@@ -10,24 +10,26 @@ description: "A speed proof with category boundaries."
 # How Bitfield is this fast.
 
 <p className="bf-lead">
-Persistent does not mean every read waits for storage hardware. Local does not mean fake. Fast claims only mean something when the measured category is visible.
+Durable does not mean every read waits for storage hardware. Local does not mean fake. Fast claims only mean something when the measured category is visible.
 </p>
 
 ## The short version
 
-Bitfield is fast because the storage shape removes work from the hot path. The source of truth is durable. The warm local read path is fast because the operating system already has the needed bytes available and Bitfield can read by the shape it stored.
+Bitfield is fast because the storage shape removes work from the read path. Durable data means the data survives a crash or restart. Warm local read means the needed local file pages are already available and Bitfield knows where to read.
 
-## Persistent does not mean every read waits for disk
+## Durable does not mean every read waits for disk
 
-A memory map connects a durable file to the program's address space. The file is still the durable thing. When the operating system already has the needed pages warm, reading those bytes avoids the normal database request path.
+A memory map connects a durable local file to the program reading it. In plain words, the operating system lets Bitfield touch local file pages like memory. The file is still the durable thing.
 
-If the page is cold and hardware has to fetch it, physics is slower. That is why the honest wording is <span className="bf-blue">persistent source of truth with a warm local fast path</span>.
+When the operating system already has the needed pages warm, Bitfield can read known local bytes without sending a request to a separate database process.
 
-## Content addresses remove searching
+If the page is cold and hardware has to fetch it, physics is slower. That is why the honest wording is <span className="bf-blue">durable data with a warm local read path</span>.
 
-Most databases start from an application question and do work to answer it: parse, plan, traverse indexes, check structures, and move data through a database process.
+## Content addresses remove a kind of searching
 
-Bitfield stores content by identity. Once it knows the exact place to read, the H0 path is almost just: go to these bytes.
+Most database reads start by asking another database process a question. That process parses the question, plans the work, checks indexes, walks structures, and sends the answer back.
+
+Bitfield stores content by identity. Content identity means bytes can be named by what they are. Once Bitfield knows the local bytes to read, the warm local read path has much less work to do.
 
 ## No benchmark gets to hide its category
 
@@ -36,5 +38,7 @@ This is not a promise that a cold disk read takes less than a nanosecond. It is 
 <div className="bf-callout">
 The rule is simple: show the mechanism, show the tradeoff, and say what work is actually being measured.
 </div>
+
+Next: read [Storage shape](/concepts/storage-shape) for the public mechanism model, then read [Warm and cold paths](/proof/warm-and-cold-paths) for the benchmark categories.
 
 </div>

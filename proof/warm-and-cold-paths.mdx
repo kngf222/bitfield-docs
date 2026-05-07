@@ -1,0 +1,77 @@
+---
+title: "Warm and cold paths"
+description: "What each benchmark category includes and what it leaves out."
+---
+
+<div className="bf-article">
+
+<p className="bf-kicker">Proof</p>
+
+# Warm and cold paths.
+
+<p className="bf-lead">
+Benchmark numbers only mean something when the measured job is named.
+</p>
+
+## The categories
+
+Warm local read = the needed data is already local, the operating system already has the needed file pages ready, and Bitfield knows where to read.
+
+Cold local read = the data is local, but the machine still has setup or fetch work to do before the bytes are ready.
+
+Content address lookup = Bitfield first resolves the content identity, then reads the bytes.
+
+Durable batch write = Bitfield records a batch of writes in the durable write path, then the benchmark divides the batch cost across the written items.
+
+Runtime call = app code asks a Bitfield target to do work through Runtime Kit.
+
+Network command = a request crosses the network before the app gets an answer.
+
+## Why the split matters
+
+These jobs are different:
+
+| Job | What is included | What is not included |
+|---|---|---|
+| Warm local read | Local bytes, warm pages, known read shape. | Cold disk fetch, network trip, general database request. |
+| Cold local read | Local storage fetch or setup work. | Network trip unless the benchmark says network. |
+| Content address lookup | Identity resolution before reading. | Exact-position read with no lookup. |
+| Durable batch write | Saved-write work for a batch. | One isolated write measured as its own wall-clock event. |
+| Runtime call | Runtime Kit request and reply shape. | Raw storage read cost by itself. |
+| Network command | The networked command path. | Local read path by itself. |
+
+If a row says one category, read it as that category. Do not silently turn it into another job.
+
+## The current public rows
+
+<div className="bf-proof-row">
+  <strong>0.68ns</strong>
+  <span>Warm local read.</span>
+  <span>The data is local and warm, so Bitfield can read known local bytes without sending a request to a separate database process.</span>
+</div>
+
+<div className="bf-proof-row">
+  <strong>91.7ns</strong>
+  <span>Content address lookup.</span>
+  <span>Bitfield first resolves the data fingerprint, then reads the bytes.</span>
+</div>
+
+<div className="bf-proof-row">
+  <strong>316ns</strong>
+  <span>Durable batch write.</span>
+  <span>The measured work includes the saved-write contract for a batch, then divides the batch cost across written items.</span>
+</div>
+
+<div className="bf-proof-row">
+  <strong>0.59ns</strong>
+  <span>Batched write ceiling.</span>
+  <span>This is a ceiling number for a full batch. It is not the same thing as every saved write.</span>
+</div>
+
+## The rule
+
+The number is allowed to be shocking. The category is not allowed to be blurry.
+
+Every public speed claim needs the number, unit, measured category, mechanism, and non-claims. If any of those are missing, the number is not ready for public docs.
+
+</div>

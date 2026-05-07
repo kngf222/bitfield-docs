@@ -25,6 +25,12 @@ const retiredClaimField = String.fromCharCode(
   104,
 );
 const failures = [];
+const allowedClaimCategories = new Set([
+  'warm-local-read',
+  'content-address-lookup',
+  'durable-batch-write',
+  'batched-write-ceiling',
+]);
 
 for (const page of manifest.pages) {
   const file = `${page.route}.mdx`;
@@ -86,6 +92,15 @@ for (const source of sourceMap.sources) {
 }
 
 for (const claim of claimLedger.claims) {
+  if (!allowedClaimCategories.has(claim.category)) {
+    failures.push(`Claim ${claim.id} uses unknown category: ${claim.category}`);
+  }
+  if (!Array.isArray(claim.mechanismCategories) || claim.mechanismCategories.length === 0) {
+    failures.push(`Claim ${claim.id} needs mechanismCategories`);
+  }
+  if (claim.disclosureTier !== 'public-mechanism-category') {
+    failures.push(`Claim ${claim.id} needs disclosureTier public-mechanism-category`);
+  }
   if (!claim.mechanism) {
     failures.push(`Claim ${claim.id} needs mechanism text`);
   }
@@ -99,6 +114,9 @@ for (const claim of claimLedger.claims) {
   }
   if (!claim.notClaiming?.length) {
     failures.push(`Claim ${claim.id} needs explicit non-claims`);
+  }
+  if (!Array.isArray(claim.forbiddenPublicDetails) || claim.forbiddenPublicDetails.length === 0) {
+    failures.push(`Claim ${claim.id} needs forbiddenPublicDetails`);
   }
 }
 

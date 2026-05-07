@@ -13,21 +13,22 @@ description: "How to read Bitfield benchmark numbers without comparing unlike jo
 Benchmark numbers are only useful when you know what job was measured.
 </p>
 
-The wrong way to read a benchmark is to take one number from one category and compare it to a different number from another category. A warm local read, a cold disk read, a hash lookup, a durable batch write, and a networked database request are different jobs.
+The wrong way to read a benchmark is to take one number from one category and compare it to a different number from another category. A warm local read, a cold local read, a content address lookup, a durable batch write, a runtime call, and a network command are different jobs.
 
 ## The categories
 
 | Category | What it means | What to compare it to |
 |---|---|---|
-| Warm local read | The data is already available locally and the read path knows where to look. | Other warm local reads with a similar access shape. |
-| Hash lookup before read | Bitfield first resolves an identity, then reads. | Other local lookup paths, not exact-position reads. |
+| Warm local read | The data is local, the needed pages are warm, and Bitfield knows where to read. | Other warm local reads with a similar access shape. |
+| Cold local read | The data is local, but setup or fetch work is included. | Other cold local reads on similar hardware. |
+| Content address lookup | Bitfield resolves a content identity before reading. | Other local lookup paths, not exact-position reads. |
 | Durable batch write | Many writes are grouped, then the cost is divided across written items. | Other batch writes with the same durability boundary. |
-| Networked request | Data crosses a network before the app gets an answer. | Other networked systems in the same deployment shape. |
-| Cold storage read | Hardware or the operating system has to fetch data that is not warm. | Other cold reads on similar hardware. |
+| Runtime call | App code asks a Bitfield target to do work through Runtime Kit. | Other runtime request and reply paths. |
+| Network command | Data crosses a network before the app gets an answer. | Other networked systems in the same deployment shape. |
 
 ## Why warm local read is allowed to be tiny
 
-Warm means the operating system already has the needed file pages available. Local means the read does not cross a network. Known position means Bitfield is not asking a general database process to parse, plan, and search for the answer.
+Warm means the operating system already has the needed file pages available. Local means the read does not cross a network. Known position means Bitfield is not asking a separate database process to parse, plan, and search for the answer.
 
 That does not break physics. It names the physics being measured.
 
@@ -49,6 +50,6 @@ Every public speed row needs:
 - The mechanism.
 - A list of what the number is not claiming.
 
-That is why the [benchmark ledger](/proof/benchmark-ledger) exists.
+That is why the [benchmark ledger](/proof/benchmark-ledger) and [claim ledger](/reference/claim-ledger) exist.
 
 </div>

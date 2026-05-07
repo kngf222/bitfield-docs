@@ -15,20 +15,20 @@ Every number here names the work category. That is the only honest way to compar
 
 <div className="bf-proof-row">
   <strong>0.68ns</strong>
-  <span>H0 warm local read</span>
-  <span>A warm local engine read. This is not a cold disk read and not a network trip.</span>
+  <span>Warm local read</span>
+  <span>The data is local and warm, so Bitfield can read known local bytes without sending a request to a separate database process.</span>
 </div>
 
 <div className="bf-proof-row">
   <strong>91.7ns</strong>
-  <span>Hash lookup</span>
-  <span>The path where Bitfield resolves the content address before reading the bytes.</span>
+  <span>Content address lookup</span>
+  <span>Bitfield first resolves the data fingerprint, then reads the bytes.</span>
 </div>
 
 <div className="bf-proof-row">
   <strong>0.59ns</strong>
-  <span>Batched engine write ceiling</span>
-  <span>The optimized engine path divided across a full engine batch. Useful as a ceiling, not the same as every saved-write comparison.</span>
+  <span>Batched write ceiling</span>
+  <span>The optimized write path divided across a full batch. Useful as a ceiling, not the same as every saved-write comparison.</span>
 </div>
 
 <div className="bf-proof-row">
@@ -43,5 +43,7 @@ Every number here names the work category. That is the only honest way to compar
 - They do not say the internet has zero cost.
 - They do not say every database benchmark measures the same job.
 - They do not say one isolated write and a full batch have the same wall-clock shape.
+
+For the field-level contract behind each row, read the [claim ledger](/reference/claim-ledger).
 
 </div>

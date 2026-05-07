@@ -1,0 +1,55 @@
+---
+title: "Claim ledger"
+description: "The fields every public benchmark claim must carry."
+---
+
+<div className="bf-article">
+
+<p className="bf-kicker">Reference</p>
+
+# Claim ledger.
+
+<p className="bf-lead">
+The claim ledger is the public checklist that keeps speed numbers honest.
+</p>
+
+## What this is
+
+Claim ledger = the structured list of public benchmark claims.
+
+Each claim has a number, a unit, a measured category, a mechanism, and a list of things the number does not claim.
+
+## Required fields
+
+| Field | Meaning |
+|---|---|
+| `id` | Stable internal docs ID for the claim row. |
+| `publicLabel` | The phrase readers see. |
+| `value` | The number. |
+| `unit` | What the number is counted in. |
+| `category` | The job measured, such as `warm-local-read` or `durable-batch-write`. |
+| `mechanismCategories` | Public mechanism families that explain the claim. |
+| `disclosureTier` | The public detail level. Current proof rows use `public-mechanism-category`. |
+| `mechanism` | Plain sentence explaining why this category can have this number. |
+| `notClaiming` | The boundaries. This stops readers from comparing unlike jobs. |
+| `forbiddenPublicDetails` | Private details that public docs must not expose. |
+| `publicUse` | The public pages that are allowed to use the claim. |
+
+## Current category names
+
+| Category | Meaning |
+|---|---|
+| `warm-local-read` | Local read when the needed bytes are already warm and no network request is included. |
+| `content-address-lookup` | Local lookup where Bitfield resolves a content identity before reading. |
+| `durable-batch-write` | Saved-write work measured across a batch. |
+| `batched-write-ceiling` | Ceiling number for an optimized full-batch path. |
+
+## Public boundary
+
+Public docs may explain mechanism categories.
+
+Public docs may not publish private file layouts, private binary record formats, private write scheduling logic, or raw internal benchmark logs.
+
+That is the point of the ledger. It lets the docs show enough mechanism to be credible without turning the docs into a private implementation dump.
+
+</div>

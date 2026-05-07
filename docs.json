@@ -49,6 +49,8 @@
             "pages": [
               "concepts/what-is-bitfield",
               "concepts/database-and-runtime",
+              "concepts/storage-shape",
+              "concepts/content-addressed-storage",
               "concepts/slots",
               "concepts/active-devices"
             ]
@@ -101,8 +103,10 @@
             "group": "Speed claims",
             "pages": [
               "proof/how-bitfield-is-fast",
+              "proof/warm-and-cold-paths",
               "proof/benchmark-ledger",
-              "proof/methodology"
+              "proof/methodology",
+              "reference/claim-ledger"
             ]
           },
           {

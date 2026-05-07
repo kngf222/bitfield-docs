@@ -11,6 +11,8 @@ These pages are public customer documentation. They describe the public product,
 - [Get your key](start/get-your-key): Explains what happens when you get a Bitfield key and activate your first device.
 - [What is Bitfield?](concepts/what-is-bitfield): Explains Bitfield without assuming the reader already knows database or runtime vocabulary.
 - [Database and runtime](concepts/database-and-runtime): Defines the public database and runtime model.
+- [Storage shape](concepts/storage-shape): Explains local durable truth, memory-mapped local files, content identity, and the current view.
+- [Content-addressed storage](concepts/content-addressed-storage): Defines content addresses in plain words and states what the public docs do not expose.
 - [Slots](concepts/slots): Explains slots as named runnable doors that features can call without importing each other.
 - [Active devices](concepts/active-devices): Defines active devices for pricing, keys, and account management.
 - [JavaScript Runtime Kit](runtime-kit/javascript): Shows the public JavaScript Runtime Kit shape without exposing Bitfield setup work.
@@ -21,9 +23,11 @@ These pages are public customer documentation. They describe the public product,
 - [Build your own surface](build-your-own-surface/sdk-boundary): Defines the public SDK boundary pattern: simple app functions outside, Bitfield setup behind the plug.
 - [Trials and billing](activation/trials-and-billing): Explains trial billing and active-device ranges without turning pricing into hidden math.
 - [How Bitfield is this fast](proof/how-bitfield-is-fast): Explains warm local reads, memory mapping, content addresses, and non-claims.
+- [Warm and cold paths](proof/warm-and-cold-paths): Defines warm local read, cold local read, content address lookup, durable batch write, runtime call, and network command.
 - [Benchmark ledger](proof/benchmark-ledger): Lists public speed claims with the work category attached.
 - [Measurement methodology](proof/methodology): Explains warm reads, cold reads, hash lookup, durable writes, and why each number needs its category.
 - [Runtime Kit API](reference/runtime-kit-api): Reference for useBitfieldData and sendRequestToBitfieldTarget.
+- [Claim ledger](reference/claim-ledger): Documents the public claim-ledger fields that keep speed claims honest.
 - [Package boundary](reference/package-boundary): Lists the public package boundary fields and thing types.
 - [Changelog](changelog/index): The public change log for docs and customer-visible product behavior.
 
@@ -34,6 +38,7 @@ These pages are public customer documentation. They describe the public product,
 - runtime-kit-package-boundary: Package boundary file, thing types, and local state language. Freshness rule: review when package boundary validation changes.
 - bitfield-public-legal-pages: Public Terms, Refund Policy, and Privacy Policy routes. Freshness rule: review when legal page routes or checkout consent wording changes.
 - bitfield-public-claim-ledger: Published benchmark numbers, categories, and non-claims. Freshness rule: review when claim-ledger.json changes.
+- fastest-db-public-disclosure-cssot: Public mechanism categories for memory mapping, content addressing, durable append paths, warm/cold cache state, and forbidden private details. Freshness rule: review when benchmark mechanism language or public disclosure boundaries change.
 - bitfield-docs-information-architecture: Docs navigation, page summaries, and reader-intent grouping. Freshness rule: review when docs.manifest.json changes.
 
 ## Public API surface
@@ -43,10 +48,10 @@ These pages are public customer documentation. They describe the public product,
 
 ## Benchmark boundary
 
-- 0.68ns H0 warm local read: warm local engine read. The data path is already warm on the local machine, and Bitfield can read by the storage shape that avoids the normal database request path. Not claiming: A cold disk read takes less than a nanosecond. A network round trip disappears. Every database benchmark measures the same job.
-- 91.7ns hash lookup: local lookup before read. This is the path where Bitfield first resolves the content address before reading the bytes. Not claiming: This is the same category as the H0 exact read. This includes networked application latency.
-- 316ns durable batch write comparison: durable batch write comparison. This row includes more of the saved-write contract than the raw write ceiling, then divides the batch cost across written items. Not claiming: Every single isolated write has 316ns wall-clock latency. This is the same category as a networked managed database write.
-- 0.59ns batched engine write ceiling: batched engine write ceiling. This is the optimized engine path divided across a full engine batch. It is useful as a ceiling, not as a replacement for durable write comparison rows. Not claiming: A full saved write is always 0.59ns. This number should be compared directly to every vendor write benchmark.
+- 0.68ns warm local read: warm-local-read. The data is local and already warm, so Bitfield can read known local bytes without sending a request to a separate database process. Not claiming: A cold disk read takes less than a nanosecond. A network round trip disappears. Every database benchmark measures the same job.
+- 91.7ns hash lookup: content-address-lookup. Bitfield first resolves the content address, which means it uses the data fingerprint to find the bytes, then reads them. Not claiming: This is the same category as the H0 exact read. This includes networked application latency.
+- 316ns durable batch write comparison: durable-batch-write. The measured work includes the saved-write contract for a batch, then divides the batch cost across the written items. Not claiming: Every single isolated write has 316ns wall-clock latency. This is the same category as a networked managed database write.
+- 0.59ns batched engine write ceiling: batched-write-ceiling. This is the optimized write path divided across a full batch. It is a ceiling number, not a replacement for durable write comparison rows. Not claiming: A full saved write is always 0.59ns. This number should be compared directly to every vendor write benchmark.
 
 Cold storage, network trips, and managed database requests are different categories from warm local reads.
 

@@ -89,6 +89,8 @@
           "pages": [
             "concepts/what-is-bitfield",
             "concepts/database-and-runtime",
+            "concepts/storage-shape",
+            "concepts/content-addressed-storage",
             "concepts/slots",
             "concepts/active-devices"
           ]
@@ -141,8 +143,10 @@
           "group": "Speed claims",
           "pages": [
             "proof/how-bitfield-is-fast",
+            "proof/warm-and-cold-paths",
             "proof/benchmark-ledger",
-            "proof/methodology"
+            "proof/methodology",
+            "reference/claim-ledger"
           ]
         },
         {
@@ -189,6 +193,20 @@
       "description": "What Bitfield stores, what it runs, and why those two pieces belong together.",
       "diataxis": "concept",
       "summary": "Defines the public database and runtime model."
+    },
+    {
+      "route": "concepts/storage-shape",
+      "title": "Storage shape",
+      "description": "How Bitfield keeps local durable data fast without turning private internals into public docs.",
+      "diataxis": "concept",
+      "summary": "Explains local durable truth, memory-mapped local files, content identity, and the current view."
+    },
+    {
+      "route": "concepts/content-addressed-storage",
+      "title": "Content-addressed storage",
+      "description": "What content addresses are and why they matter for speed, integrity, and reuse.",
+      "diataxis": "concept",
+      "summary": "Defines content addresses in plain words and states what the public docs do not expose."
     },
     {
       "route": "concepts/slots",
@@ -261,6 +279,13 @@
       "summary": "Explains warm local reads, memory mapping, content addresses, and non-claims."
     },
     {
+      "route": "proof/warm-and-cold-paths",
+      "title": "Warm and cold paths",
+      "description": "What each benchmark category includes and what it leaves out.",
+      "diataxis": "concept",
+      "summary": "Defines warm local read, cold local read, content address lookup, durable batch write, runtime call, and network command."
+    },
+    {
       "route": "proof/benchmark-ledger",
       "title": "Benchmark ledger",
       "description": "Public benchmark claims with category boundaries and non-claims.",
@@ -280,6 +305,13 @@
       "description": "The current public Runtime Kit values.",
       "diataxis": "reference",
       "summary": "Reference for useBitfieldData and sendRequestToBitfieldTarget."
+    },
+    {
+      "route": "reference/claim-ledger",
+      "title": "Claim ledger",
+      "description": "The fields every public benchmark claim must carry.",
+      "diataxis": "reference",
+      "summary": "Documents the public claim-ledger fields that keep speed claims honest."
     },
     {
       "route": "reference/package-boundary",

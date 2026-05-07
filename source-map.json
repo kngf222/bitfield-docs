@@ -33,6 +33,12 @@
       "freshness": "review when claim-ledger.json changes"
     },
     {
+      "id": "fastest-db-public-disclosure-cssot",
+      "kind": "public-proof-boundary",
+      "publicUse": "Public mechanism categories for memory mapping, content addressing, durable append paths, warm/cold cache state, and forbidden private details.",
+      "freshness": "review when benchmark mechanism language or public disclosure boundaries change"
+    },
+    {
       "id": "bitfield-docs-information-architecture",
       "kind": "docs-graph",
       "publicUse": "Docs navigation, page summaries, and reader-intent grouping.",
@@ -59,6 +65,14 @@
     {
       "route": "concepts/database-and-runtime",
       "sourceIds": ["bitfield-public-landing-copy", "runtime-kit-package-boundary"]
+    },
+    {
+      "route": "concepts/storage-shape",
+      "sourceIds": ["fastest-db-public-disclosure-cssot", "runtime-kit-package-boundary", "bitfield-public-claim-ledger"]
+    },
+    {
+      "route": "concepts/content-addressed-storage",
+      "sourceIds": ["fastest-db-public-disclosure-cssot", "runtime-kit-package-boundary", "bitfield-public-claim-ledger"]
     },
     {
       "route": "concepts/slots",
@@ -98,19 +112,27 @@
     },
     {
       "route": "proof/how-bitfield-is-fast",
-      "sourceIds": ["bitfield-public-claim-ledger", "bitfield-public-landing-copy"]
+      "sourceIds": ["bitfield-public-claim-ledger", "fastest-db-public-disclosure-cssot", "bitfield-public-landing-copy"]
+    },
+    {
+      "route": "proof/warm-and-cold-paths",
+      "sourceIds": ["bitfield-public-claim-ledger", "fastest-db-public-disclosure-cssot"]
     },
     {
       "route": "proof/benchmark-ledger",
-      "sourceIds": ["bitfield-public-claim-ledger"]
+      "sourceIds": ["bitfield-public-claim-ledger", "fastest-db-public-disclosure-cssot"]
     },
     {
       "route": "proof/methodology",
-      "sourceIds": ["bitfield-public-claim-ledger"]
+      "sourceIds": ["bitfield-public-claim-ledger", "fastest-db-public-disclosure-cssot"]
     },
     {
       "route": "reference/runtime-kit-api",
       "sourceIds": ["runtime-kit-js-public-contract"]
+    },
+    {
+      "route": "reference/claim-ledger",
+      "sourceIds": ["bitfield-public-claim-ledger", "fastest-db-public-disclosure-cssot"]
     },
     {
       "route": "reference/package-boundary",

@@ -1,0 +1,70 @@
+---
+title: "Storage shape"
+description: "How Bitfield keeps local durable data fast without turning private internals into public docs."
+---
+
+<div className="bf-article">
+
+<p className="bf-kicker">Concept</p>
+
+# Storage shape.
+
+<p className="bf-lead">
+Bitfield stores data so the current answer can be read directly when the bytes are already local and warm.
+</p>
+
+## What this means
+
+Storage shape = the way Bitfield keeps durable data, content identity, and the current view connected.
+
+Durable data = data that survives a crash or restart.
+
+Current view = the answer your app needs right now.
+
+Content identity = a stable name for bytes based on what the bytes are.
+
+Those pieces matter because speed is not only about faster hardware. Speed also comes from removing work. If the current view already points at the bytes Bitfield needs, the warm local read path can skip the normal database request path.
+
+## The plain version
+
+Most database reads start by asking another database process a question. That process parses the question, plans the work, checks indexes, walks structures, and sends the answer back.
+
+Bitfield is built around a different shape. The durable data is local. The current view points at content. When the needed local pages are already warm, Bitfield can read the known bytes instead of making a general database request.
+
+That is why the speed claim must say `warm local read`. Warm means the operating system already has the needed local file pages available. Local means the read does not cross a network.
+
+## The technical version
+
+Bitfield public docs can safely name the mechanism category:
+
+| Mechanism | Plain meaning | Public boundary |
+|---|---|---|
+| Memory-mapped local file | The operating system lets Bitfield touch local file pages like memory. | Public docs explain the category, not the private file layout. |
+| Content address | Bytes can be named by their fingerprint. | Public docs explain identity and integrity, not private hash framing. |
+| Durable append path | Writes are recorded before later cleanup or reshaping work. | Public docs explain the category, not private write scheduling. |
+| Current view | The app reads the current answer instead of scanning all history every time. | Public docs explain the model, not private indexes. |
+
+## Before and after
+
+| Before | After |
+|---|---|
+| A feature asks a separate database process for every answer. | A warm local read can touch known local bytes. |
+| The speed number floats without context. | The speed number says exactly which path was measured. |
+| Content identity sounds like magic. | Content identity means the bytes can be named by what they are. |
+| The docs either hide the mechanism or leak too much. | The docs explain the category and keep private internals private. |
+
+## What this does not claim
+
+This does not claim that cold storage is sub-nanosecond.
+
+This does not claim that the internet has zero cost.
+
+This does not claim that every query, write, sync, and network command is the same job.
+
+The honest claim is narrower and stronger: Bitfield has a warm local read path, and that path is measured separately from cold reads, content address lookups, durable writes, runtime calls, and network commands.
+
+<div className="bf-callout">
+The rule is simple. Explain the mechanism category. Name the measured path. Say where the number stops.
+</div>
+
+</div>

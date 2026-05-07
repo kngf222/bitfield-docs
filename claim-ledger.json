@@ -4,20 +4,29 @@
   "claims": [
     {
       "id": "h0-warm-local-read",
-      "publicLabel": "0.68ns H0 warm local read",
+      "publicLabel": "0.68ns warm local read",
       "value": 0.68,
       "unit": "nanoseconds per read",
-      "category": "warm local engine read",
-      "mechanism": "The data path is already warm on the local machine, and Bitfield can read by the storage shape that avoids the normal database request path.",
+      "category": "warm-local-read",
+      "mechanismCategories": ["memory-mapped-local-read", "content-addressed-storage"],
+      "disclosureTier": "public-mechanism-category",
+      "mechanism": "The data is local and already warm, so Bitfield can read known local bytes without sending a request to a separate database process.",
       "notClaiming": [
         "A cold disk read takes less than a nanosecond.",
         "A network round trip disappears.",
         "Every database benchmark measures the same job."
       ],
+      "forbiddenPublicDetails": [
+        "exact private file layout",
+        "binary record encoding",
+        "raw internal harness log"
+      ],
       "publicUse": [
         "proof/how-bitfield-is-fast",
+        "proof/warm-and-cold-paths",
         "proof/benchmark-ledger",
-        "proof/methodology"
+        "proof/methodology",
+        "reference/claim-ledger"
       ]
     },
     {
@@ -25,15 +34,24 @@
       "publicLabel": "91.7ns hash lookup",
       "value": 91.7,
       "unit": "nanoseconds per lookup",
-      "category": "local lookup before read",
-      "mechanism": "This is the path where Bitfield first resolves the content address before reading the bytes.",
+      "category": "content-address-lookup",
+      "mechanismCategories": ["content-addressed-storage"],
+      "disclosureTier": "public-mechanism-category",
+      "mechanism": "Bitfield first resolves the content address, which means it uses the data fingerprint to find the bytes, then reads them.",
       "notClaiming": [
         "This is the same category as the H0 exact read.",
         "This includes networked application latency."
       ],
+      "forbiddenPublicDetails": [
+        "exact private hash framing",
+        "binary record encoding",
+        "raw internal harness log"
+      ],
       "publicUse": [
+        "proof/warm-and-cold-paths",
         "proof/benchmark-ledger",
-        "proof/methodology"
+        "proof/methodology",
+        "reference/claim-ledger"
       ]
     },
     {
@@ -41,15 +59,24 @@
       "publicLabel": "316ns durable batch write comparison",
       "value": 316,
       "unit": "nanoseconds per written item",
-      "category": "durable batch write comparison",
-      "mechanism": "This row includes more of the saved-write contract than the raw write ceiling, then divides the batch cost across written items.",
+      "category": "durable-batch-write",
+      "mechanismCategories": ["durable-append-path"],
+      "disclosureTier": "public-mechanism-category",
+      "mechanism": "The measured work includes the saved-write contract for a batch, then divides the batch cost across the written items.",
       "notClaiming": [
         "Every single isolated write has 316ns wall-clock latency.",
         "This is the same category as a networked managed database write."
       ],
+      "forbiddenPublicDetails": [
+        "exact private log record layout",
+        "private write scheduling logic",
+        "raw internal harness log"
+      ],
       "publicUse": [
+        "proof/warm-and-cold-paths",
         "proof/benchmark-ledger",
-        "proof/methodology"
+        "proof/methodology",
+        "reference/claim-ledger"
       ]
     },
     {
@@ -57,16 +84,25 @@
       "publicLabel": "0.59ns batched engine write ceiling",
       "value": 0.59,
       "unit": "nanoseconds per written item",
-      "category": "batched engine write ceiling",
-      "mechanism": "This is the optimized engine path divided across a full engine batch. It is useful as a ceiling, not as a replacement for durable write comparison rows.",
+      "category": "batched-write-ceiling",
+      "mechanismCategories": ["durable-append-path"],
+      "disclosureTier": "public-mechanism-category",
+      "mechanism": "This is the optimized write path divided across a full batch. It is a ceiling number, not a replacement for durable write comparison rows.",
       "notClaiming": [
         "A full saved write is always 0.59ns.",
         "This number should be compared directly to every vendor write benchmark."
       ],
+      "forbiddenPublicDetails": [
+        "exact private log record layout",
+        "private write scheduling logic",
+        "raw internal harness log"
+      ],
       "publicUse": [
         "proof/how-bitfield-is-fast",
+        "proof/warm-and-cold-paths",
         "proof/benchmark-ledger",
-        "proof/methodology"
+        "proof/methodology",
+        "reference/claim-ledger"
       ]
     }
   ]

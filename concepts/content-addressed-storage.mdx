@@ -1,0 +1,65 @@
+---
+title: "Content-addressed storage"
+description: "What content addresses are and why they matter for speed, integrity, and reuse."
+---
+
+<div className="bf-article">
+
+<p className="bf-kicker">Concept</p>
+
+# Content-addressed storage.
+
+<p className="bf-lead">
+A content address is a name for bytes that comes from the bytes themselves.
+</p>
+
+## What this means
+
+Content-addressed storage = storing bytes so the content can be found by a fingerprint of the content.
+
+Fingerprint = a short identity made from the bytes. If the bytes change, the fingerprint changes.
+
+That gives Bitfield a useful rule. The same bytes have the same identity. Different bytes have a different identity.
+
+## Why this matters
+
+Most app code thinks in names that people made up. A record might be called `user_123`, `invoice_9`, or `project-settings`. Those names are useful, but they do not prove what bytes are inside.
+
+A content address points at the bytes by what they are. That makes identity, reuse, and integrity easier to explain:
+
+<div className="bf-grid">
+  <div className="bf-card">
+    <strong>Identity.</strong>
+    The address points at the content, not at a random storage location.
+  </div>
+  <div className="bf-card">
+    <strong>Reuse.</strong>
+    The same content can share the same identity instead of being treated like a totally new thing.
+  </div>
+  <div className="bf-card">
+    <strong>Integrity.</strong>
+    If the bytes change, the identity changes, so silent changes are easier to catch.
+  </div>
+</div>
+
+## How this connects to speed
+
+Content addresses do not make every job instant. They remove a kind of searching when the system already knows which content it needs.
+
+That is why the benchmark ledger separates `warm-local-read` from `content-address-lookup`. A warm local read means Bitfield already knows the local bytes to read and the needed pages are warm. A content address lookup means Bitfield first resolves the content identity, then reads.
+
+Those are both local jobs. They are not the same job.
+
+## What stays private
+
+Public docs can explain that content addresses exist and what they do.
+
+Public docs do not expose private byte layouts, private hash framing, private record encoding, or raw benchmark logs.
+
+That boundary is not a lack of proof. It is the difference between explaining how the product works and handing out proprietary internals.
+
+<div className="bf-callout">
+Content address = a name made from the bytes. That is the public idea. The private layout stays private.
+</div>
+
+</div>
