@@ -1,0 +1,68 @@
+---
+title: "React surface for package data"
+description: "Read package-prepared data and send a target request from one React surface."
+---
+
+<div className="bf-article">
+
+<p className="bf-kicker">Workflow</p>
+
+# React surface for package data.
+
+<p className="bf-lead">
+This workflow shows the app side. The component reads prepared data with `useBitfieldData(...)` and asks a target to do work with `sendRequestToBitfieldTarget(...)`.
+</p>
+
+Prepared data means Runtime Kit has already made a piece of Bitfield data available to this app surface. The component reads it. It does not create storage addresses or parse package files.
+
+## Component
+
+```tsx
+import { sendRequestToBitfieldTarget } from '@bitfield/runtime-kit';
+import { useBitfieldData } from '@bitfield/runtime-kit/react';
+
+type WelcomeData = {
+  headline: string;
+  body: string;
+};
+
+export function WelcomePanel() {
+  const welcome = useBitfieldData<WelcomeData>((data) => data.welcome);
+
+  async function refresh() {
+    await sendRequestToBitfieldTarget({
+      target: 'product.search',
+      payload: { reason: 'refresh-welcome-panel' },
+    });
+  }
+
+  if (welcome.loading) return <section>Loading</section>;
+  if (welcome.error) return <section>Could not load this panel.</section>;
+  if (!welcome.data) return null;
+
+  return (
+    <section>
+      <h2>{welcome.data.headline}</h2>
+      <p>{welcome.data.body}</p>
+      <button type="button" onClick={refresh}>
+        Refresh
+      </button>
+    </section>
+  );
+}
+```
+
+## Why the component stays small
+
+The component has two jobs:
+
+- Read the prepared `welcome` data.
+- Ask `product.search` to do work.
+
+It does not know where the record lives, where package bytes are stored, which runner backs the target, or how the active package set is mounted.
+
+## What changes when the package changes
+
+The package can add more records, ship more bytes, or replace the runnable thing behind `product.search`. The component can stay the same as long as the public data shape and target name stay the same.
+
+</div>

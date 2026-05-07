@@ -1,0 +1,68 @@
+---
+title: "Callable package slot"
+description: "Declare a package-owned runnable door that app code can ask for work."
+---
+
+<div className="bf-article">
+
+<p className="bf-kicker">Workflow</p>
+
+# Callable package slot.
+
+<p className="bf-lead">
+Use a `slot` when a package needs a named runnable door. App code asks the public target. It does not learn how the runnable thing is built, mounted, or replaced.
+</p>
+
+A slot is a callable door. The package boundary says the door name and the methods it accepts. The private runner behind that door stays behind the plug.
+
+## Folder shape
+
+```text
+search-package/
+  things-to-store-and-run.json
+  slots/
+    search-slot.bin
+```
+
+## Boundary file
+
+```json
+{
+  "package": "search-package",
+  "things": [
+    {
+      "type": "slot",
+      "name": "product.search",
+      "methods": [{ "name": "query" }],
+      "boundary": {
+        "call_shape": "envelope-bytes-in-envelope-bytes-out",
+        "methods": [{ "name": "query" }]
+      },
+      "artifact": {
+        "source_path": "slots/search-slot.bin"
+      }
+    }
+  ]
+}
+```
+
+## App call
+
+```ts
+import { sendRequestToBitfieldTarget } from '@bitfield/runtime-kit';
+
+const reply = await sendRequestToBitfieldTarget({
+  target: 'product.search',
+  payload: { query: 'blue jacket' },
+});
+```
+
+## What stays stable
+
+Your app keeps calling `product.search`. The package can change the bytes behind that target without making the React component import a new runner, read a package file, or understand the slot internals.
+
+<div className="bf-callout">
+The boundary is public. The runner details are not. A docs example can show the door name and call shape without publishing how the private runner is built.
+</div>
+
+</div>

@@ -103,6 +103,26 @@
       "sourceIds": ["runtime-kit-package-boundary"]
     },
     {
+      "route": "workflows/index",
+      "sourceIds": ["runtime-kit-package-boundary", "runtime-kit-js-public-contract", "bitfield-docs-information-architecture"]
+    },
+    {
+      "route": "workflows/package-set-with-one-record",
+      "sourceIds": ["runtime-kit-package-boundary"]
+    },
+    {
+      "route": "workflows/package-owned-file",
+      "sourceIds": ["runtime-kit-package-boundary"]
+    },
+    {
+      "route": "workflows/callable-package-slot",
+      "sourceIds": ["runtime-kit-package-boundary", "runtime-kit-js-public-contract"]
+    },
+    {
+      "route": "workflows/react-surface-for-package-data",
+      "sourceIds": ["runtime-kit-js-public-contract", "runtime-kit-package-boundary"]
+    },
+    {
       "route": "build-your-own-surface/sdk-boundary",
       "sourceIds": ["runtime-kit-js-public-contract", "runtime-kit-package-boundary"]
     },

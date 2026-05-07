@@ -1,0 +1,56 @@
+---
+title: "Package-owned file"
+description: "Attach package-owned bytes to a package boundary."
+---
+
+<div className="bf-article">
+
+<p className="bf-kicker">Workflow</p>
+
+# Package-owned file.
+
+<p className="bf-lead">
+Use `stored_bytes` when the package needs to bring a file with it. The file can be text, JSON, an image, or any other bytes your package owns.
+</p>
+
+Stored bytes are package-owned bytes with a stable package name. Bitfield stores the bytes behind that name after the package is admitted.
+
+## Folder shape
+
+```text
+help-package/
+  things-to-store-and-run.json
+  help/
+    getting-started.txt
+```
+
+## Boundary file
+
+```json
+{
+  "package": "help-package",
+  "things": [
+    {
+      "type": "stored_bytes",
+      "name": "getting-started-help",
+      "source_path": "help/getting-started.txt"
+    }
+  ]
+}
+```
+
+## File content
+
+```text
+Start with one screen.
+Keep the app-facing Runtime Kit calls boring.
+Let packages grow behind them.
+```
+
+## Why this shape works
+
+The package gives the bytes a public package name: `getting-started-help`. The package also points at the file inside the package folder. Bitfield can reject a file path that tries to escape the package.
+
+That keeps the package boundary clear. The package can bring bytes with it, but it cannot quietly read random files from the machine.
+
+</div>

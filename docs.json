@@ -80,6 +80,21 @@
         ]
       },
       {
+        "tab": "Workflows",
+        "groups": [
+          {
+            "group": "Package examples",
+            "pages": [
+              "workflows/index",
+              "workflows/package-set-with-one-record",
+              "workflows/package-owned-file",
+              "workflows/callable-package-slot",
+              "workflows/react-surface-for-package-data"
+            ]
+          }
+        ]
+      },
+      {
         "tab": "Build",
         "groups": [
           {

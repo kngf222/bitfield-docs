@@ -1,0 +1,58 @@
+---
+title: "Package set with one record"
+description: "Create the smallest complete package boundary: one package, one record, one clear address."
+---
+
+<div className="bf-article">
+
+<p className="bf-kicker">Workflow</p>
+
+# Package set with one record.
+
+<p className="bf-lead">
+This workflow creates the smallest useful package. It declares one record that Bitfield can admit as durable package data.
+</p>
+
+A record is addressed data. Addressed means the package gives the data a stable name, so the same package can be admitted again without guessing what the data is.
+
+## Folder shape
+
+```text
+starter-package-set/
+  product-copy/
+    things-to-store-and-run.json
+```
+
+`starter-package-set` is the collection. `product-copy` is one package inside it. The file inside the package is the boundary Bitfield reads.
+
+## Boundary file
+
+```json
+{
+  "package": "product-copy",
+  "things": [
+    {
+      "type": "record",
+      "address": "package::product-copy::welcome",
+      "payload": {
+        "headline": "Welcome back.",
+        "body": "Your product can keep moving without every feature talking directly to every other feature."
+      }
+    }
+  ]
+}
+```
+
+## What this gives you
+
+The package now has one durable record named `package::product-copy::welcome`. The address is not a UI label. It is the stable package-owned name that lets Bitfield admit the same record predictably.
+
+## Change the record later
+
+Change the `payload`, keep the `address`, and admit the package again. Same address means same piece of package data. New payload means new content for that piece.
+
+<div className="bf-callout">
+Do not put private product secrets in public package examples. Package records are product data. Secrets belong behind your account and deployment controls.
+</div>
+
+</div>

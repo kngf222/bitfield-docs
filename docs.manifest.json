@@ -120,6 +120,21 @@
       ]
     },
     {
+      "tab": "Workflows",
+      "groups": [
+        {
+          "group": "Package examples",
+          "pages": [
+            "workflows/index",
+            "workflows/package-set-with-one-record",
+            "workflows/package-owned-file",
+            "workflows/callable-package-slot",
+            "workflows/react-surface-for-package-data"
+          ]
+        }
+      ]
+    },
+    {
       "tab": "Build",
       "groups": [
         {
@@ -256,6 +271,41 @@
       "description": "What lives under the Bitfield local state folder and what each area means.",
       "diataxis": "reference",
       "summary": "Documents customer-visible local state at a high level."
+    },
+    {
+      "route": "workflows/index",
+      "title": "Workflow examples",
+      "description": "Complete public examples for package sets, package boundary files, and app-facing Runtime Kit calls.",
+      "diataxis": "workflow",
+      "summary": "Indexes complete package and Runtime Kit workflows that stay inside the public contract."
+    },
+    {
+      "route": "workflows/package-set-with-one-record",
+      "title": "Package set with one record",
+      "description": "Create the smallest complete package boundary: one package, one record, one clear address.",
+      "diataxis": "workflow",
+      "summary": "Shows the smallest package boundary with one durable package record."
+    },
+    {
+      "route": "workflows/package-owned-file",
+      "title": "Package-owned file",
+      "description": "Attach package-owned bytes to a package boundary.",
+      "diataxis": "workflow",
+      "summary": "Shows how a package declares package-owned bytes without reaching outside its folder."
+    },
+    {
+      "route": "workflows/callable-package-slot",
+      "title": "Callable package slot",
+      "description": "Declare a package-owned runnable door that app code can ask for work.",
+      "diataxis": "workflow",
+      "summary": "Shows how a package declares a callable slot and how app code sends a request to it."
+    },
+    {
+      "route": "workflows/react-surface-for-package-data",
+      "title": "React surface for package data",
+      "description": "Read package-prepared data and send a target request from one React surface.",
+      "diataxis": "workflow",
+      "summary": "Shows the app-facing read and request shape without exposing package internals to React."
     },
     {
       "route": "build-your-own-surface/sdk-boundary",

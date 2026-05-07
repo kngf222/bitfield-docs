@@ -41,7 +41,11 @@ const banned = [
   { parts: ['for ', 'now'] },
   {
     parts: ['source', '_path'],
-    allowedFiles: new Set(['reference/package-boundary.mdx']),
+    allowedFiles: new Set([
+      'reference/package-boundary.mdx',
+      'workflows/package-owned-file.mdx',
+      'workflows/callable-package-slot.mdx',
+    ]),
   },
   { parts: ['source', '_repo'] },
 ].map((rule) => ({
