@@ -1,0 +1,33 @@
+# Bitfield Docs
+
+> Public docs for Bitfield, the plug-in runtime and database for products that need to stay fast as they grow.
+
+These pages are public customer documentation. They describe the public product, public Runtime Kit surface, active-device language, and benchmark claim categories.
+
+## Pages
+
+- [Bitfield Docs](index): The public entry point for Bitfield docs.
+- [Quickstart](start/quickstart): The shortest path from a Bitfield key to the first app-facing Runtime Kit calls.
+- [Get your key](start/get-your-key): Explains what happens when you get a Bitfield key and activate your first device.
+- [What is Bitfield?](concepts/what-is-bitfield): Explains Bitfield without assuming the reader already knows database or runtime vocabulary.
+- [Database and runtime](concepts/database-and-runtime): Defines the public database and runtime model.
+- [Active devices](concepts/active-devices): Defines active devices for pricing, keys, and account management.
+- [JavaScript Runtime Kit](runtime-kit/javascript): Shows the public JavaScript Runtime Kit shape without exposing owner machinery.
+- [Packages](runtime-kit/packages): Documents the public package boundary file and package-set idea.
+- [Local state](runtime-kit/local-state): Documents customer-visible local state at a high level.
+- [How Bitfield is this fast](proof/how-bitfield-is-fast): Explains warm local reads, memory mapping, content addresses, and non-claims.
+- [Benchmark ledger](proof/benchmark-ledger): Lists public speed claims with the work category attached.
+- [Runtime Kit API](reference/runtime-kit-api): Reference for useBitfieldData and sendRequestToBitfieldTarget.
+- [Changelog](changelog/index): The public change log for docs and customer-visible product behavior.
+
+## Public API surface
+
+- `@bitfield/runtime-kit`: `sendRequestToBitfieldTarget(...)`
+- `@bitfield/runtime-kit/react`: `useBitfieldData(...)`
+
+## Benchmark boundary
+
+- `0.68ns` is a warm local H0 read category.
+- `0.59ns` is a batched engine write ceiling category.
+- Cold storage, network trips, and managed database requests are different categories.
+

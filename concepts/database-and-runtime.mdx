@@ -1,0 +1,34 @@
+---
+title: "Database and runtime"
+description: "What Bitfield stores, what it runs, and why those two pieces belong together."
+---
+
+<div className="bf-article">
+
+<p className="bf-kicker">Concept</p>
+
+# Database and runtime.
+
+<p className="bf-lead">
+Bitfield stores durable truth and runs the pieces that use it.
+</p>
+
+## Database
+
+The database side stores records and content so the product can remember what happened. A durable truth means the product can recover, replay, sync, project into other systems, and keep working when plans change.
+
+## Runtime
+
+The runtime side loads runnable pieces. A runnable piece can be a feature, worker, adapter, renderer, or tool-shaped capability. The public docs call these pieces slots.
+
+## Why they belong together
+
+If storage and runtime are separate worlds, every feature has to learn how to talk to every other feature and every database choice. That is how products become brittle.
+
+With Bitfield, features talk through the shared place. That means the data path and the execution path can stay coordinated without every feature depending directly on the others.
+
+<div className="bf-callout">
+The customer-facing rule is simple: your app talks to Runtime Kit, Runtime Kit talks to Bitfield, and Bitfield keeps the durable shape underneath.
+</div>
+
+</div>

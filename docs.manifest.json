@@ -1,0 +1,228 @@
+{
+  "site": {
+    "name": "Bitfield",
+    "description": "Public docs for Bitfield, the plug-in runtime and database for products that need to stay fast as they grow.",
+    "typography": {
+      "display": "\"SF Pro Display\", -apple-system, BlinkMacSystemFont, \"Segoe UI\", sans-serif",
+      "body": "\"SF Pro Display\", -apple-system, BlinkMacSystemFont, \"Segoe UI\", sans-serif",
+      "fontFaces": [
+        {
+          "family": "SF Pro Display",
+          "source": "/fonts/SF-Pro-Display-Regular.woff2",
+          "format": "woff2",
+          "weight": 400,
+          "style": "normal"
+        },
+        {
+          "family": "SF Pro Display",
+          "source": "/fonts/SF-Pro-Display-Medium.woff2",
+          "format": "woff2",
+          "weight": 500,
+          "style": "normal"
+        },
+        {
+          "family": "SF Pro Display",
+          "source": "/fonts/SF-Pro-Display-Semibold.woff2",
+          "format": "woff2",
+          "weight": 600,
+          "style": "normal"
+        },
+        {
+          "family": "SF Pro Display",
+          "source": "/fonts/SF-Pro-Display-Bold.woff2",
+          "format": "woff2",
+          "weight": 700,
+          "style": "normal"
+        }
+      ]
+    },
+    "rendererFallbackColors": {
+      "primary": "#4F62FF",
+      "light": "#85F0B5",
+      "dark": "#111111"
+    },
+    "themes": {
+      "paper": {
+        "surface": "#F7F5EF",
+        "surfaceRaised": "#EBE7DC",
+        "text": "#111111",
+        "muted": "#6B665B",
+        "red": "#FB6A5F",
+        "orange": "#FF9B5F",
+        "yellow": "#FFD767",
+        "green": "#85F0B5",
+        "blue": "#4F62FF",
+        "purple": "#A77BFF",
+        "cyan": "#85D8FF"
+      },
+      "ink": {
+        "surface": "#111111",
+        "surfaceRaised": "#1F1F1B",
+        "text": "#F7F5EF",
+        "muted": "#B9B2A3",
+        "red": "#FB6A5F",
+        "orange": "#FF9B5F",
+        "yellow": "#FFD767",
+        "green": "#85F0B5",
+        "blue": "#85D8FF",
+        "purple": "#A77BFF",
+        "cyan": "#85D8FF"
+      }
+    },
+    "siteUrl": "https://bitfield.so",
+    "supportEmail": "support@bitfield.so"
+  },
+  "navigation": [
+    {
+      "tab": "Start",
+      "groups": [
+        {
+          "group": "Get moving",
+          "pages": [
+            "index",
+            "start/quickstart",
+            "start/get-your-key"
+          ]
+        },
+        {
+          "group": "Understand",
+          "pages": [
+            "concepts/what-is-bitfield",
+            "concepts/database-and-runtime",
+            "concepts/active-devices"
+          ]
+        }
+      ]
+    },
+    {
+      "tab": "Runtime Kit",
+      "groups": [
+        {
+          "group": "Use Runtime Kit",
+          "pages": [
+            "runtime-kit/javascript",
+            "runtime-kit/packages",
+            "runtime-kit/local-state"
+          ]
+        },
+        {
+          "group": "Reference",
+          "pages": [
+            "reference/runtime-kit-api"
+          ]
+        }
+      ]
+    },
+    {
+      "tab": "Proof",
+      "groups": [
+        {
+          "group": "Speed claims",
+          "pages": [
+            "proof/how-bitfield-is-fast",
+            "proof/benchmark-ledger"
+          ]
+        },
+        {
+          "group": "Updates",
+          "pages": [
+            "changelog/index"
+          ]
+        }
+      ]
+    }
+  ],
+  "pages": [
+    {
+      "route": "index",
+      "title": "Bitfield Docs",
+      "description": "Start here if you want to understand Bitfield and use the public Runtime Kit surface.",
+      "diataxis": "index",
+      "summary": "The public entry point for Bitfield docs."
+    },
+    {
+      "route": "start/quickstart",
+      "title": "Quickstart",
+      "description": "Get a key, add Runtime Kit, read data, and send a request.",
+      "diataxis": "tutorial",
+      "summary": "The shortest path from a Bitfield key to the first app-facing Runtime Kit calls."
+    },
+    {
+      "route": "start/get-your-key",
+      "title": "Get your key",
+      "description": "How keys, checkout, account access, and the first device activation fit together.",
+      "diataxis": "how-to",
+      "summary": "Explains what happens when you get a Bitfield key and activate your first device."
+    },
+    {
+      "route": "concepts/what-is-bitfield",
+      "title": "What is Bitfield?",
+      "description": "A plain-English explanation of Bitfield as a database and runtime.",
+      "diataxis": "concept",
+      "summary": "Explains Bitfield without assuming the reader already knows database or runtime vocabulary."
+    },
+    {
+      "route": "concepts/database-and-runtime",
+      "title": "Database and runtime",
+      "description": "What Bitfield stores, what it runs, and why those two pieces belong together.",
+      "diataxis": "concept",
+      "summary": "Defines the public database and runtime model."
+    },
+    {
+      "route": "concepts/active-devices",
+      "title": "Active devices",
+      "description": "What counts as an active device and how revoking or replacing a device works.",
+      "diataxis": "concept",
+      "summary": "Defines active devices for pricing, keys, and account management."
+    },
+    {
+      "route": "runtime-kit/javascript",
+      "title": "JavaScript Runtime Kit",
+      "description": "Use the app-facing JavaScript and React surface.",
+      "diataxis": "how-to",
+      "summary": "Shows the public JavaScript Runtime Kit shape without exposing owner machinery."
+    },
+    {
+      "route": "runtime-kit/packages",
+      "title": "Packages",
+      "description": "How Runtime Kit packages declare what should be stored and run.",
+      "diataxis": "reference",
+      "summary": "Documents the public package boundary file and package-set idea."
+    },
+    {
+      "route": "runtime-kit/local-state",
+      "title": "Local state",
+      "description": "What lives under the Bitfield local state folder and what each area means.",
+      "diataxis": "reference",
+      "summary": "Documents customer-visible local state at a high level."
+    },
+    {
+      "route": "proof/how-bitfield-is-fast",
+      "title": "How Bitfield is this fast",
+      "description": "A plain-English speed proof with category boundaries.",
+      "diataxis": "concept",
+      "summary": "Explains warm local reads, memory mapping, content addresses, and non-claims."
+    },
+    {
+      "route": "proof/benchmark-ledger",
+      "title": "Benchmark ledger",
+      "description": "Public benchmark claims with category boundaries and non-claims.",
+      "diataxis": "reference",
+      "summary": "Lists public speed claims with the work category attached."
+    },
+    {
+      "route": "reference/runtime-kit-api",
+      "title": "Runtime Kit API",
+      "description": "The current public Runtime Kit values.",
+      "diataxis": "reference",
+      "summary": "Reference for useBitfieldData and sendRequestToBitfieldTarget."
+    },
+    {
+      "route": "changelog/index",
+      "title": "Changelog",
+      "description": "Customer-facing docs and product updates.",
+      "diataxis": "changelog",
+      "summary": "The public change log for docs and customer-visible product behavior."
+    }
+  ]
+}

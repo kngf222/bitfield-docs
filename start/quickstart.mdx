@@ -1,0 +1,65 @@
+---
+title: "Quickstart"
+description: "Get a key, add Runtime Kit, read data, and send a request."
+---
+
+<div className="bf-article">
+
+<p className="bf-kicker">Quickstart</p>
+
+# Get from key to first call.
+
+<p className="bf-lead">
+This is the short path. Get your key, activate a device, add Runtime Kit, then use the public app-facing surface.
+</p>
+
+## 1. Get your key
+
+Start at [Get your key](/start/get-your-key). Your account portal is where you confirm your email, get access, manage active devices, and replace a device when you need to move a spot.
+
+## 2. Add Runtime Kit
+
+Runtime Kit is the customer-facing package that app code talks to. Your account portal gives the current install instructions for your account and environment.
+
+The public JavaScript surface is intentionally small:
+
+```ts
+import { sendRequestToBitfieldTarget } from '@bitfield/runtime-kit';
+import { useBitfieldData } from '@bitfield/runtime-kit/react';
+```
+
+## 3. Read data in React
+
+`useBitfieldData(...)` reads materialized data that the Runtime Kit owner has already made available to your app.
+
+```tsx
+import { useBitfieldData } from '@bitfield/runtime-kit/react';
+
+export function InboxCount() {
+  const inbox = useBitfieldData((data) => data.inbox);
+
+  if (inbox.loading) return <span>Loading</span>;
+  if (inbox.error) return <span>Could not read inbox</span>;
+
+  return <strong>{inbox.data?.length ?? 0}</strong>;
+}
+```
+
+## 4. Send a request
+
+`sendRequestToBitfieldTarget(...)` sends opaque request data to a Bitfield target and returns the reply. Your app does not need to know how the target is mounted.
+
+```ts
+import { sendRequestToBitfieldTarget } from '@bitfield/runtime-kit';
+
+const reply = await sendRequestToBitfieldTarget({
+  target,
+  payload,
+});
+```
+
+<div className="bf-callout">
+The app surface stays boring on purpose. The product can gain new storage paths, packages, devices, or slots without making every React component learn a new API.
+</div>
+
+</div>

@@ -1,0 +1,74 @@
+/* Generated from docs.manifest.json. Run npm run docs:generate. */
+
+@font-face {
+  font-family: "SF Pro Display";
+  src: url("/fonts/SF-Pro-Display-Regular.woff2") format("woff2");
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "SF Pro Display";
+  src: url("/fonts/SF-Pro-Display-Medium.woff2") format("woff2");
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "SF Pro Display";
+  src: url("/fonts/SF-Pro-Display-Semibold.woff2") format("woff2");
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "SF Pro Display";
+  src: url("/fonts/SF-Pro-Display-Bold.woff2") format("woff2");
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+}
+
+:root {
+  --bf-font-display: "SF Pro Display", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --bf-font-body: "SF Pro Display", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+:root, html[data-bf-docs-theme="paper"] {
+  --bf-surface: #F7F5EF;
+  --bf-surface-raised: #EBE7DC;
+  --bf-text: #111111;
+  --bf-muted: #6B665B;
+  --bf-red: #FB6A5F;
+  --bf-orange: #FF9B5F;
+  --bf-yellow: #FFD767;
+  --bf-green: #85F0B5;
+  --bf-blue: #4F62FF;
+  --bf-purple: #A77BFF;
+  --bf-cyan: #85D8FF;
+}
+
+html[data-bf-docs-theme="ink"] {
+  --bf-surface: #111111;
+  --bf-surface-raised: #1F1F1B;
+  --bf-text: #F7F5EF;
+  --bf-muted: #B9B2A3;
+  --bf-red: #FB6A5F;
+  --bf-orange: #FF9B5F;
+  --bf-yellow: #FFD767;
+  --bf-green: #85F0B5;
+  --bf-blue: #85D8FF;
+  --bf-purple: #A77BFF;
+  --bf-cyan: #85D8FF;
+}
+
+html[data-bf-docs-theme="paper"] {
+  color-scheme: light;
+}
+
+html[data-bf-docs-theme="ink"] {
+  color-scheme: dark;
+}

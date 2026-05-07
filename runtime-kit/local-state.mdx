@@ -1,0 +1,37 @@
+---
+title: "Local state"
+description: "What lives under the Bitfield local state folder and what each area means."
+---
+
+<div className="bf-article">
+
+<p className="bf-kicker">Runtime Kit</p>
+
+# Local state.
+
+<p className="bf-lead">
+Runtime Kit keeps Bitfield's local customer-visible files under `~/.bitfield`.
+</p>
+
+## The top level
+
+```text
+~/.bitfield/
+  stored-data/
+  runtime-kit/
+  check-license/
+```
+
+## What each area means
+
+| Area | Meaning |
+|---|---|
+| `stored-data/` | The durable Bitfield data area. |
+| `runtime-kit/` | Package sets, active package material, and local runner state. |
+| `check-license/` | Device permission files for this machine or runtime identity. |
+
+## What not to edit by hand
+
+Do not edit these files by hand unless Bitfield support tells you to. Use Runtime Kit and the account portal. Manual edits can break activation, package state, or the durable data area.
+
+</div>

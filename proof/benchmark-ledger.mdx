@@ -1,0 +1,47 @@
+---
+title: "Benchmark ledger"
+description: "Public benchmark claims with category boundaries and non-claims."
+---
+
+<div className="bf-article">
+
+<p className="bf-kicker">Proof</p>
+
+# Benchmark ledger.
+
+<p className="bf-lead">
+Every number here names the work category. That is the only honest way to compare speed.
+</p>
+
+<div className="bf-proof-row">
+  <strong>0.68ns</strong>
+  <span>H0 warm local read</span>
+  <span>A warm local engine read. This is not a cold disk read and not a network trip.</span>
+</div>
+
+<div className="bf-proof-row">
+  <strong>91.7ns</strong>
+  <span>Hash lookup</span>
+  <span>The path where Bitfield resolves the content address before reading the bytes.</span>
+</div>
+
+<div className="bf-proof-row">
+  <strong>0.59ns</strong>
+  <span>Batched engine write ceiling</span>
+  <span>The raw optimized engine path divided across a full internal batch. Useful as a ceiling, not the same as every saved-write comparison.</span>
+</div>
+
+<div className="bf-proof-row">
+  <strong>316ns</strong>
+  <span>Durable batch write comparison</span>
+  <span>A conservative saved-write comparison that includes more of the durable write contract.</span>
+</div>
+
+## What these numbers do not say
+
+- They do not say cold storage is sub-nanosecond.
+- They do not say the internet has zero cost.
+- They do not say every database benchmark measures the same job.
+- They do not say one isolated write and a full batch have the same wall-clock shape.
+
+</div>

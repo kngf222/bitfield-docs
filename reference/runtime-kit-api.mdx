@@ -1,0 +1,44 @@
+---
+title: "Runtime Kit API"
+description: "The current public Runtime Kit values."
+---
+
+<div className="bf-article">
+
+<p className="bf-kicker">Reference</p>
+
+# Runtime Kit API.
+
+<p className="bf-lead">
+The current app-facing Runtime Kit API has two public values.
+</p>
+
+## `@bitfield/runtime-kit`
+
+```ts
+sendRequestToBitfieldTarget(request)
+```
+
+Sends opaque request data to a Bitfield target and returns reply data.
+
+## `@bitfield/runtime-kit/react`
+
+```ts
+useBitfieldData(selector?)
+```
+
+Reads descriptor-bound materialized data in React and returns:
+
+```ts
+{
+  data: T | null;
+  loading: boolean;
+  error: Error | null;
+}
+```
+
+## What app code should not do
+
+App code should not create storage addresses, pick observation lanes, parse package contracts, or wire low-level readers. Runtime Kit keeps those choices behind the public surface so your app code stays stable.
+
+</div>

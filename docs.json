@@ -1,122 +1,124 @@
 {
   "$schema": "https://mintlify.com/docs.json",
   "theme": "mint",
-  "name": "Mint Starter Kit",
+  "name": "Bitfield",
+  "description": "Public docs for Bitfield, the plug-in runtime and database for products that need to stay fast as they grow.",
   "colors": {
-    "primary": "#16A34A",
-    "light": "#07C983",
-    "dark": "#15803D"
+    "primary": "#4F62FF",
+    "light": "#85F0B5",
+    "dark": "#111111"
+  },
+  "appearance": {
+    "default": "light",
+    "strict": false
   },
   "favicon": "/favicon.svg",
+  "logo": {
+    "light": "/logo/light.svg",
+    "dark": "/logo/dark.svg"
+  },
+  "fonts": {
+    "heading": {
+      "family": "SF Pro Display",
+      "source": "/fonts/SF-Pro-Display-Semibold.woff2",
+      "format": "woff2",
+      "weight": 600
+    },
+    "body": {
+      "family": "SF Pro Display",
+      "source": "/fonts/SF-Pro-Display-Regular.woff2",
+      "format": "woff2",
+      "weight": 400
+    }
+  },
   "navigation": {
     "tabs": [
       {
-        "tab": "Guides",
+        "tab": "Start",
         "groups": [
           {
-            "group": "Getting started",
+            "group": "Get moving",
             "pages": [
               "index",
-              "quickstart",
-              "development"
+              "start/quickstart",
+              "start/get-your-key"
             ]
           },
           {
-            "group": "Customization",
+            "group": "Understand",
             "pages": [
-              "essentials/settings",
-              "essentials/navigation"
-            ]
-          },
-          {
-            "group": "Writing content",
-            "pages": [
-              "essentials/markdown",
-              "essentials/code",
-              "essentials/images",
-              "essentials/reusable-snippets"
-            ]
-          },
-          {
-            "group": "AI tools",
-            "pages": [
-              "ai-tools/cursor",
-              "ai-tools/claude-code",
-              "ai-tools/windsurf"
+              "concepts/what-is-bitfield",
+              "concepts/database-and-runtime",
+              "concepts/active-devices"
             ]
           }
         ]
       },
       {
-        "tab": "API reference",
+        "tab": "Runtime Kit",
         "groups": [
           {
-            "group": "API documentation",
+            "group": "Use Runtime Kit",
             "pages": [
-              "api-reference/introduction"
+              "runtime-kit/javascript",
+              "runtime-kit/packages",
+              "runtime-kit/local-state"
             ]
           },
           {
-            "group": "Endpoint examples",
+            "group": "Reference",
             "pages": [
-              "api-reference/endpoint/get",
-              "api-reference/endpoint/create",
-              "api-reference/endpoint/delete",
-              "api-reference/endpoint/webhook"
+              "reference/runtime-kit-api"
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "Proof",
+        "groups": [
+          {
+            "group": "Speed claims",
+            "pages": [
+              "proof/how-bitfield-is-fast",
+              "proof/benchmark-ledger"
+            ]
+          },
+          {
+            "group": "Updates",
+            "pages": [
+              "changelog/index"
             ]
           }
         ]
       }
-    ],
-    "global": {
-      "anchors": [
-        {
-          "anchor": "Documentation",
-          "href": "https://mintlify.com/docs",
-          "icon": "book-open-cover"
-        },
-        {
-          "anchor": "Blog",
-          "href": "https://mintlify.com/blog",
-          "icon": "newspaper"
-        }
-      ]
-    }
-  },
-  "logo": {
-    "light": "/logo/light.svg",
-    "dark": "/logo/dark.svg"
+    ]
   },
   "navbar": {
     "links": [
       {
+        "label": "Bitfield",
+        "href": "https://bitfield.so"
+      },
+      {
         "label": "Support",
-        "href": "mailto:hi@mintlify.com"
+        "href": "mailto:support@bitfield.so"
       }
     ],
     "primary": {
       "type": "button",
-      "label": "Dashboard",
-      "href": "https://dashboard.mintlify.com"
+      "label": "Get My Key",
+      "href": "https://bitfield.so/#pricing"
     }
   },
   "contextual": {
     "options": [
-     "copy",
-     "view",
-     "chatgpt",
-     "claude",
-     "perplexity",
-     "mcp",
-     "cursor",
-     "vscode"
-   ]
-  },
-  "footer": {
-    "socials": {
-      "x": "https://x.com/mintlify",
-      "github": "https://github.com/mintlify",
-      "linkedin": "https://linkedin.com/company/mintlify"
-    }
+      "copy",
+      "view",
+      "chatgpt",
+      "claude",
+      "perplexity",
+      "cursor",
+      "vscode"
+    ]
   }
 }

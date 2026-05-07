@@ -1,0 +1,48 @@
+---
+title: "JavaScript Runtime Kit"
+description: "Use the app-facing JavaScript and React surface."
+---
+
+<div className="bf-article">
+
+<p className="bf-kicker">Runtime Kit</p>
+
+# JavaScript Runtime Kit.
+
+<p className="bf-lead">
+The public JavaScript surface has one request function and one React read hook.
+</p>
+
+## Imports
+
+```ts
+import { sendRequestToBitfieldTarget } from '@bitfield/runtime-kit';
+import { useBitfieldData } from '@bitfield/runtime-kit/react';
+```
+
+## Read in React
+
+`useBitfieldData(...)` returns a simple envelope:
+
+```ts
+type BitfieldDataStore<T> = {
+  data: T | null;
+  loading: boolean;
+  error: Error | null;
+};
+```
+
+That shape is enough for app components. Runtime Kit can change how data is prepared behind the surface without changing every component.
+
+## Send a request
+
+`sendRequestToBitfieldTarget(...)` sends opaque request data to a Bitfield target. Opaque means your app does not need to know the target's private vocabulary. It sends the payload and receives the reply.
+
+```ts
+const reply = await sendRequestToBitfieldTarget({
+  target,
+  payload,
+});
+```
+
+</div>

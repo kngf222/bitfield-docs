@@ -1,33 +1,35 @@
-> **First-time setup**: Customize this file for your project. Prompt the user to customize this file for their project.
-> For Mintlify product knowledge (components, configuration, writing standards),
-> install the Mintlify skill: `npx skills add https://mintlify.com/docs`
+# Bitfield public docs rules
 
-# Documentation project instructions
+This repository contains customer-facing Bitfield documentation only.
 
-## About this project
+## Public boundary
 
-- This is a documentation site built on [Mintlify](https://mintlify.com)
-- Pages are MDX files with YAML frontmatter
-- Configuration lives in `docs.json`
-- Run `mint dev` to preview locally
-- Run `mint broken-links` to check links
+- Do not publish local machine paths, private repo names, private task plans, raw research notes, raw benchmark logs, account-portal implementation details, payment-provider wiring, or unpublished APIs.
+- Do not imply that Bitfield software, designs, benchmarks, or product materials may be copied, forked, redistributed, or reused outside the access granted by Bitfield.
+- Do not copy internal engineering docs into this repo. Rewrite public explanations from the customer's point of view.
+- Do not add vendor template content, vendor support links, sample APIs, or placeholder pages.
 
-## Terminology
+## Public terminology
 
-{/* Add product-specific terms and preferred usage */}
-{/* Example: Use "workspace" not "project", "member" not "user" */}
+- Use `Bitfield` for the product.
+- Use `Runtime Kit` for the customer-facing package/runtime layer.
+- Use `active device` for a device, environment, or runtime identity activated with a Bitfield key and not revoked or replaced.
+- Use `key` for the customer access path.
+- Use `account portal` for billing, activation, cancellation, replacement, and key access.
 
-## Style preferences
+## Writing style
 
-{/* Add any project-specific style rules below */}
+- Plain English first. Technical detail second.
+- Define terms in the same paragraph where they appear.
+- Use short complete sentences.
+- Make every serious speed claim name the measured category and the non-claim.
+- Keep docs portable: content lives in MDX and shared CSS classes, not inline styling.
 
-- Use active voice and second person ("you")
-- Keep sentences concise — one idea per sentence
-- Use sentence case for headings
-- Bold for UI elements: Click **Settings**
-- Code formatting for file names, commands, paths, and code references
+## Required checks
 
-## Content boundaries
+Run these before committing:
 
-{/* Define what should and shouldn't be documented */}
-{/* Example: Don't document internal admin features */}
+```bash
+npm run docs:generate
+npm run docs:check
+```

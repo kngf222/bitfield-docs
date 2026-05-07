@@ -1,0 +1,52 @@
+---
+title: "Packages"
+description: "How Runtime Kit packages declare what should be stored and run."
+---
+
+<div className="bf-article">
+
+<p className="bf-kicker">Runtime Kit</p>
+
+# Packages.
+
+<p className="bf-lead">
+A Runtime Kit package declares what Bitfield should store and what it should make runnable.
+</p>
+
+## Package shape
+
+Every package has one boundary file:
+
+```text
+<package-name>/
+  things-to-store-and-run.json
+  slots/
+  other package files
+```
+
+`things-to-store-and-run.json` is the public boundary. It is where the package says what records, stored bytes, or runnable pieces belong to the package.
+
+## Package sets
+
+A package set is a named collection of packages for one product or project. Package sets let different products reuse package names without colliding with each other.
+
+## Thing types
+
+| Type | Meaning |
+|---|---|
+| `record` | Store or remove one addressed record. |
+| `stored_bytes` | Store package-owned bytes under a package-owned name. |
+| `slot` | Make one package-owned runnable thing callable. |
+
+## Minimum file
+
+```json
+{
+  "package": "sample-package",
+  "things": []
+}
+```
+
+Unknown thing types are rejected before they become active.
+
+</div>
