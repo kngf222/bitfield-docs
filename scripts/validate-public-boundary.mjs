@@ -21,27 +21,33 @@ const ignoredDirectories = new Set([
 ]);
 
 const banned = [
-  ['/', 'Users', '/'],
-  ['.', 'claude'],
-  ['.', 'agents'],
-  ['Arch', 'itect'],
-  ['Mint', ' Starter Kit'],
-  ['star', 'ter', '.', 'mintlify', '.', 'com'],
-  ['hi', '@', 'mintlify', '.', 'com'],
-  ['dash', 'board', '.', 'mintlify', '.', 'com'],
-  ['open', ' source'],
-  ['open', '-source'],
-  ['MIT', ' License'],
-  ['Apache', ' License'],
-  ['G', 'P', 'L'],
-  ['A', 'G', 'P', 'L'],
-  ['TO', 'DO'],
-  ['M', 'VP'],
-  ['temp', 'orary'],
-  ['for ', 'now'],
-  ['source', '_path'],
-  ['source', '_repo'],
-].map((parts) => parts.join(''));
+  { parts: ['/', 'Users', '/'] },
+  { parts: ['.', 'claude'] },
+  { parts: ['.', 'agents'] },
+  { parts: ['Arch', 'itect'] },
+  { parts: ['Mint', ' Starter Kit'] },
+  { parts: ['star', 'ter', '.', 'mintlify', '.', 'com'] },
+  { parts: ['hi', '@', 'mintlify', '.', 'com'] },
+  { parts: ['dash', 'board', '.', 'mintlify', '.', 'com'] },
+  { parts: ['open', ' source'] },
+  { parts: ['open', '-source'] },
+  { parts: ['MIT', ' License'] },
+  { parts: ['Apache', ' License'] },
+  { parts: ['G', 'P', 'L'] },
+  { parts: ['A', 'G', 'P', 'L'] },
+  { parts: ['TO', 'DO'] },
+  { parts: ['M', 'VP'] },
+  { parts: ['temp', 'orary'] },
+  { parts: ['for ', 'now'] },
+  {
+    parts: ['source', '_path'],
+    allowedFiles: new Set(['reference/package-boundary.mdx']),
+  },
+  { parts: ['source', '_repo'] },
+].map((rule) => ({
+  pattern: rule.parts.join(''),
+  allowedFiles: rule.allowedFiles ?? new Set(),
+}));
 
 function extensionOf(path) {
   const index = path.lastIndexOf('.');
@@ -69,9 +75,9 @@ const failures = [];
 for (const file of walk(root)) {
   const rel = relative(root, file);
   const body = readFileSync(file, 'utf8');
-  for (const pattern of banned) {
-    if (body.includes(pattern)) {
-      failures.push(`${rel}: contains blocked public-boundary phrase: ${pattern}`);
+  for (const rule of banned) {
+    if (body.includes(rule.pattern) && !rule.allowedFiles.has(rel)) {
+      failures.push(`${rel}: contains blocked public-boundary phrase: ${rule.pattern}`);
     }
   }
 }

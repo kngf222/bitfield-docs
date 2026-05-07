@@ -8,7 +8,7 @@
       "value": 0.68,
       "unit": "nanoseconds per read",
       "category": "warm local engine read",
-      "plainEnglish": "The data path is already warm on the local machine, and Bitfield can read by the storage shape that avoids the normal database request path.",
+      "mechanism": "The data path is already warm on the local machine, and Bitfield can read by the storage shape that avoids the normal database request path.",
       "notClaiming": [
         "A cold disk read takes less than a nanosecond.",
         "A network round trip disappears.",
@@ -16,7 +16,8 @@
       ],
       "publicUse": [
         "proof/how-bitfield-is-fast",
-        "proof/benchmark-ledger"
+        "proof/benchmark-ledger",
+        "proof/methodology"
       ]
     },
     {
@@ -25,13 +26,14 @@
       "value": 91.7,
       "unit": "nanoseconds per lookup",
       "category": "local lookup before read",
-      "plainEnglish": "This is the path where Bitfield first resolves the content address before reading the bytes.",
+      "mechanism": "This is the path where Bitfield first resolves the content address before reading the bytes.",
       "notClaiming": [
         "This is the same category as the H0 exact read.",
         "This includes networked application latency."
       ],
       "publicUse": [
-        "proof/benchmark-ledger"
+        "proof/benchmark-ledger",
+        "proof/methodology"
       ]
     },
     {
@@ -40,13 +42,14 @@
       "value": 316,
       "unit": "nanoseconds per written item",
       "category": "durable batch write comparison",
-      "plainEnglish": "This row includes more of the saved-write contract than the raw write ceiling, then divides the batch cost across written items.",
+      "mechanism": "This row includes more of the saved-write contract than the raw write ceiling, then divides the batch cost across written items.",
       "notClaiming": [
         "Every single isolated write has 316ns wall-clock latency.",
         "This is the same category as a networked managed database write."
       ],
       "publicUse": [
-        "proof/benchmark-ledger"
+        "proof/benchmark-ledger",
+        "proof/methodology"
       ]
     },
     {
@@ -55,14 +58,15 @@
       "value": 0.59,
       "unit": "nanoseconds per written item",
       "category": "batched engine write ceiling",
-      "plainEnglish": "This is the raw optimized engine path divided across a full internal batch. It is useful as a ceiling, not as a replacement for durable write comparison rows.",
+      "mechanism": "This is the optimized engine path divided across a full engine batch. It is useful as a ceiling, not as a replacement for durable write comparison rows.",
       "notClaiming": [
         "A full saved write is always 0.59ns.",
         "This number should be compared directly to every vendor write benchmark."
       ],
       "publicUse": [
         "proof/how-bitfield-is-fast",
-        "proof/benchmark-ledger"
+        "proof/benchmark-ledger",
+        "proof/methodology"
       ]
     }
   ]

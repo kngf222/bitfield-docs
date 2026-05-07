@@ -1,0 +1,96 @@
+---
+title: "Package boundary"
+description: "Reference for things-to-store-and-run.json."
+---
+
+<div className="bf-article">
+
+<p className="bf-kicker">Reference</p>
+
+# Package boundary.
+
+<p className="bf-lead">
+`things-to-store-and-run.json` is the public file where a package declares what Bitfield should admit.
+</p>
+
+## Minimum file
+
+```json
+{
+  "package": "sample-package",
+  "things": []
+}
+```
+
+## Top-level fields
+
+| Field | Type | Required | Meaning |
+|---|---|---:|---|
+| `package` | string | yes | Package name inside the package set. |
+| `things` | array | yes | Records, stored bytes, or slots declared by the package. |
+
+Unknown top-level fields may be rejected by the package compiler.
+
+## Thing types
+
+| Type | Required fields | Meaning |
+|---|---|---|
+| `record` | `type`, `address`, one payload choice | Store or remove one addressed record. |
+| `stored_bytes` | `type`, `name`, `source_path` | Store package-owned bytes under a package-owned name. |
+| `slot` | `type`, `name`, `methods`, `boundary`, artifact or build data | Make one runnable thing callable. |
+
+Unknown thing types are rejected before they become active.
+
+## Record
+
+```json
+{
+  "type": "record",
+  "address": "package::sample-package::main",
+  "payload": { "ready": true }
+}
+```
+
+A record chooses exactly one payload action:
+
+- `payload`
+- `payload_text`
+- `payload_base64`
+- `remove: true`
+
+## Stored bytes
+
+```json
+{
+  "type": "stored_bytes",
+  "name": "help.txt",
+  "source_path": "help.txt"
+}
+```
+
+`source_path` must point inside the package. The package compiler must not accept a path that escapes the package folder.
+
+## Slot
+
+```json
+{
+  "type": "slot",
+  "name": "sample-slot",
+  "methods": [{ "name": "query" }],
+  "boundary": {
+    "call_shape": "envelope-bytes-in-envelope-bytes-out",
+    "methods": [{ "name": "query" }]
+  },
+  "artifact": {
+    "source_path": "slots/sample-slot.bin"
+  }
+}
+```
+
+A slot declares the public door and the artifact or build data needed to admit it. The runner-specific details stay behind the plug.
+
+## Error shape
+
+Package compiler errors are machine-readable. A UI should use the error code and message it receives instead of copying error strings into its own local table.
+
+</div>

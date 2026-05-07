@@ -1,0 +1,124 @@
+{
+  "version": 1,
+  "publicOnly": true,
+  "sources": [
+    {
+      "id": "bitfield-public-landing-copy",
+      "kind": "public-copy",
+      "publicUse": "Product language for what Bitfield is, active devices, checkout, and proof framing.",
+      "freshness": "review when public site copy changes"
+    },
+    {
+      "id": "runtime-kit-js-public-contract",
+      "kind": "public-contract",
+      "publicUse": "JavaScript Runtime Kit exports and app-facing API shape.",
+      "freshness": "review when Runtime Kit package exports change"
+    },
+    {
+      "id": "runtime-kit-package-boundary",
+      "kind": "public-contract",
+      "publicUse": "Package boundary file, thing types, and local state language.",
+      "freshness": "review when package boundary validation changes"
+    },
+    {
+      "id": "bitfield-public-legal-pages",
+      "kind": "public-legal",
+      "publicUse": "Public Terms, Refund Policy, and Privacy Policy routes.",
+      "freshness": "review when legal page routes or checkout consent wording changes"
+    },
+    {
+      "id": "bitfield-public-claim-ledger",
+      "kind": "public-proof",
+      "publicUse": "Published benchmark numbers, categories, and non-claims.",
+      "freshness": "review when claim-ledger.json changes"
+    },
+    {
+      "id": "bitfield-docs-information-architecture",
+      "kind": "docs-graph",
+      "publicUse": "Docs navigation, page summaries, and reader-intent grouping.",
+      "freshness": "review when docs.manifest.json changes"
+    }
+  ],
+  "pages": [
+    {
+      "route": "index",
+      "sourceIds": ["bitfield-public-landing-copy", "bitfield-docs-information-architecture"]
+    },
+    {
+      "route": "start/quickstart",
+      "sourceIds": ["runtime-kit-js-public-contract", "bitfield-public-landing-copy"]
+    },
+    {
+      "route": "start/get-your-key",
+      "sourceIds": ["bitfield-public-landing-copy", "bitfield-public-legal-pages"]
+    },
+    {
+      "route": "concepts/what-is-bitfield",
+      "sourceIds": ["bitfield-public-landing-copy"]
+    },
+    {
+      "route": "concepts/database-and-runtime",
+      "sourceIds": ["bitfield-public-landing-copy", "runtime-kit-package-boundary"]
+    },
+    {
+      "route": "concepts/slots",
+      "sourceIds": ["bitfield-public-landing-copy", "runtime-kit-package-boundary"]
+    },
+    {
+      "route": "concepts/active-devices",
+      "sourceIds": ["bitfield-public-landing-copy", "bitfield-public-legal-pages"]
+    },
+    {
+      "route": "runtime-kit/javascript",
+      "sourceIds": ["runtime-kit-js-public-contract"]
+    },
+    {
+      "route": "runtime-kit/use-bitfield-data",
+      "sourceIds": ["runtime-kit-js-public-contract"]
+    },
+    {
+      "route": "runtime-kit/send-request",
+      "sourceIds": ["runtime-kit-js-public-contract"]
+    },
+    {
+      "route": "runtime-kit/packages",
+      "sourceIds": ["runtime-kit-package-boundary"]
+    },
+    {
+      "route": "runtime-kit/local-state",
+      "sourceIds": ["runtime-kit-package-boundary"]
+    },
+    {
+      "route": "build-your-own-surface/sdk-boundary",
+      "sourceIds": ["runtime-kit-js-public-contract", "runtime-kit-package-boundary"]
+    },
+    {
+      "route": "activation/trials-and-billing",
+      "sourceIds": ["bitfield-public-landing-copy", "bitfield-public-legal-pages"]
+    },
+    {
+      "route": "proof/how-bitfield-is-fast",
+      "sourceIds": ["bitfield-public-claim-ledger", "bitfield-public-landing-copy"]
+    },
+    {
+      "route": "proof/benchmark-ledger",
+      "sourceIds": ["bitfield-public-claim-ledger"]
+    },
+    {
+      "route": "proof/methodology",
+      "sourceIds": ["bitfield-public-claim-ledger"]
+    },
+    {
+      "route": "reference/runtime-kit-api",
+      "sourceIds": ["runtime-kit-js-public-contract"]
+    },
+    {
+      "route": "reference/package-boundary",
+      "sourceIds": ["runtime-kit-package-boundary"]
+    },
+    {
+      "route": "changelog/index",
+      "sourceIds": ["bitfield-docs-information-architecture"]
+    }
+  ]
+}

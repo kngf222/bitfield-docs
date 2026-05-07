@@ -1,0 +1,77 @@
+---
+title: "Send a request"
+description: "Send opaque payloads to Bitfield targets through the public request function."
+---
+
+<div className="bf-article">
+
+<p className="bf-kicker">Runtime Kit</p>
+
+# Send a request.
+
+<p className="bf-lead">
+Use `sendRequestToBitfieldTarget(...)` when app code needs to ask a Bitfield target to do something.
+</p>
+
+## Import
+
+```ts
+import { sendRequestToBitfieldTarget } from '@bitfield/runtime-kit';
+```
+
+## Shape
+
+```ts
+type BitfieldTargetRequest = {
+  target: string;
+  payload?: unknown;
+};
+
+type BitfieldTargetReply = {
+  payload: Uint8Array;
+};
+```
+
+`target` is the public name of the thing you want to ask. `payload` is the data you are sending. The reply is bytes because targets can return JSON, text, packed data, or another format chosen by that target.
+
+## Send JSON-like data
+
+```ts
+const reply = await sendRequestToBitfieldTarget({
+  target: 'product.search',
+  payload: { query: 'camera' },
+});
+
+const text = new TextDecoder().decode(reply.payload);
+const result = JSON.parse(text);
+```
+
+## Send bytes
+
+```ts
+const reply = await sendRequestToBitfieldTarget({
+  target: 'image.thumbnail',
+  payload: imageBytes,
+});
+```
+
+If the payload is already a `Uint8Array`, Runtime Kit sends those bytes. If the payload is a string, Runtime Kit encodes the string. Otherwise it serializes the value as JSON before sending.
+
+## Cancel a request
+
+```ts
+const controller = new AbortController();
+
+const reply = await sendRequestToBitfieldTarget(
+  { target: 'product.search', payload: { query: 'camera' } },
+  controller.signal,
+);
+```
+
+Use the abort signal when the user leaves a screen, types a new query, or cancels a task.
+
+## What app code should not do
+
+App code should not create connection managers, boot hooks, transports, package readers, or storage addresses. Those are Bitfield setup jobs behind Runtime Kit. The app sends the request and handles the reply.
+
+</div>

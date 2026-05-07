@@ -9,7 +9,7 @@ This repository publishes public docs only. It does not grant rights to Bitfield
 | Area | Purpose |
 |---|---|
 | `start/` | First-run guides. |
-| `concepts/` | Plain-English explanations. |
+| `concepts/` | Concept explanations. |
 | `runtime-kit/` | Runtime Kit usage and package docs. |
 | `activation/` | Keys, active devices, trials, and billing behavior. |
 | `proof/` | Public speed claims with category boundaries. |

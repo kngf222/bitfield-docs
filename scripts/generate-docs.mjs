@@ -1,6 +1,8 @@
 import { readFileSync, writeFileSync } from 'node:fs';
 
 const manifest = JSON.parse(readFileSync('docs.manifest.json', 'utf8'));
+const claimLedger = JSON.parse(readFileSync('claim-ledger.json', 'utf8'));
+const sourceMap = JSON.parse(readFileSync('source-map.json', 'utf8'));
 const pages = new Map(manifest.pages.map((page) => [page.route, page]));
 const themeNames = Object.keys(manifest.site.themes);
 const regularFont = manifest.site.typography.fontFaces.find((font) => font.weight === 400);
@@ -214,6 +216,16 @@ for (const page of manifest.pages) {
 
 llmsLines.push(
   '',
+  '## Public source categories',
+  '',
+);
+
+for (const source of sourceMap.sources) {
+  llmsLines.push(`- ${source.id}: ${source.publicUse} Freshness rule: ${source.freshness}.`);
+}
+
+llmsLines.push(
+  '',
   '## Public API surface',
   '',
   '- `@bitfield/runtime-kit`: `sendRequestToBitfieldTarget(...)`',
@@ -221,9 +233,17 @@ llmsLines.push(
   '',
   '## Benchmark boundary',
   '',
-  '- `0.68ns` is a warm local H0 read category.',
-  '- `0.59ns` is a batched engine write ceiling category.',
-  '- Cold storage, network trips, and managed database requests are different categories.',
+);
+
+for (const claim of claimLedger.claims) {
+  llmsLines.push(
+    `- ${claim.publicLabel}: ${claim.category}. ${claim.mechanism} Not claiming: ${claim.notClaiming.join(' ')}`,
+  );
+}
+
+llmsLines.push(
+  '',
+  'Cold storage, network trips, and managed database requests are different categories from warm local reads.',
   '',
 );
 

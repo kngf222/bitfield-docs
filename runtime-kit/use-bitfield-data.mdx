@@ -1,0 +1,68 @@
+---
+title: "Read data in React"
+description: "Use the public React read hook without taking on Bitfield setup details."
+---
+
+<div className="bf-article">
+
+<p className="bf-kicker">Runtime Kit</p>
+
+# Read data in React.
+
+<p className="bf-lead">
+Use `useBitfieldData(...)` when a React component needs data that Runtime Kit has already prepared for app code.
+</p>
+
+## Import
+
+```ts
+import { useBitfieldData } from '@bitfield/runtime-kit/react';
+```
+
+## Shape
+
+The hook returns the same simple shape every time:
+
+```ts
+type BitfieldDataStore<T> = {
+  data: T | null;
+  loading: boolean;
+  error: Error | null;
+};
+```
+
+That is the public contract. Your component does not need to know whether the data came from a direct value, a derived value, selected payload bytes, or a pushed update.
+
+## Use it in a component
+
+```tsx
+import { useBitfieldData } from '@bitfield/runtime-kit/react';
+
+export function ProductName() {
+  const product = useBitfieldData<{ name: string }>();
+
+  if (product.loading) return <span>Loading</span>;
+  if (product.error) return <span>{product.error.message}</span>;
+  if (!product.data) return null;
+
+  return <strong>{product.data.name}</strong>;
+}
+```
+
+## Why the surface is this small
+
+The component should read app data. It should not create addresses, choose storage lanes, subscribe to bytes, parse package contracts, or bind private read scopes.
+
+Those jobs still exist. Runtime Kit keeps them behind the public surface so app components stay boring and replaceable.
+
+## When to use a selector
+
+Some integrations may give the hook a selector. A selector is not a second public API family. It is just a way to pick the data Runtime Kit already made available to the component.
+
+```tsx
+const item = useBitfieldData((scope) => scope.item);
+```
+
+If your app has no selector yet, call the hook without one and let the integration decide what the current component receives.
+
+</div>

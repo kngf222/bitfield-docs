@@ -19,7 +19,7 @@ This repository contains customer-facing Bitfield documentation only.
 
 ## Writing style
 
-- Plain English first. Technical detail second.
+- Clear reader language first. Technical detail second.
 - Define terms in the same paragraph where they appear.
 - Use short complete sentences.
 - Make every serious speed claim name the measured category and the non-claim.

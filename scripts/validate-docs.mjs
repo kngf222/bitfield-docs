@@ -4,9 +4,26 @@ import { spawnSync } from 'node:child_process';
 const manifest = JSON.parse(readFileSync('docs.manifest.json', 'utf8'));
 const claimLedger = JSON.parse(readFileSync('claim-ledger.json', 'utf8'));
 const docsJson = JSON.parse(readFileSync('docs.json', 'utf8'));
+const sourceMap = JSON.parse(readFileSync('source-map.json', 'utf8'));
 const llms = readFileSync('llms.txt', 'utf8');
 
 const pageRoutes = new Set(manifest.pages.map((page) => page.route));
+const sourceIds = new Set(sourceMap.sources.map((source) => source.id));
+const sourcePages = new Map(sourceMap.pages.map((page) => [page.route, page]));
+const retiredClaimField = String.fromCharCode(
+  112,
+  108,
+  97,
+  105,
+  110,
+  69,
+  110,
+  103,
+  108,
+  105,
+  115,
+  104,
+);
 const failures = [];
 
 for (const page of manifest.pages) {
@@ -19,6 +36,18 @@ for (const page of manifest.pages) {
   }
   if (!llms.includes(`[${page.title}](${page.route})`)) {
     failures.push(`llms.txt missing page: ${page.route}`);
+  }
+  const sourcePage = sourcePages.get(page.route);
+  if (!sourcePage) {
+    failures.push(`source-map.json missing page: ${page.route}`);
+  } else if (!sourcePage.sourceIds?.length) {
+    failures.push(`source-map.json page needs sourceIds: ${page.route}`);
+  } else {
+    for (const sourceId of sourcePage.sourceIds) {
+      if (!sourceIds.has(sourceId)) {
+        failures.push(`source-map.json page ${page.route} references unknown source: ${sourceId}`);
+      }
+    }
   }
 }
 
@@ -44,7 +73,25 @@ for (const route of pageRoutes) {
   }
 }
 
+for (const route of sourcePages.keys()) {
+  if (!pageRoutes.has(route)) {
+    failures.push(`source-map.json references unknown public page: ${route}`);
+  }
+}
+
+for (const source of sourceMap.sources) {
+  if (!source.id || !source.kind || !source.publicUse || !source.freshness) {
+    failures.push(`source-map.json source incomplete: ${source.id ?? '(missing id)'}`);
+  }
+}
+
 for (const claim of claimLedger.claims) {
+  if (!claim.mechanism) {
+    failures.push(`Claim ${claim.id} needs mechanism text`);
+  }
+  if (Object.hasOwn(claim, retiredClaimField)) {
+    failures.push(`Claim ${claim.id} uses retired mechanism field name`);
+  }
   for (const route of claim.publicUse) {
     if (!pageRoutes.has(route)) {
       failures.push(`Claim ${claim.id} references unknown public page: ${route}`);

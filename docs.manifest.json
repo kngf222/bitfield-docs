@@ -89,6 +89,7 @@
           "pages": [
             "concepts/what-is-bitfield",
             "concepts/database-and-runtime",
+            "concepts/slots",
             "concepts/active-devices"
           ]
         }
@@ -101,6 +102,8 @@
           "group": "Use Runtime Kit",
           "pages": [
             "runtime-kit/javascript",
+            "runtime-kit/use-bitfield-data",
+            "runtime-kit/send-request",
             "runtime-kit/packages",
             "runtime-kit/local-state"
           ]
@@ -108,7 +111,25 @@
         {
           "group": "Reference",
           "pages": [
-            "reference/runtime-kit-api"
+            "reference/runtime-kit-api",
+            "reference/package-boundary"
+          ]
+        }
+      ]
+    },
+    {
+      "tab": "Build",
+      "groups": [
+        {
+          "group": "Own your surface",
+          "pages": [
+            "build-your-own-surface/sdk-boundary"
+          ]
+        },
+        {
+          "group": "Activation",
+          "pages": [
+            "activation/trials-and-billing"
           ]
         }
       ]
@@ -120,7 +141,8 @@
           "group": "Speed claims",
           "pages": [
             "proof/how-bitfield-is-fast",
-            "proof/benchmark-ledger"
+            "proof/benchmark-ledger",
+            "proof/methodology"
           ]
         },
         {
@@ -157,7 +179,7 @@
     {
       "route": "concepts/what-is-bitfield",
       "title": "What is Bitfield?",
-      "description": "A plain-English explanation of Bitfield as a database and runtime.",
+      "description": "A customer-facing explanation of Bitfield as a database and runtime.",
       "diataxis": "concept",
       "summary": "Explains Bitfield without assuming the reader already knows database or runtime vocabulary."
     },
@@ -167,6 +189,13 @@
       "description": "What Bitfield stores, what it runs, and why those two pieces belong together.",
       "diataxis": "concept",
       "summary": "Defines the public database and runtime model."
+    },
+    {
+      "route": "concepts/slots",
+      "title": "Slots",
+      "description": "What a Bitfield slot is and why slots keep features from tangling together.",
+      "diataxis": "concept",
+      "summary": "Explains slots as named runnable doors that features can call without importing each other."
     },
     {
       "route": "concepts/active-devices",
@@ -180,7 +209,21 @@
       "title": "JavaScript Runtime Kit",
       "description": "Use the app-facing JavaScript and React surface.",
       "diataxis": "how-to",
-      "summary": "Shows the public JavaScript Runtime Kit shape without exposing owner machinery."
+      "summary": "Shows the public JavaScript Runtime Kit shape without exposing Bitfield setup work."
+    },
+    {
+      "route": "runtime-kit/use-bitfield-data",
+      "title": "Read data in React",
+      "description": "Use the public React read hook without taking on Bitfield setup details.",
+      "diataxis": "how-to",
+      "summary": "Shows how useBitfieldData returns data, loading, and error for app components."
+    },
+    {
+      "route": "runtime-kit/send-request",
+      "title": "Send a request",
+      "description": "Send opaque payloads to Bitfield targets through the public request function.",
+      "diataxis": "how-to",
+      "summary": "Shows how sendRequestToBitfieldTarget sends a target plus payload and returns reply bytes."
     },
     {
       "route": "runtime-kit/packages",
@@ -197,9 +240,23 @@
       "summary": "Documents customer-visible local state at a high level."
     },
     {
+      "route": "build-your-own-surface/sdk-boundary",
+      "title": "Build your own surface",
+      "description": "How to design another app-facing SDK without exposing Bitfield setup details.",
+      "diataxis": "how-to",
+      "summary": "Defines the public SDK boundary pattern: simple app functions outside, Bitfield setup behind the plug."
+    },
+    {
+      "route": "activation/trials-and-billing",
+      "title": "Trials and billing",
+      "description": "How the free trial, monthly and yearly cadence, active-device ranges, and legal links fit together.",
+      "diataxis": "reference",
+      "summary": "Explains trial billing and active-device ranges without turning pricing into hidden math."
+    },
+    {
       "route": "proof/how-bitfield-is-fast",
       "title": "How Bitfield is this fast",
-      "description": "A plain-English speed proof with category boundaries.",
+      "description": "A speed proof with category boundaries.",
       "diataxis": "concept",
       "summary": "Explains warm local reads, memory mapping, content addresses, and non-claims."
     },
@@ -211,11 +268,25 @@
       "summary": "Lists public speed claims with the work category attached."
     },
     {
+      "route": "proof/methodology",
+      "title": "Measurement methodology",
+      "description": "How to read Bitfield benchmark numbers without comparing unlike jobs.",
+      "diataxis": "concept",
+      "summary": "Explains warm reads, cold reads, hash lookup, durable writes, and why each number needs its category."
+    },
+    {
       "route": "reference/runtime-kit-api",
       "title": "Runtime Kit API",
       "description": "The current public Runtime Kit values.",
       "diataxis": "reference",
       "summary": "Reference for useBitfieldData and sendRequestToBitfieldTarget."
+    },
+    {
+      "route": "reference/package-boundary",
+      "title": "Package boundary",
+      "description": "Reference for things-to-store-and-run.json.",
+      "diataxis": "reference",
+      "summary": "Lists the public package boundary fields and thing types."
     },
     {
       "route": "changelog/index",

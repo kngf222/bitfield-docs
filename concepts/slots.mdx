@@ -1,0 +1,58 @@
+---
+title: "Slots"
+description: "What a Bitfield slot is and why slots keep features from tangling together."
+---
+
+<div className="bf-article">
+
+<p className="bf-kicker">Concept</p>
+
+# Slots.
+
+<p className="bf-lead">
+A slot is a named door to something your product can ask Bitfield to run.
+</p>
+
+That "something" might answer a question, transform data, render a view, call another system, or do work in the background. The important part is the shape. The app calls the slot by name. The slot owns how it does the work.
+
+## Why slots exist
+
+Without slots, features start talking directly to each other. That feels simple at first. Then the product grows, and one feature needs to know how another feature stores data, names inputs, handles failures, and changes over time.
+
+Slots keep that from becoming a knot. A feature sends a request to a slot. The slot replies. The feature does not import the slot's private code or copy its private rules.
+
+## The model
+
+<div className="bf-grid">
+  <div className="bf-card">
+    <strong>A slot has a name.</strong>
+    The name is the public door. App code can ask for that door without knowing the room behind it.
+  </div>
+  <div className="bf-card">
+    <strong>A slot has methods.</strong>
+    Methods are the public actions the door accepts, like a query or a command.
+  </div>
+  <div className="bf-card">
+    <strong>A slot has its own setup.</strong>
+    The package decides how the slot runs. The app does not need those details.
+  </div>
+</div>
+
+## What the app sees
+
+The app-facing surface stays small:
+
+```ts
+await sendRequestToBitfieldTarget({
+  target: 'product.search',
+  payload: { query: 'camera' },
+});
+```
+
+The app sends a target and payload. Bitfield gets that request to the right runnable piece and returns reply bytes.
+
+## What this prevents
+
+Slots prevent feature code from learning too much about other feature code. That matters because private details change. Public doors should stay steady.
+
+</div>

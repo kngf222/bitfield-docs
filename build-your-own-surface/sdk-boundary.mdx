@@ -1,0 +1,62 @@
+---
+title: "Build your own surface"
+description: "How to design another app-facing SDK without exposing Bitfield setup details."
+---
+
+<div className="bf-article">
+
+<p className="bf-kicker">Build</p>
+
+# Build your own surface.
+
+<p className="bf-lead">
+A good SDK gives app code a tiny surface and keeps Bitfield setup work behind the plug.
+</p>
+
+The JavaScript Runtime Kit is the example. App code gets one read hook and one request function. Bitfield still handles boot, connection, package loading, storage readers, subscriptions, and validation behind that surface.
+
+## The rule
+
+Expose the thing the app actually wants to do. Do not expose the setup steps Bitfield had to take to make that possible.
+
+<div className="bf-grid">
+  <div className="bf-card">
+    <strong>Expose reads.</strong>
+    Give app code a stable way to receive data, loading, and error.
+  </div>
+  <div className="bf-card">
+    <strong>Expose requests.</strong>
+    Give app code a stable way to send a target plus payload.
+  </div>
+  <div className="bf-card">
+    <strong>Hide setup work.</strong>
+    Keep boot, package binding, storage addressing, byte subscriptions, and transport setup outside the app surface.
+  </div>
+</div>
+
+## A public surface can be small
+
+```ts
+export { sendRequestToBitfieldTarget } from './request-surface';
+export { useBitfieldData } from './react-surface';
+```
+
+That is enough for most app code. If you need a Swift, Kotlin, Python, or server-side surface later, keep the same shape: one way to read prepared data and one way to send a request.
+
+## The setup surface can be large
+
+The setup surface can do real work. It may connect to Bitfield, load packages, prepare read scopes, subscribe to updates, decode payloads, validate package boundaries, or recover from resets.
+
+That does not mean the app surface should expose those details. App developers should not have to learn the setup work just to render data.
+
+## The boundary test
+
+Ask this before adding a public SDK function:
+
+<div className="bf-callout">
+Would an app developer call this because their product needs it, or because Bitfield setup needed a place to live?
+</div>
+
+If it is setup work, keep it behind the plug.
+
+</div>

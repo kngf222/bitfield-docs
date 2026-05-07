@@ -1,0 +1,54 @@
+---
+title: "Measurement methodology"
+description: "How to read Bitfield benchmark numbers without comparing unlike jobs."
+---
+
+<div className="bf-article">
+
+<p className="bf-kicker">Proof</p>
+
+# Measurement methodology.
+
+<p className="bf-lead">
+Benchmark numbers are only useful when you know what job was measured.
+</p>
+
+The wrong way to read a benchmark is to take one number from one category and compare it to a different number from another category. A warm local read, a cold disk read, a hash lookup, a durable batch write, and a networked database request are different jobs.
+
+## The categories
+
+| Category | What it means | What to compare it to |
+|---|---|---|
+| Warm local read | The data is already available locally and the read path knows where to look. | Other warm local reads with a similar access shape. |
+| Hash lookup before read | Bitfield first resolves an identity, then reads. | Other local lookup paths, not exact-position reads. |
+| Durable batch write | Many writes are grouped, then the cost is divided across written items. | Other batch writes with the same durability boundary. |
+| Networked request | Data crosses a network before the app gets an answer. | Other networked systems in the same deployment shape. |
+| Cold storage read | Hardware or the operating system has to fetch data that is not warm. | Other cold reads on similar hardware. |
+
+## Why warm local read is allowed to be tiny
+
+Warm means the operating system already has the needed file pages available. Local means the read does not cross a network. Known position means Bitfield is not asking a general database process to parse, plan, and search for the answer.
+
+That does not break physics. It names the physics being measured.
+
+## Why the non-claims matter
+
+The headline number is never the whole truth. The non-claims tell you where the number stops.
+
+<div className="bf-callout">
+If a number says warm local read, do not read it as cold disk, network request, every possible query, or every possible write.
+</div>
+
+## How docs should present numbers
+
+Every public speed row needs:
+
+- The number.
+- The unit.
+- The measured category.
+- The mechanism.
+- A list of what the number is not claiming.
+
+That is why the [benchmark ledger](/proof/benchmark-ledger) exists.
+
+</div>

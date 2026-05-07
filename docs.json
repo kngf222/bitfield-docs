@@ -49,6 +49,7 @@
             "pages": [
               "concepts/what-is-bitfield",
               "concepts/database-and-runtime",
+              "concepts/slots",
               "concepts/active-devices"
             ]
           }
@@ -61,6 +62,8 @@
             "group": "Use Runtime Kit",
             "pages": [
               "runtime-kit/javascript",
+              "runtime-kit/use-bitfield-data",
+              "runtime-kit/send-request",
               "runtime-kit/packages",
               "runtime-kit/local-state"
             ]
@@ -68,7 +71,25 @@
           {
             "group": "Reference",
             "pages": [
-              "reference/runtime-kit-api"
+              "reference/runtime-kit-api",
+              "reference/package-boundary"
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "Build",
+        "groups": [
+          {
+            "group": "Own your surface",
+            "pages": [
+              "build-your-own-surface/sdk-boundary"
+            ]
+          },
+          {
+            "group": "Activation",
+            "pages": [
+              "activation/trials-and-billing"
             ]
           }
         ]
@@ -80,7 +101,8 @@
             "group": "Speed claims",
             "pages": [
               "proof/how-bitfield-is-fast",
-              "proof/benchmark-ledger"
+              "proof/benchmark-ledger",
+              "proof/methodology"
             ]
           },
           {
