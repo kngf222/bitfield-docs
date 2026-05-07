@@ -4,7 +4,7 @@
   "type": "module",
   "scripts": {
     "docs:generate": "node scripts/generate-docs.mjs",
-    "docs:check": "node scripts/validate-public-boundary.mjs && node scripts/validate-docs.mjs",
+    "docs:check": "node scripts/validate-public-boundary.mjs && node scripts/validate-examples.mjs && node scripts/validate-docs.mjs",
     "docs:mint": "mint validate --disable-openapi && mint broken-links --check-anchors --check-redirects --check-snippets && mint a11y"
   },
   "devDependencies": {}

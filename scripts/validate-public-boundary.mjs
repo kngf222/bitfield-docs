@@ -1,9 +1,10 @@
-import { readdirSync, readFileSync, statSync } from 'node:fs';
+import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs';
 import { join, relative } from 'node:path';
 
 const root = process.cwd();
 const textExtensions = new Set([
   '.css',
+  '.bin',
   '.js',
   '.json',
   '.md',
@@ -18,6 +19,32 @@ const textExtensions = new Set([
 const ignoredDirectories = new Set([
   '.git',
   'node_modules',
+]);
+
+function workflowExampleAllowlist() {
+  if (!existsSync('workflow-examples.json')) return new Set();
+  const examples = JSON.parse(readFileSync('workflow-examples.json', 'utf8'));
+  const sourcePathToken = ['source', '_path'].join('');
+  const allowed = new Set(['reference/package-boundary.schema.json']);
+  for (const example of examples.examples ?? []) {
+    if (!example.packageBoundary || !existsSync(example.packageBoundary)) {
+      continue;
+    }
+    const packageBoundary = readFileSync(example.packageBoundary, 'utf8');
+    if (!packageBoundary.includes(sourcePathToken)) {
+      continue;
+    }
+    allowed.add(example.packageBoundary);
+    if (example.route) {
+      allowed.add(`${example.route}.mdx`);
+    }
+  }
+  return allowed;
+}
+
+const sourcePathAllowedFiles = new Set([
+  'reference/package-boundary.mdx',
+  ...workflowExampleAllowlist(),
 ]);
 
 const banned = [
@@ -41,11 +68,7 @@ const banned = [
   { parts: ['for ', 'now'] },
   {
     parts: ['source', '_path'],
-    allowedFiles: new Set([
-      'reference/package-boundary.mdx',
-      'workflows/package-owned-file.mdx',
-      'workflows/callable-package-slot.mdx',
-    ]),
+    allowedFiles: sourcePathAllowedFiles,
   },
   { parts: ['source', '_repo'] },
 ].map((rule) => ({

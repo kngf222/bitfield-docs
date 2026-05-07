@@ -33,10 +33,18 @@ search-package/
     {
       "type": "slot",
       "name": "product.search",
-      "methods": [{ "name": "query" }],
+      "methods": [
+        {
+          "name": "query"
+        }
+      ],
       "boundary": {
         "call_shape": "envelope-bytes-in-envelope-bytes-out",
-        "methods": [{ "name": "query" }]
+        "methods": [
+          {
+            "name": "query"
+          }
+        ]
       },
       "artifact": {
         "source_path": "slots/search-slot.bin"

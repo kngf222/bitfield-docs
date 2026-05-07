@@ -1,0 +1,10 @@
+{
+  "package": "help-package",
+  "things": [
+    {
+      "type": "stored_bytes",
+      "name": "getting-started-help",
+      "source_path": "help/getting-started.txt"
+    }
+  ]
+}

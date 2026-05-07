@@ -1,0 +1,60 @@
+{
+  "version": 1,
+  "examples": [
+    {
+      "id": "package-set-with-one-record",
+      "route": "workflows/package-set-with-one-record",
+      "kind": "package-boundary",
+      "packageBoundary": "examples/package-workflows/package-set-with-one-record/product-copy/things-to-store-and-run.json",
+      "snippets": [
+        {
+          "file": "examples/package-workflows/package-set-with-one-record/product-copy/things-to-store-and-run.json",
+          "language": "json"
+        }
+      ],
+      "sourceIds": ["runtime-kit-package-boundary", "bitfield-public-workflow-examples"]
+    },
+    {
+      "id": "package-owned-file",
+      "route": "workflows/package-owned-file",
+      "kind": "package-boundary",
+      "packageBoundary": "examples/package-workflows/package-owned-file/help-package/things-to-store-and-run.json",
+      "snippets": [
+        {
+          "file": "examples/package-workflows/package-owned-file/help-package/things-to-store-and-run.json",
+          "language": "json"
+        },
+        {
+          "file": "examples/package-workflows/package-owned-file/help-package/help/getting-started.txt",
+          "language": "text"
+        }
+      ],
+      "sourceIds": ["runtime-kit-package-boundary", "bitfield-public-workflow-examples"]
+    },
+    {
+      "id": "callable-package-slot",
+      "route": "workflows/callable-package-slot",
+      "kind": "package-boundary",
+      "packageBoundary": "examples/package-workflows/callable-package-slot/search-package/things-to-store-and-run.json",
+      "snippets": [
+        {
+          "file": "examples/package-workflows/callable-package-slot/search-package/things-to-store-and-run.json",
+          "language": "json"
+        }
+      ],
+      "sourceIds": ["runtime-kit-package-boundary", "runtime-kit-js-public-contract", "bitfield-public-workflow-examples"]
+    },
+    {
+      "id": "react-surface-for-package-data",
+      "route": "workflows/react-surface-for-package-data",
+      "kind": "runtime-kit-react",
+      "snippets": [
+        {
+          "file": "examples/react-surfaces/welcome-panel.tsx",
+          "language": "tsx"
+        }
+      ],
+      "sourceIds": ["runtime-kit-js-public-contract", "runtime-kit-package-boundary", "bitfield-public-workflow-examples"]
+    }
+  ]
+}

@@ -1,0 +1,25 @@
+{
+  "version": 1,
+  "boundaryFile": "things-to-store-and-run.json",
+  "topLevel": {
+    "required": ["package", "things"],
+    "allowed": ["package", "things"]
+  },
+  "thingTypes": {
+    "record": {
+      "required": ["type", "address"],
+      "payloadChoices": ["payload", "payload_text", "payload_base64", "remove"]
+    },
+    "stored_bytes": {
+      "required": ["type", "name", "source_path"],
+      "pathFields": ["source_path"]
+    },
+    "slot": {
+      "required": ["type", "name", "methods", "boundary"],
+      "pathChoices": [
+        ["artifact", "source_path"]
+      ],
+      "methodFields": ["methods", "boundary.methods"]
+    }
+  }
+}

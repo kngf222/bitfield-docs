@@ -43,6 +43,12 @@
       "kind": "docs-graph",
       "publicUse": "Docs navigation, page summaries, and reader-intent grouping.",
       "freshness": "review when docs.manifest.json changes"
+    },
+    {
+      "id": "bitfield-public-workflow-examples",
+      "kind": "public-example-contract",
+      "publicUse": "Machine-validated package and Runtime Kit examples used by public workflow pages.",
+      "freshness": "review when workflow-examples.json, reference/package-boundary.schema.json, or examples/ changes"
     }
   ],
   "pages": [
@@ -104,23 +110,23 @@
     },
     {
       "route": "workflows/index",
-      "sourceIds": ["runtime-kit-package-boundary", "runtime-kit-js-public-contract", "bitfield-docs-information-architecture"]
+      "sourceIds": ["runtime-kit-package-boundary", "runtime-kit-js-public-contract", "bitfield-docs-information-architecture", "bitfield-public-workflow-examples"]
     },
     {
       "route": "workflows/package-set-with-one-record",
-      "sourceIds": ["runtime-kit-package-boundary"]
+      "sourceIds": ["runtime-kit-package-boundary", "bitfield-public-workflow-examples"]
     },
     {
       "route": "workflows/package-owned-file",
-      "sourceIds": ["runtime-kit-package-boundary"]
+      "sourceIds": ["runtime-kit-package-boundary", "bitfield-public-workflow-examples"]
     },
     {
       "route": "workflows/callable-package-slot",
-      "sourceIds": ["runtime-kit-package-boundary", "runtime-kit-js-public-contract"]
+      "sourceIds": ["runtime-kit-package-boundary", "runtime-kit-js-public-contract", "bitfield-public-workflow-examples"]
     },
     {
       "route": "workflows/react-surface-for-package-data",
-      "sourceIds": ["runtime-kit-js-public-contract", "runtime-kit-package-boundary"]
+      "sourceIds": ["runtime-kit-js-public-contract", "runtime-kit-package-boundary", "bitfield-public-workflow-examples"]
     },
     {
       "route": "build-your-own-surface/sdk-boundary",
