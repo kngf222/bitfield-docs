@@ -28,6 +28,6 @@ npm run docs:generate
 npm run docs:check
 ```
 
-`docs:generate` rebuilds `docs.json` and `llms.txt` from `docs.manifest.json`.
+`docs:generate` rebuilds `docs.json`, `llms.txt`, `theme.css`, and `theme.js` from `docs.manifest.json`.
 
 `docs:check` verifies public boundaries, workflow examples, navigation, required pages, generated files, and claim references.

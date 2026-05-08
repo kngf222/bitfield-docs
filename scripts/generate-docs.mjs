@@ -5,6 +5,18 @@ const claimLedger = JSON.parse(readFileSync('claim-ledger.json', 'utf8'));
 const sourceMap = JSON.parse(readFileSync('source-map.json', 'utf8'));
 const pages = new Map(manifest.pages.map((page) => [page.route, page]));
 const themeNames = Object.keys(manifest.site.themes);
+const defaultThemeName = themeNames.includes('paper') ? 'paper' : themeNames[0];
+const themePickerSwatchColors = [
+  '#e05a5a',
+  '#f5cc42',
+  '#22c0ba',
+  '#9060ee',
+  '#f5a03a',
+  '#35be7a',
+  '#3d7ced',
+  '#e0609a',
+];
+const themePickerPhaseOffsets = [0, 3, 6, 1, 5, 2, 7, 4];
 const regularFont = manifest.site.typography.fontFaces.find((font) => font.weight === 400);
 const headingFont =
   manifest.site.typography.fontFaces.find((font) => font.weight === 600) ?? regularFont;
@@ -39,7 +51,7 @@ const docsJson = {
   },
   appearance: {
     default: 'light',
-    strict: false,
+    strict: true,
   },
   favicon: '/favicon.svg',
   logo: {
@@ -89,11 +101,63 @@ function cssVariableName(name) {
 
 function themeBlock(selector, tokens) {
   const variables = Object.entries(tokens)
+    .filter(([name]) => !['label', 'swatchPrimary', 'swatchSecondary'].includes(name))
     .map(([name, value]) => `  --bf-${cssVariableName(name)}: ${value};`)
     .join('\n');
 
   return `${selector} {\n${variables}\n}`;
 }
+
+function themeLabel(name) {
+  return manifest.site.themes[name].label ?? name
+    .split('-')
+    .map((part) => part[0].toUpperCase() + part.slice(1))
+    .join(' ');
+}
+
+function isLightTheme(name) {
+  return name === 'paper' || name.endsWith('-light');
+}
+
+function trimPercent(value) {
+  return value.toFixed(3).replace(/\.?0+$/, '');
+}
+
+function themePickerDiscoCss() {
+  return themePickerSwatchColors
+    .map((_, cellIndex) => {
+      const phaseOffset = themePickerPhaseOffsets[cellIndex] ?? 0;
+      const stepSize = 100 / themePickerSwatchColors.length;
+      const stops = themePickerSwatchColors
+        .map((__, stepIndex) => {
+          const color =
+            themePickerSwatchColors[
+              (stepIndex + phaseOffset) % themePickerSwatchColors.length
+            ];
+          const start = trimPercent(stepIndex * stepSize);
+          const end = trimPercent((stepIndex + 1) * stepSize - 0.001);
+          return `  ${start}%, ${end}% { --theme-picker-swatch-color: ${color}; }`;
+        })
+        .join('\n');
+
+      return `.theme-picker-swatch-icon__bit[data-disco-index="${cellIndex}"] {
+  animation-name: bf-docs-theme-disco-${cellIndex};
+}
+
+@keyframes bf-docs-theme-disco-${cellIndex} {
+${stops}
+}`;
+    })
+    .join('\n\n');
+}
+
+const themeMeta = themeNames.map((name) => ({
+  name,
+  label: themeLabel(name),
+  mode: isLightTheme(name) ? 'light' : 'dark',
+  primary: manifest.site.themes[name].swatchPrimary,
+  secondary: manifest.site.themes[name].swatchSecondary,
+}));
 
 const themeCss = [
   '/* Generated from docs.manifest.json. Run npm run docs:generate. */',
@@ -109,30 +173,66 @@ const themeCss = [
   `:root {
   --bf-font-display: ${manifest.site.typography.display};
   --bf-font-body: ${manifest.site.typography.body};
+  --bf-red: #FB6A5F;
+  --bf-orange: #FF9B5F;
+  --bf-yellow: #FFD767;
+  --bf-green: #85F0B5;
+  --bf-blue: #4F62FF;
+  --bf-purple: #A77BFF;
+  --bf-cyan: #85D8FF;
+  --surface-base: var(--bf-surface);
+  --text-primary: var(--bf-text);
+  --text-secondary: var(--bf-muted);
+  --border-primary: var(--bf-border);
 }`,
   '',
-  themeBlock(`:root, html[data-bf-docs-theme="${themeNames[0]}"]`, manifest.site.themes[themeNames[0]]),
+  themePickerDiscoCss(),
+  '',
+  themeBlock(
+    `:root, html[data-bf-docs-theme="${defaultThemeName}"]`,
+    manifest.site.themes[defaultThemeName],
+  ),
   ...themeNames
-    .slice(1)
+    .filter((name) => name !== defaultThemeName)
     .map((name) => themeBlock(`html[data-bf-docs-theme="${name}"]`, manifest.site.themes[name])),
-  `html[data-bf-docs-theme="paper"] {
+  ...themeNames
+    .filter(isLightTheme)
+    .map((name) => `html[data-bf-docs-theme="${name}"] {
   color-scheme: light;
-}`,
-  `html[data-bf-docs-theme="ink"] {
+}`),
+  ...themeNames
+    .filter((name) => !isLightTheme(name))
+    .map((name) => `html[data-bf-docs-theme="${name}"] {
   color-scheme: dark;
-}`,
+}`),
   '',
 ]
   .filter(Boolean)
   .join('\n\n');
 
 const themeJs = `(() => {
-  const themes = ${JSON.stringify(themeNames)};
-  const labels = ${JSON.stringify(Object.fromEntries(themeNames.map((name) => [name, name[0].toUpperCase() + name.slice(1)])))};
-  const defaultTheme = themes[0];
+  const themes = ${JSON.stringify(themeMeta)};
+  const themeNames = themes.map((theme) => theme.name);
+  const labels = Object.fromEntries(themes.map((theme) => [theme.name, theme.label]));
+  const modes = Object.fromEntries(themes.map((theme) => [theme.name, theme.mode]));
+  const swatches = Object.fromEntries(themes.map((theme) => [theme.name, [theme.primary, theme.secondary]]));
+  const defaultTheme = ${JSON.stringify(defaultThemeName)};
   const storageKey = 'bitfield-docs-theme';
+  const swatchColors = ${JSON.stringify(themePickerSwatchColors)};
+  const swatchTiming = [
+    { delay: 0.1, duration: 7.3 },
+    { delay: 1.25, duration: 8.9 },
+    { delay: 0.68, duration: 6.8 },
+    { delay: 1.9, duration: 9.6 },
+    { delay: 0.42, duration: 8.1 },
+    { delay: 1.55, duration: 7.7 },
+    { delay: 0.95, duration: 9.2 },
+    { delay: 2.22, duration: 7.0 },
+  ];
   const root = document.documentElement;
-  let button;
+  let picker;
+  let trigger;
+  let panel;
 
   function readStoredTheme() {
     try {
@@ -151,50 +251,165 @@ const themeJs = `(() => {
   }
 
   function safeTheme(theme) {
-    return themes.includes(theme) ? theme : defaultTheme;
+    return themeNames.includes(theme) ? theme : defaultTheme;
+  }
+
+  function activeTheme() {
+    return safeTheme(root.dataset.bfDocsTheme || readStoredTheme());
+  }
+
+  function setPanelOpen(open) {
+    if (!picker || !trigger || !panel) return;
+    picker.dataset.open = open ? 'true' : 'false';
+    trigger.dataset.state = open ? 'open' : 'closed';
+    trigger.setAttribute('aria-expanded', open ? 'true' : 'false');
+    panel.hidden = !open;
   }
 
   function applyTheme(theme, persist = false) {
     const activeTheme = safeTheme(theme);
+    const mode = modes[activeTheme] === 'dark' ? 'dark' : 'light';
     root.dataset.bfDocsTheme = activeTheme;
+    root.classList.toggle('dark', mode === 'dark');
+    root.style.colorScheme = mode;
     if (persist) {
       writeStoredTheme(activeTheme);
     }
-    if (button) {
-      button.textContent = labels[activeTheme];
-      button.setAttribute('aria-label', \`Switch docs theme. Current theme: \${labels[activeTheme]}.\`);
+    if (trigger) {
+      trigger.setAttribute('aria-label', \`Theme. Current theme: \${labels[activeTheme]}.\`);
     }
+    document.querySelectorAll('[data-bf-theme-option]').forEach((option) => {
+      const selected = option.getAttribute('data-bf-theme-option') === activeTheme;
+      option.classList.toggle('is-active', selected);
+      option.setAttribute('aria-selected', selected ? 'true' : 'false');
+    });
   }
 
-  function mountButton() {
-    if (!document.body || document.querySelector('.bf-theme-toggle')) {
-      return;
+  function navbarMountPoint() {
+    const primary = document.querySelector('#topbar-cta-button');
+    if (primary?.parentElement) {
+      return { target: primary.parentElement, before: primary };
     }
 
-    button = document.createElement('button');
-    button.type = 'button';
-    button.className = 'bf-theme-toggle';
-    button.addEventListener('click', () => {
-      const currentIndex = themes.indexOf(safeTheme(root.dataset.bfDocsTheme));
-      const nextTheme = themes[(currentIndex + 1) % themes.length];
-      applyTheme(nextTheme, true);
+    const candidates = [
+      '#navbar',
+      'header nav',
+      'header',
+      'nav',
+    ];
+
+    for (const selector of candidates) {
+      const target = document.querySelector(selector);
+      if (target) return { target, before: null };
+    }
+
+    return null;
+  }
+
+  function swatchIcon() {
+    return \`<span class="theme-picker-swatch-icon" aria-hidden="true">\${swatchColors.map((color, index) => {
+      const timing = swatchTiming[index] ?? swatchTiming[0];
+      return \`<span class="theme-picker-swatch-icon__bit" data-disco-index="\${index}" style="--theme-picker-swatch-color: \${color}; animation-delay: \${timing.delay + (index % 5) * 0.11}s; animation-duration: \${timing.duration}s;"></span>\`;
+    }).join('')}</span>\`;
+  }
+
+  function themeOption(theme) {
+    const [primary, secondary] = swatches[theme.name] ?? [theme.primary, theme.secondary];
+    const selected = theme.name === activeTheme();
+    const option = document.createElement('button');
+    option.type = 'button';
+    option.className = \`bf-docs-theme-option\${selected ? ' is-active' : ''}\`;
+    option.dataset.bfThemeOption = theme.name;
+    option.setAttribute('role', 'option');
+    option.setAttribute('aria-selected', selected ? 'true' : 'false');
+    option.innerHTML = \`
+      <span class="bf-docs-theme-option__swatch" aria-hidden="true">
+        <span style="background: \${primary};"></span>
+        <span style="background: \${secondary};"></span>
+      </span>
+      <span class="bf-docs-theme-option__label">\${theme.label}</span>
+      <span class="bf-docs-theme-option__check" aria-hidden="true">✓</span>
+    \`;
+    option.addEventListener('click', () => {
+      applyTheme(theme.name, true);
+      setPanelOpen(false);
+      trigger?.focus();
+    });
+    return option;
+  }
+
+  function mountPicker() {
+    if (!document.body || document.querySelector('.bf-docs-theme-picker')) {
+      return true;
+    }
+
+    const mountPoint = navbarMountPoint();
+    if (!mountPoint) return false;
+
+    picker = document.createElement('div');
+    picker.className = 'bf-docs-theme-picker';
+    picker.dataset.open = 'false';
+
+    trigger = document.createElement('button');
+    trigger.type = 'button';
+    trigger.className = 'bf-docs-theme-trigger theme-picker-trigger';
+    trigger.setAttribute('aria-haspopup', 'listbox');
+    trigger.setAttribute('aria-expanded', 'false');
+    trigger.setAttribute('aria-controls', 'bf-docs-theme-panel');
+    trigger.innerHTML = swatchIcon();
+    trigger.addEventListener('click', (event) => {
+      event.stopPropagation();
+      setPanelOpen(picker.dataset.open !== 'true');
     });
 
-    document.body.append(button);
+    panel = document.createElement('div');
+    panel.id = 'bf-docs-theme-panel';
+    panel.className = 'bf-docs-theme-panel';
+    panel.setAttribute('role', 'listbox');
+    panel.setAttribute('aria-label', 'Select theme');
+    panel.hidden = true;
+
+    const header = document.createElement('div');
+    header.className = 'bf-docs-theme-panel__header';
+    header.textContent = 'Select Theme';
+    panel.append(header, ...themes.map(themeOption));
+
+    picker.append(trigger, panel);
+    mountPoint.target.insertBefore(picker, mountPoint.before);
     applyTheme(root.dataset.bfDocsTheme || readStoredTheme() || defaultTheme);
+    return true;
   }
 
   applyTheme(readStoredTheme() || defaultTheme);
 
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', mountButton, { once: true });
+    document.addEventListener('DOMContentLoaded', mountPicker, { once: true });
   } else {
-    mountButton();
+    mountPicker();
   }
+
+  const observer = new MutationObserver(() => {
+    if (mountPicker()) observer.disconnect();
+  });
+
+  observer.observe(document.documentElement, { childList: true, subtree: true });
+
+  document.addEventListener('click', (event) => {
+    if (picker && !picker.contains(event.target)) {
+      setPanelOpen(false);
+    }
+  });
+
+  document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape') {
+      setPanelOpen(false);
+      trigger?.focus();
+    }
+  });
 
   window.addEventListener('pageshow', () => {
     applyTheme(readStoredTheme() || root.dataset.bfDocsTheme || defaultTheme);
-    mountButton();
+    mountPicker();
   });
 })();
 `;

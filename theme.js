@@ -1,10 +1,26 @@
 (() => {
-  const themes = ["paper","ink"];
-  const labels = {"paper":"Paper","ink":"Ink"};
-  const defaultTheme = themes[0];
+  const themes = [{"name":"midnight","label":"Midnight","mode":"dark","primary":"#1a1a1a","secondary":"#b3b3b3"},{"name":"abyss","label":"Abyss","mode":"dark","primary":"#020202","secondary":"#444444"},{"name":"paper","label":"Paper","mode":"light","primary":"#fafafa","secondary":"#333333"},{"name":"ocean","label":"Ocean","mode":"dark","primary":"#40e0d0","secondary":"#00d9b8"},{"name":"forest","label":"Forest","mode":"dark","primary":"#22c55e","secondary":"#10b981"},{"name":"sunset","label":"Sunset","mode":"dark","primary":"#fb923c","secondary":"#ea580c"},{"name":"lavender","label":"Lavender","mode":"dark","primary":"#a855f7","secondary":"#818cf8"},{"name":"rose","label":"Rose","mode":"dark","primary":"#fb7185","secondary":"#ec4899"},{"name":"amber","label":"Amber","mode":"dark","primary":"#fbbf24","secondary":"#f59e0b"},{"name":"slate","label":"Slate","mode":"dark","primary":"#94a3b8","secondary":"#64748b"},{"name":"cyan","label":"Cyan","mode":"dark","primary":"#22d3ee","secondary":"#06b6d4"},{"name":"crimson","label":"Crimson","mode":"dark","primary":"#dc2626","secondary":"#ef4444"},{"name":"monet","label":"Monet","mode":"dark","primary":"#162828","secondary":"#5bab8a"},{"name":"monet-light","label":"Monet Light","mode":"light","primary":"#f5f0e8","secondary":"#2d8a65"},{"name":"midnight-light","label":"Midnight Light","mode":"light","primary":"#f5f5f5","secondary":"#333333"},{"name":"abyss-light","label":"Abyss Light","mode":"light","primary":"#fafafa","secondary":"#555555"},{"name":"ocean-light","label":"Ocean Light","mode":"light","primary":"#f0fafa","secondary":"#009990"},{"name":"forest-light","label":"Forest Light","mode":"light","primary":"#f0faf4","secondary":"#0d9960"},{"name":"sunset-light","label":"Sunset Light","mode":"light","primary":"#fdf5f0","secondary":"#cc5500"},{"name":"lavender-light","label":"Lavender Light","mode":"light","primary":"#f5f0fa","secondary":"#7040cc"},{"name":"rose-light","label":"Rose Light","mode":"light","primary":"#fdf0f2","secondary":"#cc3355"},{"name":"amber-light","label":"Amber Light","mode":"light","primary":"#fdf8f0","secondary":"#cc8800"},{"name":"slate-light","label":"Slate Light","mode":"light","primary":"#f5f6f8","secondary":"#556677"},{"name":"cyan-light","label":"Cyan Light","mode":"light","primary":"#f0fafc","secondary":"#0099bb"},{"name":"crimson-light","label":"Crimson Light","mode":"light","primary":"#fdf0f0","secondary":"#bb2222"}];
+  const themeNames = themes.map((theme) => theme.name);
+  const labels = Object.fromEntries(themes.map((theme) => [theme.name, theme.label]));
+  const modes = Object.fromEntries(themes.map((theme) => [theme.name, theme.mode]));
+  const swatches = Object.fromEntries(themes.map((theme) => [theme.name, [theme.primary, theme.secondary]]));
+  const defaultTheme = "paper";
   const storageKey = 'bitfield-docs-theme';
+  const swatchColors = ["#e05a5a","#f5cc42","#22c0ba","#9060ee","#f5a03a","#35be7a","#3d7ced","#e0609a"];
+  const swatchTiming = [
+    { delay: 0.1, duration: 7.3 },
+    { delay: 1.25, duration: 8.9 },
+    { delay: 0.68, duration: 6.8 },
+    { delay: 1.9, duration: 9.6 },
+    { delay: 0.42, duration: 8.1 },
+    { delay: 1.55, duration: 7.7 },
+    { delay: 0.95, duration: 9.2 },
+    { delay: 2.22, duration: 7.0 },
+  ];
   const root = document.documentElement;
-  let button;
+  let picker;
+  let trigger;
+  let panel;
 
   function readStoredTheme() {
     try {
@@ -23,49 +39,164 @@
   }
 
   function safeTheme(theme) {
-    return themes.includes(theme) ? theme : defaultTheme;
+    return themeNames.includes(theme) ? theme : defaultTheme;
+  }
+
+  function activeTheme() {
+    return safeTheme(root.dataset.bfDocsTheme || readStoredTheme());
+  }
+
+  function setPanelOpen(open) {
+    if (!picker || !trigger || !panel) return;
+    picker.dataset.open = open ? 'true' : 'false';
+    trigger.dataset.state = open ? 'open' : 'closed';
+    trigger.setAttribute('aria-expanded', open ? 'true' : 'false');
+    panel.hidden = !open;
   }
 
   function applyTheme(theme, persist = false) {
     const activeTheme = safeTheme(theme);
+    const mode = modes[activeTheme] === 'dark' ? 'dark' : 'light';
     root.dataset.bfDocsTheme = activeTheme;
+    root.classList.toggle('dark', mode === 'dark');
+    root.style.colorScheme = mode;
     if (persist) {
       writeStoredTheme(activeTheme);
     }
-    if (button) {
-      button.textContent = labels[activeTheme];
-      button.setAttribute('aria-label', `Switch docs theme. Current theme: ${labels[activeTheme]}.`);
+    if (trigger) {
+      trigger.setAttribute('aria-label', `Theme. Current theme: ${labels[activeTheme]}.`);
     }
+    document.querySelectorAll('[data-bf-theme-option]').forEach((option) => {
+      const selected = option.getAttribute('data-bf-theme-option') === activeTheme;
+      option.classList.toggle('is-active', selected);
+      option.setAttribute('aria-selected', selected ? 'true' : 'false');
+    });
   }
 
-  function mountButton() {
-    if (!document.body || document.querySelector('.bf-theme-toggle')) {
-      return;
+  function navbarMountPoint() {
+    const primary = document.querySelector('#topbar-cta-button');
+    if (primary?.parentElement) {
+      return { target: primary.parentElement, before: primary };
     }
 
-    button = document.createElement('button');
-    button.type = 'button';
-    button.className = 'bf-theme-toggle';
-    button.addEventListener('click', () => {
-      const currentIndex = themes.indexOf(safeTheme(root.dataset.bfDocsTheme));
-      const nextTheme = themes[(currentIndex + 1) % themes.length];
-      applyTheme(nextTheme, true);
+    const candidates = [
+      '#navbar',
+      'header nav',
+      'header',
+      'nav',
+    ];
+
+    for (const selector of candidates) {
+      const target = document.querySelector(selector);
+      if (target) return { target, before: null };
+    }
+
+    return null;
+  }
+
+  function swatchIcon() {
+    return `<span class="theme-picker-swatch-icon" aria-hidden="true">${swatchColors.map((color, index) => {
+      const timing = swatchTiming[index] ?? swatchTiming[0];
+      return `<span class="theme-picker-swatch-icon__bit" data-disco-index="${index}" style="--theme-picker-swatch-color: ${color}; animation-delay: ${timing.delay + (index % 5) * 0.11}s; animation-duration: ${timing.duration}s;"></span>`;
+    }).join('')}</span>`;
+  }
+
+  function themeOption(theme) {
+    const [primary, secondary] = swatches[theme.name] ?? [theme.primary, theme.secondary];
+    const selected = theme.name === activeTheme();
+    const option = document.createElement('button');
+    option.type = 'button';
+    option.className = `bf-docs-theme-option${selected ? ' is-active' : ''}`;
+    option.dataset.bfThemeOption = theme.name;
+    option.setAttribute('role', 'option');
+    option.setAttribute('aria-selected', selected ? 'true' : 'false');
+    option.innerHTML = `
+      <span class="bf-docs-theme-option__swatch" aria-hidden="true">
+        <span style="background: ${primary};"></span>
+        <span style="background: ${secondary};"></span>
+      </span>
+      <span class="bf-docs-theme-option__label">${theme.label}</span>
+      <span class="bf-docs-theme-option__check" aria-hidden="true">✓</span>
+    `;
+    option.addEventListener('click', () => {
+      applyTheme(theme.name, true);
+      setPanelOpen(false);
+      trigger?.focus();
+    });
+    return option;
+  }
+
+  function mountPicker() {
+    if (!document.body || document.querySelector('.bf-docs-theme-picker')) {
+      return true;
+    }
+
+    const mountPoint = navbarMountPoint();
+    if (!mountPoint) return false;
+
+    picker = document.createElement('div');
+    picker.className = 'bf-docs-theme-picker';
+    picker.dataset.open = 'false';
+
+    trigger = document.createElement('button');
+    trigger.type = 'button';
+    trigger.className = 'bf-docs-theme-trigger theme-picker-trigger';
+    trigger.setAttribute('aria-haspopup', 'listbox');
+    trigger.setAttribute('aria-expanded', 'false');
+    trigger.setAttribute('aria-controls', 'bf-docs-theme-panel');
+    trigger.innerHTML = swatchIcon();
+    trigger.addEventListener('click', (event) => {
+      event.stopPropagation();
+      setPanelOpen(picker.dataset.open !== 'true');
     });
 
-    document.body.append(button);
+    panel = document.createElement('div');
+    panel.id = 'bf-docs-theme-panel';
+    panel.className = 'bf-docs-theme-panel';
+    panel.setAttribute('role', 'listbox');
+    panel.setAttribute('aria-label', 'Select theme');
+    panel.hidden = true;
+
+    const header = document.createElement('div');
+    header.className = 'bf-docs-theme-panel__header';
+    header.textContent = 'Select Theme';
+    panel.append(header, ...themes.map(themeOption));
+
+    picker.append(trigger, panel);
+    mountPoint.target.insertBefore(picker, mountPoint.before);
     applyTheme(root.dataset.bfDocsTheme || readStoredTheme() || defaultTheme);
+    return true;
   }
 
   applyTheme(readStoredTheme() || defaultTheme);
 
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', mountButton, { once: true });
+    document.addEventListener('DOMContentLoaded', mountPicker, { once: true });
   } else {
-    mountButton();
+    mountPicker();
   }
+
+  const observer = new MutationObserver(() => {
+    if (mountPicker()) observer.disconnect();
+  });
+
+  observer.observe(document.documentElement, { childList: true, subtree: true });
+
+  document.addEventListener('click', (event) => {
+    if (picker && !picker.contains(event.target)) {
+      setPanelOpen(false);
+    }
+  });
+
+  document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape') {
+      setPanelOpen(false);
+      trigger?.focus();
+    }
+  });
 
   window.addEventListener('pageshow', () => {
     applyTheme(readStoredTheme() || root.dataset.bfDocsTheme || defaultTheme);
-    mountButton();
+    mountPicker();
   });
 })();
