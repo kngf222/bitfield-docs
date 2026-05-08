@@ -21,6 +21,10 @@ const ignoredDirectories = new Set([
   'node_modules',
 ]);
 
+const ignoredFiles = new Set([
+  'package-lock.json',
+]);
+
 function workflowExampleAllowlist() {
   if (!existsSync('workflow-examples.json')) return new Set();
   const examples = JSON.parse(readFileSync('workflow-examples.json', 'utf8'));
@@ -84,6 +88,7 @@ function extensionOf(path) {
 function walk(directory, files = []) {
   for (const name of readdirSync(directory)) {
     if (ignoredDirectories.has(name)) continue;
+    if (ignoredFiles.has(name)) continue;
     const path = join(directory, name);
     const stat = statSync(path);
     if (stat.isDirectory()) {

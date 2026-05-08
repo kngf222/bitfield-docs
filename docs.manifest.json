@@ -39,7 +39,7 @@
     "rendererFallbackColors": {
       "primary": "#4F62FF",
       "light": "#85F0B5",
-      "dark": "#111111"
+      "dark": "#4F62FF"
     },
     "themes": {
       "midnight": {

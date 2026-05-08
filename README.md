@@ -21,13 +21,18 @@ This repository publishes public docs only. It does not grant rights to Bitfield
 | `changelog/` | Docs and product-facing changes. |
 | `workflow-examples.json` | Source of truth for workflow example files and their docs routes. |
 
+`examples/` is ignored by Mintlify directly. Workflow pages embed the public snippets, and `docs:check` verifies the embedded snippets match the fixture files exactly.
+
 ## Commands
 
 ```bash
 npm run docs:generate
 npm run docs:check
+npm run docs:mint
 ```
 
 `docs:generate` rebuilds `docs.json`, `llms.txt`, `theme.css`, and `theme.js` from `docs.manifest.json`.
 
 `docs:check` verifies public boundaries, workflow examples, navigation, required pages, generated files, and claim references.
+
+`docs:mint` runs Mintlify build validation, broken-link checks, snippet checks, and accessibility checks with the repo-pinned CLI.

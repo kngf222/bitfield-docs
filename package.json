@@ -7,5 +7,8 @@
     "docs:check": "node scripts/validate-public-boundary.mjs && node scripts/validate-examples.mjs && node scripts/validate-docs.mjs",
     "docs:mint": "mint validate --disable-openapi && mint broken-links --check-anchors --check-redirects --check-snippets && mint a11y"
   },
-  "devDependencies": {}
+  "devDependencies": {
+    "mint": "4.2.557",
+    "node": "22.22.2"
+  }
 }

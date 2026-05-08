@@ -5,3 +5,7 @@ private/
 research/
 source-material/
 node_modules/
+
+# Machine-validated fixtures. The public pages embed these snippets directly;
+# scripts/validate-examples.mjs verifies they stay exact.
+examples/
