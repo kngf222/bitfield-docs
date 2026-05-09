@@ -2,7 +2,7 @@
   "$schema": "https://mintlify.com/docs.json",
   "theme": "mint",
   "name": "Bitfield",
-  "description": "Public docs for Bitfield, the plug-in runtime and database for products that need to stay fast as they grow.",
+  "description": "World's fastest plug-in runtime and database for founders who can't afford to slow down when plans change.",
   "colors": {
     "primary": "#4F62FF",
     "light": "#85F0B5",
@@ -11,6 +11,42 @@
   "appearance": {
     "default": "light",
     "strict": true
+  },
+  "metadata": {
+    "timestamp": true
+  },
+  "search": {
+    "prompt": "Search Bitfield docs..."
+  },
+  "seo": {
+    "indexing": "navigable",
+    "metatags": {
+      "canonical": "https://docs.bitfield.so",
+      "description": "Build fast today and keep your 100th feature as fast as your first with Bitfield.",
+      "keywords": "Bitfield, plug-in runtime, local-first database, runtime kit, offline software, active devices, content-addressed storage, founder developer tools",
+      "robots": "index, follow",
+      "googlebot": "index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1",
+      "application-name": "Bitfield",
+      "apple-mobile-web-app-title": "Bitfield",
+      "apple-mobile-web-app-capable": "yes",
+      "apple-mobile-web-app-status-bar-style": "default",
+      "format-detection": "telephone=no",
+      "og:site_name": "Bitfield Docs",
+      "og:type": "website",
+      "og:url": "https://docs.bitfield.so",
+      "og:title": "Bitfield Docs",
+      "og:description": "Build fast today and keep your 100th feature as fast as your first with Bitfield.",
+      "og:image": "https://docs.bitfield.so/social/bitfield-social-card-og-1200x630.png",
+      "og:image:width": "1200",
+      "og:image:height": "630",
+      "og:image:type": "image/png",
+      "og:image:alt": "World's fastest plug-in runtime and database for founders who can't afford to slow down when plans change. Bitfield.",
+      "twitter:card": "summary_large_image",
+      "twitter:title": "Bitfield Docs",
+      "twitter:description": "Build fast today and keep your 100th feature as fast as your first with Bitfield.",
+      "twitter:image": "https://docs.bitfield.so/social/bitfield-social-card-x-1200x600.png",
+      "twitter:image:alt": "World's fastest plug-in runtime and database for founders who can't afford to slow down when plans change. Bitfield."
+    }
   },
   "favicon": "/favicon.svg",
   "logo": {

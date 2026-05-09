@@ -42,10 +42,32 @@
   --bf-blue: #4F62FF;
   --bf-purple: #A77BFF;
   --bf-cyan: #85D8FF;
+  --black-pure: var(--bf-surface);
+  --black-rich: var(--bf-surface-raised);
   --surface-base: var(--bf-surface);
+  --glass-bg-primary: var(--bf-surface-raised);
+  --glass-bg-secondary: color-mix(in srgb, var(--bf-text) 5%, transparent);
+  --glass-bg-tertiary: color-mix(in srgb, var(--bf-text) 8%, transparent);
+  --glass-bg-popover: var(--bf-surface-raised);
+  --glass-bg-hover: color-mix(in srgb, var(--bf-text) 10%, transparent);
+  --glass-bg-active: color-mix(in srgb, var(--bf-text) 15%, transparent);
+  --glass-bg-subtle: color-mix(in srgb, var(--bf-text) 5%, transparent);
+  --button-primary-bg: var(--bf-text);
+  --button-primary-text: var(--bf-surface);
   --text-primary: var(--bf-text);
   --text-secondary: var(--bf-muted);
+  --text-tertiary: color-mix(in srgb, var(--bf-muted) 82%, transparent);
+  --text-muted: color-mix(in srgb, var(--bf-muted) 58%, transparent);
   --border-primary: var(--bf-border);
+  --border-secondary: var(--bf-border-strong);
+  --border-focus: color-mix(in srgb, var(--bf-text) 30%, transparent);
+  --color-success: var(--bf-success);
+  --color-warning: var(--bf-warning);
+  --color-error: var(--bf-error);
+  --color-info: var(--bf-info);
+  --accent-blue: var(--bf-accent);
+  --accent-purple: var(--bf-accent-secondary);
+  --accent-emerald: var(--bf-accent-tertiary);
 }
 
 .theme-picker-swatch-icon__bit[data-disco-index="0"] {

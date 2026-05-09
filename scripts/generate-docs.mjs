@@ -4,6 +4,7 @@ const manifest = JSON.parse(readFileSync('docs.manifest.json', 'utf8'));
 const claimLedger = JSON.parse(readFileSync('claim-ledger.json', 'utf8'));
 const sourceMap = JSON.parse(readFileSync('source-map.json', 'utf8'));
 const pages = new Map(manifest.pages.map((page) => [page.route, page]));
+const seo = manifest.site.seo;
 const themeNames = Object.keys(manifest.site.themes);
 const defaultThemeName = themeNames.includes('paper') ? 'paper' : themeNames[0];
 const themePickerSwatchColors = [
@@ -52,6 +53,42 @@ const docsJson = {
   appearance: {
     default: 'light',
     strict: true,
+  },
+  metadata: {
+    timestamp: true,
+  },
+  search: {
+    prompt: seo.searchPrompt,
+  },
+  seo: {
+    indexing: seo.indexing,
+    metatags: {
+      canonical: seo.canonicalUrl,
+      description: seo.social.description,
+      keywords: seo.keywords.join(', '),
+      robots: 'index, follow',
+      googlebot: 'index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1',
+      'application-name': manifest.site.name,
+      'apple-mobile-web-app-title': manifest.site.name,
+      'apple-mobile-web-app-capable': 'yes',
+      'apple-mobile-web-app-status-bar-style': 'default',
+      'format-detection': 'telephone=no',
+      'og:site_name': seo.social.siteName,
+      'og:type': 'website',
+      'og:url': seo.canonicalUrl,
+      'og:title': seo.social.title,
+      'og:description': seo.social.description,
+      'og:image': seo.social.image,
+      'og:image:width': '1200',
+      'og:image:height': '630',
+      'og:image:type': 'image/png',
+      'og:image:alt': seo.social.imageAlt,
+      'twitter:card': 'summary_large_image',
+      'twitter:title': seo.social.title,
+      'twitter:description': seo.social.description,
+      'twitter:image': seo.social.twitterImage,
+      'twitter:image:alt': seo.social.imageAlt,
+    },
   },
   favicon: '/favicon.svg',
   logo: {
@@ -180,10 +217,32 @@ const themeCss = [
   --bf-blue: #4F62FF;
   --bf-purple: #A77BFF;
   --bf-cyan: #85D8FF;
+  --black-pure: var(--bf-surface);
+  --black-rich: var(--bf-surface-raised);
   --surface-base: var(--bf-surface);
+  --glass-bg-primary: var(--bf-surface-raised);
+  --glass-bg-secondary: color-mix(in srgb, var(--bf-text) 5%, transparent);
+  --glass-bg-tertiary: color-mix(in srgb, var(--bf-text) 8%, transparent);
+  --glass-bg-popover: var(--bf-surface-raised);
+  --glass-bg-hover: color-mix(in srgb, var(--bf-text) 10%, transparent);
+  --glass-bg-active: color-mix(in srgb, var(--bf-text) 15%, transparent);
+  --glass-bg-subtle: color-mix(in srgb, var(--bf-text) 5%, transparent);
+  --button-primary-bg: var(--bf-text);
+  --button-primary-text: var(--bf-surface);
   --text-primary: var(--bf-text);
   --text-secondary: var(--bf-muted);
+  --text-tertiary: color-mix(in srgb, var(--bf-muted) 82%, transparent);
+  --text-muted: color-mix(in srgb, var(--bf-muted) 58%, transparent);
   --border-primary: var(--bf-border);
+  --border-secondary: var(--bf-border-strong);
+  --border-focus: color-mix(in srgb, var(--bf-text) 30%, transparent);
+  --color-success: var(--bf-success);
+  --color-warning: var(--bf-warning);
+  --color-error: var(--bf-error);
+  --color-info: var(--bf-info);
+  --accent-blue: var(--bf-accent);
+  --accent-purple: var(--bf-accent-secondary);
+  --accent-emerald: var(--bf-accent-tertiary);
 }`,
   '',
   themePickerDiscoCss(),
@@ -270,6 +329,7 @@ const themeJs = `(() => {
     const activeTheme = safeTheme(theme);
     const mode = modes[activeTheme] === 'dark' ? 'dark' : 'light';
     root.dataset.bfDocsTheme = activeTheme;
+    root.setAttribute('data-theme', activeTheme);
     root.classList.toggle('dark', mode === 'dark');
     root.style.colorScheme = mode;
     if (persist) {
@@ -352,11 +412,11 @@ const themeJs = `(() => {
 
     trigger = document.createElement('button');
     trigger.type = 'button';
-    trigger.className = 'bf-docs-theme-trigger theme-picker-trigger';
+    trigger.className = 'bf-docs-theme-trigger theme-picker-trigger button-flat-surface';
     trigger.setAttribute('aria-haspopup', 'listbox');
     trigger.setAttribute('aria-expanded', 'false');
     trigger.setAttribute('aria-controls', 'bf-docs-theme-panel');
-    trigger.innerHTML = swatchIcon();
+    trigger.innerHTML = \`<span class="button-flat-floor" aria-hidden="true"></span><span class="button-flat-face">\${swatchIcon()}</span>\`;
     trigger.addEventListener('click', (event) => {
       event.stopPropagation();
       setPanelOpen(picker.dataset.open !== 'true');

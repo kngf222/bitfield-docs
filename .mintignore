@@ -9,3 +9,5 @@ node_modules/
 # Machine-validated fixtures. The public pages embed these snippets directly;
 # scripts/validate-examples.mjs verifies they stay exact.
 examples/
+brand/README.md
+social/README.md

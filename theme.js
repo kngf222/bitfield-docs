@@ -58,6 +58,7 @@
     const activeTheme = safeTheme(theme);
     const mode = modes[activeTheme] === 'dark' ? 'dark' : 'light';
     root.dataset.bfDocsTheme = activeTheme;
+    root.setAttribute('data-theme', activeTheme);
     root.classList.toggle('dark', mode === 'dark');
     root.style.colorScheme = mode;
     if (persist) {
@@ -140,11 +141,11 @@
 
     trigger = document.createElement('button');
     trigger.type = 'button';
-    trigger.className = 'bf-docs-theme-trigger theme-picker-trigger';
+    trigger.className = 'bf-docs-theme-trigger theme-picker-trigger button-flat-surface';
     trigger.setAttribute('aria-haspopup', 'listbox');
     trigger.setAttribute('aria-expanded', 'false');
     trigger.setAttribute('aria-controls', 'bf-docs-theme-panel');
-    trigger.innerHTML = swatchIcon();
+    trigger.innerHTML = `<span class="button-flat-floor" aria-hidden="true"></span><span class="button-flat-face">${swatchIcon()}</span>`;
     trigger.addEventListener('click', (event) => {
       event.stopPropagation();
       setPanelOpen(picker.dataset.open !== 'true');

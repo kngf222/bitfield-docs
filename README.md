@@ -13,8 +13,10 @@ This repository publishes public docs only. It does not grant rights to Bitfield
 | `runtime-kit/` | Runtime Kit usage and package docs. |
 | `workflows/` | Complete package and Runtime Kit examples. |
 | `examples/` | Machine-validated public example fixtures used by workflow pages. |
-| `logo/` | Public docs logo assets. The wordmark is the Apple Garamond Bitfield mark from the site exported as SVG outlines. |
-| `favicon.svg` | Public docs browser icon using the current Bitfield square mark. |
+| `logo/` | Mintlify navbar logo assets. The wordmark is the Apple Garamond Bitfield mark from the site exported as SVG outlines. |
+| `brand/` | Public Bitfield mark and wordmark assets mirrored from `bitfield-site`. |
+| `social/` | Open Graph, X, and LinkedIn social preview images mirrored from `bitfield-site`. |
+| `favicon.svg`, `favicon-*.png`, `apple-touch-icon.png`, `icon-*.png`, `site.webmanifest` | Browser, tab, mobile, and install icons using the current Bitfield square mark. |
 | `activation/` | Keys, active devices, trials, and billing behavior. |
 | `proof/` | Public speed claims, warm and cold path boundaries, and methodology. |
 | `reference/` | Public API, claim-ledger, and file-format reference. |

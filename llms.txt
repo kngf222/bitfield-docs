@@ -1,6 +1,6 @@
 # Bitfield Docs
 
-> Public docs for Bitfield, the plug-in runtime and database for products that need to stay fast as they grow.
+> World's fastest plug-in runtime and database for founders who can't afford to slow down when plans change.
 
 These pages are public customer documentation. They describe the public product, public Runtime Kit surface, active-device language, and benchmark claim categories.
 
