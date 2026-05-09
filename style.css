@@ -108,6 +108,7 @@ main > article,
 main a[href]:not(#sidebar a):not(#table-of-contents a):not(#navbar a):not(header a),
 [role="main"] a[href]:not(#sidebar a):not(#table-of-contents a):not(#navbar a):not(header a),
 #content-area a[href]:not(#sidebar a):not(#table-of-contents a):not(#navbar a):not(header a) {
+  border-bottom-color: var(--bf-docs-selected-border) !important;
   color: color-mix(in srgb, var(--docs-active-color) 82%, var(--text-primary) 18%) !important;
   text-decoration-color: var(--bf-docs-selected-border) !important;
   text-decoration-line: underline !important;
@@ -121,6 +122,7 @@ main a[href]:not(#sidebar a):not(#table-of-contents a):not(#navbar a):not(header
 [role="main"] a[href]:not(#sidebar a):not(#table-of-contents a):not(#navbar a):not(header a):focus-visible,
 #content-area a[href]:not(#sidebar a):not(#table-of-contents a):not(#navbar a):not(header a):hover,
 #content-area a[href]:not(#sidebar a):not(#table-of-contents a):not(#navbar a):not(header a):focus-visible {
+  border-bottom-color: var(--bf-docs-selected-border) !important;
   color: var(--docs-active-color) !important;
   text-decoration-color: var(--bf-docs-selected-border) !important;
 }
