@@ -10,12 +10,8 @@ main {
 }
 
 html {
-  --bf-docs-selected-surface:
-    linear-gradient(90deg, color-mix(in srgb, var(--docs-active-color) 8%, transparent), transparent),
-    color-mix(in srgb, var(--surface-base) 88%, var(--text-primary) 12%);
-  --bf-docs-selected-surface-hover:
-    linear-gradient(90deg, color-mix(in srgb, var(--docs-active-color) 12%, transparent), transparent),
-    color-mix(in srgb, var(--surface-base) 84%, var(--text-primary) 16%);
+  --bf-docs-selected-surface: color-mix(in srgb, var(--surface-base) 88%, var(--text-primary) 12%);
+  --bf-docs-selected-surface-hover: color-mix(in srgb, var(--surface-base) 84%, var(--text-primary) 16%);
   --bf-docs-selected-border: color-mix(in srgb, var(--docs-active-color) 36%, var(--border-primary) 64%);
 }
 
@@ -146,7 +142,7 @@ main > article,
 [data-bf-docs-copy-page="true"]:hover,
 [data-bf-docs-copy-page="true"]:focus-within {
   background: var(--bf-docs-selected-surface-hover) !important;
-  border-color: var(--docs-active-color) !important;
+  border-color: var(--bf-docs-selected-border) !important;
   box-shadow: none !important;
 }
 
@@ -173,9 +169,18 @@ main > article,
 
 [data-bf-docs-copy-page-part="true"][data-bf-docs-copy-page-arrow="true"] {
   background: var(--bf-docs-selected-surface) !important;
-  border-left: 1px solid var(--bf-docs-selected-border) !important;
+  border: 0 !important;
   color: var(--docs-active-color) !important;
   min-width: 2.65rem;
+}
+
+[data-bf-docs-copy-page-part="true"][data-bf-docs-copy-page-arrow="true"]:hover,
+[data-bf-docs-copy-page-part="true"][data-bf-docs-copy-page-arrow="true"]:focus-visible,
+[data-bf-docs-copy-page-part="true"][data-bf-docs-copy-page-arrow="true"] * {
+  background: var(--bf-docs-selected-surface) !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  outline: 0 !important;
 }
 
 [data-bf-docs-copy-page="true"] svg,
@@ -199,6 +204,7 @@ main > article,
 [data-bf-docs-copy-menu="true"] *,
 [data-bf-docs-copy-menu-item="true"] {
   border-radius: 0 !important;
+  box-shadow: none !important;
 }
 
 [data-bf-docs-copy-menu-item="true"] {
