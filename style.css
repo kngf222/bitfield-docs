@@ -1,10 +1,19 @@
 html,
 body,
+#__next,
+#root,
 #body-content,
 #background-color,
 main {
-  background: var(--surface-base) !important;
+  background: var(--docs-page-bg) !important;
   color: var(--text-primary) !important;
+}
+
+html[data-bf-docs-theme="paper"],
+html[data-bf-docs-theme$="-light"],
+html[data-theme="paper"],
+html[data-theme$="-light"] {
+  --landing-canvas-bg: color-mix(in srgb, var(--surface-base) 92%, #fbfaf6 8%);
 }
 
 body,
@@ -27,11 +36,33 @@ h4,
 }
 
 #navbar,
+header,
+header > *,
 #sidebar,
 #table-of-contents {
-  background: var(--glass-bg-primary) !important;
+  background: var(--docs-page-bg) !important;
   border-color: var(--border-primary) !important;
+  box-shadow: none !important;
   color: var(--text-primary) !important;
+}
+
+#navbar::before,
+#navbar::after,
+header::before,
+header::after {
+  background-image: none !important;
+  box-shadow: none !important;
+}
+
+#body-content > *,
+body > div,
+main > div,
+main > section,
+main > article,
+[role="main"],
+[data-radix-scroll-area-viewport] {
+  background-color: var(--docs-page-bg) !important;
+  box-shadow: none !important;
 }
 
 #sidebar::before,
@@ -41,14 +72,6 @@ h4,
 #sidebar [class*="to-transparent"] {
   background-image: none !important;
   box-shadow: none !important;
-}
-
-#navbar {
-  box-shadow:
-    0 1px 0 color-mix(in srgb, var(--text-primary) 10%, transparent),
-    0 8px 0 color-mix(in srgb, var(--text-primary) 4%, transparent) !important;
-  -webkit-backdrop-filter: saturate(106%);
-  backdrop-filter: saturate(106%);
 }
 
 #sidebar a[href],

@@ -45,6 +45,8 @@
   --black-pure: var(--bf-surface);
   --black-rich: var(--bf-surface-raised);
   --surface-base: var(--bf-surface);
+  --landing-canvas-bg: color-mix(in srgb, var(--surface-base) 94%, #fbfaf6 6%);
+  --docs-page-bg: var(--landing-canvas-bg);
   --glass-bg-primary: var(--bf-surface-raised);
   --glass-bg-secondary: color-mix(in srgb, var(--bf-text) 5%, transparent);
   --glass-bg-tertiary: color-mix(in srgb, var(--bf-text) 8%, transparent);
