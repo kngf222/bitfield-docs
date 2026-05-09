@@ -199,6 +199,10 @@ main [style*="box-shadow"] {
   display: none !important;
 }
 
+#topbar-cta-button:has([data-bf-native-account-link="true"]) {
+  display: none !important;
+}
+
 #bf-docs-account-cta {
   align-items: center !important;
   background: var(--cta-hardware-bg) !important;

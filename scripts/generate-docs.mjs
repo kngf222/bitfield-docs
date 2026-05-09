@@ -385,7 +385,8 @@ const themeJs = `(() => {
   function normalizeAccountCta() {
     const nativeLinks = nativeAccountLinks();
     const nativePrimary = nativeLinks[0];
-    const target = nativePrimary?.parentElement;
+    const nativeShell = nativePrimary?.closest('li') || nativePrimary?.parentElement;
+    const target = nativeShell?.parentElement;
 
     nativeLinks.forEach((link) => {
       link.dataset.bfNativeAccountLink = 'true';
@@ -399,8 +400,8 @@ const themeJs = `(() => {
       accountCta = makeAccountCta();
     }
 
-    if (accountCta.parentElement !== target) {
-      target.append(accountCta);
+    if (accountCta.parentElement !== target || accountCta.previousElementSibling !== nativeShell) {
+      nativeShell?.insertAdjacentElement('afterend', accountCta);
     }
 
     return accountCta;
