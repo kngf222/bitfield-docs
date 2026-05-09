@@ -1,6 +1,6 @@
 ---
 title: "Read data in React"
-description: "Use the public React read hook without taking on Bitfield setup details."
+description: "Use useBitfieldData as the public React read surface for prepared Bitfield data."
 ---
 
 <div className="bf-article">
@@ -10,8 +10,47 @@ description: "Use the public React read hook without taking on Bitfield setup de
 # Read data in React.
 
 <p className="bf-lead">
-Use `useBitfieldData(...)` when a React component needs data that Runtime Kit has already prepared for app code.
+Use `useBitfieldData(...)` when a React component needs data that Runtime Kit has already prepared for that surface.
 </p>
+
+## What this is
+
+`useBitfieldData(...)` is the public React read hook. It gives a component one boring shape:
+
+```ts
+{
+  data: T | null;
+  loading: boolean;
+  error: Error | null;
+}
+```
+
+That shape is the point. Your component can render data, loading, and error states without learning how Bitfield prepared the data.
+
+## The mental model
+
+The component asks for data by using the hook. Runtime Kit decides what prepared input that component is allowed to read. The component receives the latest app-facing value.
+
+This is not a normal fetch call. The component is not asking a server for a record by URL. It is reading a prepared app value. Runtime Kit may prepare that value from local data, package records, package-owned bytes, derived values, or another public package surface. The component does not need to know that path.
+
+## How it works technically
+
+```text
+package material becomes app-facing data
+  -> Runtime Kit exposes a read input to this component tree
+  -> useBitfieldData(...) selects the default input or a named input
+  -> React receives { data, loading, error }
+```
+
+The public hook call is stable even when the preparation path changes behind it.
+
+| Public concept | Meaning |
+|---|---|
+| Prepared data | Data Runtime Kit has already made available to the app surface. |
+| Selector | A public way to pick which prepared input you want. |
+| `data` | The current materialized value, or `null` if none is ready. |
+| `loading` | `true` while Runtime Kit is preparing or waiting for the value. |
+| `error` | An `Error` when the read surface cannot provide the value. |
 
 ## Import
 
@@ -19,50 +58,157 @@ Use `useBitfieldData(...)` when a React component needs data that Runtime Kit ha
 import { useBitfieldData } from '@bitfield/runtime-kit/react';
 ```
 
-## Shape
+Do not import from unpublished Runtime Kit paths. The public React package exports the hook.
 
-The hook returns the same simple shape every time:
+## Read the default input
 
-```ts
-type BitfieldDataStore<T> = {
-  data: T | null;
-  loading: boolean;
-  error: Error | null;
-};
-```
-
-That is the public contract. Your component does not need to know whether the data came from a direct value, a derived value, selected payload bytes, or a pushed update.
-
-## Use it in a component
+Use the hook without an argument when the surface has one default prepared value.
 
 ```tsx
 import { useBitfieldData } from '@bitfield/runtime-kit/react';
 
-export function ProductName() {
-  const product = useBitfieldData<{ name: string }>();
+type WelcomeData = {
+  headline: string;
+  body: string;
+};
 
-  if (product.loading) return <span>Loading</span>;
-  if (product.error) return <span>{product.error.message}</span>;
-  if (!product.data) return null;
+export function WelcomePanel() {
+  const welcome = useBitfieldData<WelcomeData>();
 
-  return <strong>{product.data.name}</strong>;
+  if (welcome.loading) return <section>Loading</section>;
+  if (welcome.error) return <section>Could not load this panel.</section>;
+  if (!welcome.data) return null;
+
+  return (
+    <section>
+      <h2>{welcome.data.headline}</h2>
+      <p>{welcome.data.body}</p>
+    </section>
+  );
 }
 ```
 
-## Why the surface is this small
+## Read a named input
 
-The component should read app data. It should not create addresses, choose storage lanes, subscribe to bytes, parse package contracts, or bind private read scopes.
-
-Those jobs still exist. Runtime Kit keeps them behind the public surface so app components stay boring and replaceable.
-
-## When to use a selector
-
-Some integrations may give the hook a selector. A selector is not a second public API family. It is just a way to pick the data Runtime Kit already made available to the component.
+Use a string selector when the surface exposes more than one prepared input.
 
 ```tsx
-const item = useBitfieldData((scope) => scope.item);
+const welcome = useBitfieldData<WelcomeData>('welcome');
+const profile = useBitfieldData<{ name: string }>('profile');
 ```
 
-If your app has no selector yet, call the hook without one and let the integration decide what the current component receives.
+The string is not a storage path. It is a public input name made available to this surface.
+
+## Read with local params
+
+Some surfaces may allow a selection object with params. Params are local selection data, like the current search query or selected item id.
+
+```tsx
+const result = useBitfieldData<SearchResult>({
+  input: 'search-results',
+  params: { query },
+});
+```
+
+Use params for the thing the user is changing on this screen. Do not use params to smuggle private storage or setup into a component.
+
+## Render every state
+
+Good Runtime Kit components handle four states.
+
+```tsx
+if (store.loading) return <section>Loading</section>;
+if (store.error) return <section>{store.error.message}</section>;
+if (!store.data) return <section>No data yet</section>;
+return <section>{store.data.title}</section>;
+```
+
+That sounds simple because it should be simple. The hard work belongs behind Runtime Kit.
+
+## Pair it with a request
+
+Use the hook for reading. Use `sendRequestToBitfieldTarget(...)` when the user asks something to do work.
+
+```tsx
+import { sendRequestToBitfieldTarget } from '@bitfield/runtime-kit';
+import { useBitfieldData } from '@bitfield/runtime-kit/react';
+
+export function SearchBox() {
+  const results = useBitfieldData<SearchResult[]>('search-results');
+
+  async function runSearch(query: string) {
+    await sendRequestToBitfieldTarget({
+      target: 'product.search',
+      payload: { query },
+    });
+  }
+
+  return (
+    <section>
+      <button type="button" onClick={() => runSearch('blue jacket')}>
+        Search
+      </button>
+      {results.data?.map((item) => <p key={item.id}>{item.name}</p>)}
+    </section>
+  );
+}
+```
+
+The request asks a target to do work. The hook reads prepared results.
+
+## Before / after
+
+| Before | After |
+|---|---|
+| Component imports storage helpers. | Component imports one hook. |
+| Component chooses low-level data wiring. | Runtime Kit handles preparation behind the surface. |
+| Component knows package internals. | Component knows public input names and data shape. |
+| AI has many low-level APIs to misuse. | AI gets one read shape and fewer ways to tangle the app. |
+
+## Common mistakes
+
+**Using the hook as setup code**
+
+Do not make the component create package state, storage addresses, or low-level wiring. The component reads prepared app data.
+
+**Skipping loading and empty states**
+
+`data` can be `null`. Treat that as a real state, not an error.
+
+**Assuming every selector is global**
+
+A selector is scoped to the surface that Runtime Kit prepared. If a selector is not available, fix the package/surface boundary instead of hardcoding private reads in the component.
+
+**Deep importing Runtime Kit internals**
+
+Only import from `@bitfield/runtime-kit/react`. If code needs private setup machinery, that code is not app component code.
+
+## Quick reference
+
+```tsx
+const store = useBitfieldData<MyData>();
+const named = useBitfieldData<MyData>('input-name');
+const selected = useBitfieldData<MyData>({
+  input: 'input-name',
+  params: { id },
+});
+```
+
+Return shape:
+
+```ts
+{
+  data: T | null;
+  loading: boolean;
+  error: Error | null;
+}
+```
+
+## Ceiling you have not hit yet
+
+- **Replace the source behind a screen:** Keep the same input name while changing how Runtime Kit prepares it.
+- **Build richer package surfaces:** Expose multiple named inputs to one component tree without adding more public hooks.
+- **Keep UI code portable:** Wrap the same read idea for another UI stack later.
+- **Give AI safer rails:** Let AI-generated components read prepared values instead of learning private system machinery.
 
 </div>

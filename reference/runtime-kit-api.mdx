@@ -1,6 +1,6 @@
 ---
 title: "Runtime Kit API"
-description: "The current public Runtime Kit values."
+description: "Reference for the current public Runtime Kit JavaScript values."
 ---
 
 <div className="bf-article">
@@ -10,35 +10,124 @@ description: "The current public Runtime Kit values."
 # Runtime Kit API.
 
 <p className="bf-lead">
-The current app-facing Runtime Kit API has two public values.
+The current public JavaScript Runtime Kit API exposes one request function and one React read hook.
 </p>
 
-## `@bitfield/runtime-kit`
+## Public imports
 
 ```ts
-sendRequestToBitfieldTarget(request)
+import {
+  sendRequestToBitfieldTarget,
+  type BitfieldTargetReply,
+  type BitfieldTargetRequest,
+} from '@bitfield/runtime-kit';
+import { useBitfieldData } from '@bitfield/runtime-kit/react';
 ```
 
-Sends opaque request data to a Bitfield target and returns reply data.
+The request and reply types are exported from `@bitfield/runtime-kit`. The React hook exports the hook value only.
 
-## `@bitfield/runtime-kit/react`
+## `sendRequestToBitfieldTarget(...)`
 
 ```ts
-useBitfieldData(selector?)
+function sendRequestToBitfieldTarget(
+  request: BitfieldTargetRequest,
+  signal?: AbortSignal,
+): Promise<BitfieldTargetReply>;
 ```
 
-Reads descriptor-bound materialized data in React and returns:
+### Request
 
 ```ts
-{
+type BitfieldTargetRequest = {
+  target: string;
+  payload?: unknown;
+};
+```
+
+| Field | Required | Meaning |
+|---|---:|---|
+| `target` | yes | Public name of the callable target. |
+| `payload` | no | Data sent to the target. Runtime Kit turns it into bytes. |
+
+### Reply
+
+```ts
+type BitfieldTargetReply = {
+  payload: Uint8Array;
+};
+```
+
+The reply is bytes. Decode it according to the target contract.
+
+### Payload conversion
+
+| Input | Sent as |
+|---|---|
+| `Uint8Array` | The same bytes. |
+| `string` | Text bytes. |
+| Any other JSON-compatible value | JSON bytes. |
+| omitted | Empty bytes. |
+
+### Errors
+
+The function throws an `Error` if the request cannot complete. App code should catch errors at user-action boundaries and render a recoverable state.
+
+### Guide
+
+Read [Send a request](/runtime-kit/send-request) for examples and patterns.
+
+## `useBitfieldData(...)`
+
+```ts
+function useBitfieldData<T>(
+  selector?:
+    | string
+    | {
+        input?: string;
+        params?: Record<string, unknown>;
+      },
+): {
   data: T | null;
   loading: boolean;
   error: Error | null;
-}
+};
 ```
 
-## What app code should not do
+### Return value
 
-App code should not create storage addresses, pick observation lanes, parse package contracts, or wire low-level readers. Runtime Kit keeps those choices behind the public surface so your app code stays stable.
+| Field | Meaning |
+|---|---|
+| `data` | The current prepared value, or `null` if no value is ready. |
+| `loading` | `true` while Runtime Kit is preparing or waiting for the value. |
+| `error` | The read error, or `null` when no error exists. |
+
+### Selector forms
+
+| Selector | Meaning |
+|---|---|
+| omitted | Read the default prepared input for this surface. |
+| string | Read a named prepared input. |
+| object with `input` and `params` | Read a named or selected input with local selection params. |
+
+Selector names are app-surface names. They are not storage paths. Do not import React selector helper types from unpublished paths.
+
+### Guide
+
+Read [Read data in React](/runtime-kit/use-bitfield-data) for component examples and common mistakes.
+
+## Public versus private
+
+| Public app code may use | App code should not use |
+|---|---|
+| `@bitfield/runtime-kit` | Unpublished Runtime Kit source paths. |
+| `@bitfield/runtime-kit/react` | Private setup or low-level Runtime Kit machinery. |
+| `sendRequestToBitfieldTarget(...)` | Direct imports of the target implementation. |
+| `useBitfieldData(...)` | Hand-built storage addresses or package parsing inside components. |
+
+This boundary is deliberate. Runtime Kit can improve the machinery behind the public surface without making app code change every time.
+
+## Version note
+
+This page documents the current public JavaScript surface. If the package exports change, this reference and the Runtime Kit guides must be reviewed together.
 
 </div>

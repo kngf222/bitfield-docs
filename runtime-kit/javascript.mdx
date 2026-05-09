@@ -1,6 +1,6 @@
 ---
 title: "JavaScript Runtime Kit"
-description: "Use the app-facing JavaScript and React surface."
+description: "Understand the public Runtime Kit surface, the package boundary, and where React fits."
 ---
 
 <div className="bf-article">
@@ -10,43 +10,183 @@ description: "Use the app-facing JavaScript and React surface."
 # JavaScript Runtime Kit.
 
 <p className="bf-lead">
-The public JavaScript surface has one request function and one React read hook.
+Runtime Kit is the public plug between your app and Bitfield. Your app reads prepared data, sends target requests, and stays out of the setup work that makes packages, storage, and runnable slots work.
 </p>
 
-## Imports
+## What this is
+
+Runtime Kit lets a product use Bitfield without turning every screen, feature, and package into one tangled codebase.
+
+The public JavaScript surface is intentionally small:
 
 ```ts
 import { sendRequestToBitfieldTarget } from '@bitfield/runtime-kit';
 import { useBitfieldData } from '@bitfield/runtime-kit/react';
 ```
 
-## Read in React
+That small surface is not a small system. It is the stable app-facing edge of a larger Runtime Kit flow:
 
-`useBitfieldData(...)` returns a simple envelope:
+```text
+package boundary
+  -> package material admitted by Runtime Kit
+  -> prepared data or callable target
+  -> app code reads or sends a request
+```
+
+React is one surface in that flow. It is not the whole Runtime Kit.
+
+## The mental model
+
+Think of Runtime Kit as the plug board for your product.
+
+Your package says what it brings: data to store, bytes it owns, or a callable thing. Bitfield admits that package into local state. Runtime Kit prepares the app-facing view. Your app then does one of two jobs: read data that is already prepared for it, or ask a named target to do work.
+
+The important part is what your app does not do. It does not open storage files. It does not choose data plumbing. It does not parse package boundaries. It does not know how the callable target is backed. That is the point. Your feature code stays calm while the system behind it can get faster, more flexible, and more replaceable.
+
+## How it works technically
+
+Runtime Kit separates four public roles:
+
+| Role | What it owns | Public file or call |
+|---|---|---|
+| Package author | Declares records, stored bytes, and callable slots. | `things-to-store-and-run.json` |
+| Runtime Kit | Admits package material and prepares app-facing reads or targets. | Runtime Kit setup behind the public surface |
+| App surface | Reads prepared data and sends target requests. | `useBitfieldData(...)`, `sendRequestToBitfieldTarget(...)` |
+| Bitfield account/device | Controls whether this device can use the product. | Account portal and local activation state |
+
+The public app call chain looks like this:
+
+```text
+React component
+  -> useBitfieldData(...)
+  -> prepared data chosen by Runtime Kit
+  -> { data, loading, error }
+
+button or user action
+  -> sendRequestToBitfieldTarget({ target, payload })
+  -> target receives bytes
+  -> reply bytes return to app code
+```
+
+The public package chain looks like this:
+
+```text
+package folder
+  -> things-to-store-and-run.json
+  -> record, stored_bytes, or slot declarations
+  -> Runtime Kit admits the package
+  -> app code sees stable reads and targets
+```
+
+## What app code should own
+
+App code should own names and product behavior:
+
+- Which prepared data a component wants.
+- Which target a button or action calls.
+- How to render loading, empty, error, and success states.
+- How to decode reply bytes when the target returns JSON, text, or another public format.
+
+App code should not own Runtime Kit setup:
+
+- No direct package parsing.
+- No hand-built storage addresses.
+- No low-level data wiring choices.
+- No unpublished Runtime Kit deep imports.
+- No private implementation wiring.
+
+## Before / after
+
+| Before Runtime Kit | With Runtime Kit |
+|---|---|
+| Features import each other because it is the fastest way to ship today. | Features talk through package data and named targets. |
+| A React component learns storage and package details. | A React component reads `{ data, loading, error }`. |
+| Replacing a feature means tracing imports across the app. | Replacing a package keeps the public data shape or target name stable. |
+| AI code generation tangles new features into old ones. | The AI has a smaller public surface and clearer boundaries to follow. |
+
+## The two app-facing calls
+
+### `useBitfieldData(...)`
+
+Use this when a component needs prepared data.
+
+```tsx
+const welcome = useBitfieldData<{ headline: string; body: string }>('welcome');
+```
+
+The hook returns:
 
 ```ts
-type BitfieldDataStore<T> = {
+{
   data: T | null;
   loading: boolean;
   error: Error | null;
-};
+}
 ```
-
-That shape is enough for app components. Runtime Kit can change how data is prepared behind the surface without changing every component.
 
 Read the focused guide: [Read data in React](/runtime-kit/use-bitfield-data).
 
-## Send a request
+### `sendRequestToBitfieldTarget(...)`
 
-`sendRequestToBitfieldTarget(...)` sends opaque request data to a Bitfield target. Opaque means your app does not need to know the target's private vocabulary. It sends the payload and receives the reply.
+Use this when app code needs a named target to do work.
 
 ```ts
 const reply = await sendRequestToBitfieldTarget({
-  target,
-  payload,
+  target: 'product.search',
+  payload: { query: 'blue jacket' },
 });
 ```
 
+The reply is bytes. Decode it according to the target contract your package exposes.
+
 Read the focused guide: [Send a request](/runtime-kit/send-request).
+
+## Runtime Kit is not React-only
+
+React is the first documented app surface because a lot of products start there. Runtime Kit is broader than that.
+
+| Runtime Kit area | Why it matters |
+|---|---|
+| Package boundary | Lets a package declare what it stores and runs. |
+| Package sets | Lets one product or project hold a named collection of packages. |
+| Stored bytes | Lets a package bring owned files without reaching outside itself. |
+| Callable slots | Lets a package expose a named door your app can ask for work. |
+| Local state | Keeps customer-visible Bitfield state on the device. |
+| App surfaces | Lets React, and later other SDKs, read and request without learning private setup. |
+
+## Common mistakes
+
+**Treating the hook like a database query**
+
+`useBitfieldData(...)` reads data Runtime Kit has already prepared for the surface. It is not where app code should build storage addresses or recreate package setup.
+
+**Turning target names into imports**
+
+A target name like `product.search` is a door. Keep calling the door. Do not import the private code behind it from your component.
+
+**Making React the architecture**
+
+React is a surface. Runtime Kit is the boundary. If you build a non-React surface later, the Runtime Kit idea stays the same: prepared reads and named target requests.
+
+**Publishing secrets in package examples**
+
+Package records and stored bytes are product material. Do not put private keys, tokens, or account secrets into public package examples.
+
+## Quick reference
+
+| Need | Use |
+|---|---|
+| Show prepared app data | `useBitfieldData(...)` |
+| Ask a package target to work | `sendRequestToBitfieldTarget(...)` |
+| Declare package data or runnable doors | `things-to-store-and-run.json` |
+| Understand package shapes | [Packages](/runtime-kit/packages) |
+| Look up exact API shape | [Runtime Kit API](/reference/runtime-kit-api) |
+
+## Ceiling you have not hit yet
+
+- **Feature replacement:** Keep a target name stable while changing the package behind it.
+- **Package-owned help, copy, or config:** Ship bytes with a package instead of scattering support files through app code.
+- **Non-React surfaces:** Wrap the same public read/request shape for another UI stack without changing package boundaries.
+- **AI-safe architecture:** Give an AI agent a small public surface so it can add features without crossing private boundaries.
 
 </div>

@@ -7,7 +7,7 @@ type WelcomeData = {
 };
 
 export function WelcomePanel() {
-  const welcome = useBitfieldData<WelcomeData>((data) => data.welcome);
+  const welcome = useBitfieldData<WelcomeData>('welcome');
 
   async function refresh() {
     await sendRequestToBitfieldTarget({

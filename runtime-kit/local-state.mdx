@@ -1,6 +1,6 @@
 ---
 title: "Local state"
-description: "What lives under the Bitfield local state folder and what each area means."
+description: "Understand the customer-visible Bitfield state under ~/.bitfield."
 ---
 
 <div className="bf-article">
@@ -10,10 +10,22 @@ description: "What lives under the Bitfield local state folder and what each are
 # Local state.
 
 <p className="bf-lead">
-Runtime Kit keeps Bitfield's local customer-visible files under `~/.bitfield`.
+Runtime Kit keeps customer-visible Bitfield state under `~/.bitfield` on the device.
 </p>
 
-## The top level
+## What this is
+
+Local state is the device-side home for Bitfield's durable data area, package material, local runtime state, and activation files.
+
+This page explains the public folder meanings. It does not document proprietary storage layouts, binary encodings, or private recovery mechanics.
+
+## The mental model
+
+Bitfield is built around local truth. That means your device has local state it can use without making every read depend on a remote service.
+
+Runtime Kit keeps that state in one predictable place. Some folders hold durable product data. Some folders hold package material. Some folders hold files that prove this device is allowed to use Bitfield. You usually do not edit any of them by hand. Runtime Kit and the account portal should do that work.
+
+## Top-level shape
 
 ```text
 ~/.bitfield/
@@ -24,14 +36,95 @@ Runtime Kit keeps Bitfield's local customer-visible files under `~/.bitfield`.
 
 ## What each area means
 
+| Area | Meaning | What you should do |
+|---|---|---|
+| `stored-data/` | The durable Bitfield data area. | Do not edit by hand. |
+| `runtime-kit/` | Package sets, active package material, and local runtime state. | Use Runtime Kit package flows. |
+| `check-license/` | Device permission files for this machine or runtime identity. | Use the account portal for activation, replacement, or revocation. |
+
+## Runtime Kit area
+
+```text
+~/.bitfield/runtime-kit/
+  package-sets/
+  running-now/
+```
+
 | Area | Meaning |
 |---|---|
-| `stored-data/` | The durable Bitfield data area. |
-| `runtime-kit/` | Package sets, active package material, and local runner state. |
-| `check-license/` | Device permission files for this machine or runtime identity. |
+| `package-sets/` | Active package material grouped by package set. |
+| `running-now/` | Local process state for the current Runtime Kit session. |
 
-## What not to edit by hand
+A package set separates one product or project from another. Package names can repeat across package sets without colliding.
 
-Do not edit these files by hand unless Bitfield support tells you to. Use Runtime Kit and the account portal. Manual edits can break activation, package state, or the durable data area.
+## Activation area
+
+```text
+~/.bitfield/check-license/
+```
+
+This area is where Runtime Kit keeps device permission material. A normal user should manage activation from the account portal, not by editing files here.
+
+## What is safe to inspect
+
+You can look at folder names when support asks you to confirm whether local state exists.
+
+You should not:
+
+- Edit files by hand.
+- Delete activation files to "reset" an account.
+- Copy one device's local state to another device.
+- Treat local state as a public backup format.
+- Publish local state contents in a support ticket or public issue.
+
+## Privacy and offline behavior
+
+The point of local state is that Bitfield can keep useful product truth close to the device. That supports offline and local-first workflows.
+
+Local-first does not mean every file in `~/.bitfield` is safe to share. Treat this folder like product data and device permission material.
+
+## Before / after
+
+| Before clear local state | With Runtime Kit local state |
+|---|---|
+| Product data, package files, and device permission files are scattered. | They live under one predictable device folder. |
+| Debugging starts with guessing where things are. | Support can ask for the top-level area that matters. |
+| A package name can collide across projects. | Package sets separate project/package material. |
+| Users try to hand-edit state. | The docs make clear what Runtime Kit and the account portal own. |
+
+## Common mistakes
+
+**Editing stored data by hand**
+
+Do not edit files under `stored-data/`. Use Runtime Kit and product/account flows.
+
+**Deleting device permission files without understanding activation**
+
+Use the account portal when you need to replace or revoke a device.
+
+**Copying local state between devices**
+
+Device permission material belongs to a runtime identity. Copying folders is not the same as activating a new device.
+
+**Publishing local state**
+
+Do not paste local state contents into public docs, issues, chats, or social posts.
+
+## Quick reference
+
+```text
+~/.bitfield/stored-data/    durable Bitfield data area
+~/.bitfield/runtime-kit/    package sets and local runtime state
+~/.bitfield/check-license/  device permission material
+```
+
+If something is broken, start with the account portal for activation/account issues and Runtime Kit package flows for package issues.
+
+## Ceiling you have not hit yet
+
+- **Device replacement:** Use account-managed activation rather than copying local state.
+- **Package-set debugging:** Inspect which package set is active without opening private storage files.
+- **Offline-first products:** Keep useful local state on the device while still respecting account permissions.
+- **Support-ready diagnostics:** Share folder presence and high-level status without leaking product data or device permission material.
 
 </div>

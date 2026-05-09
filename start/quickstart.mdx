@@ -36,7 +36,7 @@ import { useBitfieldData } from '@bitfield/runtime-kit/react';
 import { useBitfieldData } from '@bitfield/runtime-kit/react';
 
 export function InboxCount() {
-  const inbox = useBitfieldData((data) => data.inbox);
+  const inbox = useBitfieldData<{ id: string }[]>('inbox');
 
   if (inbox.loading) return <span>Loading</span>;
   if (inbox.error) return <span>Could not read inbox</span>;

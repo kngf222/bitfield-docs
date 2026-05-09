@@ -701,7 +701,7 @@
       "title": "Content-addressed storage",
       "description": "What content addresses are and why they matter for speed, integrity, and reuse.",
       "diataxis": "concept",
-      "summary": "Defines content addresses in plain words and states what the public docs do not expose."
+      "summary": "Defines content addresses and states what the public docs do not expose."
     },
     {
       "route": "concepts/slots",
@@ -720,37 +720,37 @@
     {
       "route": "runtime-kit/javascript",
       "title": "JavaScript Runtime Kit",
-      "description": "Use the app-facing JavaScript and React surface.",
+      "description": "Understand the public Runtime Kit surface, package boundary, and where React fits.",
       "diataxis": "how-to",
-      "summary": "Shows the public JavaScript Runtime Kit shape without exposing Bitfield setup work."
+      "summary": "Maps the public Runtime Kit flow from package boundary to prepared reads and named target requests."
     },
     {
       "route": "runtime-kit/use-bitfield-data",
       "title": "Read data in React",
-      "description": "Use the public React read hook without taking on Bitfield setup details.",
+      "description": "Use the public React read hook for prepared Bitfield data.",
       "diataxis": "how-to",
-      "summary": "Shows how useBitfieldData returns data, loading, and error for app components."
+      "summary": "Shows selectors, render states, request pairing, and what React components should not own."
     },
     {
       "route": "runtime-kit/send-request",
       "title": "Send a request",
       "description": "Send opaque payloads to Bitfield targets through the public request function.",
       "diataxis": "how-to",
-      "summary": "Shows how sendRequestToBitfieldTarget sends a target plus payload and returns reply bytes."
+      "summary": "Shows JSON, text, byte payloads, reply decoding, cancellation, and target-boundary mistakes."
     },
     {
       "route": "runtime-kit/packages",
       "title": "Packages",
-      "description": "How Runtime Kit packages declare what should be stored and run.",
+      "description": "Declare what a Runtime Kit package stores, ships, and makes callable.",
       "diataxis": "reference",
-      "summary": "Documents the public package boundary file and package-set idea."
+      "summary": "Explains package sets, records, stored bytes, callable slots, validation rules, and safe package examples."
     },
     {
       "route": "runtime-kit/local-state",
       "title": "Local state",
-      "description": "What lives under the Bitfield local state folder and what each area means.",
+      "description": "Understand the customer-visible Bitfield state under ~/.bitfield.",
       "diataxis": "reference",
-      "summary": "Documents customer-visible local state at a high level."
+      "summary": "Explains stored data, Runtime Kit package state, activation material, and what users should not hand-edit."
     },
     {
       "route": "workflows/index",
@@ -832,9 +832,9 @@
     {
       "route": "reference/runtime-kit-api",
       "title": "Runtime Kit API",
-      "description": "The current public Runtime Kit values.",
+      "description": "Reference for the current public Runtime Kit JavaScript values.",
       "diataxis": "reference",
-      "summary": "Reference for useBitfieldData and sendRequestToBitfieldTarget."
+      "summary": "Reference for sendRequestToBitfieldTarget, useBitfieldData, payload conversion, selectors, return values, and public boundaries."
     },
     {
       "route": "reference/claim-ledger",

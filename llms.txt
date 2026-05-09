@@ -12,14 +12,14 @@ These pages are public customer documentation. They describe the public product,
 - [What is Bitfield?](concepts/what-is-bitfield): Explains Bitfield without assuming the reader already knows database or runtime vocabulary.
 - [Database and runtime](concepts/database-and-runtime): Defines the public database and runtime model.
 - [Storage shape](concepts/storage-shape): Explains local durable truth, memory-mapped local files, content identity, and the current view.
-- [Content-addressed storage](concepts/content-addressed-storage): Defines content addresses in plain words and states what the public docs do not expose.
+- [Content-addressed storage](concepts/content-addressed-storage): Defines content addresses and states what the public docs do not expose.
 - [Slots](concepts/slots): Explains slots as named runnable doors that features can call without importing each other.
 - [Active devices](concepts/active-devices): Defines active devices for pricing, keys, and account management.
-- [JavaScript Runtime Kit](runtime-kit/javascript): Shows the public JavaScript Runtime Kit shape without exposing Bitfield setup work.
-- [Read data in React](runtime-kit/use-bitfield-data): Shows how useBitfieldData returns data, loading, and error for app components.
-- [Send a request](runtime-kit/send-request): Shows how sendRequestToBitfieldTarget sends a target plus payload and returns reply bytes.
-- [Packages](runtime-kit/packages): Documents the public package boundary file and package-set idea.
-- [Local state](runtime-kit/local-state): Documents customer-visible local state at a high level.
+- [JavaScript Runtime Kit](runtime-kit/javascript): Maps the public Runtime Kit flow from package boundary to prepared reads and named target requests.
+- [Read data in React](runtime-kit/use-bitfield-data): Shows selectors, render states, request pairing, and what React components should not own.
+- [Send a request](runtime-kit/send-request): Shows JSON, text, byte payloads, reply decoding, cancellation, and target-boundary mistakes.
+- [Packages](runtime-kit/packages): Explains package sets, records, stored bytes, callable slots, validation rules, and safe package examples.
+- [Local state](runtime-kit/local-state): Explains stored data, Runtime Kit package state, activation material, and what users should not hand-edit.
 - [Workflow examples](workflows/index): Indexes complete package and Runtime Kit workflows that stay inside the public contract.
 - [Package set with one record](workflows/package-set-with-one-record): Shows the smallest package boundary with one durable package record.
 - [Package-owned file](workflows/package-owned-file): Shows how a package declares package-owned bytes without reaching outside its folder.
@@ -31,7 +31,7 @@ These pages are public customer documentation. They describe the public product,
 - [Warm and cold paths](proof/warm-and-cold-paths): Defines warm local read, cold local read, content address lookup, durable batch write, runtime call, and network command.
 - [Benchmark ledger](proof/benchmark-ledger): Lists public speed claims with the work category attached.
 - [Measurement methodology](proof/methodology): Explains warm reads, cold reads, hash lookup, durable writes, and why each number needs its category.
-- [Runtime Kit API](reference/runtime-kit-api): Reference for useBitfieldData and sendRequestToBitfieldTarget.
+- [Runtime Kit API](reference/runtime-kit-api): Reference for sendRequestToBitfieldTarget, useBitfieldData, payload conversion, selectors, return values, and public boundaries.
 - [Claim ledger](reference/claim-ledger): Documents the public claim-ledger fields that keep speed claims honest.
 - [Package boundary](reference/package-boundary): Lists the public package boundary fields and thing types.
 - [Changelog](changelog/index): The public change log for docs and customer-visible product behavior.

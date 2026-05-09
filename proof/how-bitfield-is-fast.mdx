@@ -19,7 +19,7 @@ Bitfield is fast because the storage shape removes work from the read path. Dura
 
 ## Durable does not mean every read waits for disk
 
-A memory map connects a durable local file to the program reading it. In plain words, the operating system lets Bitfield touch local file pages like memory. The file is still the durable thing.
+A memory map connects a durable local file to the program reading it. The operating system lets Bitfield touch local file pages like memory. The file is still the durable thing.
 
 When the operating system already has the needed pages warm, Bitfield can read known local bytes without sending a request to a separate database process.
 

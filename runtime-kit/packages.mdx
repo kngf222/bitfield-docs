@@ -1,6 +1,6 @@
 ---
 title: "Packages"
-description: "How Runtime Kit packages declare what should be stored and run."
+description: "Declare what a Runtime Kit package stores, ships, and makes callable."
 ---
 
 <div className="bf-article">
@@ -10,35 +10,50 @@ description: "How Runtime Kit packages declare what should be stored and run."
 # Packages.
 
 <p className="bf-lead">
-A Runtime Kit package declares what Bitfield should store and what it should make runnable.
+A Runtime Kit package is a folder with one public boundary file. That file tells Bitfield what to store, which bytes the package owns, and which callable doors the package exposes.
 </p>
 
-## Package shape
+## What this is
+
+Packages are how features enter Bitfield without turning into direct imports everywhere.
+
+A package can bring three public kinds of things:
+
+| Thing | Plain meaning |
+|---|---|
+| `record` | Store or remove one named piece of package data. |
+| `stored_bytes` | Attach package-owned bytes, such as text, JSON, images, or other files. |
+| `slot` | Declare a named callable door app code can ask for work. |
+
+The package boundary says what exists. Runtime Kit decides how to admit it behind the public contract.
+
+## The mental model
+
+Put a boundary file in the package. The boundary file says, "Here is what this package wants Bitfield to know about." Runtime Kit checks that file before package material becomes active.
+
+That check is important. The package should not quietly read files outside itself. It should not invent unsupported thing types. It should not force app code to learn private setup. A package declares the public shape; Bitfield owns the admission path.
+
+## Folder shape
+
+```text
+<package-set>/
+  <package-name>/
+    things-to-store-and-run.json
+    slots/
+    other package-owned files
+```
+
+`<package-set>` is the collection for one product or project. `<package-name>` is one package inside that collection.
+
+## Boundary file
 
 Every package has one boundary file:
 
 ```text
-<package-name>/
-  things-to-store-and-run.json
-  slots/
-  other package files
+things-to-store-and-run.json
 ```
 
-`things-to-store-and-run.json` is the public boundary. It is where the package says what records, stored bytes, or runnable pieces belong to the package.
-
-## Package sets
-
-A package set is a named collection of packages for one product or project. Package sets let different products reuse package names without colliding with each other.
-
-## Thing types
-
-| Type | Meaning |
-|---|---|
-| `record` | Store or remove one addressed record. |
-| `stored_bytes` | Store package-owned bytes under a package-owned name. |
-| `slot` | Make one package-owned runnable thing callable. |
-
-## Minimum file
+Minimum file:
 
 ```json
 {
@@ -47,10 +62,186 @@ A package set is a named collection of packages for one product or project. Pack
 }
 ```
 
-Unknown thing types are rejected before they become active.
+The `package` field names the package. The `things` array lists what the package declares.
 
-For exact fields and examples, read [Package boundary](/reference/package-boundary).
+## Package sets
 
-For complete copyable shapes, read [Workflow examples](/workflows/index).
+A package set is a named collection of packages for one product or project.
+
+Package sets matter because two projects can use the same package names without colliding. For example, two products can both have a package named `search-package` if they live in different package sets.
+
+## Record thing
+
+Use `record` when the package needs one named piece of durable data.
+
+```json
+{
+  "type": "record",
+  "address": "package::product-copy::welcome",
+  "payload": {
+    "headline": "Welcome back.",
+    "body": "Your product can keep moving without every feature talking directly to every other feature."
+  }
+}
+```
+
+The `address` is the stable package-owned name for that data. Keep the same address when you want to update the same piece of package data.
+
+A record chooses exactly one action:
+
+| Action | Meaning |
+|---|---|
+| `payload` | Store JSON-compatible data. |
+| `payload_text` | Store text. |
+| `payload_base64` | Store bytes encoded as base64. |
+| `remove: true` | Remove the record at that address. |
+
+Do not combine those actions in one record.
+
+## Stored bytes thing
+
+Use `stored_bytes` when a package brings a file.
+
+```json
+{
+  "type": "stored_bytes",
+  "name": "getting-started-help",
+  "source_path": "help/getting-started.txt"
+}
+```
+
+`source_path` must point inside the package folder. That rule keeps packages from reaching into random files on the machine.
+
+Stored bytes are good for:
+
+- Help text.
+- JSON config.
+- Images or other package-owned assets.
+- Data files a callable slot needs.
+
+## Slot thing
+
+Use `slot` when a package exposes a named callable door.
+
+```json
+{
+  "type": "slot",
+  "name": "product.search",
+  "methods": [
+    {
+      "name": "query"
+    }
+  ],
+  "boundary": {
+    "call_shape": "envelope-bytes-in-envelope-bytes-out",
+    "methods": [
+      {
+        "name": "query"
+      }
+    ]
+  },
+  "artifact": {
+    "source_path": "slots/search-slot.bin"
+  }
+}
+```
+
+The public parts are the slot name, method list, call boundary, and package-owned artifact path. The machinery behind that slot is not app API.
+
+Your app calls the slot through the target name:
+
+```ts
+await sendRequestToBitfieldTarget({
+  target: 'product.search',
+  payload: { query: 'blue jacket' },
+});
+```
+
+## Validation rules
+
+Runtime Kit should reject package material before it becomes active when:
+
+| Problem | Why it is rejected |
+|---|---|
+| Missing `things-to-store-and-run.json` | Runtime Kit needs one boundary file. |
+| Unknown thing type | Unsupported package law cannot become active. |
+| Record has no payload action | Runtime Kit cannot tell what the record should do. |
+| Record has multiple payload actions | One record should do one thing. |
+| File path escapes the package | Packages must not read arbitrary local files. |
+| Slot is missing a boundary | App code needs a public call shape. |
+
+## Before / after
+
+| Before packages | With packages |
+|---|---|
+| Feature data is scattered through app code. | Package data is declared in one boundary. |
+| Files are copied by convention. | Package-owned bytes are declared by name. |
+| A callable feature is imported directly. | The package exposes a named target. |
+| Removing a feature means hunting through imports. | Replacing a package can keep public names stable. |
+
+## Common mistakes
+
+**Putting secrets in package files**
+
+Do not put private keys, tokens, or account secrets into package records or stored bytes.
+
+**Pointing outside the package**
+
+`source_path` must stay inside the package folder. Move the file into the package instead of using `../`.
+
+**Using package data as app code**
+
+The package boundary declares data and callable doors. App code should still use Runtime Kit read/request calls.
+
+**Making the slot name too specific**
+
+Use a stable target name like `product.search`. Do not bake an implementation name into the public target name.
+
+## Quick reference
+
+Minimum:
+
+```json
+{
+  "package": "sample-package",
+  "things": []
+}
+```
+
+Record:
+
+```json
+{ "type": "record", "address": "package::sample::main", "payload": { "ok": true } }
+```
+
+Stored bytes:
+
+```json
+{ "type": "stored_bytes", "name": "help", "source_path": "help.txt" }
+```
+
+Slot:
+
+```json
+{
+  "type": "slot",
+  "name": "product.search",
+  "methods": [{ "name": "query" }],
+  "boundary": {
+    "call_shape": "envelope-bytes-in-envelope-bytes-out",
+    "methods": [{ "name": "query" }]
+  },
+  "artifact": { "source_path": "slots/search-slot.bin" }
+}
+```
+
+For exact fields, read [Package boundary](/reference/package-boundary). For complete examples, read [Workflow examples](/workflows/index).
+
+## Ceiling you have not hit yet
+
+- **Package sets per product:** Keep package names stable while separating products or projects.
+- **Package-owned files:** Ship help, rules, copy, or assets without app code knowing file locations.
+- **Callable feature doors:** Let app code call a target while package internals change behind it.
+- **AI-generated package shapes:** Give an AI agent one boundary file to edit instead of letting it wire private imports across the app.
 
 </div>

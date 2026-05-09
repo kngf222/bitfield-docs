@@ -10,16 +10,37 @@ description: "Send opaque payloads to Bitfield targets through the public reques
 # Send a request.
 
 <p className="bf-lead">
-Use `sendRequestToBitfieldTarget(...)` when app code needs to ask a Bitfield target to do something.
+Use `sendRequestToBitfieldTarget(...)` when app code needs to ask a named Bitfield target to do work.
 </p>
 
-## Import
+## What this is
+
+A target is a public callable door. Your app sends a payload to the door. Runtime Kit gets the payload to the thing behind the door. Your app receives reply bytes.
 
 ```ts
 import { sendRequestToBitfieldTarget } from '@bitfield/runtime-kit';
 ```
 
-## Shape
+## The mental model
+
+Your app should not care how the work is performed. It should care about the public target name and the payload it sends.
+
+If a user clicks a search button, your app can call `product.search`. The package behind that target can change later. Your button can stay the same as long as the target contract stays the same.
+
+That is the value: app code calls the door, not the implementation behind the door.
+
+## How it works technically
+
+```text
+app action
+  -> sendRequestToBitfieldTarget({ target, payload })
+  -> Runtime Kit encodes payload as bytes
+  -> named target receives the request
+  -> target replies with bytes
+  -> app decodes bytes according to the public target contract
+```
+
+The request shape is:
 
 ```ts
 type BitfieldTargetRequest = {
@@ -32,19 +53,30 @@ type BitfieldTargetReply = {
 };
 ```
 
-`target` is the public name of the thing you want to ask. `payload` is the data you are sending. The reply is bytes because targets can return JSON, text, packed data, or another format chosen by that target.
-
 ## Send JSON-like data
 
 ```ts
 const reply = await sendRequestToBitfieldTarget({
   target: 'product.search',
-  payload: { query: 'camera' },
+  payload: { query: 'blue jacket' },
 });
 
 const text = new TextDecoder().decode(reply.payload);
 const result = JSON.parse(text);
 ```
+
+Use JSON-like payloads when your target contract is ordinary app data.
+
+## Send text
+
+```ts
+await sendRequestToBitfieldTarget({
+  target: 'note.analyze',
+  payload: 'Look for missing details.',
+});
+```
+
+Runtime Kit encodes strings as bytes before sending.
 
 ## Send bytes
 
@@ -55,23 +87,129 @@ const reply = await sendRequestToBitfieldTarget({
 });
 ```
 
-If the payload is already a `Uint8Array`, Runtime Kit sends those bytes. If the payload is a string, Runtime Kit encodes the string. Otherwise it serializes the value as JSON before sending.
+If `payload` is already a `Uint8Array`, Runtime Kit sends those bytes.
+
+## Understand payload encoding
+
+| Payload value | Public behavior |
+|---|---|
+| `Uint8Array` | Sent as bytes. |
+| `string` | Encoded as text bytes. |
+| object, array, number, boolean, or `null` | Serialized as JSON bytes. |
+| omitted payload | Sent as empty bytes. |
+
+The target decides what those bytes mean. Your app and target should agree on a public contract, such as JSON in and JSON out.
+
+## Decode the reply
+
+The reply is always bytes because targets are not forced into one format.
+
+```ts
+const text = new TextDecoder().decode(reply.payload);
+```
+
+For JSON replies:
+
+```ts
+const data = JSON.parse(new TextDecoder().decode(reply.payload));
+```
+
+For binary replies, keep the `Uint8Array`:
+
+```ts
+const thumbnailBytes = reply.payload;
+```
 
 ## Cancel a request
 
-```ts
-const controller = new AbortController();
+Use an `AbortController` when the user leaves a screen, changes a search query, or cancels work.
 
-const reply = await sendRequestToBitfieldTarget(
-  { target: 'product.search', payload: { query: 'camera' } },
-  controller.signal,
-);
+```ts
+let currentSearch: AbortController | null = null;
+
+async function runSearch(query: string) {
+  currentSearch?.abort();
+  currentSearch = new AbortController();
+
+  return sendRequestToBitfieldTarget(
+    { target: 'product.search', payload: { query } },
+    currentSearch.signal,
+  );
+}
 ```
 
-Use the abort signal when the user leaves a screen, types a new query, or cancels a task.
+## Handle errors
 
-## What app code should not do
+Wrap user-triggered requests so the UI can recover.
 
-App code should not create connection managers, boot hooks, transports, package readers, or storage addresses. Those are Bitfield setup jobs behind Runtime Kit. The app sends the request and handles the reply.
+```ts
+try {
+  const reply = await sendRequestToBitfieldTarget({
+    target: 'product.search',
+    payload: { query },
+  });
+  return JSON.parse(new TextDecoder().decode(reply.payload));
+} catch (error) {
+  return { error: error instanceof Error ? error.message : 'Request failed' };
+}
+```
+
+An error means the public request did not complete. It does not mean the component should learn private target internals.
+
+## Before / after
+
+| Before | After |
+|---|---|
+| Button imports the feature implementation directly. | Button calls a named target. |
+| Replacing the feature requires rewiring app imports. | Replacing the package keeps the target name stable. |
+| App code knows implementation details. | App code knows payload and reply shape. |
+| AI has to understand private execution code. | AI sends a request to a public door. |
+
+## Common mistakes
+
+**Using target names as storage addresses**
+
+`product.search` is a callable target name. It is not a storage path.
+
+**Parsing every reply the same way**
+
+The reply is bytes. Decode according to the target contract. Do not assume every target returns JSON unless that target says it does.
+
+**Calling private implementation code directly**
+
+If a component imports the thing behind the target, the target boundary has been bypassed.
+
+**Forgetting cancellation**
+
+Search boxes, typeahead, and long tasks should use an abort signal so stale work can stop.
+
+## Quick reference
+
+```ts
+const reply = await sendRequestToBitfieldTarget({
+  target: 'target.name',
+  payload: { ok: true },
+});
+```
+
+With cancellation:
+
+```ts
+const controller = new AbortController();
+await sendRequestToBitfieldTarget(request, controller.signal);
+```
+
+Decode JSON:
+
+```ts
+const json = JSON.parse(new TextDecoder().decode(reply.payload));
+```
+
+## Ceiling you have not hit yet
+
+- **Replace work behind a target:** Keep `target` stable while swapping package implementation.
+- **Use binary replies:** Return bytes for image, audio, packed table, or model output workflows.
+- **Run local-first actions:** Let a device ask local targets for work even when the network is not part of the path.
+- **Give AI a stable command surface:** Let an AI agent call named targets instead of editing implementation wiring.
 
 </div>
