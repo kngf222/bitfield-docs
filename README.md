@@ -23,6 +23,7 @@ This repository publishes public docs only. It does not grant rights to Bitfield
 | `changelog/` | Docs and product-facing changes. |
 | `cookbook-examples.json` | Source of truth for cookbook example files and their docs routes. |
 | `.github/workflows/docs.yml` | Pull request and main-branch docs quality gate. |
+| `CONTRIBUTING.md` | Source-backed writing, public-boundary, changelog, and commit rules. |
 
 `examples/` is ignored by Mintlify directly. Cookbook pages embed the public snippets, and `docs:check` verifies the embedded snippets match the fixture files exactly.
 
@@ -43,3 +44,7 @@ npm run docs:mint
 ## CI
 
 The GitHub Actions docs workflow installs the locked npm dependencies, regenerates docs outputs, runs the public-boundary and docs-depth checks, runs Mintlify validation, confirms generated files are committed, and runs whitespace diff checks.
+
+## Contribution Contract
+
+Read [CONTRIBUTING.md](./CONTRIBUTING.md) before changing public docs. It defines the source-backed writing rule, the public boundary, page quality bars, changelog rules, and the required validation gate.
