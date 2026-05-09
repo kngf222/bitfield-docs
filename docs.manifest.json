@@ -64,6 +64,38 @@
         "siteName": "Bitfield Docs"
       }
     },
+    "searchSuggestions": [
+      {
+        "eyebrow": "Start",
+        "label": "Quickstart",
+        "href": "/start/quickstart",
+        "description": "Get your key and make your first call."
+      },
+      {
+        "eyebrow": "Concepts",
+        "label": "What is Bitfield?",
+        "href": "/concepts/what-is-bitfield",
+        "description": "Understand the runtime and database."
+      },
+      {
+        "eyebrow": "Workflows",
+        "label": "Workflow examples",
+        "href": "/workflows",
+        "description": "Copy a complete public package shape."
+      },
+      {
+        "eyebrow": "Account",
+        "label": "Get your key",
+        "href": "/start/get-your-key",
+        "description": "Create the account and activate devices."
+      },
+      {
+        "eyebrow": "Proof",
+        "label": "How Bitfield is this fast",
+        "href": "/proof/how-bitfield-is-fast",
+        "description": "Read the speed mechanism and claim boundary."
+      }
+    ],
     "themes": {
       "midnight": {
         "surface": "#0a0a0a",

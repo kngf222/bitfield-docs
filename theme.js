@@ -6,6 +6,7 @@
   const swatches = Object.fromEntries(themes.map((theme) => [theme.name, [theme.primary, theme.secondary]]));
   const defaultTheme = "paper";
   const storageKey = 'bitfield-docs-theme';
+  const searchSuggestions = [{"eyebrow":"Start","label":"Quickstart","href":"/start/quickstart","description":"Get your key and make your first call."},{"eyebrow":"Concepts","label":"What is Bitfield?","href":"/concepts/what-is-bitfield","description":"Understand the runtime and database."},{"eyebrow":"Workflows","label":"Workflow examples","href":"/workflows","description":"Copy a complete public package shape."},{"eyebrow":"Account","label":"Get your key","href":"/start/get-your-key","description":"Create the account and activate devices."},{"eyebrow":"Proof","label":"How Bitfield is this fast","href":"/proof/how-bitfield-is-fast","description":"Read the speed mechanism and claim boundary."}];
   const swatchColors = ["#e05a5a","#f5cc42","#22c0ba","#9060ee","#f5a03a","#35be7a","#3d7ced","#e0609a"];
   const swatchTiming = [
     { delay: 0.1, duration: 7.3 },
@@ -217,6 +218,84 @@
     });
   }
 
+  function searchText(node) {
+    return [
+      node.getAttribute?.('aria-label') || '',
+      node.getAttribute?.('placeholder') || '',
+      node.textContent || '',
+    ].join(' ').toLowerCase();
+  }
+
+  function isSearchNode(node) {
+    return searchText(node).includes('search');
+  }
+
+  function searchSuggestionCard(item) {
+    const link = document.createElement('a');
+    link.className = 'bf-docs-search-defaults__item';
+    link.href = item.href;
+
+    const eyebrow = document.createElement('span');
+    eyebrow.className = 'bf-docs-search-defaults__eyebrow';
+    eyebrow.textContent = item.eyebrow;
+
+    const label = document.createElement('strong');
+    label.textContent = item.label;
+
+    const description = document.createElement('span');
+    description.textContent = item.description;
+
+    link.append(eyebrow, label, description);
+    return link;
+  }
+
+  function decorateSearchDialog(dialog) {
+    if (!searchSuggestions.length || dialog.querySelector('.bf-docs-search-defaults')) {
+      return;
+    }
+
+    const input = dialog.querySelector('input');
+    if (!input || !isSearchNode(input)) return;
+
+    const defaults = document.createElement('section');
+    defaults.className = 'bf-docs-search-defaults';
+    defaults.setAttribute('aria-label', 'Suggested docs');
+
+    const label = document.createElement('div');
+    label.className = 'bf-docs-search-defaults__label';
+    label.textContent = 'Start here';
+
+    const list = document.createElement('div');
+    list.className = 'bf-docs-search-defaults__list';
+    searchSuggestions.forEach((item) => list.append(searchSuggestionCard(item)));
+
+    defaults.append(label, list);
+    (input.closest('form') || input.parentElement || dialog).insertAdjacentElement('afterend', defaults);
+
+    const sync = () => {
+      defaults.hidden = Boolean(input.value?.trim());
+    };
+    input.addEventListener('input', sync);
+    sync();
+  }
+
+  function markSearchChrome() {
+    document.querySelectorAll('header button, #navbar button, header [role="button"], #navbar [role="button"], header input, #navbar input, header form, #navbar form')
+      .forEach((node) => {
+        if (isSearchNode(node)) {
+          node.setAttribute('data-bf-docs-search-trigger', 'true');
+        }
+      });
+
+    document.querySelectorAll('[role="dialog"], dialog, [data-radix-dialog-content], [cmdk-root]')
+      .forEach((dialog) => {
+        const input = dialog.querySelector('input');
+        if (!input || !isSearchNode(input)) return;
+        dialog.setAttribute('data-bf-docs-search-dialog', 'true');
+        decorateSearchDialog(dialog);
+      });
+  }
+
   function mountPicker() {
     if (!document.body || document.querySelector('.bf-docs-theme-picker')) {
       return true;
@@ -265,15 +344,18 @@
     document.addEventListener('DOMContentLoaded', () => {
       mountPicker();
       scheduleTocScrollSpy();
+      markSearchChrome();
     }, { once: true });
   } else {
     mountPicker();
     scheduleTocScrollSpy();
+    markSearchChrome();
   }
 
   const observer = new MutationObserver(() => {
     mountPicker();
     scheduleTocScrollSpy();
+    markSearchChrome();
   });
 
   observer.observe(document.documentElement, { childList: true, subtree: true });
@@ -294,5 +376,6 @@
   window.addEventListener('pageshow', () => {
     applyTheme(readStoredTheme() || root.dataset.bfDocsTheme || defaultTheme);
     mountPicker();
+    markSearchChrome();
   });
 })();
