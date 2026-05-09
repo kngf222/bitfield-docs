@@ -16,10 +16,13 @@ These pages are public customer documentation. They describe the public product,
 - [Slots](concepts/slots): Explains slots as named runnable doors that features can call without importing each other.
 - [Active devices](concepts/active-devices): Defines active devices for pricing, keys, and account management.
 - [JavaScript Runtime Kit](runtime-kit/javascript): Maps the public Runtime Kit flow from package boundary to prepared reads and named target requests.
+- [Package to screen](runtime-kit/package-to-screen): Walks from a package boundary through admitted material, prepared reads, target requests, and React rendering.
 - [Read data in React](runtime-kit/use-bitfield-data): Shows selectors, render states, request pairing, and what React components should not own.
 - [Send a request](runtime-kit/send-request): Shows JSON, text, byte payloads, reply decoding, cancellation, and target-boundary mistakes.
 - [Packages](runtime-kit/packages): Explains package sets, records, stored bytes, callable slots, validation rules, and safe package examples.
 - [Local state](runtime-kit/local-state): Explains stored data, Runtime Kit package state, activation material, and what users should not hand-edit.
+- [Build with AI agents](runtime-kit/ai-build-rules): Gives AI-agent prompts, review checks, and public Runtime Kit boundaries for generated feature work.
+- [Troubleshooting](runtime-kit/troubleshooting): Maps Runtime Kit symptoms to the public chain link that failed and gives safe repair checks.
 - [Workflow examples](workflows/index): Indexes complete package and Runtime Kit workflows that stay inside the public contract.
 - [Package set with one record](workflows/package-set-with-one-record): Shows the smallest package boundary with one durable package record.
 - [Package-owned file](workflows/package-owned-file): Shows how a package declares package-owned bytes without reaching outside its folder.

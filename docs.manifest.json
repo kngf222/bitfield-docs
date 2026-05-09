@@ -584,10 +584,13 @@
           "group": "Use Runtime Kit",
           "pages": [
             "runtime-kit/javascript",
+            "runtime-kit/package-to-screen",
             "runtime-kit/use-bitfield-data",
             "runtime-kit/send-request",
             "runtime-kit/packages",
-            "runtime-kit/local-state"
+            "runtime-kit/local-state",
+            "runtime-kit/ai-build-rules",
+            "runtime-kit/troubleshooting"
           ]
         },
         {
@@ -725,6 +728,13 @@
       "summary": "Maps the public Runtime Kit flow from package boundary to prepared reads and named target requests."
     },
     {
+      "route": "runtime-kit/package-to-screen",
+      "title": "Package to screen",
+      "description": "Build the full public Runtime Kit chain from one package boundary to one React surface.",
+      "diataxis": "tutorial",
+      "summary": "Walks from a package boundary through admitted material, prepared reads, target requests, and React rendering."
+    },
+    {
       "route": "runtime-kit/use-bitfield-data",
       "title": "Read data in React",
       "description": "Use the public React read hook for prepared Bitfield data.",
@@ -751,6 +761,20 @@
       "description": "Understand the customer-visible Bitfield state under ~/.bitfield.",
       "diataxis": "reference",
       "summary": "Explains stored data, Runtime Kit package state, activation material, and what users should not hand-edit."
+    },
+    {
+      "route": "runtime-kit/ai-build-rules",
+      "title": "Build with AI agents",
+      "description": "Give an AI agent the Runtime Kit public contract so it adds features without crossing private boundaries.",
+      "diataxis": "how-to",
+      "summary": "Gives AI-agent prompts, review checks, and public Runtime Kit boundaries for generated feature work."
+    },
+    {
+      "route": "runtime-kit/troubleshooting",
+      "title": "Troubleshooting",
+      "description": "Find which Runtime Kit boundary broke: package admission, prepared reads, target requests, replies, local state, or activation.",
+      "diataxis": "how-to",
+      "summary": "Maps Runtime Kit symptoms to the public chain link that failed and gives safe repair checks."
     },
     {
       "route": "workflows/index",

@@ -48,6 +48,7 @@ function workflowExampleAllowlist() {
 
 const sourcePathAllowedFiles = new Set([
   'reference/package-boundary.mdx',
+  'runtime-kit/package-to-screen.mdx',
   'runtime-kit/packages.mdx',
   ...workflowExampleAllowlist(),
 ]);

@@ -35,6 +35,8 @@ package boundary
 
 React is one surface in that flow. It is not the whole Runtime Kit.
 
+If you want the full build path first, read [Package to screen](/runtime-kit/package-to-screen). It walks through a package boundary, prepared data, a target request, and the React surface that uses both.
+
 ## The mental model
 
 Think of Runtime Kit as the plug board for your product.
@@ -176,11 +178,14 @@ Package records and stored bytes are product material. Do not put private keys, 
 
 | Need | Use |
 |---|---|
+| See the whole feature chain | [Package to screen](/runtime-kit/package-to-screen) |
 | Show prepared app data | `useBitfieldData(...)` |
 | Ask a package target to work | `sendRequestToBitfieldTarget(...)` |
 | Declare package data or runnable doors | `things-to-store-and-run.json` |
 | Understand package shapes | [Packages](/runtime-kit/packages) |
 | Look up exact API shape | [Runtime Kit API](/reference/runtime-kit-api) |
+| Give an AI agent safe rails | [Build with AI agents](/runtime-kit/ai-build-rules) |
+| Find a broken link in the chain | [Troubleshooting](/runtime-kit/troubleshooting) |
 
 ## Ceiling you have not hit yet
 

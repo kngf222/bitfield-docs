@@ -65,8 +65,10 @@ The reply is bytes. Decode it according to the target contract.
 |---|---|
 | `Uint8Array` | The same bytes. |
 | `string` | Text bytes. |
-| Any other JSON-compatible value | JSON bytes. |
-| omitted | Empty bytes. |
+| object, array, number, or boolean | JSON bytes. |
+| `null` or omitted | Empty bytes. |
+
+If a target contract needs a JSON `null`, wrap it in an object, such as `{ value: null }`, so the payload is not treated as empty.
 
 ### Errors
 

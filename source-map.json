@@ -93,6 +93,10 @@
       "sourceIds": ["runtime-kit-js-public-contract"]
     },
     {
+      "route": "runtime-kit/package-to-screen",
+      "sourceIds": ["runtime-kit-js-public-contract", "runtime-kit-package-boundary"]
+    },
+    {
       "route": "runtime-kit/use-bitfield-data",
       "sourceIds": ["runtime-kit-js-public-contract"]
     },
@@ -107,6 +111,14 @@
     {
       "route": "runtime-kit/local-state",
       "sourceIds": ["runtime-kit-package-boundary"]
+    },
+    {
+      "route": "runtime-kit/ai-build-rules",
+      "sourceIds": ["runtime-kit-js-public-contract", "runtime-kit-package-boundary"]
+    },
+    {
+      "route": "runtime-kit/troubleshooting",
+      "sourceIds": ["runtime-kit-js-public-contract", "runtime-kit-package-boundary"]
     },
     {
       "route": "workflows/index",

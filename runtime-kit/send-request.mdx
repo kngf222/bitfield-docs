@@ -95,10 +95,19 @@ If `payload` is already a `Uint8Array`, Runtime Kit sends those bytes.
 |---|---|
 | `Uint8Array` | Sent as bytes. |
 | `string` | Encoded as text bytes. |
-| object, array, number, boolean, or `null` | Serialized as JSON bytes. |
-| omitted payload | Sent as empty bytes. |
+| object, array, number, or boolean | Serialized as JSON bytes. |
+| `null` or omitted payload | Sent as empty bytes. |
 
 The target decides what those bytes mean. Your app and target should agree on a public contract, such as JSON in and JSON out.
+
+If a target needs JSON with a `null` value, send an object that contains the null field:
+
+```ts
+await sendRequestToBitfieldTarget({
+  target: 'settings.update',
+  payload: { value: null },
+});
+```
 
 ## Decode the reply
 

@@ -1,0 +1,221 @@
+---
+title: "Troubleshooting"
+description: "Find which Runtime Kit boundary broke: package admission, prepared reads, target requests, replies, local state, or activation."
+---
+
+<div className="bf-article">
+
+<p className="bf-kicker">Runtime Kit</p>
+
+# Troubleshooting.
+
+<p className="bf-lead">
+When a Runtime Kit feature breaks, do not guess. Identify which public link failed: package boundary, prepared read, target request, reply decoding, local state, or activation.
+</p>
+
+## What this is
+
+Runtime Kit deliberately hides private machinery from app code. That is good for product architecture, but it means debugging should follow the public chain instead of poking random internals.
+
+Use this chain:
+
+```text
+package boundary
+  -> package admission
+  -> prepared read input
+  -> React surface
+  -> target request
+  -> reply decoding
+  -> local state and activation
+```
+
+Do not skip straight to private files. First prove which public link failed.
+
+## Start with the symptom
+
+| Symptom | Most likely link |
+|---|---|
+| Package never becomes available. | Package boundary or package admission. |
+| Component stays empty. | Prepared read input. |
+| Component throws immediately. | Missing read scope or unavailable input. |
+| Button call throws before work runs. | Target request shape. |
+| Button call succeeds but UI cannot use the result. | Reply decoding. |
+| Works on one device but not another. | Activation or package set/local state. |
+| AI-generated code imports deep Runtime Kit files. | App boundary violation. |
+
+Find the link first. Then fix that link.
+
+## Package boundary failures
+
+Check the boundary file before blaming React.
+
+Valid packages have one boundary file:
+
+```text
+things-to-store-and-run.json
+```
+
+The package should declare supported thing types:
+
+| Thing type | Common failure |
+|---|---|
+| `record` | The record has no payload action or multiple payload actions. |
+| `stored_bytes` | The file path does not stay inside the package. |
+| `slot` | The slot has no boundary or no method list. |
+
+Fix package boundary problems in the package. Do not work around them in the app surface.
+
+## Prepared read failures
+
+If `useBitfieldData(...)` does not return the value you expected, check the input name and surface contract.
+
+```tsx
+const welcome = useBitfieldData<WelcomeCopy>('welcome-copy');
+```
+
+Ask:
+
+| Question | Why it matters |
+|---|---|
+| Is `welcome-copy` the public input name for this surface? | Selector names are not storage paths. |
+| Does the component render `loading`? | The value may not be ready yet. |
+| Does the component render `error`? | A hidden thrown error becomes a bad user experience. |
+| Does the component handle `data === null`? | Empty is a real state. |
+| Did app code import only the public React hook? | Deep imports bypass the boundary. |
+
+The correct fix is usually to repair the package/surface contract or the component states, not to create a private read path.
+
+## Missing read scope errors
+
+If you see an error like:
+
+```text
+useBitfieldData() without an input handle requires a Bitfield read scope
+```
+
+The component is trying to read a prepared input without the app surface that provides it.
+
+Do not fix this by importing private provider or scope code into the component. The surface owner must provide the read scope before the component renders, or the component must receive an input handle through the public shape that surface supports.
+
+## Target request failures
+
+The request function needs a non-empty public target name.
+
+```ts
+await sendRequestToBitfieldTarget({
+  target: 'welcome.suggest',
+  payload: { topic: 'launch' },
+});
+```
+
+Check:
+
+| Question | Why it matters |
+|---|---|
+| Is `target` a non-empty string? | Runtime Kit rejects empty target names. |
+| Does the package declare that target? | App code can only call public doors. |
+| Is the payload shape what the target expects? | Runtime Kit sends bytes; the target owns meaning. |
+| Should this request be cancellable? | Search, typeahead, and long work should use `AbortController`. |
+
+Do not import the code behind the target to "make the button work." That bypasses Runtime Kit.
+
+## Reply decoding failures
+
+The reply is bytes:
+
+```ts
+const reply = await sendRequestToBitfieldTarget({
+  target: 'welcome.suggest',
+  payload: { topic: 'launch' },
+});
+```
+
+Decode according to the target contract:
+
+```ts
+const text = new TextDecoder().decode(reply.payload);
+const data = JSON.parse(text);
+```
+
+If JSON parsing fails, the request may still have succeeded. The problem may be that the target returned text, binary bytes, an error payload, or a different JSON shape than the app expected.
+
+## Payload conversion surprises
+
+Runtime Kit converts payloads before sending:
+
+| Payload | Sent as |
+|---|---|
+| `Uint8Array` | The same bytes. |
+| `string` | Text bytes. |
+| object, array, number, or boolean | JSON bytes. |
+| `null` or omitted | Empty bytes. |
+
+That last row is easy to miss. If your target needs a JSON `null`, send an object with an explicit field instead, such as `{ "value": null }`.
+
+## Local state confusion
+
+Customer-visible Bitfield state lives under:
+
+```text
+~/.bitfield/
+  stored-data/
+  runtime-kit/
+  check-license/
+```
+
+Use this meaning:
+
+| Area | Debug meaning |
+|---|---|
+| `stored-data/` | Durable Bitfield data area. Do not edit by hand. |
+| `runtime-kit/` | Package sets and current Runtime Kit process state. |
+| `check-license/` | Device permission material. Use account flows for activation issues. |
+
+Do not copy one device's local state to another device as a fix. Device permission and package state need the right owner flow.
+
+## AI-generated code failures
+
+If an AI wrote the code, check for these violations first:
+
+| Violation | Fix |
+|---|---|
+| Imports from unpublished Runtime Kit paths. | Replace with public imports only. |
+| React component parses package files. | Move package material to the boundary and read prepared data. |
+| Button imports target implementation. | Call `sendRequestToBitfieldTarget(...)`. |
+| Component ignores loading/error/empty. | Add all four states. |
+| Target reply is parsed without a contract. | Decode according to the target's public reply shape. |
+
+AI tends to connect things directly when the boundary is not repeated clearly. Point it at [Build with AI agents](/runtime-kit/ai-build-rules).
+
+## Escalation checklist
+
+Before asking for support, capture the public facts:
+
+1. The package name.
+2. The package set name.
+3. The public input name that failed.
+4. The public target name that failed.
+5. The payload shape, without secrets or customer data.
+6. The visible error message.
+7. Whether the problem happens on one device or every device.
+
+Do not paste local state contents, device permission files, private keys, tokens, or customer data into public support channels.
+
+## Quick reference
+
+```text
+No data       -> check prepared input and render states
+Request fails -> check target name and payload shape
+Decode fails  -> check reply contract
+Device differs -> check activation and package set
+AI code smells -> reject private imports and direct implementation calls
+```
+
+## Ceiling you have not hit yet
+
+- **Self-checking feature templates:** Add a review checklist beside every AI-generated Runtime Kit feature.
+- **Support-safe diagnostics:** Report package set, input name, target name, and error text without exposing local state contents.
+- **Contract-first targets:** Write payload and reply contracts before the UI button calls the target.
+- **Boundary-led debugging:** Fix the broken public link instead of creating a second private path.
+
+</div>
