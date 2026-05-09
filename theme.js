@@ -280,6 +280,40 @@
     return searchText(node).includes('search');
   }
 
+  function normalizedControlText(node) {
+    return searchText(node).replace(/\s+/g, ' ').trim();
+  }
+
+  function isCopyPageNode(node) {
+    return normalizedControlText(node).includes('copy page');
+  }
+
+  function copyPageShell(node) {
+    let current = node;
+    for (let depth = 0; depth < 4 && current.parentElement; depth += 1) {
+      const parent = current.parentElement;
+      if (parent.closest('header, #navbar, nav')) break;
+      if (!isCopyPageNode(parent)) break;
+      const controls = parent.querySelectorAll('button, [role="button"], a[href]');
+      if (controls.length > 4) break;
+      current = parent;
+    }
+    return current;
+  }
+
+  function markCopyPageControls() {
+    document
+      .querySelectorAll('main button, article button, #content-area button, main [role="button"], article [role="button"], #content-area [role="button"]')
+      .forEach((node) => {
+        if (!isCopyPageNode(node)) return;
+        const shell = copyPageShell(node);
+        shell.setAttribute('data-bf-docs-copy-page', 'true');
+        shell
+          .querySelectorAll('button, [role="button"], a[href]')
+          .forEach((part) => part.setAttribute('data-bf-docs-copy-page-part', 'true'));
+      });
+  }
+
   function searchSuggestionCard(item) {
     const link = document.createElement('a');
     link.className = 'bf-docs-search-defaults__item';
@@ -403,17 +437,20 @@
       mountPicker();
       scheduleTocScrollSpy();
       markSearchChrome();
+      markCopyPageControls();
     }, { once: true });
   } else {
     mountPicker();
     scheduleTocScrollSpy();
     markSearchChrome();
+    markCopyPageControls();
   }
 
   const observer = new MutationObserver(() => {
     mountPicker();
     scheduleTocScrollSpy();
     markSearchChrome();
+    markCopyPageControls();
   });
 
   observer.observe(document.documentElement, { childList: true, subtree: true });
@@ -435,5 +472,6 @@
     applyTheme(readStoredTheme() || root.dataset.bfDocsTheme || defaultTheme);
     mountPicker();
     markSearchChrome();
+    markCopyPageControls();
   });
 })();
