@@ -749,11 +749,11 @@ nav .bf-docs-theme-picker {
   --button-flat-face-bg: color-mix(in srgb, var(--surface-base) 97%, var(--text-primary) 3%);
   --button-flat-face-bg-hover: var(--button-flat-face-bg);
   --button-flat-face-bg-pressed: color-mix(in srgb, var(--surface-base) 95%, var(--text-primary) 5%);
-  --button-flat-floor-bg: color-mix(in srgb, var(--text-primary) 12%, transparent);
-  --button-flat-floor-bg-hover: var(--button-flat-floor-bg);
-  --button-flat-floor-shadow:
+  --button-flat-floor-bg: transparent;
+  --button-flat-floor-bg-hover: color-mix(in srgb, var(--text-primary) 12%, transparent);
+  --button-flat-floor-shadow: none;
+  --button-flat-floor-shadow-hover:
     0 4px 16px color-mix(in srgb, var(--text-primary) 10%, transparent);
-  --button-flat-floor-shadow-hover: var(--button-flat-floor-shadow);
   appearance: none;
   border: 0;
   border-radius: 0;
@@ -789,12 +789,12 @@ nav .bf-docs-theme-picker {
 .bf-docs-theme-trigger.theme-picker-trigger:focus-visible .button-flat-face,
 .bf-docs-theme-picker[data-open="true"] .bf-docs-theme-trigger.theme-picker-trigger .button-flat-face {
   box-shadow: none;
-  transform: translate3d(0, 0, 0);
+  transform: translate3d(0, -2px, 0);
 }
 
 .bf-docs-theme-trigger.theme-picker-trigger:active .button-flat-face {
   box-shadow: none;
-  transform: translate3d(0, 3px, 0);
+  transform: translate3d(0, 7px, 0);
 }
 
 .bf-docs-theme-trigger.theme-picker-trigger:focus-visible {
