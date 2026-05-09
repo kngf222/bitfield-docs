@@ -24,7 +24,7 @@ These pages are public customer documentation. They describe the public product,
 - [Local state](runtime-kit/local-state): Explains stored data, Runtime Kit package state, activation material, and what users should not hand-edit.
 - [Build with AI agents](runtime-kit/ai-build-rules): Gives AI-agent prompts, review checks, and public Runtime Kit boundaries for generated feature work.
 - [Troubleshooting](runtime-kit/troubleshooting): Maps Runtime Kit symptoms to the public chain link that failed and gives safe repair checks.
-- [Cookbook](cookbook/index): Indexes complete package and Runtime Kit cookbook entries that stay inside the public contract.
+- [Start here](cookbook/index): Indexes complete package and Runtime Kit cookbook entries that stay inside the public contract.
 - [Package set with one record](cookbook/package-set-with-one-record): Shows the smallest package boundary with one durable package record.
 - [Package-owned file](cookbook/package-owned-file): Shows how a package declares package-owned bytes without reaching outside its folder.
 - [Callable package slot](cookbook/callable-package-slot): Shows how a package declares a callable slot and how app code sends a request to it.

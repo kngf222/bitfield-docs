@@ -78,7 +78,7 @@
         "description": "Understand the runtime and database."
       },
       {
-        "eyebrow": "Cookbook",
+        "eyebrow": "Runtime Kit",
         "label": "Cookbook",
         "href": "/cookbook",
         "description": "Copy a complete public package shape."
@@ -595,19 +595,7 @@
           ]
         },
         {
-          "group": "Reference",
-          "pages": [
-            "reference/runtime-kit-api",
-            "reference/package-boundary"
-          ]
-        }
-      ]
-    },
-    {
-      "tab": "Cookbook",
-      "groups": [
-        {
-          "group": "Package examples",
+          "group": "Cookbook",
           "pages": [
             "cookbook/index",
             "cookbook/package-set-with-one-record",
@@ -615,6 +603,13 @@
             "cookbook/callable-package-slot",
             "cookbook/react-surface-for-package-data",
             "cookbook/placeable-surface-product-loop"
+          ]
+        },
+        {
+          "group": "Reference",
+          "pages": [
+            "reference/runtime-kit-api",
+            "reference/package-boundary"
           ]
         }
       ]
@@ -787,7 +782,7 @@
     },
     {
       "route": "cookbook/index",
-      "title": "Cookbook",
+      "title": "Start here",
       "description": "Complete public examples for package sets, package boundary files, and app-facing Runtime Kit calls.",
       "diataxis": "cookbook",
       "summary": "Indexes complete package and Runtime Kit cookbook entries that stay inside the public contract."

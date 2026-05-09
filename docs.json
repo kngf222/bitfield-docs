@@ -111,19 +111,7 @@
             ]
           },
           {
-            "group": "Reference",
-            "pages": [
-              "reference/runtime-kit-api",
-              "reference/package-boundary"
-            ]
-          }
-        ]
-      },
-      {
-        "tab": "Cookbook",
-        "groups": [
-          {
-            "group": "Package examples",
+            "group": "Cookbook",
             "pages": [
               "cookbook/index",
               "cookbook/package-set-with-one-record",
@@ -131,6 +119,13 @@
               "cookbook/callable-package-slot",
               "cookbook/react-surface-for-package-data",
               "cookbook/placeable-surface-product-loop"
+            ]
+          },
+          {
+            "group": "Reference",
+            "pages": [
+              "reference/runtime-kit-api",
+              "reference/package-boundary"
             ]
           }
         ]
