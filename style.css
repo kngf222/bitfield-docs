@@ -16,6 +16,7 @@ html {
   --bf-docs-copy-border-width: 1px;
   --bf-docs-copy-control-height: 2.5rem;
   --bf-docs-copy-label-width: 8rem;
+  --bf-docs-copy-text-width: 4.5rem;
   --bf-docs-copy-arrow-width: 2.35rem;
 }
 
@@ -213,7 +214,11 @@ main > article,
 [data-bf-docs-copy-page-part="true"]:not([data-bf-docs-copy-page-arrow="true"]) span {
   display: inline-block !important;
   flex: 0 0 auto !important;
+  max-width: var(--bf-docs-copy-text-width) !important;
+  min-width: var(--bf-docs-copy-text-width) !important;
+  text-align: center !important;
   white-space: nowrap !important;
+  width: var(--bf-docs-copy-text-width) !important;
 }
 
 [data-bf-docs-copy-page-part="true"][data-bf-docs-copy-page-arrow="true"] {
