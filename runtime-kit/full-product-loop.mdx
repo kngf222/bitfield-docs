@@ -1,0 +1,339 @@
+---
+title: "Full product loop"
+description: "Compose multiple packages, screens, prepared inputs, target requests, and support contracts into one product flow."
+---
+
+<div className="bf-article">
+
+<p className="bf-kicker">Runtime Kit</p>
+
+# Full product loop.
+
+<p className="bf-lead">
+This page shows the harder shape: multiple packages feed multiple screens, screens call multiple targets, and the whole product still keeps the same public Runtime Kit boundary.
+</p>
+
+## What this is
+
+One package and one screen proves the shape. A real product needs more.
+
+This page builds a launch dashboard with:
+
+| Product part | Runtime Kit shape |
+|---|---|
+| Welcome copy | Package record -> prepared input. |
+| Launch checklist | Package record -> prepared input. |
+| Help content | Package-owned file -> package material. |
+| Next-step engine | Package slot -> target request. |
+| Search/help action | Package slot -> target request. |
+| Dashboard screen | Reads multiple prepared inputs and calls targets. |
+| Support screen | Reads diagnostics contract and never exposes local state contents. |
+
+The important part is not the number of files. The important part is that the product gets more capable without making screens import package setup code.
+
+## The product map
+
+```text
+launch-copy package
+  -> prepared input: welcome-copy
+
+launch-checklist package
+  -> prepared input: launch-checklist
+  -> target: launch.next-step
+
+launch-help package
+  -> package-owned bytes: help/launch-help.txt
+  -> target: help.search
+
+Dashboard screen
+  -> useBitfieldData('welcome-copy')
+  -> useBitfieldData('launch-checklist')
+  -> sendRequestToBitfieldTarget('launch.next-step')
+
+Support screen
+  -> shows public contract facts
+  -> never asks for private local state contents
+```
+
+This is already a meaningful product loop: read product state, show progress, ask for work, search help, and support the user without leaking private material.
+
+## Package 1: launch copy
+
+The first package owns the dashboard copy.
+
+```json
+{
+  "package": "launch-copy",
+  "things": [
+    {
+      "type": "record",
+      "address": "package::launch-copy::welcome-copy",
+      "payload": {
+        "headline": "Your launch stays fast.",
+        "body": "Every feature stays behind a package boundary, so the next idea does not have to tangle the last one."
+      }
+    }
+  ]
+}
+```
+
+The screen does not read this file. Runtime Kit admits the package and prepares the input.
+
+## Package 2: launch checklist
+
+The second package owns progress data and the target that decides the next move.
+
+```json
+{
+  "package": "launch-checklist",
+  "things": [
+    {
+      "type": "record",
+      "address": "package::launch-checklist::items",
+      "payload": {
+        "items": [
+          { "id": "account", "label": "Create account", "done": true },
+          { "id": "device", "label": "Activate this device", "done": true },
+          { "id": "package", "label": "Run a package", "done": false },
+          { "id": "target", "label": "Call a target", "done": false }
+        ]
+      }
+    },
+    {
+      "type": "slot",
+      "name": "launch.next-step",
+      "methods": [{ "name": "query" }],
+      "boundary": {
+        "call_shape": "envelope-bytes-in-envelope-bytes-out",
+        "methods": [{ "name": "query" }]
+      },
+      "artifact": { "source_path": "slots/next-step.bin" }
+    }
+  ]
+}
+```
+
+This package gives the app a read and an action. The read is `launch-checklist`. The action is `launch.next-step`.
+
+## Package 3: launch help
+
+The third package owns help content and search.
+
+```json
+{
+  "package": "launch-help",
+  "things": [
+    {
+      "type": "stored_bytes",
+      "name": "launch-help",
+      "source_path": "help/launch-help.txt"
+    },
+    {
+      "type": "slot",
+      "name": "help.search",
+      "methods": [{ "name": "query" }],
+      "boundary": {
+        "call_shape": "envelope-bytes-in-envelope-bytes-out",
+        "methods": [{ "name": "query" }]
+      },
+      "artifact": { "source_path": "slots/help-search.bin" }
+    }
+  ]
+}
+```
+
+This keeps help text and help search inside the package boundary. The UI calls `help.search`; it does not import the search implementation.
+
+## Dashboard screen
+
+The dashboard reads two prepared inputs and calls one target.
+
+```tsx
+import { sendRequestToBitfieldTarget } from '@bitfield/runtime-kit';
+import { useBitfieldData } from '@bitfield/runtime-kit/react';
+
+type WelcomeCopy = {
+  headline: string;
+  body: string;
+};
+
+type Checklist = {
+  items: Array<{ id: string; label: string; done: boolean }>;
+};
+
+type NextStepReply = {
+  nextStep: string;
+  reason: string;
+};
+
+export function LaunchDashboard() {
+  const welcome = useBitfieldData<WelcomeCopy>('welcome-copy');
+  const checklist = useBitfieldData<Checklist>('launch-checklist');
+
+  async function getNextStep() {
+    const reply = await sendRequestToBitfieldTarget({
+      target: 'launch.next-step',
+      payload: {
+        completed: checklist.data?.items.filter((item) => item.done).map((item) => item.id) ?? [],
+      },
+    });
+
+    return JSON.parse(new TextDecoder().decode(reply.payload)) as NextStepReply;
+  }
+
+  if (welcome.loading || checklist.loading) return <section>Loading launch dashboard.</section>;
+  if (welcome.error || checklist.error) return <section>Could not load launch dashboard.</section>;
+  if (!welcome.data || !checklist.data) return <section>No launch dashboard yet.</section>;
+
+  return (
+    <section>
+      <h2>{welcome.data.headline}</h2>
+      <p>{welcome.data.body}</p>
+
+      {checklist.data.items.map((item) => (
+        <p key={item.id}>{item.done ? 'Done' : 'Next'}: {item.label}</p>
+      ))}
+
+      <button type="button" onClick={getNextStep}>
+        Show next step
+      </button>
+    </section>
+  );
+}
+```
+
+This screen is doing useful work. It still only knows prepared input names, target names, payload shapes, and reply shapes.
+
+## Help search screen
+
+The help screen calls a different target. It can cancel stale work when the user changes the query.
+
+```tsx
+import { useRef } from 'react';
+import { sendRequestToBitfieldTarget } from '@bitfield/runtime-kit';
+
+type HelpSearchReply = {
+  results: Array<{ title: string; excerpt: string }>;
+};
+
+export function HelpSearch() {
+  const current = useRef<AbortController | null>(null);
+
+  async function search(query: string): Promise<HelpSearchReply> {
+    current.current?.abort();
+    current.current = new AbortController();
+
+    const reply = await sendRequestToBitfieldTarget(
+      { target: 'help.search', payload: { query } },
+      current.current.signal,
+    );
+
+    return JSON.parse(new TextDecoder().decode(reply.payload)) as HelpSearchReply;
+  }
+
+  return <button type="button" onClick={() => search('activation')}>Search help</button>;
+}
+```
+
+This is the same request primitive as the dashboard. The target and payload contract change; the public API does not.
+
+## Support contract screen
+
+The support screen should show public contract facts, not private file contents.
+
+```tsx
+type RuntimeKitContract = {
+  packageSet: string;
+  packages: string[];
+  preparedInputs: string[];
+  targets: string[];
+};
+
+export function SupportContract({ contract }: { contract: RuntimeKitContract }) {
+  return (
+    <section>
+      <h2>Runtime Kit contract</h2>
+      <p>Package set: {contract.packageSet}</p>
+      <p>Packages: {contract.packages.join(', ')}</p>
+      <p>Prepared inputs: {contract.preparedInputs.join(', ')}</p>
+      <p>Targets: {contract.targets.join(', ')}</p>
+    </section>
+  );
+}
+```
+
+That gives support enough information to debug the public chain:
+
+```text
+Package set: launch-product
+Packages: launch-copy, launch-checklist, launch-help
+Prepared inputs: welcome-copy, launch-checklist
+Targets: launch.next-step, help.search
+```
+
+It does not ask the user to paste local state contents, activation files, private keys, or package implementation files.
+
+## What gets harder and what stays simple
+
+| Product grows | Public shape stays simple |
+|---|---|
+| More packages. | Package boundaries still declare records, bytes, and slots. |
+| More screens. | Screens still read prepared inputs and call targets. |
+| More work behind targets. | Buttons still call stable target names. |
+| More support cases. | Support still starts from package set, input names, targets, and visible errors. |
+| More AI-generated code. | The agent still gets the same public import rules. |
+
+That is the point of the Runtime Kit boundary. Complexity can grow behind the boundary without making the app surface learn every mechanism.
+
+## Review the full loop
+
+Before you call the feature done, write this checklist beside it:
+
+```text
+Package set:
+  launch-product
+
+Packages:
+  launch-copy
+  launch-checklist
+  launch-help
+
+Prepared inputs:
+  welcome-copy
+  launch-checklist
+
+Targets:
+  launch.next-step
+  help.search
+
+Screens:
+  LaunchDashboard
+  HelpSearch
+  SupportContract
+
+Public request/reply contracts:
+  launch.next-step -> { completed: string[] } -> { nextStep: string; reason: string }
+  help.search -> { query: string } -> { results: Array<{ title: string; excerpt: string }> }
+```
+
+If an AI agent built the feature, make it return this checklist before you accept the code. If a teammate built it, use the same checklist in review.
+
+## What to build after this
+
+Build a second product loop with the same shape.
+
+For example, build an `analytics-insight` package that owns a prepared `daily-summary` input and an `analytics.explain` target. Add an `InsightDashboard` screen that reads `daily-summary` and calls `analytics.explain`. Add the same support contract facts.
+
+Now you have two product loops using the same public architecture:
+
+```text
+Launch loop:
+  welcome-copy + launch-checklist + launch.next-step + help.search
+
+Analytics loop:
+  daily-summary + analytics.explain
+```
+
+That is how the system scales: not by inventing a new public API for every idea, but by repeating the package/read/request/support shape.
+
+</div>

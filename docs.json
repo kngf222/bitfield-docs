@@ -101,6 +101,7 @@
             "pages": [
               "runtime-kit/javascript",
               "runtime-kit/package-to-screen",
+              "runtime-kit/full-product-loop",
               "runtime-kit/use-bitfield-data",
               "runtime-kit/send-request",
               "runtime-kit/packages",

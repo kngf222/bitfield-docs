@@ -6,6 +6,7 @@ This folder owns the public Runtime Kit documentation pages rendered by Mintlify
 
 - `javascript.mdx` explains the overall public Runtime Kit map.
 - `package-to-screen.mdx` walks from a package boundary to a React surface.
+- `full-product-loop.mdx` composes multiple packages, screens, prepared inputs, targets, and support contracts.
 - `use-bitfield-data.mdx` documents the public React read shape.
 - `send-request.mdx` documents target requests and reply bytes.
 - `packages.mdx` documents package boundary concepts and thing types.

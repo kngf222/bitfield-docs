@@ -97,6 +97,10 @@
       "sourceIds": ["runtime-kit-js-public-contract", "runtime-kit-package-boundary"]
     },
     {
+      "route": "runtime-kit/full-product-loop",
+      "sourceIds": ["runtime-kit-js-public-contract", "runtime-kit-package-boundary"]
+    },
+    {
       "route": "runtime-kit/use-bitfield-data",
       "sourceIds": ["runtime-kit-js-public-contract"]
     },
