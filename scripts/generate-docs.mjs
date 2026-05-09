@@ -286,6 +286,7 @@ const themeJs = `(() => {
   const swatches = Object.fromEntries(themes.map((theme) => [theme.name, [theme.primary, theme.secondary]]));
   const defaultTheme = ${JSON.stringify(defaultThemeName)};
   const storageKey = 'bitfield-docs-theme';
+  const accountUrl = ${JSON.stringify(manifest.site.accountUrl)};
   const searchSuggestions = ${JSON.stringify(searchSuggestions)};
   const swatchColors = ${JSON.stringify(themePickerSwatchColors)};
   const swatchTiming = [
@@ -302,6 +303,7 @@ const themeJs = `(() => {
   let picker;
   let trigger;
   let panel;
+  let accountCta;
   let tocCleanup;
   let tocSetupFrame = 0;
 
@@ -357,10 +359,57 @@ const themeJs = `(() => {
     });
   }
 
+  function isAccountHref(link) {
+    try {
+      const href = new URL(link.getAttribute('href') || '', window.location.href);
+      const target = new URL(accountUrl, window.location.href);
+      return href.origin === target.origin && href.pathname.replace(/\\/$/, '') === target.pathname.replace(/\\/$/, '');
+    } catch {
+      return false;
+    }
+  }
+
+  function nativeAccountLinks() {
+    return Array.from(document.querySelectorAll('header a[href], #navbar a[href], nav a[href]'))
+      .filter((link) => link.id !== 'bf-docs-account-cta' && isAccountHref(link));
+  }
+
+  function makeAccountCta() {
+    const link = document.createElement('a');
+    link.id = 'bf-docs-account-cta';
+    link.href = accountUrl;
+    link.innerHTML = '<span>Get My Key</span><span aria-hidden="true">›</span>';
+    return link;
+  }
+
+  function normalizeAccountCta() {
+    const nativeLinks = nativeAccountLinks();
+    const nativePrimary = nativeLinks[0];
+    const target = nativePrimary?.parentElement;
+
+    nativeLinks.forEach((link) => {
+      link.dataset.bfNativeAccountLink = 'true';
+      link.setAttribute('aria-hidden', 'true');
+      link.tabIndex = -1;
+    });
+
+    if (!target) return accountCta?.parentElement ? accountCta : null;
+
+    if (!accountCta) {
+      accountCta = makeAccountCta();
+    }
+
+    if (accountCta.parentElement !== target) {
+      target.append(accountCta);
+    }
+
+    return accountCta;
+  }
+
   function navbarMountPoint() {
-    const primary = document.querySelector('#topbar-cta-button');
-    if (primary?.parentElement) {
-      return { target: primary.parentElement, before: primary };
+    const normalizedCta = normalizeAccountCta();
+    if (normalizedCta?.parentElement) {
+      return { target: normalizedCta.parentElement, before: null };
     }
 
     const candidates = [
@@ -550,7 +599,10 @@ const themeJs = `(() => {
     searchSuggestions.forEach((item) => list.append(searchSuggestionCard(item)));
 
     defaults.append(label, list);
-    (input.closest('form') || input.parentElement || dialog).insertAdjacentElement('afterend', defaults);
+
+    const searchField = input.closest('form') || input.parentElement;
+    searchField?.setAttribute('data-bf-docs-search-field', 'true');
+    (searchField || dialog).insertAdjacentElement('afterend', defaults);
 
     const sync = () => {
       defaults.hidden = Boolean(input.value?.trim());
@@ -567,53 +619,58 @@ const themeJs = `(() => {
         }
       });
 
-    document.querySelectorAll('[role="dialog"], dialog, [data-radix-dialog-content], [cmdk-root]')
-      .forEach((dialog) => {
-        const input = dialog.querySelector('input');
-        if (!input || !isSearchNode(input)) return;
+    document.querySelectorAll('input')
+      .forEach((input) => {
+        if (!isSearchNode(input)) return;
+        const dialog = input.closest('[role="dialog"], dialog, [data-radix-dialog-content], [cmdk-dialog], [cmdk-root]');
+        if (!dialog || dialog.closest('header, #navbar, nav')) return;
         dialog.setAttribute('data-bf-docs-search-dialog', 'true');
         decorateSearchDialog(dialog);
       });
   }
 
   function mountPicker() {
-    if (!document.body || document.querySelector('.bf-docs-theme-picker')) {
-      return true;
-    }
+    if (!document.body) return false;
 
     const mountPoint = navbarMountPoint();
     if (!mountPoint) return false;
 
-    picker = document.createElement('div');
-    picker.className = 'bf-docs-theme-picker';
-    picker.dataset.open = 'false';
+    if (!picker) {
+      picker = document.createElement('div');
+      picker.className = 'bf-docs-theme-picker';
+      picker.dataset.open = 'false';
 
-    trigger = document.createElement('button');
-    trigger.type = 'button';
-    trigger.className = 'bf-docs-theme-trigger theme-picker-trigger button-flat-surface';
-    trigger.setAttribute('aria-haspopup', 'listbox');
-    trigger.setAttribute('aria-expanded', 'false');
-    trigger.setAttribute('aria-controls', 'bf-docs-theme-panel');
-    trigger.innerHTML = \`<span class="button-flat-floor" aria-hidden="true"></span><span class="button-flat-face">\${swatchIcon()}</span>\`;
-    trigger.addEventListener('click', (event) => {
-      event.stopPropagation();
-      setPanelOpen(picker.dataset.open !== 'true');
-    });
+      trigger = document.createElement('button');
+      trigger.type = 'button';
+      trigger.className = 'bf-docs-theme-trigger theme-picker-trigger button-flat-surface';
+      trigger.setAttribute('aria-haspopup', 'listbox');
+      trigger.setAttribute('aria-expanded', 'false');
+      trigger.setAttribute('aria-controls', 'bf-docs-theme-panel');
+      trigger.innerHTML = \`<span class="button-flat-floor" aria-hidden="true"></span><span class="button-flat-face">\${swatchIcon()}</span>\`;
+      trigger.addEventListener('click', (event) => {
+        event.stopPropagation();
+        setPanelOpen(picker.dataset.open !== 'true');
+      });
 
-    panel = document.createElement('div');
-    panel.id = 'bf-docs-theme-panel';
-    panel.className = 'bf-docs-theme-panel';
-    panel.setAttribute('role', 'listbox');
-    panel.setAttribute('aria-label', 'Select theme');
-    panel.hidden = true;
+      panel = document.createElement('div');
+      panel.id = 'bf-docs-theme-panel';
+      panel.className = 'bf-docs-theme-panel';
+      panel.setAttribute('role', 'listbox');
+      panel.setAttribute('aria-label', 'Select theme');
+      panel.hidden = true;
 
-    const header = document.createElement('div');
-    header.className = 'bf-docs-theme-panel__header';
-    header.textContent = 'Select Theme';
-    panel.append(header, ...themes.map(themeOption));
+      const header = document.createElement('div');
+      header.className = 'bf-docs-theme-panel__header';
+      header.textContent = 'Select Theme';
+      panel.append(header, ...themes.map(themeOption));
 
-    picker.append(trigger, panel);
-    mountPoint.target.insertBefore(picker, mountPoint.before);
+      picker.append(trigger, panel);
+    }
+
+    if (picker.parentElement !== mountPoint.target || picker.nextSibling !== mountPoint.before) {
+      mountPoint.target.insertBefore(picker, mountPoint.before);
+    }
+
     applyTheme(root.dataset.bfDocsTheme || readStoredTheme() || defaultTheme);
     return true;
   }

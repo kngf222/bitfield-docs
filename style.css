@@ -188,22 +188,11 @@ main [style*="box-shadow"] {
   box-shadow: none !important;
 }
 
-#navbar a[href*="account.bitfield.so"]:has(> *),
-header a[href*="account.bitfield.so"]:has(> *),
-nav a[href*="account.bitfield.so"]:has(> *) {
-  background: transparent !important;
-  border: 0 !important;
-  box-shadow: none !important;
-  padding: 0 !important;
+[data-bf-native-account-link="true"] {
+  display: none !important;
 }
 
-#topbar-cta-button,
-#navbar a[href*="account.bitfield.so"]:not(:has(> *)),
-header a[href*="account.bitfield.so"]:not(:has(> *)),
-nav a[href*="account.bitfield.so"]:not(:has(> *)),
-#navbar a[href*="account.bitfield.so"] > *,
-header a[href*="account.bitfield.so"] > *,
-nav a[href*="account.bitfield.so"] > * {
+#bf-docs-account-cta {
   align-items: center !important;
   background: var(--cta-hardware-bg) !important;
   border: 1px solid color-mix(in srgb, white 20%, transparent) !important;
@@ -227,20 +216,8 @@ nav a[href*="account.bitfield.so"] > * {
     transform 180ms cubic-bezier(0.22, 1, 0.36, 1) !important;
 }
 
-#topbar-cta-button:hover,
-#topbar-cta-button:focus-visible,
-#navbar a[href*="account.bitfield.so"]:not(:has(> *)):hover,
-#navbar a[href*="account.bitfield.so"]:not(:has(> *)):focus-visible,
-header a[href*="account.bitfield.so"]:not(:has(> *)):hover,
-header a[href*="account.bitfield.so"]:not(:has(> *)):focus-visible,
-nav a[href*="account.bitfield.so"]:not(:has(> *)):hover,
-nav a[href*="account.bitfield.so"]:not(:has(> *)):focus-visible,
-#navbar a[href*="account.bitfield.so"]:hover > *,
-#navbar a[href*="account.bitfield.so"]:focus-visible > *,
-header a[href*="account.bitfield.so"]:hover > *,
-header a[href*="account.bitfield.so"]:focus-visible > *,
-nav a[href*="account.bitfield.so"]:hover > *,
-nav a[href*="account.bitfield.so"]:focus-visible > * {
+#bf-docs-account-cta:hover,
+#bf-docs-account-cta:focus-visible {
   background: var(--cta-hardware-bg) !important;
   box-shadow:
     inset 0 1px 0 rgba(255,255,255,0.08),
@@ -251,11 +228,9 @@ nav a[href*="account.bitfield.so"]:focus-visible > * {
   transform: translateY(-1px) !important;
 }
 
-#topbar-cta-button *,
-#navbar a[href*="account.bitfield.so"] > * *,
-header a[href*="account.bitfield.so"] > * *,
-nav a[href*="account.bitfield.so"] > * * {
+#bf-docs-account-cta * {
   background: transparent !important;
+  border: 0 !important;
   border-radius: 0 !important;
   box-shadow: none !important;
   color: inherit !important;
@@ -265,11 +240,11 @@ nav a[href*="account.bitfield.so"] > * * {
 #navbar button[aria-label*="Search"],
 #navbar button:has(kbd),
 #navbar [role="button"][aria-label*="Search"],
-input[type="search"],
-input[placeholder*="Search Bitfield docs"],
-form:has(input[placeholder*="Search Bitfield docs"]),
-[cmdk-root],
-[role="dialog"]:has(input[placeholder*="Search"]) {
+#navbar input[type="search"],
+#navbar input[placeholder*="Search Bitfield docs"],
+header input[type="search"],
+header input[placeholder*="Search Bitfield docs"],
+header form:has(input[placeholder*="Search Bitfield docs"]) {
   background:
     linear-gradient(180deg, color-mix(in srgb, white 8%, transparent), transparent),
     color-mix(in srgb, var(--surface-base) 84%, var(--text-primary) 16%) !important;
@@ -297,9 +272,8 @@ form:has(input[placeholder*="Search Bitfield docs"]),
 
 [data-bf-docs-search-trigger="true"],
 [data-bf-docs-search-trigger="true"] *,
-[role="dialog"]:has(input[placeholder*="Search"]) *,
 [data-bf-docs-search-dialog="true"] *,
-[cmdk-root] * {
+[data-bf-docs-search-dialog="true"] {
   border-radius: 0 !important;
 }
 
@@ -319,15 +293,39 @@ form:has(input[placeholder*="Search Bitfield docs"]),
   width: min(88vw, 64rem) !important;
 }
 
-[data-bf-docs-search-dialog="true"] input {
+[data-bf-docs-search-field="true"] {
+  align-items: center !important;
   background:
     linear-gradient(180deg, color-mix(in srgb, white 9%, transparent), transparent),
     color-mix(in srgb, var(--surface-base) 82%, var(--text-primary) 18%) !important;
   border: 1px solid var(--border-primary) !important;
+  box-shadow: inset 0 1px 0 color-mix(in srgb, white 16%, transparent) !important;
+  display: flex !important;
+  min-height: 3.45rem !important;
+  position: relative !important;
+}
+
+[data-bf-docs-search-field="true"] svg {
   color: var(--text-primary) !important;
+  left: 1rem !important;
+  opacity: 0.92 !important;
+  position: absolute !important;
+  top: 50% !important;
+  transform: translateY(-50%) !important;
+  z-index: 1 !important;
+}
+
+[data-bf-docs-search-dialog="true"] input {
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  color: var(--text-primary) !important;
+  flex: 1 1 auto !important;
   font-size: 1.05rem !important;
   min-height: 3.45rem !important;
-  padding: 0 1rem !important;
+  outline: none !important;
+  padding: 0 1rem 0 3.2rem !important;
+  width: 100% !important;
 }
 
 input[type="search"],
