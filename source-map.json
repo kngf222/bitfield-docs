@@ -60,15 +60,15 @@
   "pages": [
     {
       "route": "index",
-      "sourceIds": ["bitfield-public-landing-copy", "bitfield-docs-information-architecture"]
+      "sourceIds": ["bitfield-public-landing-copy", "runtime-kit-js-public-contract", "runtime-kit-package-boundary", "bitfield-docs-information-architecture"]
     },
     {
       "route": "start/quickstart",
-      "sourceIds": ["runtime-kit-js-public-contract", "bitfield-public-landing-copy"]
+      "sourceIds": ["runtime-kit-js-public-contract", "runtime-kit-package-boundary", "bitfield-public-landing-copy", "bitfield-account-portal-public-lifecycle"]
     },
     {
       "route": "start/get-your-key",
-      "sourceIds": ["bitfield-public-landing-copy", "bitfield-public-legal-pages"]
+      "sourceIds": ["bitfield-public-landing-copy", "bitfield-public-legal-pages", "bitfield-account-portal-public-lifecycle"]
     },
     {
       "route": "concepts/what-is-bitfield",

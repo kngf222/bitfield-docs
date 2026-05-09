@@ -42,6 +42,7 @@ const knownPageClasses = new Set([
   'build-curriculum',
   'activation-lifecycle',
   'proof-stack',
+  'start-onboarding',
 ]);
 
 function hasAny(body, needles) {
@@ -177,6 +178,19 @@ function validateDepthContract(page, body, sourcePage, output = failures) {
       ['common failures section', '## Common failures'],
       ['next-step section', '## Next'],
       ['claim/proof link', ['/reference/claim-ledger', '/proof/benchmark-ledger', '/proof/methodology']],
+    ], output);
+    return;
+  }
+
+  if (page.pageClass === 'start-onboarding') {
+    requireIncludes(page.route, body, [
+      ['start visual flow', 'className="bf-flow"'],
+      ['expected result', 'Expected result:'],
+      ['step-by-step section', ['## 1.', '## Choose your path']],
+      ['failure or wrong-turn section', ['## Common failures', '## Common first wrong turns']],
+      ['next-step section', '## Next'],
+      ['Runtime Kit link', '/runtime-kit/'],
+      ['account or activation link', ['/start/get-your-key', 'account.bitfield.so', '/activation/', '/concepts/active-devices']],
     ], output);
   }
 }

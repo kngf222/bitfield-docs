@@ -676,21 +676,24 @@
       "title": "Bitfield Docs",
       "description": "Build fast today and keep your 100th feature as fast as your first with Bitfield.",
       "diataxis": "index",
-      "summary": "The public entry point for Bitfield docs."
+      "pageClass": "start-onboarding",
+      "summary": "The public entry point and path chooser for understanding Bitfield, trying it, building a first screen, checking proof, or managing account access."
     },
     {
       "route": "start/quickstart",
       "title": "Quickstart",
       "description": "Get a key, add Runtime Kit, read data, and send a request.",
       "diataxis": "tutorial",
-      "summary": "The shortest path from a Bitfield key to the first app-facing Runtime Kit calls."
+      "pageClass": "start-onboarding",
+      "summary": "A first-result tutorial for account access, device activation, Runtime Kit imports, reading prepared data, sending a target request, and handling first failures."
     },
     {
       "route": "start/get-your-key",
       "title": "Get your key",
       "description": "How keys, checkout, account access, and the first device activation fit together.",
       "diataxis": "how-to",
-      "summary": "Explains what happens when you get a Bitfield key and activate your first device."
+      "pageClass": "start-onboarding",
+      "summary": "Explains the account portal path for account creation, trial or plan access, email confirmation, key access, first device activation, recovery, and next steps."
     },
     {
       "route": "concepts/what-is-bitfield",

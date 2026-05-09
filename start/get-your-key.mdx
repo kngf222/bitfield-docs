@@ -6,22 +6,76 @@ description: "How keys, checkout, account access, and the first device activatio
 <div className="bf-article">
 
 <p className="bf-lead">
-Your key is how a device starts running Bitfield for your account. Checkout gets you the key path. The account portal is where you confirm email, manage devices, and recover access.
+Your key is how a device starts running Bitfield for your account. The account portal owns the customer path: account, checkout, email, key access, active devices, recovery, and plan management.
 </p>
 
-## What happens first
+Product scene: you want to try Bitfield on the device in front of you. You need account access first, then device activation, then Runtime Kit can run against that account path.
+
+<div className="bf-flow" aria-label="Get your key flow">
+  <div className="bf-flow-step">
+    <span>1</span>
+    <strong>Create account</strong>
+    <p>Use the account portal and confirm the email you will keep.</p>
+  </div>
+  <div className="bf-flow-arrow">→</div>
+  <div className="bf-flow-step">
+    <span>2</span>
+    <strong>Choose access</strong>
+    <p>Start a trial or plan with the active-device count you need.</p>
+  </div>
+  <div className="bf-flow-arrow">→</div>
+  <div className="bf-flow-step">
+    <span>3</span>
+    <strong>Activate device</strong>
+    <p>Use the key path to connect this device to your account.</p>
+  </div>
+</div>
+
+Expected result: your account portal shows the account, plan/trial state, available active-device count, and the current way to activate this device.
+
+## 1. Open the account portal
+
+Go to [account.bitfield.so](https://account.bitfield.so).
+
+Use an email you control. Account recovery, checkout receipts, key access, and device messages depend on that email.
+
+## 2. Choose the trial or plan
 
 1. Choose the plan or trial that fits the active-device count you need.
 2. Confirm the checkout terms and billing authorization.
 3. Confirm your email when it arrives.
 4. Open the account portal and activate the first device.
 
-## What the account portal is for
+The active-device count is not the number of users in your imagination. It is the number of devices allowed to be active for your account or plan at the same time.
+
+## 3. Activate the first device
+
+Use the account portal's current activation path for the device you are using.
+
+If you are testing alone, this is usually your laptop first. If you are testing with a phone and laptop, each active device can matter. If you give a slot to a friend or teammate, treat it like real account access.
+
+## 4. Keep the account path recoverable
 
 The account portal is the customer control room. It is where you see your plan, billing cadence, keys, active-device count, replacement history, and cancellation options when they are available.
 
-## What to keep
-
 Keep access to the email you used at checkout. License-key and account-recovery messages go there. If a device is lost or replaced, use the portal to revoke that device and free the spot for another one.
+
+## Common failures
+
+| Symptom | Likely cause | Fix |
+|---|---|---|
+| You cannot find the key path | Email or checkout step is incomplete | Confirm email, then reopen the account portal |
+| A new device will not activate | Active-device count is full | Revoke or replace an old device in the portal |
+| You used the wrong email | Account ownership is tied to checkout/recovery email | Use the email you can keep and recover |
+| You are unsure what counts as a device | Active device means a device authorized to run Bitfield for the account | Read [Active devices](/concepts/active-devices) |
+| Billing or cancellation is unclear | Plan management belongs in the account lifecycle | Read [Trials and billing](/activation/trials-and-billing) and [Plan changes and cancellation](/activation/plan-changes-and-cancellation) |
+
+## Next
+
+- Make the first app-facing call: [Quickstart](/start/quickstart)
+- Understand the app-facing package: [JavaScript Runtime Kit](/runtime-kit/javascript)
+- Understand active devices: [Active devices](/concepts/active-devices)
+- Read the full account path: [Account and key flow](/activation/account-and-key-flow)
+- Understand billing timing: [Trials and billing](/activation/trials-and-billing)
 
 </div>

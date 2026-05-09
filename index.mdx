@@ -9,41 +9,85 @@ description: "Build fast today and keep your 100th feature as fast as your first
 Bitfield is a plug-in runtime and database for founders who want their product to get huge and cannot afford to slow down when plans change.
 </p>
 
-Bitfield gives your product one durable place to store what happened and one runtime that can load the pieces you plug in around it. You can start small, add more later, and keep the structure from turning into a pile of direct dependencies.
+Start here if you are trying to decide what Bitfield is, whether to try it, or what to build first. The best path is not to read every page in order. Pick the job you have right now.
 
-<div className="bf-grid">
-  <div className="bf-card">
-    <strong>Understand Bitfield</strong>
-    Concept docs explain the database, runtime, active devices, keys, and why the structure stays fast.
+<div className="bf-flow" aria-label="Bitfield start flow">
+  <div className="bf-flow-step">
+    <span>1</span>
+    <strong>Pick the job</strong>
+    <p>Understand it, try it, build a first screen, check proof, or manage access.</p>
   </div>
-  <div className="bf-card">
-    <strong>Use Runtime Kit</strong>
-    Runtime Kit gives app code one read hook and one request function. Packages and slots can keep growing behind that surface.
+  <div className="bf-flow-arrow">→</div>
+  <div className="bf-flow-step">
+    <span>2</span>
+    <strong>Follow the first path</strong>
+    <p>Use the page that matches your job instead of hunting through the whole docs tree.</p>
   </div>
-  <div className="bf-card">
-    <strong>Copy the Runtime Kit Cookbook</strong>
-    Runtime Kit Cookbook entries show complete package files and app calls without pulling private product implementation details into public docs.
-  </div>
-  <div className="bf-card">
-    <strong>Read the proof</strong>
-    Speed claims show the measured category. A warm local read, a hash lookup, and a durable batch write are different jobs.
-  </div>
-  <div className="bf-card">
-    <strong>Own your account flow</strong>
-    Trial, billing, active-device ranges, key delivery, and legal links all stay in one visible checkout story.
+  <div className="bf-flow-arrow">→</div>
+  <div className="bf-flow-step">
+    <span>3</span>
+    <strong>Go deeper</strong>
+    <p>Move into Runtime Kit, Build, Activation, Concepts, or Proof after the first result is clear.</p>
   </div>
 </div>
 
-## Where to go first
+Expected result: you should know which page to open next and what that page will help you do.
+
+## Choose your path
+
+<div className="bf-grid">
+  <div className="bf-card">
+    <strong>I am curious.</strong>
+    Start with <a href="/concepts/what-is-bitfield">What is Bitfield?</a>. You will get the product model before seeing code.
+  </div>
+  <div className="bf-card">
+    <strong>I want to try it.</strong>
+    Start with <a href="/start/get-your-key">Get your key</a>, then open <a href="/start/quickstart">Quickstart</a>.
+  </div>
+  <div className="bf-card">
+    <strong>I want the first visible result.</strong>
+    Use <a href="/start/quickstart">Quickstart</a>. It shows the read hook, request function, expected result, and first failures.
+  </div>
+  <div className="bf-card">
+    <strong>I want to build a real screen.</strong>
+    Use <a href="/runtime-kit/package-to-screen">Package to screen</a>, then copy a <a href="/runtime-kit/cookbook/index">Runtime Kit Cookbook</a> recipe.
+  </div>
+  <div className="bf-card">
+    <strong>I want to check the speed claim.</strong>
+    Start with <a href="/proof/how-bitfield-is-fast">How Bitfield is this fast</a>, then read the <a href="/proof/benchmark-ledger">Benchmark ledger</a>.
+  </div>
+</div>
+
+## What Bitfield does for your first product
+
+Bitfield gives your product one durable place to store what happened and one runtime that can load the pieces you plug in around it. You can start small, add more later, and keep the structure from turning into a pile of direct dependencies.
+
+The first product path looks like this:
+
+| Step | You do | Bitfield gives you |
+|---|---|---|
+| Account | Create an account and get key access. | A customer-owned activation path for your devices. |
+| Runtime Kit | Add the public Runtime Kit surface. | One read hook and one request function for app code. |
+| Package | Declare records, package-owned bytes, or callable targets. | A boundary around the product pieces you want to plug in. |
+| Surface | Render prepared data and send named requests. | A screen that can grow without importing private package setup. |
+| Device | Activate the devices you actually use. | A way to run locally without treating every install like a new product. |
+
+## Common first wrong turns
+
+| Wrong turn | Why it hurts | Go here instead |
+|---|---|---|
+| Reading only the proof pages first | You see numbers before the product model | [What is Bitfield?](/concepts/what-is-bitfield) |
+| Starting in API reference | You see exact facts before the first journey | [Quickstart](/start/quickstart) |
+| Building a custom shell first | You skip the public Runtime Kit path | [Package to screen](/runtime-kit/package-to-screen) |
+| Guessing how devices work | Account access and active devices get confused | [Get your key](/start/get-your-key) |
+
+## Next
 
 - New to Bitfield: [What is Bitfield?](/concepts/what-is-bitfield)
-- Ready to try it: [Quickstart](/start/quickstart)
+- Ready to try it: [Get your key](/start/get-your-key)
+- Ready to make the first app call: [Quickstart](/start/quickstart)
 - Want a complete Runtime Kit example: [Runtime Kit Cookbook](/runtime-kit/cookbook/index)
 - Need to understand pricing words: [Active devices](/concepts/active-devices)
-- Need the speed mechanism: [Storage shape](/concepts/storage-shape)
-- Learning package shape: [Package boundary](/reference/package-boundary)
-- Building another app surface: [Build your own surface](/build-your-own-surface/sdk-boundary)
 - Checking the speed claim: [How Bitfield is this fast](/proof/how-bitfield-is-fast)
-- Looking for the app surface: [Runtime Kit API](/reference/runtime-kit-api)
 
 </div>

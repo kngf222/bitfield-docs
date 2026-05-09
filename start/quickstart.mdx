@@ -6,12 +6,49 @@ description: "Get a key, add Runtime Kit, read data, and send a request."
 <div className="bf-article">
 
 <p className="bf-lead">
-This is the short path. Get your key, activate a device, add Runtime Kit, then use the public app-facing surface.
+This is the shortest first-result path: get key access, activate a device, add Runtime Kit, read prepared data, and send one target request.
 </p>
 
-## 1. Get your key
+Product scene: you are building the first screen of a product. It needs one piece of prepared data and one button that asks Bitfield to do work.
 
-Start at [Get your key](/start/get-your-key). Your account portal is where you confirm your email, get access, manage active devices, and replace a device when you need to move a spot.
+<div className="bf-flow" aria-label="Quickstart flow">
+  <div className="bf-flow-step">
+    <span>1</span>
+    <strong>Key and device</strong>
+    <p>Create account access and activate the device you are using.</p>
+  </div>
+  <div className="bf-flow-arrow">→</div>
+  <div className="bf-flow-step">
+    <span>2</span>
+    <strong>Runtime Kit</strong>
+    <p>Add the public app-facing package.</p>
+  </div>
+  <div className="bf-flow-arrow">→</div>
+  <div className="bf-flow-step">
+    <span>3</span>
+    <strong>Read and request</strong>
+    <p>Render prepared data and call a named target.</p>
+  </div>
+</div>
+
+Expected result: your app can render one prepared value and send one target request without importing private package setup.
+
+## Prerequisites
+
+| Need | Why |
+|---|---|
+| Bitfield account access | The account portal owns key access and active-device management. |
+| One activated device | Runtime Kit runs against an account/device path, not a random anonymous install. |
+| A JavaScript app surface | The current public examples use the JavaScript Runtime Kit and React hook. |
+| A prepared input name and target name | App code reads named prepared data and sends requests to named targets. |
+
+If you do not have key access yet, do [Get your key](/start/get-your-key) first.
+
+## 1. Get your key and activate this device
+
+Open [account.bitfield.so](https://account.bitfield.so), create or open your account, confirm email if needed, and activate the device you are using.
+
+Your account portal is where you manage active devices, replace a device, recover access, and find the current install instructions for your account.
 
 ## 2. Add Runtime Kit
 
@@ -24,7 +61,7 @@ import { sendRequestToBitfieldTarget } from '@bitfield/runtime-kit';
 import { useBitfieldData } from '@bitfield/runtime-kit/react';
 ```
 
-## 3. Read data in React
+## 3. Read prepared data in React
 
 `useBitfieldData(...)` reads materialized data that Runtime Kit has already made available to your app.
 
@@ -41,6 +78,8 @@ export function InboxCount() {
 }
 ```
 
+Visible result: the screen shows an inbox count when the prepared data is available. The component owns loading, error, and success rendering. It does not decide how Bitfield stores or prepares the data.
+
 ## 4. Send a request
 
 `sendRequestToBitfieldTarget(...)` sends opaque request data to a Bitfield target and returns the reply. Your app does not need to know how the target is mounted.
@@ -49,13 +88,43 @@ export function InboxCount() {
 import { sendRequestToBitfieldTarget } from '@bitfield/runtime-kit';
 
 const reply = await sendRequestToBitfieldTarget({
-  target,
-  payload,
+  target: 'inbox.refresh',
+  payload: { reason: 'first-run' },
 });
 ```
+
+Visible result: the app asks the named target to do work and waits for a reply. The button does not import the target implementation.
 
 <div className="bf-callout">
 The app surface stays boring on purpose. The product can gain new storage paths, packages, devices, or slots without making every React component learn a new API.
 </div>
+
+## What you just built
+
+You did not build the whole product. You built the public app-facing shape:
+
+| Piece | What it proved |
+|---|---|
+| Account and device | Runtime Kit is attached to your account path. |
+| `useBitfieldData(...)` | React can read prepared product data by name. |
+| `sendRequestToBitfieldTarget(...)` | App code can ask a named Bitfield target to do work. |
+| Loading/error/success UI | The surface can handle real runtime states instead of assuming data is always there. |
+
+## Common failures
+
+| Symptom | Likely cause | Fix |
+|---|---|---|
+| You do not know where to get the key | Account path was skipped | Open [Get your key](/start/get-your-key) |
+| The component stays loading | Device/account path or prepared input is not ready | Check account activation, then read [Runtime Kit troubleshooting](/runtime-kit/troubleshooting) |
+| The read returns no data | The prepared input name does not exist yet | Follow [Package to screen](/runtime-kit/package-to-screen) |
+| The target request fails | The target name or payload contract is wrong | Read [Send a request](/runtime-kit/send-request) |
+| An AI agent imports a deep Runtime Kit file | It crossed the public boundary | Use only the imports shown on this page |
+
+## Next
+
+- Build the first real feature: [Package to screen](/runtime-kit/package-to-screen)
+- Copy a complete recipe: [Runtime Kit Cookbook](/runtime-kit/cookbook/index)
+- Look up exact API behavior: [Runtime Kit API](/reference/runtime-kit-api)
+- Understand devices: [Active devices](/concepts/active-devices)
 
 </div>
