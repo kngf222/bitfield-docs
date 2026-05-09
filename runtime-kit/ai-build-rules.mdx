@@ -1,6 +1,6 @@
 ---
 title: "Build with AI agents"
-description: "Give an AI agent the Runtime Kit public contract so it adds features without crossing private boundaries."
+description: "Give an AI agent the Runtime Kit public contract so it adds features without crossing private implementation boundaries."
 ---
 
 <div className="bf-article">
@@ -10,14 +10,14 @@ description: "Give an AI agent the Runtime Kit public contract so it adds featur
 # Build with AI agents.
 
 <p className="bf-lead">
-Runtime Kit gives AI agents a small public surface: read prepared data, send target requests, and edit package boundaries without importing private machinery.
+Runtime Kit gives AI agents a small public surface: read prepared data, send target requests, and edit package boundaries without importing private implementation code.
 </p>
 
 ## What this is
 
 This page is for founders and developers who ask an AI agent to build with Bitfield.
 
-The agent needs rails. Without rails, it will do the fastest-looking thing: import internals, parse files in UI code, wire features directly together, or create a second data path. That can work for one screen and punish you later.
+The agent needs rails. Without rails, it will do the fastest-looking thing: import unpublished code, parse files in UI code, wire features directly together, or create a second data path. That can work for one screen and punish you later.
 
 Runtime Kit gives the agent a better instruction set:
 
@@ -45,7 +45,7 @@ App code may import:
 - sendRequestToBitfieldTarget from @bitfield/runtime-kit
 - useBitfieldData from @bitfield/runtime-kit/react
 
-App code must not import Runtime Kit internals, parse package boundary files,
+App code must not import unpublished Runtime Kit code, parse package boundary files,
 construct storage addresses, choose low-level readers, or call the code behind
 a target directly.
 
@@ -78,7 +78,7 @@ Ask for one boundary at a time:
 ```text
 Add a welcome panel that reads the prepared input named "welcome-copy"
 with useBitfieldData(...). Render loading, error, empty, and success states.
-Do not import Runtime Kit internals.
+Do not import unpublished Runtime Kit code.
 ```
 
 ```text
@@ -133,7 +133,7 @@ Tell me:
 2. Which prepared input names the UI reads.
 3. Which target names the UI calls.
 4. Which payload and reply shapes are public contracts.
-5. Which Runtime Kit internals you did not import.
+5. Which unpublished Runtime Kit code you did not import.
 ```
 
 If the agent cannot answer those five points, the work is not ready.
@@ -163,14 +163,37 @@ App read       -> useBitfieldData(...)
 App action     -> sendRequestToBitfieldTarget(...)
 Package data   -> things-to-store-and-run.json
 Public contract -> input names, target names, payloads, replies
-Review failure -> reject private imports and storage wiring in app code
+Review failure -> reject unpublished imports and storage wiring in app code
 ```
 
-## Ceiling you have not hit yet
+## Now build the bigger version
 
-- **Agent-generated package workflows:** Ask the agent for one package boundary and one app surface, then review the chain instead of reading every internal line.
-- **Safer refactors:** Keep public input and target names stable while the agent changes the package behind them.
-- **Feature factories:** Give the agent a reusable feature template built around package data, prepared reads, and target requests.
-- **Docs-driven coding:** Point the agent at this page, [Package to screen](/runtime-kit/package-to-screen), and [Runtime Kit API](/reference/runtime-kit-api) before it writes code.
+Use this full prompt for the next AI-built feature:
+
+```text
+Build a Runtime Kit feature named launch-assistant.
+
+Create one package boundary with:
+- one record named launch-checklist
+- one stored file named launch-help
+- one target named launch.next-step
+
+Create one React surface with:
+- useBitfieldData('launch-checklist')
+- a button that calls sendRequestToBitfieldTarget(...)
+- loading, error, empty, and success states
+
+Before writing code, list:
+- package name
+- prepared input names
+- target names
+- request payload shape
+- reply payload shape
+
+Use only @bitfield/runtime-kit and @bitfield/runtime-kit/react.
+Do not import unpublished Runtime Kit code.
+```
+
+That prompt makes the agent build the package and the screen together while keeping the public boundary intact.
 
 </div>

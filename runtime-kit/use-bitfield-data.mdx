@@ -162,7 +162,7 @@ The request asks a target to do work. The hook reads prepared results.
 |---|---|
 | Component imports storage helpers. | Component imports one hook. |
 | Component chooses low-level data wiring. | Runtime Kit handles preparation behind the surface. |
-| Component knows package internals. | Component knows public input names and data shape. |
+| Component knows package implementation details. | Component knows public input names and data shape. |
 | AI has many low-level APIs to misuse. | AI gets one read shape and fewer ways to tangle the app. |
 
 ## Common mistakes
@@ -179,7 +179,7 @@ Do not make the component create package state, storage addresses, or low-level 
 
 A selector is scoped to the surface that Runtime Kit prepared. If a selector is not available, fix the package/surface boundary instead of hardcoding private reads in the component.
 
-**Deep importing Runtime Kit internals**
+**Deep importing unpublished Runtime Kit code**
 
 Only import from `@bitfield/runtime-kit/react`. If code needs private setup machinery, that code is not app component code.
 
@@ -204,11 +204,43 @@ Return shape:
 }
 ```
 
-## Ceiling you have not hit yet
+## Now build the bigger version
 
-- **Replace the source behind a screen:** Keep the same input name while changing how Runtime Kit prepares it.
-- **Build richer package surfaces:** Expose multiple named inputs to one component tree without adding more public hooks.
-- **Keep UI code portable:** Wrap the same read idea for another UI stack later.
-- **Give AI safer rails:** Let AI-generated components read prepared values instead of learning private system machinery.
+Build a real screen with two prepared inputs and one request.
+
+```tsx
+import { sendRequestToBitfieldTarget } from '@bitfield/runtime-kit';
+import { useBitfieldData } from '@bitfield/runtime-kit/react';
+
+type WelcomeCopy = { headline: string; body: string };
+type Checklist = { items: string[] };
+
+export function LaunchPanel() {
+  const welcome = useBitfieldData<WelcomeCopy>('welcome-copy');
+  const checklist = useBitfieldData<Checklist>('launch-checklist');
+
+  async function getNextStep() {
+    await sendRequestToBitfieldTarget({
+      target: 'launch.next-step',
+      payload: { completed: checklist.data?.items.length ?? 0 },
+    });
+  }
+
+  if (welcome.loading || checklist.loading) return <section>Loading launch plan.</section>;
+  if (welcome.error || checklist.error) return <section>Could not load launch plan.</section>;
+  if (!welcome.data || !checklist.data) return <section>No launch plan yet.</section>;
+
+  return (
+    <section>
+      <h2>{welcome.data.headline}</h2>
+      <p>{welcome.data.body}</p>
+      {checklist.data.items.map((item) => <p key={item}>{item}</p>)}
+      <button type="button" onClick={getNextStep}>Get next step</button>
+    </section>
+  );
+}
+```
+
+The component is doing real work, but it still only knows prepared input names, a target name, and public payload shapes.
 
 </div>

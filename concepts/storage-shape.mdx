@@ -1,6 +1,6 @@
 ---
 title: "Storage shape"
-description: "How Bitfield keeps local durable data fast without turning private internals into public docs."
+description: "How Bitfield keeps local durable data fast without publishing private implementation details."
 ---
 
 <div className="bf-article">
@@ -51,7 +51,7 @@ Bitfield public docs can safely name the mechanism category:
 | A feature asks a separate database process for every answer. | A warm local read can touch known local bytes. |
 | The speed number floats without context. | The speed number says exactly which path was measured. |
 | Content identity sounds like magic. | Content identity means the bytes can be named by what they are. |
-| The docs either hide the mechanism or leak too much. | The docs explain the category and keep private internals private. |
+| The docs either hide the mechanism or leak too much. | The docs explain the category and keep private implementation details private. |
 
 ## What this does not claim
 

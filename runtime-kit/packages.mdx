@@ -237,11 +237,40 @@ Slot:
 
 For exact fields, read [Package boundary](/reference/package-boundary). For complete examples, read [Workflow examples](/workflows/index).
 
-## Ceiling you have not hit yet
+## Now build the bigger version
 
-- **Package sets per product:** Keep package names stable while separating products or projects.
-- **Package-owned files:** Ship help, rules, copy, or assets without app code knowing file locations.
-- **Callable feature doors:** Let app code call a target while package internals change behind it.
-- **AI-generated package shapes:** Give an AI agent one boundary file to edit instead of letting it wire private imports across the app.
+Build one package that owns a complete feature slice: data, a help file, and a callable target.
+
+```json
+{
+  "package": "launch-assistant",
+  "things": [
+    {
+      "type": "record",
+      "address": "package::launch-assistant::checklist",
+      "payload": {
+        "items": ["Create account", "Activate device", "Run package"]
+      }
+    },
+    {
+      "type": "stored_bytes",
+      "name": "launch-help",
+      "source_path": "help/launch-help.txt"
+    },
+    {
+      "type": "slot",
+      "name": "launch.next-step",
+      "methods": [{ "name": "query" }],
+      "boundary": {
+        "call_shape": "envelope-bytes-in-envelope-bytes-out",
+        "methods": [{ "name": "query" }]
+      },
+      "artifact": { "source_path": "slots/next-step.bin" }
+    }
+  ]
+}
+```
+
+That package gives the app three public handles: a prepared checklist input, package-owned help bytes, and the `launch.next-step` target. The app uses those handles instead of importing package setup code.
 
 </div>

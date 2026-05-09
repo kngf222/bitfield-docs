@@ -6,7 +6,7 @@ This repository contains customer-facing Bitfield documentation only.
 
 - Do not publish local machine paths, private repo names, private task plans, raw research notes, raw benchmark logs, account-portal implementation details, payment-provider wiring, or unpublished APIs.
 - Do not imply that Bitfield software, designs, benchmarks, or product materials may be copied, forked, redistributed, or reused outside the access granted by Bitfield.
-- Do not copy internal engineering docs into this repo. Rewrite public explanations from the customer's point of view.
+- Do not copy private engineering docs into this repo. Rewrite public explanations from the customer's point of view.
 - Do not add vendor template content, vendor support links, sample APIs, or placeholder pages.
 
 ## Public terminology

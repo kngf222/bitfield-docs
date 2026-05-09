@@ -695,7 +695,7 @@
     {
       "route": "concepts/storage-shape",
       "title": "Storage shape",
-      "description": "How Bitfield keeps local durable data fast without turning private internals into public docs.",
+      "description": "How Bitfield keeps local durable data fast without publishing private implementation details.",
       "diataxis": "concept",
       "summary": "Explains local durable truth, memory-mapped local files, content identity, and the current view."
     },
@@ -809,7 +809,7 @@
       "title": "React surface for package data",
       "description": "Read package-prepared data and send a target request from one React surface.",
       "diataxis": "workflow",
-      "summary": "Shows the app-facing read and request shape without exposing package internals to React."
+      "summary": "Shows the app-facing read and request shape without exposing package implementation details to React."
     },
     {
       "route": "build-your-own-surface/sdk-boundary",

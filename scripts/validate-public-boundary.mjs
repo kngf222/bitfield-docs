@@ -52,6 +52,7 @@ const sourcePathAllowedFiles = new Set([
   'runtime-kit/packages.mdx',
   ...workflowExampleAllowlist(),
 ]);
+const validatorSelfAllowedFiles = new Set(['scripts/validate-public-boundary.mjs']);
 
 const banned = [
   { parts: ['/', 'Users', '/'] },
@@ -77,6 +78,15 @@ const banned = [
     allowedFiles: sourcePathAllowedFiles,
   },
   { parts: ['source', '_repo'] },
+  { parts: ['Ceiling you have not hit yet'], allowedFiles: validatorSelfAllowedFiles },
+  { parts: ['plain English'], allowedFiles: validatorSelfAllowedFiles },
+  { parts: ['Plain English'], allowedFiles: validatorSelfAllowedFiles },
+  { parts: ['internal docs ID'], allowedFiles: validatorSelfAllowedFiles },
+  { parts: ['internals'], allowedFiles: validatorSelfAllowedFiles },
+  { parts: ['raw internal'], allowedFiles: validatorSelfAllowedFiles },
+  { parts: ['proprietary internals'], allowedFiles: validatorSelfAllowedFiles },
+  { parts: ['private internals'], allowedFiles: validatorSelfAllowedFiles },
+  { parts: ['slot internals'], allowedFiles: validatorSelfAllowedFiles },
 ].map((rule) => ({
   pattern: rule.parts.join(''),
   allowedFiles: rule.allowedFiles ?? new Set(),

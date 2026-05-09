@@ -248,7 +248,7 @@ Start at the boundary. Then check the prepared input or target. Then check the c
 ```text
 Declare record       -> read with useBitfieldData(...)
 Declare slot         -> call with sendRequestToBitfieldTarget(...)
-Change internals     -> keep public input or target stable
+Change implementation -> keep public input or target stable
 Change app UI        -> keep package admission out of React
 Debug failure        -> identify boundary, read, request, or decode link
 ```
@@ -263,11 +263,47 @@ Read [Send a request](/runtime-kit/send-request) when a user action needs a targ
 
 Read [Troubleshooting](/runtime-kit/troubleshooting) when the chain breaks.
 
-## Ceiling you have not hit yet
+## Now build the bigger version
 
-- **Multiple packages behind one screen:** A surface can read prepared data from more than one package without importing those packages directly.
-- **Stable targets during rewrites:** A package can change the work behind a target while the button keeps calling the same public name.
-- **Package-authored product surfaces:** A package can bring data, owned bytes, and callable targets as one unit instead of scattering feature setup through the app.
-- **AI-safe feature work:** An AI agent can add a screen by following this chain instead of guessing private setup code.
+Take the same chain and build a screen that uses two packages.
+
+Package one owns the copy:
+
+```json
+{
+  "type": "record",
+  "address": "package::welcome-package::welcome-copy",
+  "payload": {
+    "headline": "Keep shipping.",
+    "body": "Your app can add the next feature without tying this screen to every package behind it."
+  }
+}
+```
+
+Package two owns the checklist:
+
+```json
+{
+  "type": "record",
+  "address": "package::launch-checklist::items",
+  "payload": {
+    "items": [
+      "Create your account",
+      "Activate this device",
+      "Run your first package",
+      "Call your first target"
+    ]
+  }
+}
+```
+
+The React surface reads both prepared inputs without importing either package:
+
+```tsx
+const welcome = useBitfieldData<WelcomeCopy>('welcome-copy');
+const checklist = useBitfieldData<{ items: string[] }>('launch-checklist');
+```
+
+Then add one target, such as `launch.next-step`, for the button that helps the user keep moving. The UI now has copy, checklist data, and a callable action while still using the same public read/request shape.
 
 </div>

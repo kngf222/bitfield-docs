@@ -15,7 +15,7 @@ When a Runtime Kit feature breaks, do not guess. Identify which public link fail
 
 ## What this is
 
-Runtime Kit deliberately hides private machinery from app code. That is good for product architecture, but it means debugging should follow the public chain instead of poking random internals.
+Runtime Kit deliberately hides private implementation details from app code. That is good for product architecture, but it means debugging should follow the public chain instead of poking unpublished code.
 
 Use this chain:
 
@@ -211,11 +211,23 @@ Device differs -> check activation and package set
 AI code smells -> reject private imports and direct implementation calls
 ```
 
-## Ceiling you have not hit yet
+## Now build the bigger version
 
-- **Self-checking feature templates:** Add a review checklist beside every AI-generated Runtime Kit feature.
-- **Support-safe diagnostics:** Report package set, input name, target name, and error text without exposing local state contents.
-- **Contract-first targets:** Write payload and reply contracts before the UI button calls the target.
-- **Boundary-led debugging:** Fix the broken public link instead of creating a second private path.
+Add a small public debug note beside every Runtime Kit feature.
+
+```md
+## Runtime Kit contract
+
+- Package set: customer-portal
+- Package: launch-assistant
+- Prepared inputs: welcome-copy, launch-checklist
+- Targets: launch.next-step
+- Request shape: { currentStep: string }
+- Reply shape: { nextStep: string; reason: string }
+```
+
+When something breaks, compare the bug to that contract. If the prepared input is missing, fix the package/surface link. If the target reply has a different shape, fix the target contract or the decoder. If one device behaves differently, check activation and package-set state before touching the UI.
+
+That gives support, developers, and AI agents the same map without exposing local state contents or private implementation files.
 
 </div>

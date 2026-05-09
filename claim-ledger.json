@@ -19,7 +19,7 @@
       "forbiddenPublicDetails": [
         "exact private file layout",
         "binary record encoding",
-        "raw internal harness log"
+        "raw private harness log"
       ],
       "publicUse": [
         "proof/how-bitfield-is-fast",
@@ -45,7 +45,7 @@
       "forbiddenPublicDetails": [
         "exact private hash framing",
         "binary record encoding",
-        "raw internal harness log"
+        "raw private harness log"
       ],
       "publicUse": [
         "proof/warm-and-cold-paths",
@@ -70,7 +70,7 @@
       "forbiddenPublicDetails": [
         "exact private log record layout",
         "private write scheduling logic",
-        "raw internal harness log"
+        "raw private harness log"
       ],
       "publicUse": [
         "proof/warm-and-cold-paths",
@@ -95,7 +95,7 @@
       "forbiddenPublicDetails": [
         "exact private log record layout",
         "private write scheduling logic",
-        "raw internal harness log"
+        "raw private harness log"
       ],
       "publicUse": [
         "proof/how-bitfield-is-fast",

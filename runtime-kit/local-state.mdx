@@ -120,11 +120,22 @@ Do not paste local state contents into public docs, issues, chats, or social pos
 
 If something is broken, start with the account portal for activation/account issues and Runtime Kit package flows for package issues.
 
-## Ceiling you have not hit yet
+## Now build the bigger version
 
-- **Device replacement:** Use account-managed activation rather than copying local state.
-- **Package-set debugging:** Inspect which package set is active without opening private storage files.
-- **Offline-first products:** Keep useful local state on the device while still respecting account permissions.
-- **Support-ready diagnostics:** Share folder presence and high-level status without leaking product data or device permission material.
+Make local-state debugging support-safe.
+
+When a user reports a problem, ask for high-level facts only:
+
+```text
+Does ~/.bitfield exist?
+Does ~/.bitfield/runtime-kit exist?
+Which package set name were you using?
+Does the account portal show this device as active?
+What visible error did the app show?
+```
+
+Do not ask them to paste local state contents. Do not tell them to copy folders between devices. Device replacement should go through account-managed activation, and package issues should be debugged by package set and package name first.
+
+That keeps local-first speed and offline usefulness without turning local state into a public backup format or support pastebin.
 
 </div>

@@ -163,7 +163,7 @@ try {
 }
 ```
 
-An error means the public request did not complete. It does not mean the component should learn private target internals.
+An error means the public request did not complete. It does not mean the component should learn the private target implementation.
 
 ## Before / after
 
@@ -214,11 +214,42 @@ Decode JSON:
 const json = JSON.parse(new TextDecoder().decode(reply.payload));
 ```
 
-## Ceiling you have not hit yet
+## Now build the bigger version
 
-- **Replace work behind a target:** Keep `target` stable while swapping package implementation.
-- **Use binary replies:** Return bytes for image, audio, packed table, or model output workflows.
-- **Run local-first actions:** Let a device ask local targets for work even when the network is not part of the path.
-- **Give AI a stable command surface:** Let an AI agent call named targets instead of editing implementation wiring.
+Write the target contract before the button.
+
+```ts
+type SearchRequest = {
+  query: string;
+};
+
+type SearchReply = {
+  items: Array<{ id: string; name: string }>;
+};
+```
+
+Then make the button use only that contract:
+
+```ts
+async function search(query: string): Promise<SearchReply> {
+  const reply = await sendRequestToBitfieldTarget({
+    target: 'product.search',
+    payload: { query } satisfies SearchRequest,
+  });
+
+  return JSON.parse(new TextDecoder().decode(reply.payload)) as SearchReply;
+}
+```
+
+For binary work, keep the same shape. The target name stays public, the payload contract stays explicit, and the reply stays bytes:
+
+```ts
+const reply = await sendRequestToBitfieldTarget({
+  target: 'image.thumbnail',
+  payload: imageBytes,
+});
+
+const thumbnailBytes = reply.payload;
+```
 
 </div>
