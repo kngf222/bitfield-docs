@@ -305,11 +305,12 @@
     let current = node;
     for (let depth = 0; depth < 4 && current.parentElement; depth += 1) {
       const parent = current.parentElement;
-      if (parent.closest('header, #navbar, nav')) break;
+      if (parent.matches('header, #navbar, nav')) break;
       const controls = parent.querySelectorAll('button, [role="button"], a[href]');
       if (controls.length > 3) break;
       if (!isCopyPageNode(parent) && !Array.from(controls).some(isCopyPageNode)) break;
       shell = parent;
+      if (parent.id === 'page-context-menu') break;
       current = parent;
     }
     return shell;
