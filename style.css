@@ -536,11 +536,11 @@ header form:has(input[placeholder*="Search Bitfield docs"]) {
   border-radius: 0 !important;
   box-shadow: none !important;
   color: var(--text-primary) !important;
-  max-width: min(88vw, 48rem) !important;
+  max-width: min(88vw, 43.2rem) !important;
   min-height: min(72vh, 46rem) !important;
   overflow: hidden auto !important;
   padding: clamp(1rem, 2.2vw, 1.6rem) !important;
-  width: min(88vw, 48rem) !important;
+  width: min(88vw, 43.2rem) !important;
 }
 
 [data-bf-docs-search-dialog="true"] :is(div, form):has(> [data-bf-docs-search-field="true"] + .bf-docs-search-defaults) {
