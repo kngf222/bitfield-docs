@@ -1089,7 +1089,17 @@ nav .bf-docs-theme-picker {
   padding: 1rem;
 }
 
-.bf-flow-step,
+.bf-flow > .bf-flow-step {
+  background: var(--bf-docs-selected-surface);
+  border: 1px solid var(--bf-docs-selected-border);
+  border-radius: 0;
+  color: var(--text-primary);
+  min-height: 10rem;
+  padding: 1rem;
+}
+
+.bf-flow > .bf-flow-step > span,
+.bf-flow-node .bf-flow-step,
 .bf-lane-card span,
 .bf-rail-diagram span {
   color: var(--docs-active-color);
@@ -1101,6 +1111,7 @@ nav .bf-docs-theme-picker {
   text-transform: uppercase;
 }
 
+.bf-flow > .bf-flow-step > strong,
 .bf-flow-node strong,
 .bf-lane-card strong,
 .bf-rail-diagram strong {
@@ -1110,6 +1121,7 @@ nav .bf-docs-theme-picker {
   letter-spacing: -0.035em;
 }
 
+.bf-flow > .bf-flow-step > p,
 .bf-flow-node p,
 .bf-lane-card p,
 .bf-rail-diagram p {
