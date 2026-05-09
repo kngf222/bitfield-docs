@@ -17,7 +17,6 @@ This repository publishes public docs only. It does not grant rights to Bitfield
 | `brand/` | Public Bitfield mark and wordmark assets mirrored from `bitfield-site`. |
 | `social/` | Open Graph, X, and LinkedIn social preview images mirrored from `bitfield-site`. |
 | `favicon.svg`, `favicon-*.png`, `apple-touch-icon.png`, `icon-*.png`, `site.webmanifest` | Browser, tab, mobile, and install icons using the current Bitfield square mark. |
-| `launch/` | Mintlify, GitHub, DNS, HTTPS, and rollback runbook for `docs.bitfield.so`. |
 | `activation/` | Keys, active devices, trials, and billing behavior. |
 | `proof/` | Public speed claims, warm and cold path boundaries, and methodology. |
 | `reference/` | Public API, claim-ledger, and file-format reference. |
