@@ -78,9 +78,9 @@
         "description": "Understand the runtime and database."
       },
       {
-        "eyebrow": "Workflows",
-        "label": "Workflow examples",
-        "href": "/workflows",
+        "eyebrow": "Cookbook",
+        "label": "Cookbook",
+        "href": "/cookbook",
         "description": "Copy a complete public package shape."
       },
       {
@@ -585,7 +585,7 @@
           "pages": [
             "runtime-kit/javascript",
             "runtime-kit/package-to-screen",
-            "runtime-kit/full-product-loop",
+            "runtime-kit/placeable-surfaces",
             "runtime-kit/use-bitfield-data",
             "runtime-kit/send-request",
             "runtime-kit/packages",
@@ -604,16 +604,17 @@
       ]
     },
     {
-      "tab": "Workflows",
+      "tab": "Cookbook",
       "groups": [
         {
           "group": "Package examples",
           "pages": [
-            "workflows/index",
-            "workflows/package-set-with-one-record",
-            "workflows/package-owned-file",
-            "workflows/callable-package-slot",
-            "workflows/react-surface-for-package-data"
+            "cookbook/index",
+            "cookbook/package-set-with-one-record",
+            "cookbook/package-owned-file",
+            "cookbook/callable-package-slot",
+            "cookbook/react-surface-for-package-data",
+            "cookbook/placeable-surface-product-loop"
           ]
         }
       ]
@@ -736,11 +737,11 @@
       "summary": "Walks from a package boundary through admitted material, prepared reads, target requests, and React rendering."
     },
     {
-      "route": "runtime-kit/full-product-loop",
-      "title": "Full product loop",
-      "description": "Compose packages, prepared inputs, target requests, and placeable surfaces into one generic product shell.",
-      "diataxis": "workflow",
-      "summary": "Shows the placeable-surface composition shape: package material becomes prepared reads and targets, descriptors declare regions and allowed names, and a dumb shell/sidebar places surfaces without product-specific branches."
+      "route": "runtime-kit/placeable-surfaces",
+      "title": "Placeable surfaces",
+      "description": "Understand the generic surface descriptor shape that lets a shell place product UI without knowing product meaning.",
+      "diataxis": "concept",
+      "summary": "Explains the placeable-surface composition primitive with visual maps: package material becomes prepared reads and targets, descriptors declare regions and allowed names, and a dumb shell/sidebar places surfaces without product-specific branches."
     },
     {
       "route": "runtime-kit/use-bitfield-data",
@@ -785,39 +786,46 @@
       "summary": "Maps Runtime Kit symptoms to the public chain link that failed and gives safe repair checks."
     },
     {
-      "route": "workflows/index",
-      "title": "Workflow examples",
+      "route": "cookbook/index",
+      "title": "Cookbook",
       "description": "Complete public examples for package sets, package boundary files, and app-facing Runtime Kit calls.",
-      "diataxis": "workflow",
-      "summary": "Indexes complete package and Runtime Kit workflows that stay inside the public contract."
+      "diataxis": "cookbook",
+      "summary": "Indexes complete package and Runtime Kit cookbook entries that stay inside the public contract."
     },
     {
-      "route": "workflows/package-set-with-one-record",
+      "route": "cookbook/package-set-with-one-record",
       "title": "Package set with one record",
       "description": "Create the smallest complete package boundary: one package, one record, one clear address.",
-      "diataxis": "workflow",
+      "diataxis": "cookbook",
       "summary": "Shows the smallest package boundary with one durable package record."
     },
     {
-      "route": "workflows/package-owned-file",
+      "route": "cookbook/package-owned-file",
       "title": "Package-owned file",
       "description": "Attach package-owned bytes to a package boundary.",
-      "diataxis": "workflow",
+      "diataxis": "cookbook",
       "summary": "Shows how a package declares package-owned bytes without reaching outside its folder."
     },
     {
-      "route": "workflows/callable-package-slot",
+      "route": "cookbook/callable-package-slot",
       "title": "Callable package slot",
       "description": "Declare a package-owned runnable door that app code can ask for work.",
-      "diataxis": "workflow",
+      "diataxis": "cookbook",
       "summary": "Shows how a package declares a callable slot and how app code sends a request to it."
     },
     {
-      "route": "workflows/react-surface-for-package-data",
+      "route": "cookbook/react-surface-for-package-data",
       "title": "React surface for package data",
       "description": "Read package-prepared data and send a target request from one React surface.",
-      "diataxis": "workflow",
+      "diataxis": "cookbook",
       "summary": "Shows the app-facing read and request shape without exposing package implementation details to React."
+    },
+    {
+      "route": "cookbook/placeable-surface-product-loop",
+      "title": "Placeable surface product loop",
+      "description": "Build a full product loop with package records, target requests, surface descriptors, a dumb shell, and surface bodies.",
+      "diataxis": "cookbook",
+      "summary": "Shows the source-owned cookbook succession for placeable surfaces: package boundary, descriptors, generic shell, surface bodies, and review checklist."
     },
     {
       "route": "build-your-own-surface/sdk-boundary",

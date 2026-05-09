@@ -3,12 +3,12 @@ import { dirname, normalize, relative, sep } from 'node:path';
 
 const manifest = JSON.parse(readFileSync('docs.manifest.json', 'utf8'));
 const sourceMap = JSON.parse(readFileSync('source-map.json', 'utf8'));
-const examples = JSON.parse(readFileSync('workflow-examples.json', 'utf8'));
+const examples = JSON.parse(readFileSync('cookbook-examples.json', 'utf8'));
 const boundarySchema = JSON.parse(readFileSync('reference/package-boundary.schema.json', 'utf8'));
 const pageRoutes = new Set(manifest.pages.map((page) => page.route));
-const workflowRoutes = new Set(
+const cookbookRoutes = new Set(
   manifest.pages
-    .filter((page) => page.route.startsWith('workflows/') && page.route !== 'workflows/index')
+    .filter((page) => page.route.startsWith('cookbook/') && page.route !== 'cookbook/index')
     .map((page) => page.route),
 );
 const sourcePages = new Map(sourceMap.pages.map((page) => [page.route, page]));
@@ -137,19 +137,19 @@ function validatePackagePath(packageDir, target, label) {
 }
 
 if (examples.version !== 1 || !Array.isArray(examples.examples)) {
-  fail('workflow-examples.json must have version 1 and an examples array');
+  fail('cookbook-examples.json must have version 1 and an examples array');
 }
 
 const seenIds = new Set();
 const seenRoutes = new Set();
 for (const example of examples.examples ?? []) {
   if (!example || typeof example !== 'object') {
-    fail('workflow-examples.json examples must be objects');
+    fail('cookbook-examples.json examples must be objects');
     continue;
   }
   if (!ensureString(example.id, 'example.id')) continue;
   if (seenIds.has(example.id)) {
-    fail(`duplicate workflow example id ${example.id}`);
+    fail(`duplicate cookbook example id ${example.id}`);
   }
   seenIds.add(example.id);
 
@@ -199,9 +199,9 @@ for (const example of examples.examples ?? []) {
   }
 }
 
-for (const route of workflowRoutes) {
+for (const route of cookbookRoutes) {
   if (!seenRoutes.has(route)) {
-    fail(`workflow route ${route} has no workflow-examples.json entry`);
+    fail(`cookbook route ${route} has no cookbook-examples.json entry`);
   }
 }
 
@@ -210,4 +210,4 @@ if (failures.length) {
   process.exit(1);
 }
 
-console.log('workflow examples ok');
+console.log('cookbook examples ok');

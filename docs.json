@@ -101,7 +101,7 @@
             "pages": [
               "runtime-kit/javascript",
               "runtime-kit/package-to-screen",
-              "runtime-kit/full-product-loop",
+              "runtime-kit/placeable-surfaces",
               "runtime-kit/use-bitfield-data",
               "runtime-kit/send-request",
               "runtime-kit/packages",
@@ -120,16 +120,17 @@
         ]
       },
       {
-        "tab": "Workflows",
+        "tab": "Cookbook",
         "groups": [
           {
             "group": "Package examples",
             "pages": [
-              "workflows/index",
-              "workflows/package-set-with-one-record",
-              "workflows/package-owned-file",
-              "workflows/callable-package-slot",
-              "workflows/react-surface-for-package-data"
+              "cookbook/index",
+              "cookbook/package-set-with-one-record",
+              "cookbook/package-owned-file",
+              "cookbook/callable-package-slot",
+              "cookbook/react-surface-for-package-data",
+              "cookbook/placeable-surface-product-loop"
             ]
           }
         ]

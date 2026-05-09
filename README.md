@@ -11,8 +11,8 @@ This repository publishes public docs only. It does not grant rights to Bitfield
 | `start/` | First-run guides. |
 | `concepts/` | Concept explanations, including storage shape and content addresses. |
 | `runtime-kit/` | Runtime Kit usage and package docs. |
-| `workflows/` | Complete package and Runtime Kit examples. |
-| `examples/` | Machine-validated public example fixtures used by workflow pages. |
+| `cookbook/` | Complete package and Runtime Kit examples. |
+| `examples/` | Machine-validated public example fixtures used by cookbook pages. |
 | `logo/` | Mintlify navbar logo assets. The wordmark is the Apple Garamond Bitfield mark from the site exported as SVG outlines. |
 | `brand/` | Public Bitfield mark and wordmark assets mirrored from `bitfield-site`. |
 | `social/` | Open Graph, X, and LinkedIn social preview images mirrored from `bitfield-site`. |
@@ -21,9 +21,9 @@ This repository publishes public docs only. It does not grant rights to Bitfield
 | `proof/` | Public speed claims, warm and cold path boundaries, and methodology. |
 | `reference/` | Public API, claim-ledger, and file-format reference. |
 | `changelog/` | Docs and product-facing changes. |
-| `workflow-examples.json` | Source of truth for workflow example files and their docs routes. |
+| `cookbook-examples.json` | Source of truth for cookbook example files and their docs routes. |
 
-`examples/` is ignored by Mintlify directly. Workflow pages embed the public snippets, and `docs:check` verifies the embedded snippets match the fixture files exactly.
+`examples/` is ignored by Mintlify directly. Cookbook pages embed the public snippets, and `docs:check` verifies the embedded snippets match the fixture files exactly.
 
 ## Commands
 
@@ -35,6 +35,6 @@ npm run docs:mint
 
 `docs:generate` rebuilds `docs.json`, `llms.txt`, `theme.css`, and `theme.js` from `docs.manifest.json`.
 
-`docs:check` verifies public boundaries, workflow examples, navigation, required pages, generated files, and claim references.
+`docs:check` verifies public boundaries, cookbook examples, navigation, required pages, generated files, and claim references.
 
 `docs:mint` runs Mintlify build validation, broken-link checks, snippet checks, and accessibility checks with the repo-pinned CLI.

@@ -1,0 +1,89 @@
+{
+  "version": 1,
+  "examples": [
+    {
+      "id": "package-set-with-one-record",
+      "route": "cookbook/package-set-with-one-record",
+      "kind": "package-boundary",
+      "packageBoundary": "examples/package-cookbook/package-set-with-one-record/product-copy/things-to-store-and-run.json",
+      "snippets": [
+        {
+          "file": "examples/package-cookbook/package-set-with-one-record/product-copy/things-to-store-and-run.json",
+          "language": "json"
+        }
+      ],
+      "sourceIds": ["runtime-kit-package-boundary", "bitfield-public-cookbook-examples"]
+    },
+    {
+      "id": "package-owned-file",
+      "route": "cookbook/package-owned-file",
+      "kind": "package-boundary",
+      "packageBoundary": "examples/package-cookbook/package-owned-file/help-package/things-to-store-and-run.json",
+      "snippets": [
+        {
+          "file": "examples/package-cookbook/package-owned-file/help-package/things-to-store-and-run.json",
+          "language": "json"
+        },
+        {
+          "file": "examples/package-cookbook/package-owned-file/help-package/help/getting-started.txt",
+          "language": "text"
+        }
+      ],
+      "sourceIds": ["runtime-kit-package-boundary", "bitfield-public-cookbook-examples"]
+    },
+    {
+      "id": "callable-package-slot",
+      "route": "cookbook/callable-package-slot",
+      "kind": "package-boundary",
+      "packageBoundary": "examples/package-cookbook/callable-package-slot/search-package/things-to-store-and-run.json",
+      "snippets": [
+        {
+          "file": "examples/package-cookbook/callable-package-slot/search-package/things-to-store-and-run.json",
+          "language": "json"
+        }
+      ],
+      "sourceIds": ["runtime-kit-package-boundary", "runtime-kit-js-public-contract", "bitfield-public-cookbook-examples"]
+    },
+    {
+      "id": "react-surface-for-package-data",
+      "route": "cookbook/react-surface-for-package-data",
+      "kind": "runtime-kit-react",
+      "snippets": [
+        {
+          "file": "examples/react-surfaces/welcome-panel.tsx",
+          "language": "tsx"
+        }
+      ],
+      "sourceIds": ["runtime-kit-js-public-contract", "runtime-kit-package-boundary", "bitfield-public-cookbook-examples"]
+    },
+    {
+      "id": "placeable-surface-product-loop",
+      "route": "cookbook/placeable-surface-product-loop",
+      "kind": "runtime-kit-product-loop",
+      "packageBoundary": "examples/product-cookbook/placeable-surface-product-loop/launch-product/things-to-store-and-run.json",
+      "snippets": [
+        {
+          "file": "examples/product-cookbook/placeable-surface-product-loop/launch-product/things-to-store-and-run.json",
+          "language": "json"
+        },
+        {
+          "file": "examples/product-cookbook/placeable-surface-product-loop/app/surfaces.ts",
+          "language": "ts"
+        },
+        {
+          "file": "examples/product-cookbook/placeable-surface-product-loop/app/ProductShell.tsx",
+          "language": "tsx"
+        },
+        {
+          "file": "examples/product-cookbook/placeable-surface-product-loop/app/LaunchHomeSurface.tsx",
+          "language": "tsx"
+        },
+        {
+          "file": "examples/product-cookbook/placeable-surface-product-loop/app/LaunchHelpSurface.tsx",
+          "language": "tsx"
+        }
+      ],
+      "sourceIds": ["runtime-kit-js-public-contract", "runtime-kit-package-boundary", "bitfield-public-cookbook-examples"]
+    }
+  ]
+}

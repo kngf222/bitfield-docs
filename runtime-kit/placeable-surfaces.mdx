@@ -1,0 +1,150 @@
+---
+title: "Placeable surfaces"
+description: "Understand the generic surface descriptor shape that lets a shell place product UI without knowing product meaning."
+---
+
+<div className="bf-article">
+
+<p className="bf-kicker">Runtime Kit</p>
+
+# Placeable surfaces.
+
+<p className="bf-lead">
+A placeable surface is a product UI contract. It says what can appear, where it can appear, and which prepared reads or targets the surface may use. The shell reads that contract and places the surface without learning the product story behind it.
+</p>
+
+## What this explains
+
+This page explains the primitive. It is not the cookbook.
+
+Use this page when you need to understand why the architecture stays clean. Use [Placeable surface product loop](/cookbook/placeable-surface-product-loop) when you want the full example succession with files and code.
+
+## The separation
+
+The shell should not know what a launch dashboard is. It should not know what support means. It should not know which package owns help search.
+
+The shell should only know this:
+
+| Generic thing | What it means |
+|---|---|
+| Surface descriptor | A piece of UI that can be placed in a region. |
+| Region | A named area such as `main`, `rail`, or `panel`. |
+| Prepared input names | Data names the surface is allowed to read. |
+| Target names | Work names the surface is allowed to request. |
+| Component key | The renderable body for that surface. |
+
+That is the same class of idea as a command center: the arrangement model is generic, the sidebar is generic, and the product meaning lives behind descriptors.
+
+## Visual map
+
+The flow has four jobs. Each job stays separate.
+
+<div className="bf-flow" aria-label="Runtime Kit product flow from package material to placed product surfaces">
+  <div className="bf-flow-node">
+    <span className="bf-flow-step">01</span>
+    <strong>Package set</strong>
+    <p>Records, stored bytes, and named targets enter through package boundaries.</p>
+  </div>
+  <div className="bf-flow-arrow" aria-hidden="true">→</div>
+  <div className="bf-flow-node">
+    <span className="bf-flow-step">02</span>
+    <strong>Runtime Kit boundary</strong>
+    <p>Package material becomes prepared reads and callable target names.</p>
+  </div>
+  <div className="bf-flow-arrow" aria-hidden="true">→</div>
+  <div className="bf-flow-node">
+    <span className="bf-flow-step">03</span>
+    <strong>Placeable surfaces</strong>
+    <p>Descriptors say which region, component, inputs, and targets each surface uses.</p>
+  </div>
+  <div className="bf-flow-arrow" aria-hidden="true">→</div>
+  <div className="bf-flow-node">
+    <span className="bf-flow-step">04</span>
+    <strong>Dumb shell</strong>
+    <p>The shell renders labels, regions, and active surface ids without product branches.</p>
+  </div>
+</div>
+
+## Ownership lanes
+
+<div className="bf-lane-map" aria-label="Ownership map for package material, surface descriptors, and the product shell">
+  <div className="bf-lane-card">
+    <span>Data owner</span>
+    <strong>Package boundary</strong>
+    <p>Owns the records, package-owned bytes, and callable targets.</p>
+  </div>
+  <div className="bf-lane-card">
+    <span>Access owner</span>
+    <strong>Runtime Kit</strong>
+    <p>Turns package material into public reads and requests.</p>
+  </div>
+  <div className="bf-lane-card">
+    <span>Product owner</span>
+    <strong>Surface descriptor</strong>
+    <p>Declares where a surface belongs and what it may touch.</p>
+  </div>
+  <div className="bf-lane-card">
+    <span>Arrangement owner</span>
+    <strong>Shell and sidebar</strong>
+    <p>Places surfaces. It does not understand the business meaning.</p>
+  </div>
+</div>
+
+## The product map
+
+```text
+Package set
+  -> packages
+  -> prepared inputs
+  -> targets
+  -> surface descriptors
+
+Product shell
+  -> reads surface descriptors
+  -> renders a generic sidebar from labels and order
+  -> renders the active surface in a generic region
+
+Surface body
+  -> reads only the prepared inputs named by its descriptor
+  -> calls only the targets named by its descriptor
+```
+
+The product becomes larger without making the shell import package setup code or product-specific screen names.
+
+## Placement sketch
+
+<div className="bf-rail-diagram" aria-label="Dumb product shell placing multiple surface descriptors">
+  <div className="bf-rail-diagram__rail">
+    <span>Sidebar</span>
+    <strong>Launch</strong>
+    <strong>Help</strong>
+    <strong>Support</strong>
+  </div>
+  <div className="bf-rail-diagram__main">
+    <span>Region: main</span>
+    <strong>surface.launch.home</strong>
+    <p>welcome-copy + launch-checklist → launch.next-step</p>
+  </div>
+  <div className="bf-rail-diagram__panel">
+    <span>Region: panel</span>
+    <strong>surface.launch.help</strong>
+    <p>help.search</p>
+  </div>
+</div>
+
+## What this prevents
+
+| Bad shape | Placeable-surface shape |
+|---|---|
+| Sidebar branches on `dashboard`, `support`, and `help`. | Sidebar renders descriptor labels and active ids. |
+| Layout imports product screens directly. | Layout receives descriptors and resolves component keys. |
+| One new product area means editing the shell. | One new product area means adding a descriptor and body. |
+| AI agents add another special case. | AI agents repeat the same descriptor contract. |
+
+The primitive is boring on purpose. The shell can stay dumb while the product becomes more capable.
+
+## Build it
+
+The complete cookbook lives in [Placeable surface product loop](/cookbook/placeable-surface-product-loop). It walks through the package boundary, descriptors, shell, surface body, and review checklist as source-owned examples.
+
+</div>

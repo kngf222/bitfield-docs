@@ -1,0 +1,45 @@
+{
+  "package": "launch-product",
+  "things": [
+    {
+      "type": "record",
+      "address": "package::launch-product::welcome-copy",
+      "payload": {
+        "headline": "Your launch stays fast.",
+        "body": "Every feature stays behind a package boundary, so the next idea does not have to tangle the last one."
+      }
+    },
+    {
+      "type": "record",
+      "address": "package::launch-product::checklist",
+      "payload": {
+        "items": [
+          { "id": "account", "label": "Create account", "done": true },
+          { "id": "device", "label": "Activate this device", "done": true },
+          { "id": "package", "label": "Run a package", "done": false },
+          { "id": "target", "label": "Call a target", "done": false }
+        ]
+      }
+    },
+    {
+      "type": "slot",
+      "name": "launch.next-step",
+      "methods": [{ "name": "query" }],
+      "boundary": {
+        "call_shape": "envelope-bytes-in-envelope-bytes-out",
+        "methods": [{ "name": "query" }]
+      },
+      "artifact": { "source_path": "slots/next-step.bin" }
+    },
+    {
+      "type": "slot",
+      "name": "help.search",
+      "methods": [{ "name": "query" }],
+      "boundary": {
+        "call_shape": "envelope-bytes-in-envelope-bytes-out",
+        "methods": [{ "name": "query" }]
+      },
+      "artifact": { "source_path": "slots/help-search.bin" }
+    }
+  ]
+}

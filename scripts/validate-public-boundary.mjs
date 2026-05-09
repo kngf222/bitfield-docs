@@ -25,9 +25,9 @@ const ignoredFiles = new Set([
   'package-lock.json',
 ]);
 
-function workflowExampleAllowlist() {
-  if (!existsSync('workflow-examples.json')) return new Set();
-  const examples = JSON.parse(readFileSync('workflow-examples.json', 'utf8'));
+function cookbookExampleAllowlist() {
+  if (!existsSync('cookbook-examples.json')) return new Set();
+  const examples = JSON.parse(readFileSync('cookbook-examples.json', 'utf8'));
   const sourcePathToken = ['source', '_path'].join('');
   const allowed = new Set(['reference/package-boundary.schema.json']);
   for (const example of examples.examples ?? []) {
@@ -48,10 +48,9 @@ function workflowExampleAllowlist() {
 
 const sourcePathAllowedFiles = new Set([
   'reference/package-boundary.mdx',
-  'runtime-kit/full-product-loop.mdx',
   'runtime-kit/package-to-screen.mdx',
   'runtime-kit/packages.mdx',
-  ...workflowExampleAllowlist(),
+  ...cookbookExampleAllowlist(),
 ]);
 const validatorSelfAllowedFiles = new Set(['scripts/validate-public-boundary.mjs']);
 
