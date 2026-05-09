@@ -9,6 +9,30 @@ description: "How the free trial, monthly and yearly cadence, active-device rang
 Bitfield pricing is based on active devices, not seats, installs, projects, apps, tokens, or revenue share.
 </p>
 
+Product scene: you start with a 3-day Personal trial, activate up to 5 devices, and decide whether this is the foundation you want before the paid cadence begins.
+
+<div className="bf-flow" aria-label="Trial and billing flow">
+  <div className="bf-flow-step">
+    <span>Trial</span>
+    <strong>Start with 5 devices</strong>
+    <p>Use the Personal active-device range during the trial window.</p>
+  </div>
+  <div className="bf-flow-arrow">→</div>
+  <div className="bf-flow-step">
+    <span>Cadence</span>
+    <strong>Choose monthly or yearly</strong>
+    <p>The checkout total should change when the cadence changes.</p>
+  </div>
+  <div className="bf-flow-arrow">→</div>
+  <div className="bf-flow-step">
+    <span>Scale</span>
+    <strong>Move by device range</strong>
+    <p>Grow from Personal to Builder and then larger active-device ranges.</p>
+  </div>
+</div>
+
+Expected result: the customer understands what costs $0 today, when billing starts, which devices are included, and where plan management happens.
+
 ## Choices at checkout
 
 | Choice | Active devices | What it means |
@@ -51,5 +75,18 @@ Checkout must link the public legal pages:
 - [Privacy Policy](https://bitfield.so/privacy)
 
 Those pages govern the actual legal terms. This docs page explains the product language so the checkout is easier to understand.
+
+## Common failures
+
+| Symptom | Cause | Fix |
+|---|---|---|
+| Customer thinks pricing is per person | Active devices were not explained | Say devices, not seats |
+| Customer misses the post-trial billing date | Trial language is hidden | Show `$0 today` and the paid start clearly |
+| Customer thinks replacing a device means buying again | Replacement/revocation is not explained | Link to active-device management |
+| Larger-device pricing feels like a black box | Ranges are not explained as cumulative | Explain that each range applies only to devices inside that range |
+
+## Next
+
+Read [Account and key flow](/activation/account-and-key-flow) for the full account journey and [Active devices](/activation/active-devices) for replacement and revocation.
 
 </div>

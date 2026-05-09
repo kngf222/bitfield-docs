@@ -1,0 +1,77 @@
+---
+title: "Plan changes and cancellation"
+description: "How plan changes, cancellation, refunds, invoices, and account deletion fit into the account lifecycle."
+---
+
+<div className="bf-article">
+
+<p className="bf-lead">
+Plan management belongs in the account portal. A customer should be able to understand what changes now, what changes at renewal, and where to go for invoices, refunds, cancellation, or deletion.
+</p>
+
+Product scene: a customer starts with the Personal trial, grows to Builder, later removes old devices, then decides whether to keep scaling, cancel, or delete the account.
+
+<div className="bf-flow" aria-label="Plan management lifecycle">
+  <div className="bf-flow-step">
+    <span>Plan</span>
+    <strong>Change access</strong>
+    <p>Move between trial, Personal, Builder, or larger active-device ranges.</p>
+  </div>
+  <div className="bf-flow-arrow">→</div>
+  <div className="bf-flow-step">
+    <span>Billing</span>
+    <strong>Review charges</strong>
+    <p>Use the account portal for billing status, cadence, and invoice questions.</p>
+  </div>
+  <div className="bf-flow-arrow">→</div>
+  <div className="bf-flow-step">
+    <span>Exit</span>
+    <strong>Cancel or delete</strong>
+    <p>Cancel plan access or request account deletion through the account lifecycle surfaces.</p>
+  </div>
+</div>
+
+Expected result: a customer should not need to email support for normal plan management, but support and legal links must be easy to find when money, refunds, or deletion are involved.
+
+## Lifecycle jobs
+
+| Job | Where it belongs | Customer wording |
+|---|---|---|
+| Change plan | Account portal | Change, pause, resume, or cancel |
+| Cancel plan | Account portal | Stop future plan access according to displayed terms |
+| Refund question | Refund Policy and support | Check the refund policy, then contact support if needed |
+| Invoice question | Account portal or support | Find billing records or ask support |
+| Account deletion | Account portal | Request or cancel account deletion |
+| Recovery | Account portal | Recover account access before changing plan or deleting |
+
+## Legal and support links
+
+- [Terms of Service](https://bitfield.so/terms)
+- [Refund Policy](https://bitfield.so/refund-policy)
+- [Privacy Policy](https://bitfield.so/privacy)
+- [Support](mailto:support@bitfield.so)
+
+## Common failures
+
+| Symptom | Cause | Fix |
+|---|---|---|
+| Customer cannot tell whether cancellation is immediate | The page hides timing and renewal language | Show current plan state and the effective date |
+| Customer asks for refunds in a random support thread | Refund route is not visible | Link the Refund Policy from billing and cancellation pages |
+| Deletion is confused with cancellation | Product does not separate plan access from account deletion | Keep cancellation and deletion as separate actions |
+| User tries to recover access after deleting account | Recovery and deletion were not explained as different jobs | Put recovery before destructive account actions |
+
+## Verify
+
+The lifecycle docs are ready when a customer can answer:
+
+- How do I change my plan?
+- Where do I cancel?
+- Where do I ask about invoices?
+- Where is the refund policy?
+- How is account deletion different from cancellation?
+
+## Next
+
+Use [Account and key flow](/activation/account-and-key-flow) to return to the start of the account lifecycle, or [Trials and billing](/activation/trials-and-billing) for pricing language.
+
+</div>

@@ -27,6 +27,12 @@
       "freshness": "review when legal page routes or checkout consent wording changes"
     },
     {
+      "id": "bitfield-account-portal-public-lifecycle",
+      "kind": "public-account-contract",
+      "publicUse": "Account portal customer lifecycle: account creation, checkout, account page, active-device authorization, plan management, recovery, and deletion.",
+      "freshness": "review when account portal package records or account lifecycle surfaces change"
+    },
+    {
       "id": "bitfield-public-claim-ledger",
       "kind": "public-proof",
       "publicUse": "Published benchmark numbers, categories, and non-claims.",
@@ -181,8 +187,20 @@
       "sourceIds": ["runtime-kit-js-public-contract", "runtime-kit-package-boundary"]
     },
     {
+      "route": "activation/account-and-key-flow",
+      "sourceIds": ["bitfield-public-landing-copy", "bitfield-public-legal-pages", "bitfield-account-portal-public-lifecycle"]
+    },
+    {
       "route": "activation/trials-and-billing",
-      "sourceIds": ["bitfield-public-landing-copy", "bitfield-public-legal-pages"]
+      "sourceIds": ["bitfield-public-landing-copy", "bitfield-public-legal-pages", "bitfield-account-portal-public-lifecycle"]
+    },
+    {
+      "route": "activation/active-devices",
+      "sourceIds": ["bitfield-public-landing-copy", "runtime-kit-package-boundary", "bitfield-account-portal-public-lifecycle"]
+    },
+    {
+      "route": "activation/plan-changes-and-cancellation",
+      "sourceIds": ["bitfield-public-landing-copy", "bitfield-public-legal-pages", "bitfield-account-portal-public-lifecycle"]
     },
     {
       "route": "proof/how-bitfield-is-fast",

@@ -638,7 +638,10 @@
         {
           "group": "Activation",
           "pages": [
-            "activation/trials-and-billing"
+            "activation/account-and-key-flow",
+            "activation/trials-and-billing",
+            "activation/active-devices",
+            "activation/plan-changes-and-cancellation"
           ]
         }
       ]
@@ -909,11 +912,36 @@
       "summary": "Defines the public SDK boundary pattern: simple app functions outside, Bitfield setup behind the plug."
     },
     {
+      "route": "activation/account-and-key-flow",
+      "title": "Account and key flow",
+      "description": "How a customer goes from account portal to paid access, key delivery, and first device activation.",
+      "diataxis": "how-to",
+      "pageClass": "activation-lifecycle",
+      "summary": "Explains the account portal path for creating an account, choosing access, paying securely, getting key access, and activating a device."
+    },
+    {
       "route": "activation/trials-and-billing",
       "title": "Trials and billing",
       "description": "How the free trial, monthly and yearly cadence, active-device ranges, and legal links fit together.",
       "diataxis": "reference",
+      "pageClass": "activation-lifecycle",
       "summary": "Explains trial billing and active-device ranges without turning pricing into hidden math."
+    },
+    {
+      "route": "activation/active-devices",
+      "title": "Active devices",
+      "description": "What active devices mean, how activation works, and how replacement or revocation should feel.",
+      "diataxis": "concept",
+      "pageClass": "activation-lifecycle",
+      "summary": "Defines active devices, local activation state, account-owned authorization, replacement, revocation, and customer-safe boundaries."
+    },
+    {
+      "route": "activation/plan-changes-and-cancellation",
+      "title": "Plan changes and cancellation",
+      "description": "How plan changes, cancellation, refunds, invoices, and account deletion fit into the account lifecycle.",
+      "diataxis": "how-to",
+      "pageClass": "activation-lifecycle",
+      "summary": "Explains plan management, cancellation, invoice/refund routing, account deletion, recovery, and support links."
     },
     {
       "route": "proof/how-bitfield-is-fast",

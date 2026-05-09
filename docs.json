@@ -154,7 +154,10 @@
           {
             "group": "Activation",
             "pages": [
-              "activation/trials-and-billing"
+              "activation/account-and-key-flow",
+              "activation/trials-and-billing",
+              "activation/active-devices",
+              "activation/plan-changes-and-cancellation"
             ]
           }
         ]

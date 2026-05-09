@@ -1,0 +1,80 @@
+---
+title: "Active devices"
+description: "What active devices mean, how activation works, and how replacement or revocation should feel."
+---
+
+<div className="bf-article">
+
+<p className="bf-lead">
+An active device is a machine currently allowed by your Bitfield account to run Bitfield. Pricing follows active devices because the product runs on devices, not seats.
+</p>
+
+Product scene: you start with a laptop and phone, then add a test machine, then invite another person to try the product. Each allowed machine counts as an active device while it is authorized.
+
+<div className="bf-flow" aria-label="Active device lifecycle">
+  <div className="bf-flow-step">
+    <span>Grant</span>
+    <strong>Authorize device</strong>
+    <p>The account portal approves a device grant for this machine.</p>
+  </div>
+  <div className="bf-flow-arrow">→</div>
+  <div className="bf-flow-step">
+    <span>Run</span>
+    <strong>Use Bitfield locally</strong>
+    <p>The device can run Bitfield with the account's permission.</p>
+  </div>
+  <div className="bf-flow-arrow">→</div>
+  <div className="bf-flow-step">
+    <span>Manage</span>
+    <strong>Replace or revoke</strong>
+    <p>The account portal is where device access changes.</p>
+  </div>
+</div>
+
+Expected result: replacing a laptop or removing an old machine should feel like managing account access, not buying the product again.
+
+## What counts
+
+| Device | Counts when |
+|---|---|
+| Laptop or desktop | It is authorized to run Bitfield |
+| Phone or tablet | It is authorized to run Bitfield |
+| Server or local box | It is authorized to run Bitfield |
+| Test machine | It is authorized to run Bitfield |
+| Old device | It should stop counting after you revoke or replace it |
+
+## Local activation state
+
+Runtime Kit package state and engine storage live under `~/.bitfield/`, and activation has its own sibling lane for this device's signed permission. That local state is not something the customer should edit by hand.
+
+| Local idea | Customer rule |
+|---|---|
+| Device key material | Created by the activation flow, not invented manually |
+| Signed permission | Comes from account-owned authorization |
+| Old blocked permissions | Remembered so revoked access does not silently return |
+| Runtime Kit package state | Separate from activation; do not mix the two |
+
+## Common failures
+
+| Symptom | Likely cause | Fix |
+|---|---|---|
+| New computer cannot run Bitfield | Device was not authorized yet | Use the account portal activation flow |
+| Old computer still appears active | Device was not revoked or replaced | Manage active devices in the account portal |
+| User copies one device's local activation folder to another | Local permission was treated like a portable key | Authorize the second device properly |
+| Package tooling tries to own activation | Runtime Kit and activation boundaries got mixed | Keep activation in the account/key lane |
+
+## Verify
+
+The active-device model is clear when the user can tell the difference between:
+
+- account access
+- a device grant
+- local activation state
+- Runtime Kit package state
+- engine storage
+
+## Next
+
+Manage devices from `account.bitfield.so`. For product rollout, read [Device and deployment shape](/build-your-own-surface/device-deployment), then [Plan changes and cancellation](/activation/plan-changes-and-cancellation).
+
+</div>

@@ -40,6 +40,7 @@ const knownPageClasses = new Set([
   'runtime-kit-ai-agent',
   'runtime-kit-operations',
   'build-curriculum',
+  'activation-lifecycle',
 ]);
 
 function hasAny(body, needles) {
@@ -151,6 +152,17 @@ function validateDepthContract(page, body, sourcePage, output = failures) {
       ['common failures or mistakes', ['## Common failures', '## Common build mistakes', '## What this prevents']],
       ['next-step section', '## Next'],
       ['Runtime Kit or reference link', ['/runtime-kit/', '/reference/']],
+    ], output);
+    return;
+  }
+
+  if (page.pageClass === 'activation-lifecycle') {
+    requireIncludes(page.route, body, [
+      ['activation visual flow', 'className="bf-flow"'],
+      ['expected result', 'Expected result:'],
+      ['common failures section', '## Common failures'],
+      ['next-step section', '## Next'],
+      ['account or legal route', ['account.bitfield.so', 'https://bitfield.so/terms', 'mailto:support@bitfield.so']],
     ], output);
   }
 }

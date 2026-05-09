@@ -38,7 +38,10 @@ These pages are public customer documentation. They describe the public product,
 - [Product shells](build-your-own-surface/product-shells): Defines the shell boundary for navigation, layout, account/device state, and surface placement.
 - [Device and deployment shape](build-your-own-surface/device-deployment): Connects product packages and surfaces to account keys, activated devices, local state, and rollout decisions.
 - [Build your own surface](build-your-own-surface/sdk-boundary): Defines the public SDK boundary pattern: simple app functions outside, Bitfield setup behind the plug.
+- [Account and key flow](activation/account-and-key-flow): Explains the account portal path for creating an account, choosing access, paying securely, getting key access, and activating a device.
 - [Trials and billing](activation/trials-and-billing): Explains trial billing and active-device ranges without turning pricing into hidden math.
+- [Active devices](activation/active-devices): Defines active devices, local activation state, account-owned authorization, replacement, revocation, and customer-safe boundaries.
+- [Plan changes and cancellation](activation/plan-changes-and-cancellation): Explains plan management, cancellation, invoice/refund routing, account deletion, recovery, and support links.
 - [How Bitfield is this fast](proof/how-bitfield-is-fast): Explains warm local reads, memory mapping, content addresses, and non-claims.
 - [Warm and cold paths](proof/warm-and-cold-paths): Defines warm local read, cold local read, content address lookup, durable batch write, runtime call, and network command.
 - [Benchmark ledger](proof/benchmark-ledger): Lists public speed claims with the work category attached.
@@ -54,6 +57,7 @@ These pages are public customer documentation. They describe the public product,
 - runtime-kit-js-public-contract: JavaScript Runtime Kit exports and app-facing API shape. Freshness rule: review when Runtime Kit package exports change.
 - runtime-kit-package-boundary: Package boundary file, thing types, and local state language. Freshness rule: review when package boundary validation changes.
 - bitfield-public-legal-pages: Public Terms, Refund Policy, and Privacy Policy routes. Freshness rule: review when legal page routes or checkout consent wording changes.
+- bitfield-account-portal-public-lifecycle: Account portal customer lifecycle: account creation, checkout, account page, active-device authorization, plan management, recovery, and deletion. Freshness rule: review when account portal package records or account lifecycle surfaces change.
 - bitfield-public-claim-ledger: Published benchmark numbers, categories, and non-claims. Freshness rule: review when claim-ledger.json changes.
 - fastest-db-public-disclosure-cssot: Public mechanism categories for memory mapping, content addressing, durable append paths, warm/cold cache state, and forbidden private details. Freshness rule: review when benchmark mechanism language or public disclosure boundaries change.
 - bitfield-docs-information-architecture: Docs navigation, page summaries, and reader-intent grouping. Freshness rule: review when docs.manifest.json changes.

@@ -1,0 +1,82 @@
+---
+title: "Account and key flow"
+description: "How a customer goes from account portal to paid access, key delivery, and first device activation."
+---
+
+<div className="bf-article">
+
+<p className="bf-lead">
+The account portal is where a customer creates an account, chooses a plan, pays securely, manages devices, and gets the key needed to run Bitfield.
+</p>
+
+Product scene: somebody reads the docs, presses `Get My Key`, lands on `account.bitfield.so`, chooses the trial or plan, completes checkout, then opens the account page to activate their first device.
+
+<div className="bf-flow" aria-label="Account and key flow">
+  <div className="bf-flow-step">
+    <span>1</span>
+    <strong>Create account</strong>
+    <p>The account portal owns identity, returning login, and recovery.</p>
+  </div>
+  <div className="bf-flow-arrow">→</div>
+  <div className="bf-flow-step">
+    <span>2</span>
+    <strong>Choose access</strong>
+    <p>The checkout surface shows trial, plan, active-device range, and cadence.</p>
+  </div>
+  <div className="bf-flow-arrow">→</div>
+  <div className="bf-flow-step">
+    <span>3</span>
+    <strong>Pay securely</strong>
+    <p>The payment provider receives only an accepted checkout request from the account portal.</p>
+  </div>
+  <div className="bf-flow-arrow">→</div>
+  <div className="bf-flow-step">
+    <span>4</span>
+    <strong>Get key</strong>
+    <p>The account page is the place to manage account state, key access, and devices.</p>
+  </div>
+</div>
+
+Expected result: a customer should know the account portal is the live place for account access, not the marketing site and not a hand-edited local file.
+
+## What happens where
+
+| Customer job | Place |
+|---|---|
+| Create or open account | `account.bitfield.so` |
+| Choose trial, Personal, Builder, or larger active-device count | Checkout surface |
+| Complete secure payment | Checkout flow |
+| Land after successful checkout | Account page |
+| Manage devices and key access | Account page |
+| Recover access | Account portal session/recovery flow |
+
+## Key delivery rule
+
+Treat the key as account-owned access. The docs should never tell a customer to invent a key, paste a random token into local state, or edit activation files by hand.
+
+Local activation state can exist on the device after authorization, but the customer-facing control point is still the account portal.
+
+## Common failures
+
+| Symptom | Likely cause | Fix |
+|---|---|---|
+| Customer paid but does not know where to go | Checkout did not return them to the account page clearly | Send them to `account.bitfield.so/account` and show key/device next steps |
+| Customer tries to edit local files | Key delivery language made local state sound user-owned | Point them back to account portal activation |
+| Payment provider error leaks raw provider text | Provider failure is not translated into product language | Show a clean checkout-unavailable message and support route |
+| Returning customer cannot access account | Session or recovery path is unclear | Use account portal login/recovery, not local key edits |
+
+## Verify
+
+The flow is clear when a new customer can answer:
+
+- Where do I create the account?
+- Where do I pick the trial or plan?
+- Where do I pay?
+- Where do I get the key?
+- Where do I activate or replace a device?
+
+## Next
+
+Read [Active devices](/activation/active-devices), then [Trials and billing](/activation/trials-and-billing).
+
+</div>
