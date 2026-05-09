@@ -126,11 +126,18 @@ main > article,
 #sidebar a[href][class*="bg-primary"],
 #sidebar a[href][class*="text-primary"] {
   background:
-    linear-gradient(90deg, color-mix(in srgb, var(--bf-blue) 8%, transparent), transparent),
+    linear-gradient(90deg, color-mix(in srgb, var(--docs-active-color) 8%, transparent), transparent),
     color-mix(in srgb, var(--surface-base) 88%, var(--text-primary) 12%) !important;
   border: 0 !important;
   box-shadow: none !important;
   color: var(--text-primary) !important;
+}
+
+#sidebar :is(div, p, span, h2, h3)[class*="font-semibold"]:not(a):not(button),
+#sidebar :is(div, p, span, h2, h3)[class*="font-bold"]:not(a):not(button),
+#sidebar :is(div, p, span, h2, h3)[class*="uppercase"]:not(a):not(button),
+main :is(div, p, span)[class*="uppercase"][class*="tracking"]:not(a):not(button) {
+  color: var(--docs-active-color) !important;
 }
 
 #table-of-contents a[href][aria-current="page"],
@@ -158,7 +165,7 @@ header a[aria-current="page"],
 header a[data-active="true"],
 header a[class*="border-primary"] {
   border-bottom-color: var(--docs-active-color) !important;
-  color: var(--text-primary) !important;
+  color: var(--docs-active-color) !important;
 }
 
 #navbar [role="tab"][aria-selected="true"]::after,
