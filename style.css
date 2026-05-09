@@ -133,7 +133,6 @@ main > article,
   border-radius: 0 !important;
   box-shadow: none !important;
   color: var(--text-primary) !important;
-  display: inline-flex !important;
   gap: 0 !important;
   isolation: isolate;
   overflow: hidden;
@@ -170,6 +169,7 @@ main > article,
 [data-bf-docs-copy-page-part="true"][data-bf-docs-copy-page-arrow="true"] {
   background: var(--bf-docs-selected-surface) !important;
   border: 0 !important;
+  border-left: 1px solid var(--bf-docs-selected-border) !important;
   color: var(--docs-active-color) !important;
   min-width: 2.65rem;
 }

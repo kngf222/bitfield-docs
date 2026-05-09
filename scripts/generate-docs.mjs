@@ -638,7 +638,7 @@ const themeJs = `(() => {
       });
 
     document
-      .querySelectorAll('button, [role="button"], [role="menuitem"], a[href]')
+      .querySelectorAll('button, [role="button"], [role="menuitem"], a[href], [role="menu"], [data-radix-popper-content-wrapper], body > div')
       .forEach((node) => {
         if (copyMenuScore(node) === 0) return;
         const menu = copyPageMenuShell(node);
