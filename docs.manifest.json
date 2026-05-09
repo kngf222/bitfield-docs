@@ -36,8 +36,8 @@
         },
         {
           "family": "Belgiansignature",
-          "source": "/fonts/Belgiansignature.otf",
-          "format": "opentype",
+          "source": "/fonts/Belgiansignature.woff2",
+          "format": "woff2",
           "weight": 400,
           "style": "normal"
         }
