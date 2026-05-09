@@ -142,7 +142,7 @@ function themeBlock(selector, tokens) {
     .map(([name, value]) => `  --bf-${cssVariableName(name)}: ${value};`)
     .join('\n');
 
-  return `${selector} {\n${variables}\n  --docs-active-color: var(--bf-swatch-secondary, var(--bf-accent-tertiary));\n}`;
+  return `${selector} {\n${variables}\n  --docs-active-color: color-mix(in srgb, var(--bf-swatch-secondary, var(--bf-accent-tertiary)) 58%, var(--text-primary) 42%);\n}`;
 }
 
 function themeLabel(name) {

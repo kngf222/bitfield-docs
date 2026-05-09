@@ -136,7 +136,10 @@ main > article,
 #sidebar :is(div, p, span, h2, h3)[class*="font-semibold"]:not(a):not(button),
 #sidebar :is(div, p, span, h2, h3)[class*="font-bold"]:not(a):not(button),
 #sidebar :is(div, p, span, h2, h3)[class*="uppercase"]:not(a):not(button),
-main :is(div, p, span)[class*="uppercase"][class*="tracking"]:not(a):not(button) {
+main :is(div, p, span)[class*="uppercase"][class*="tracking"]:not(a):not(button),
+#content-area > #header .eyebrow,
+#content-area header .eyebrow,
+main .eyebrow {
   color: var(--docs-active-color) !important;
 }
 
