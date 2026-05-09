@@ -306,7 +306,6 @@ const themeJs = `(() => {
   let accountCta;
   let tocCleanup;
   let tocSetupFrame = 0;
-  const searchInputsWithDefaults = new WeakSet();
 
   function readStoredTheme() {
     try {
@@ -581,53 +580,35 @@ const themeJs = `(() => {
   }
 
   function decorateSearchDialog(dialog) {
-    if (!searchSuggestions.length) {
+    if (!searchSuggestions.length || dialog.querySelector('.bf-docs-search-defaults')) {
       return;
     }
 
     const input = dialog.querySelector('input');
     if (!input || !isSearchNode(input)) return;
-    const panel =
-      input.closest('[id^="headlessui-dialog-panel"], [data-radix-dialog-content], [cmdk-root]') ||
-      dialog;
 
-    let defaults = dialog.querySelector('.bf-docs-search-defaults') || panel.querySelector('.bf-docs-search-defaults');
-    if (!defaults) {
-      defaults = document.createElement('section');
-      defaults.className = 'bf-docs-search-defaults';
-      defaults.setAttribute('aria-label', 'Suggested docs');
+    const defaults = document.createElement('section');
+    defaults.className = 'bf-docs-search-defaults';
+    defaults.setAttribute('aria-label', 'Suggested docs');
 
-      const label = document.createElement('div');
-      label.className = 'bf-docs-search-defaults__label';
-      label.textContent = 'Start here';
+    const label = document.createElement('div');
+    label.className = 'bf-docs-search-defaults__label';
+    label.textContent = 'Start here';
 
-      const list = document.createElement('div');
-      list.className = 'bf-docs-search-defaults__list';
-      searchSuggestions.forEach((item) => list.append(searchSuggestionCard(item)));
+    const list = document.createElement('div');
+    list.className = 'bf-docs-search-defaults__list';
+    searchSuggestions.forEach((item) => list.append(searchSuggestionCard(item)));
 
-      defaults.append(label, list);
-    }
+    defaults.append(label, list);
 
     const searchField = input.closest('form') || input.parentElement;
-    const searchToolbar =
-      searchField?.parentElement && panel.contains(searchField.parentElement)
-        ? searchField.parentElement
-        : searchField;
     searchField?.setAttribute('data-bf-docs-search-field', 'true');
-    panel.setAttribute('data-bf-docs-search-panel', 'true');
-    if (searchToolbar?.parentElement) {
-      searchToolbar.insertAdjacentElement('afterend', defaults);
-    } else {
-      panel.append(defaults);
-    }
+    (searchField || dialog).insertAdjacentElement('afterend', defaults);
 
     const sync = () => {
       defaults.hidden = Boolean(input.value?.trim());
     };
-    if (!searchInputsWithDefaults.has(input)) {
-      input.addEventListener('input', sync);
-      searchInputsWithDefaults.add(input);
-    }
+    input.addEventListener('input', sync);
     sync();
   }
 
