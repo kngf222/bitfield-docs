@@ -584,8 +584,6 @@
           "group": "Use Runtime Kit",
           "pages": [
             "runtime-kit/javascript",
-            "runtime-kit/package-to-screen",
-            "runtime-kit/placeable-surfaces",
             "runtime-kit/use-bitfield-data",
             "runtime-kit/send-request",
             "runtime-kit/packages",
@@ -595,9 +593,16 @@
           ]
         },
         {
+          "group": "Understand Runtime Kit",
+          "pages": [
+            "runtime-kit/placeable-surfaces"
+          ]
+        },
+        {
           "group": "Cookbook",
           "pages": [
             "cookbook/index",
+            "runtime-kit/package-to-screen",
             "cookbook/package-set-with-one-record",
             "cookbook/package-owned-file",
             "cookbook/callable-package-slot",
