@@ -235,6 +235,7 @@ main > article,
   background: transparent !important;
   border: 0 !important;
   box-shadow: none !important;
+  margin-left: var(--bf-docs-copy-border-width) !important;
   outline: 0 !important;
   overflow: visible !important;
   padding: 0 !important;
