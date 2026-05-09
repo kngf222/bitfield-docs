@@ -175,9 +175,16 @@ main > article,
 }
 
 [data-bf-docs-copy-page-part="true"][data-bf-docs-copy-page-arrow="true"]:hover,
-[data-bf-docs-copy-page-part="true"][data-bf-docs-copy-page-arrow="true"]:focus-visible,
-[data-bf-docs-copy-page-part="true"][data-bf-docs-copy-page-arrow="true"] * {
+[data-bf-docs-copy-page-part="true"][data-bf-docs-copy-page-arrow="true"]:focus-visible {
   background: var(--bf-docs-selected-surface) !important;
+  border: 0 !important;
+  border-left: 1px solid var(--bf-docs-selected-border) !important;
+  box-shadow: none !important;
+  outline: 0 !important;
+}
+
+[data-bf-docs-copy-page-part="true"][data-bf-docs-copy-page-arrow="true"] * {
+  background: transparent !important;
   border: 0 !important;
   box-shadow: none !important;
   outline: 0 !important;
@@ -192,8 +199,11 @@ main > article,
   stroke: currentColor !important;
 }
 
-[data-bf-docs-copy-menu="true"] {
+[data-bf-docs-copy-menu="true"],
+[data-radix-menu-content][role="menu"]:has([data-bf-docs-copy-menu-item="true"]) {
   background: var(--bf-docs-selected-surface) !important;
+  background-color: var(--bf-docs-selected-surface) !important;
+  background-image: none !important;
   border: 1px solid var(--bf-docs-selected-border) !important;
   border-radius: 0 !important;
   box-shadow: none !important;
@@ -202,6 +212,7 @@ main > article,
 }
 
 [data-bf-docs-copy-menu="true"] *,
+[data-radix-menu-content][role="menu"]:has([data-bf-docs-copy-menu-item="true"]) *,
 [data-bf-docs-copy-menu-item="true"] {
   border-radius: 0 !important;
   box-shadow: none !important;
@@ -224,7 +235,8 @@ main > article,
   color: var(--text-primary) !important;
 }
 
-[data-bf-docs-copy-menu="true"] :is(a, button, [role="button"], [role="menuitem"], div, span) {
+[data-bf-docs-copy-menu="true"] :is(a, button, [role="button"], [role="menuitem"], div, span),
+[data-radix-menu-content][role="menu"]:has([data-bf-docs-copy-menu-item="true"]) :is(a, button, [role="button"], [role="menuitem"], div, span) {
   border-color: transparent !important;
   box-shadow: none !important;
 }
@@ -234,6 +246,7 @@ main > article,
   background: transparent !important;
   border: 0 !important;
   box-shadow: none !important;
+  color: inherit !important;
 }
 
 [data-bf-docs-copy-menu-item="true"] svg,
