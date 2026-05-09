@@ -52,6 +52,59 @@ Surface body
 
 The product becomes larger without making the shell import package setup code or product-specific screen names.
 
+## Visual map
+
+The flow has four jobs. Each job stays separate.
+
+<div className="bf-flow" aria-label="Runtime Kit product flow from package material to placed product surfaces">
+  <div className="bf-flow-node">
+    <span className="bf-flow-step">01</span>
+    <strong>Package set</strong>
+    <p>Records, stored bytes, and named targets enter through package boundaries.</p>
+  </div>
+  <div className="bf-flow-arrow" aria-hidden="true">→</div>
+  <div className="bf-flow-node">
+    <span className="bf-flow-step">02</span>
+    <strong>Runtime Kit boundary</strong>
+    <p>Package material becomes prepared reads and callable target names.</p>
+  </div>
+  <div className="bf-flow-arrow" aria-hidden="true">→</div>
+  <div className="bf-flow-node">
+    <span className="bf-flow-step">03</span>
+    <strong>Placeable surfaces</strong>
+    <p>Descriptors say which region, component, inputs, and targets each surface uses.</p>
+  </div>
+  <div className="bf-flow-arrow" aria-hidden="true">→</div>
+  <div className="bf-flow-node">
+    <span className="bf-flow-step">04</span>
+    <strong>Dumb shell</strong>
+    <p>The shell renders labels, regions, and active surface ids without product branches.</p>
+  </div>
+</div>
+
+<div className="bf-lane-map" aria-label="Ownership map for package material, surface descriptors, and the product shell">
+  <div className="bf-lane-card">
+    <span>Data owner</span>
+    <strong>Package boundary</strong>
+    <p>Owns the facts and targets.</p>
+  </div>
+  <div className="bf-lane-card">
+    <span>Access owner</span>
+    <strong>Runtime Kit</strong>
+    <p>Turns package material into public reads and requests.</p>
+  </div>
+  <div className="bf-lane-card">
+    <span>Product owner</span>
+    <strong>Surface descriptor</strong>
+    <p>Declares where a surface belongs and what it may touch.</p>
+  </div>
+  <div className="bf-lane-card">
+    <span>Arrangement owner</span>
+    <strong>Shell and sidebar</strong>
+    <p>Places surfaces. It does not understand the business meaning.</p>
+  </div>
+</div>
+
 ## Package records
 
 The packages own the product facts and the callable targets.
@@ -204,6 +257,25 @@ export function ProductShell({ surfaces, registry }: ProductShellProps) {
 ```
 
 That shell can place any future surface that follows the descriptor. It does not change when you add analytics, onboarding, billing, settings, or a new customer-facing workflow.
+
+<div className="bf-rail-diagram" aria-label="Dumb product shell placing multiple surface descriptors">
+  <div className="bf-rail-diagram__rail">
+    <span>Sidebar</span>
+    <strong>Launch</strong>
+    <strong>Help</strong>
+    <strong>Support</strong>
+  </div>
+  <div className="bf-rail-diagram__main">
+    <span>Region: main</span>
+    <strong>surface.launch.home</strong>
+    <p>welcome-copy + launch-checklist → launch.next-step</p>
+  </div>
+  <div className="bf-rail-diagram__panel">
+    <span>Region: panel</span>
+    <strong>surface.launch.help</strong>
+    <p>help.search</p>
+  </div>
+</div>
 
 ## Surface bodies
 

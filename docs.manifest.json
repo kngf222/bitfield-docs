@@ -738,9 +738,9 @@
     {
       "route": "runtime-kit/full-product-loop",
       "title": "Full product loop",
-      "description": "Compose multiple packages, screens, prepared inputs, target requests, and support contracts into one product flow.",
+      "description": "Compose packages, prepared inputs, target requests, and placeable surfaces into one generic product shell.",
       "diataxis": "workflow",
-      "summary": "Shows a multi-package product loop with dashboard, help search, support contract, prepared inputs, and target requests."
+      "summary": "Shows the placeable-surface composition shape: package material becomes prepared reads and targets, descriptors declare regions and allowed names, and a dumb shell/sidebar places surfaces without product-specific branches."
     },
     {
       "route": "runtime-kit/use-bitfield-data",

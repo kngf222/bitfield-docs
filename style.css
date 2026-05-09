@@ -1065,6 +1065,108 @@ nav .bf-docs-theme-picker {
   padding: 1.1rem 1.2rem;
 }
 
+.bf-flow {
+  align-items: stretch;
+  display: grid;
+  gap: 0.75rem;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr) auto minmax(0, 1fr) auto minmax(0, 1fr);
+  margin: 2rem 0;
+}
+
+.bf-flow-node,
+.bf-lane-card,
+.bf-rail-diagram__rail,
+.bf-rail-diagram__main,
+.bf-rail-diagram__panel {
+  background: var(--bf-docs-selected-surface);
+  border: 1px solid var(--bf-docs-selected-border);
+  border-radius: 0;
+  color: var(--text-primary);
+}
+
+.bf-flow-node {
+  min-height: 10rem;
+  padding: 1rem;
+}
+
+.bf-flow-step,
+.bf-lane-card span,
+.bf-rail-diagram span {
+  color: var(--docs-active-color);
+  display: block;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.13em;
+  margin-bottom: 0.7rem;
+  text-transform: uppercase;
+}
+
+.bf-flow-node strong,
+.bf-lane-card strong,
+.bf-rail-diagram strong {
+  color: var(--text-primary);
+  display: block;
+  font-size: 1.05rem;
+  letter-spacing: -0.035em;
+}
+
+.bf-flow-node p,
+.bf-lane-card p,
+.bf-rail-diagram p {
+  color: var(--text-secondary);
+  font-size: 0.92rem;
+  line-height: 1.55;
+  margin: 0.75rem 0 0;
+}
+
+.bf-flow-arrow {
+  align-self: center;
+  color: var(--docs-active-color);
+  font-size: 1.25rem;
+  font-weight: 800;
+}
+
+.bf-lane-map {
+  display: grid;
+  gap: 0;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  margin: 2rem 0;
+}
+
+.bf-lane-card {
+  border-left-width: 0;
+  min-height: 8.5rem;
+  padding: 1rem;
+}
+
+.bf-lane-card:first-child {
+  border-left-width: 1px;
+}
+
+.bf-rail-diagram {
+  display: grid;
+  gap: 0.75rem;
+  grid-template-columns: minmax(8rem, 0.65fr) minmax(12rem, 1.25fr) minmax(10rem, 0.85fr);
+  margin: 2rem 0;
+}
+
+.bf-rail-diagram__rail,
+.bf-rail-diagram__main,
+.bf-rail-diagram__panel {
+  padding: 1rem;
+}
+
+.bf-rail-diagram__rail {
+  display: grid;
+  gap: 0.5rem;
+}
+
+.bf-rail-diagram__rail strong {
+  background: color-mix(in srgb, var(--text-primary) 7%, transparent);
+  border-left: 2px solid var(--docs-active-color);
+  padding: 0.55rem 0.65rem;
+}
+
 .bf-proof-row {
   border-top: 1px solid color-mix(in srgb, var(--text-primary) 16%, transparent);
   display: grid;
@@ -1098,6 +1200,26 @@ nav .bf-docs-theme-picker {
 }
 
 @media (max-width: 680px) {
+  .bf-flow,
+  .bf-lane-map,
+  .bf-rail-diagram {
+    grid-template-columns: 1fr;
+  }
+
+  .bf-flow-arrow {
+    justify-self: center;
+    transform: rotate(90deg);
+  }
+
+  .bf-lane-card {
+    border-left-width: 1px;
+    border-top-width: 0;
+  }
+
+  .bf-lane-card:first-child {
+    border-top-width: 1px;
+  }
+
   .bf-proof-row {
     grid-template-columns: 1fr;
   }
