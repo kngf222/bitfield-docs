@@ -6,16 +6,41 @@ description: "Read package-prepared data and send a target request from one Reac
 <div className="bf-article">
 
 <p className="bf-lead">
-This cookbook entry shows the app side. The component reads prepared data with `useBitfieldData(...)` and asks a target to do work with `sendRequestToBitfieldTarget(...)`.
+Build the app-facing side of a Runtime Kit feature: one React surface reads prepared data, renders every state, and asks a named target to do work from a button.
 </p>
 
 Prepared data means Runtime Kit has already made a piece of Bitfield data available to this app surface. The component reads it. It does not create storage addresses or parse package files.
+
+## When to use this
+
+Use this recipe when a screen needs both data and an action.
+
+| Good fit | Not this recipe |
+|---|---|
+| A welcome panel that reads copy and asks for a refresh. | A package boundary with no UI yet. |
+| A search panel that reads prepared results and calls a search target. | A pure reference page for the hook signature. |
+| A dashboard card that reads prepared metrics and triggers a target. | A component that imports package files directly. |
+
+The point is the separation: the component owns UI state and user actions. Runtime Kit owns the public read/request line. The package owns the material behind that line.
+
+## What you will build
+
+| Contract part | Value |
+|---|---|
+| React surface | `WelcomePanel` |
+| Prepared input | `welcome` |
+| Read call | `useBitfieldData<WelcomeData>('welcome')` |
+| Target | `product.search` |
+| Request payload | `{ reason: 'refresh-welcome-panel' }` |
+| UI states | loading, error, empty, success, request success, request failure |
+| Public imports | `@bitfield/runtime-kit`, `@bitfield/runtime-kit/react` |
 
 ## Component
 
 ```tsx
 import { sendRequestToBitfieldTarget } from '@bitfield/runtime-kit';
 import { useBitfieldData } from '@bitfield/runtime-kit/react';
+import { useState } from 'react';
 
 type WelcomeData = {
   headline: string;
@@ -24,17 +49,27 @@ type WelcomeData = {
 
 export function WelcomePanel() {
   const welcome = useBitfieldData<WelcomeData>('welcome');
+  const [requestMessage, setRequestMessage] = useState<string | null>(null);
+  const [requestError, setRequestError] = useState<string | null>(null);
 
   async function refresh() {
-    await sendRequestToBitfieldTarget({
-      target: 'product.search',
-      payload: { reason: 'refresh-welcome-panel' },
-    });
+    setRequestMessage(null);
+    setRequestError(null);
+
+    try {
+      await sendRequestToBitfieldTarget({
+        target: 'product.search',
+        payload: { reason: 'refresh-welcome-panel' },
+      });
+      setRequestMessage('Refresh request sent.');
+    } catch (error) {
+      setRequestError(error instanceof Error ? error.message : 'Refresh request failed.');
+    }
   }
 
-  if (welcome.loading) return <section>Loading</section>;
+  if (welcome.loading) return <section>Loading welcome panel.</section>;
   if (welcome.error) return <section>Could not load this panel.</section>;
-  if (!welcome.data) return null;
+  if (!welcome.data) return <section>No welcome copy yet.</section>;
 
   return (
     <section>
@@ -43,10 +78,118 @@ export function WelcomePanel() {
       <button type="button" onClick={refresh}>
         Refresh
       </button>
+      {requestError ? <p>{requestError}</p> : null}
+      {requestMessage ? <p>{requestMessage}</p> : null}
     </section>
   );
 }
 ```
+
+## Read path
+
+The read line is:
+
+```tsx
+const welcome = useBitfieldData<WelcomeData>('welcome');
+```
+
+That line means:
+
+| Piece | Meaning |
+|---|---|
+| `WelcomeData` | The shape this component expects to render. |
+| `'welcome'` | Public prepared input name for this surface. |
+| `welcome.loading` | Runtime Kit is still preparing the value. |
+| `welcome.error` | Runtime Kit cannot provide the value. |
+| `welcome.data` | The current prepared value, or `null`. |
+
+The selector is not a storage path. The component does not know which package record, file, or derived value produced the prepared input.
+
+## Request path
+
+The request line is:
+
+```tsx
+await sendRequestToBitfieldTarget({
+  target: 'product.search',
+  payload: { reason: 'refresh-welcome-panel' },
+});
+```
+
+That line means:
+
+| Piece | Meaning |
+|---|---|
+| `target` | Public callable door declared by package material. |
+| `payload` | App-owned request data Runtime Kit converts to bytes. |
+| `try/catch` | UI handles request failure visibly. |
+| `requestMessage` | UI confirms the action happened. |
+
+The component does not import the target implementation.
+
+## Verify the recipe
+
+Use this checklist before copying the surface into a real app:
+
+| Check | Pass condition |
+|---|---|
+| Public imports | Only imports Runtime Kit from `@bitfield/runtime-kit` and `@bitfield/runtime-kit/react`. |
+| Prepared input | Reads `welcome` through `useBitfieldData(...)`. |
+| Loading state | Shows a visible loading message. |
+| Error state | Shows a visible read error message. |
+| Empty state | Shows a visible empty-state message instead of returning `null`. |
+| Success state | Renders `headline` and `body`. |
+| Request path | Calls `product.search` through `sendRequestToBitfieldTarget(...)`. |
+| Request failure | Catches request errors and renders a visible message. |
+
+Expected result:
+
+```text
+The surface can render before data is ready.
+The surface can show failed reads.
+The surface can show missing data.
+The surface can render real prepared data.
+The button can ask product.search for work without importing package implementation code.
+```
+
+## Bad version
+
+This version looks shorter, but it hides real states and crosses the boundary later:
+
+```tsx
+if (!welcome.data) return null;
+
+// Later:
+// import { runSearchDirectly } from '../packages/search-package/slot';
+```
+
+That is the path to a tangled app. The UI disappears when data is missing, and the button is one import away from bypassing Runtime Kit.
+
+## Common failures
+
+| Symptom | Cause | Fix |
+|---|---|---|
+| Blank panel | Empty state returns `null`. | Render a visible empty state. |
+| User sees no error | Component ignores `welcome.error` or request errors. | Render read and request failures separately. |
+| Button works only in local dev | Component imported a target implementation directly. | Call the public target name. |
+| Data shape crashes render | Component assumed fields that the prepared input does not provide. | Align `WelcomeData` with the public prepared input contract. |
+| AI-generated code creates storage addresses | Agent treated the hook like a database query. | Reject the output and point it to the prepared input contract. |
+
+## AI review checklist
+
+When an AI edits this surface, make it answer:
+
+```text
+Prepared input:
+Target name:
+Request payload:
+Read states rendered:
+Request states rendered:
+Public imports used:
+Files changed:
+```
+
+Reject the answer if it mentions package implementation imports, local state hand edits, hidden providers, or storage address construction inside the component.
 
 ## Why the component stays small
 
@@ -60,5 +203,13 @@ It does not know where the record lives, where package bytes are stored, which r
 ## What changes when the package changes
 
 The package can add more records, ship more bytes, or replace the runnable thing behind `product.search`. The component can stay the same as long as the public data shape and target name stay the same.
+
+## Next
+
+Read [Read data in React](/runtime-kit/use-bitfield-data) for the hook contract.
+
+Read [Send a request](/runtime-kit/send-request) for payload conversion, reply bytes, cancellation, and request errors.
+
+Read [Package to screen](/runtime-kit/package-to-screen) for the full package-to-surface path.
 
 </div>
