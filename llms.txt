@@ -17,6 +17,7 @@ These pages are public customer documentation. They describe the public product,
 - [Active devices](concepts/active-devices): Defines active devices for pricing, keys, and account management.
 - [JavaScript Runtime Kit](runtime-kit/javascript): Maps the public Runtime Kit flow from package boundary to prepared reads and named target requests.
 - [Package to screen](runtime-kit/package-to-screen): Walks from a package boundary through admitted material, prepared reads, target requests, and React rendering.
+- [Runtime Kit concept map](runtime-kit/concept-map): Explains the full Runtime Kit concept chain with product scenes, visual flow, anti-patterns, and links to tutorial, recipe, and reference pages.
 - [Placeable surfaces](runtime-kit/placeable-surfaces): Explains the placeable-surface composition primitive with visual maps: package material becomes prepared reads and targets, descriptors declare regions and allowed names, and a dumb shell/sidebar places surfaces without product-specific branches.
 - [Read data in React](runtime-kit/use-bitfield-data): Shows selectors, render states, request pairing, and what React components should not own.
 - [Send a request](runtime-kit/send-request): Shows JSON, text, byte payloads, reply decoding, cancellation, and target-boundary mistakes.

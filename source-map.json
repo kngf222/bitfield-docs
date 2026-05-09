@@ -97,6 +97,10 @@
       "sourceIds": ["runtime-kit-js-public-contract", "runtime-kit-package-boundary"]
     },
     {
+      "route": "runtime-kit/concept-map",
+      "sourceIds": ["runtime-kit-js-public-contract", "runtime-kit-package-boundary", "bitfield-docs-information-architecture"]
+    },
+    {
       "route": "runtime-kit/placeable-surfaces",
       "sourceIds": ["runtime-kit-js-public-contract", "runtime-kit-package-boundary"]
     },

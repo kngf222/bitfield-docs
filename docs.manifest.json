@@ -595,6 +595,7 @@
         {
           "group": "Understand Runtime Kit",
           "pages": [
+            "runtime-kit/concept-map",
             "runtime-kit/placeable-surfaces"
           ]
         },
@@ -735,6 +736,13 @@
       "description": "Build the full public Runtime Kit chain from one package boundary to one React surface.",
       "diataxis": "tutorial",
       "summary": "Walks from a package boundary through admitted material, prepared reads, target requests, and React rendering."
+    },
+    {
+      "route": "runtime-kit/concept-map",
+      "title": "Runtime Kit concept map",
+      "description": "How package boundaries, prepared reads, callable targets, local state, and placeable surfaces fit together.",
+      "diataxis": "concept",
+      "summary": "Explains the full Runtime Kit concept chain with product scenes, visual flow, anti-patterns, and links to tutorial, recipe, and reference pages."
     },
     {
       "route": "runtime-kit/placeable-surfaces",

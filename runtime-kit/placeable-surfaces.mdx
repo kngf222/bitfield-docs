@@ -139,8 +139,60 @@ The product becomes larger without making the shell import package setup code or
 
 The primitive is boring on purpose. The shell can stay dumb while the product becomes more capable.
 
+## Dumb shell rules
+
+The shell owns arrangement. It does not own product meaning.
+
+| Shell may do | Shell must not do |
+|---|---|
+| Sort descriptors by `order`. | Check whether a surface is a launch, billing, help, or support feature. |
+| Render descriptor labels. | Import package files or target implementations. |
+| Place a surface in `main`, `rail`, or `panel`. | Decide which package records the surface may read. |
+| Track the active surface id. | Decode target reply payloads for a surface body. |
+| Resolve a `componentKey` through the app's surface registry. | Add a new `if` branch for each product area. |
+
+If the shell needs to understand a business noun to render the layout, the descriptor is missing something.
+
+## Descriptor rules
+
+A descriptor should be boring data. It gives the shell placement facts and gives the surface body its allowed public handles.
+
+```ts
+{
+  id: 'launch.help',
+  label: 'Help',
+  region: 'panel',
+  order: 20,
+  componentKey: 'surface.launch.help',
+  preparedInputs: [],
+  targets: ['help.search'],
+}
+```
+
+| Field | Meaning | Mistake to avoid |
+|---|---|---|
+| `id` | Stable surface identity. | Reusing one id for different surfaces. |
+| `label` | Human label for generic navigation. | Making the shell translate product meaning. |
+| `region` | Where the shell may place it. | Hardcoding layout branches by surface id. |
+| `order` | Sort order inside a region or nav list. | Making order depend on import order. |
+| `componentKey` | Which registered body renders. | Importing that body directly in the shell branch. |
+| `preparedInputs` | Public data names the body may read. | Letting the body guess storage addresses. |
+| `targets` | Public target names the body may call. | Letting the body import target code. |
+
+## Failure modes
+
+| Symptom | Boundary crossed | Fix |
+|---|---|---|
+| Adding a surface requires editing shell logic. | Product meaning leaked into arrangement. | Add descriptor data and keep the shell generic. |
+| A surface reads a package address directly. | Prepared-read boundary was bypassed. | Give the surface a prepared input name and read it with `useBitfieldData(...)`. |
+| A button imports the work implementation. | Target boundary was bypassed. | Declare/call a target name with `sendRequestToBitfieldTarget(...)`. |
+| The same surface works in one region but breaks in another. | The surface body depends on layout context instead of its descriptor contract. | Pass only descriptor-approved inputs/targets and make layout region generic. |
+| AI adds a new sidebar branch for every feature. | The primitive was not visible enough. | Point the agent to [Runtime Kit concept map](/runtime-kit/concept-map) and the Cookbook recipe. |
+
 ## Build it
 
 The complete Runtime Kit Cookbook recipe lives in [Placeable surface product loop](/runtime-kit/cookbook/placeable-surface-product-loop). It walks through the package boundary, descriptors, shell, surface body, and review checklist as source-owned examples.
+
+Read [Runtime Kit concept map](/runtime-kit/concept-map) when you want to see how placeable surfaces fit with package boundaries, prepared reads, callable targets, and local state.
 
 </div>

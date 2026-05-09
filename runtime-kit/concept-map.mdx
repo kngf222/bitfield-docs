@@ -1,0 +1,219 @@
+---
+title: "Runtime Kit concept map"
+description: "How package boundaries, prepared reads, callable targets, local state, and placeable surfaces fit together."
+---
+
+<div className="bf-article">
+
+<p className="bf-lead">
+Runtime Kit keeps product code from tangling by turning package material into two app-facing moves: read prepared data and call named targets.
+</p>
+
+Picture a founder shipping a launch screen. The screen needs headline copy, a checklist, a help panel, and a button that asks for the next step. Without Runtime Kit, the screen starts importing data files, helper functions, search code, and setup code. With Runtime Kit, those jobs stay separated.
+
+## The whole map
+
+<div className="bf-flow" aria-label="Runtime Kit concept map from package source to app surface">
+  <div className="bf-flow-node">
+    <span className="bf-flow-step">01</span>
+    <strong>Package boundary</strong>
+    <p>The package declares records, package-owned bytes, and callable targets.</p>
+  </div>
+  <div className="bf-flow-arrow" aria-hidden="true">→</div>
+  <div className="bf-flow-node">
+    <span className="bf-flow-step">02</span>
+    <strong>Admitted material</strong>
+    <p>Runtime Kit checks the package and turns source material into active local truth.</p>
+  </div>
+  <div className="bf-flow-arrow" aria-hidden="true">→</div>
+  <div className="bf-flow-node">
+    <span className="bf-flow-step">03</span>
+    <strong>Public handles</strong>
+    <p>The app sees prepared input names and target names, not package setup.</p>
+  </div>
+  <div className="bf-flow-arrow" aria-hidden="true">→</div>
+  <div className="bf-flow-node">
+    <span className="bf-flow-step">04</span>
+    <strong>App surface</strong>
+    <p>React reads data, sends requests, renders states, and stays out of setup machinery.</p>
+  </div>
+</div>
+
+The technical contract is small:
+
+| Concept | Plain meaning | Public contract |
+|---|---|---|
+| Package boundary | The package says what it brings. | `things-to-store-and-run.json` with `record`, `stored_bytes`, or `slot` things. |
+| Prepared read | The screen asks for data that Runtime Kit already prepared. | `useBitfieldData(inputName)` returns `{ data, loading, error }`. |
+| Callable target | The user asks a named door to do work. | `sendRequestToBitfieldTarget({ target, payload }, signal?)` returns reply bytes. |
+| Local state | The device has active Bitfield material. | Customer-visible areas under `~/.bitfield`, not hand-edited app data. |
+| Placeable surface | A shell places UI by descriptor, not by product branches. | Surface descriptor names region, component key, prepared inputs, and targets. |
+
+## Package boundary
+
+Product scene: you want your welcome copy to ship with a package, not as a hardcoded React string.
+
+A package boundary is the file that says what the package owns. It can declare package-owned records, package-owned bytes, and callable targets.
+
+```json
+{
+  "package": "launch-product",
+  "things": [
+    {
+      "type": "record",
+      "address": "package::launch-product::welcome-copy",
+      "payload": {
+        "headline": "Your launch stays fast."
+      }
+    }
+  ]
+}
+```
+
+Anti-pattern:
+
+```tsx
+const copy = await fetch('/packages/launch-product/things-to-store-and-run.json');
+```
+
+That breaks the shape because the app is parsing package source instead of reading prepared data. The package boundary is for Runtime Kit admission. It is not a UI data API.
+
+Next links:
+
+| Need | Page |
+|---|---|
+| Tutorial | [Package to screen](/runtime-kit/package-to-screen) |
+| Recipe | [Package set with one record](/runtime-kit/cookbook/package-set-with-one-record) |
+| Reference | [Package boundary](/reference/package-boundary) |
+
+## Prepared reads
+
+Product scene: the launch screen wants `welcome-copy`, but it should not care which package record, file, or derived value produced it.
+
+A prepared read is a named app-facing value. The component asks for the name and renders the public states.
+
+```tsx
+const welcome = useBitfieldData<WelcomeCopy>('welcome-copy');
+
+if (welcome.loading) return <p>Loading...</p>;
+if (welcome.error) return <p>Could not load welcome copy.</p>;
+if (!welcome.data) return <p>No welcome copy yet.</p>;
+```
+
+Anti-pattern:
+
+```tsx
+const welcome = readAddress('package::launch-product::welcome-copy');
+```
+
+That breaks the shape because the component guessed a storage address. The app should read the prepared input name.
+
+Next links:
+
+| Need | Page |
+|---|---|
+| Tutorial | [Package to screen](/runtime-kit/package-to-screen) |
+| Recipe | [React surface for package data](/runtime-kit/cookbook/react-surface-for-package-data) |
+| Reference | [Runtime Kit API](/reference/runtime-kit-api) |
+
+## Callable targets
+
+Product scene: the user clicks "Suggest next step." The app should call `launch.next-step`, not import the code behind it.
+
+A callable target is a stable public name for work. Runtime Kit sends bytes to that target and gives the app reply bytes.
+
+```ts
+const reply = await sendRequestToBitfieldTarget({
+  target: 'launch.next-step',
+  payload: { topic: 'activation' },
+});
+```
+
+Anti-pattern:
+
+```ts
+import { nextStep } from '../slots/next-step';
+```
+
+That breaks the shape because the button bypasses the target boundary. The target implementation can change only if the app keeps calling the public door.
+
+Next links:
+
+| Need | Page |
+|---|---|
+| Tutorial | [Package to screen](/runtime-kit/package-to-screen) |
+| Recipe | [Callable package slot](/runtime-kit/cookbook/callable-package-slot) |
+| Reference | [Runtime Kit API](/reference/runtime-kit-api) |
+
+## Local state ownership
+
+Product scene: one customer says the feature works on a laptop but not a phone. You need to know whether the device has the package, activation, and local Runtime Kit material, without telling the customer to edit files.
+
+Local state is customer-visible evidence, not a place for manual repair.
+
+```text
+~/.bitfield
+  account and activation material
+  runtime-kit package-set material
+  local stored data
+```
+
+Anti-pattern:
+
+```text
+Open ~/.bitfield and edit the package record by hand.
+```
+
+That breaks the shape because hand edits bypass admission, validation, and device/account rules. Inspect for support; repair through product/account/runtime flows.
+
+Next links:
+
+| Need | Page |
+|---|---|
+| Guide | [Local state](/runtime-kit/local-state) |
+| Troubleshooting | [Troubleshooting](/runtime-kit/troubleshooting) |
+| Reference | [Package boundary](/reference/package-boundary) |
+
+## Placeable surfaces
+
+Product scene: the product grows from one launch screen to launch, help, support, and settings. The shell should not grow a branch for every business area.
+
+A placeable surface descriptor says where a surface can appear and which prepared inputs or targets it may use.
+
+```ts
+{
+  id: 'launch.help',
+  label: 'Help',
+  region: 'panel',
+  componentKey: 'surface.launch.help',
+  preparedInputs: [],
+  targets: ['help.search'],
+}
+```
+
+Anti-pattern:
+
+```tsx
+if (screen === 'help') return <HelpSearch />;
+if (screen === 'support') return <SupportPanel />;
+```
+
+That breaks the shape because the shell learns product meaning. The shell should render descriptor labels, regions, and active surface ids.
+
+Next links:
+
+| Need | Page |
+|---|---|
+| Concept | [Placeable surfaces](/runtime-kit/placeable-surfaces) |
+| Recipe | [Placeable surface product loop](/runtime-kit/cookbook/placeable-surface-product-loop) |
+| Reference | [Runtime Kit API](/reference/runtime-kit-api) |
+
+## One sentence version
+
+```text
+Package declares -> Runtime Kit admits -> app reads prepared inputs or calls targets -> shell places surfaces by descriptor.
+```
+
+If a feature does not fit that sentence, stop and find which boundary it crossed.
+
+</div>

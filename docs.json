@@ -111,6 +111,7 @@
           {
             "group": "Understand Runtime Kit",
             "pages": [
+              "runtime-kit/concept-map",
               "runtime-kit/placeable-surfaces"
             ]
           },
