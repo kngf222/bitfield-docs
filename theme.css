@@ -78,6 +78,18 @@
   --accent-emerald: var(--bf-accent-tertiary);
 }
 
+@media (scripting: enabled) {
+  html:not([data-bf-docs-ready="true"]) body {
+    opacity: 0 !important;
+    visibility: hidden !important;
+  }
+}
+
+html[data-bf-docs-ready="true"] body {
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
 .theme-picker-swatch-icon__bit[data-disco-index="0"] {
   animation-name: bf-docs-theme-disco-0;
 }

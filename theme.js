@@ -79,6 +79,10 @@
     });
   }
 
+  function markReady() {
+    root.dataset.bfDocsReady = 'true';
+  }
+
   function isAccountHref(link) {
     try {
       const href = new URL(link.getAttribute('href') || '', window.location.href);
@@ -486,18 +490,21 @@
 
   applyTheme(readStoredTheme() || defaultTheme);
 
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', () => {
+  function bootChrome() {
+    try {
       mountPicker();
       scheduleTocScrollSpy();
       markSearchChrome();
       markCopyPageControls();
-    }, { once: true });
+    } finally {
+      markReady();
+    }
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', bootChrome, { once: true });
   } else {
-    mountPicker();
-    scheduleTocScrollSpy();
-    markSearchChrome();
-    markCopyPageControls();
+    bootChrome();
   }
 
   const observer = new MutationObserver(() => {
@@ -523,9 +530,13 @@
   });
 
   window.addEventListener('pageshow', () => {
-    applyTheme(readStoredTheme() || root.dataset.bfDocsTheme || defaultTheme);
-    mountPicker();
-    markSearchChrome();
-    markCopyPageControls();
+    try {
+      applyTheme(readStoredTheme() || root.dataset.bfDocsTheme || defaultTheme);
+      mountPicker();
+      markSearchChrome();
+      markCopyPageControls();
+    } finally {
+      markReady();
+    }
   });
 })();

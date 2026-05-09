@@ -13,6 +13,9 @@ html {
   --bf-docs-selected-surface: color-mix(in srgb, var(--surface-base) 88%, var(--text-primary) 12%);
   --bf-docs-selected-surface-hover: color-mix(in srgb, var(--surface-base) 84%, var(--text-primary) 16%);
   --bf-docs-selected-border: color-mix(in srgb, var(--docs-active-color) 36%, var(--border-primary) 64%);
+  --bf-docs-copy-border-width: 1px;
+  --bf-docs-copy-control-height: 2.5rem;
+  --bf-docs-copy-arrow-width: 2.35rem;
 }
 
 html[data-bf-docs-theme="paper"],
@@ -129,12 +132,17 @@ main > article,
 [data-bf-docs-copy-page="true"] {
   align-items: stretch !important;
   background: var(--bf-docs-selected-surface) !important;
-  border: 1px solid var(--bf-docs-selected-border) !important;
+  border: var(--bf-docs-copy-border-width) solid var(--bf-docs-selected-border) !important;
   border-radius: 0 !important;
+  box-sizing: border-box !important;
   box-shadow: none !important;
   color: var(--text-primary) !important;
   gap: 0 !important;
+  height: var(--bf-docs-copy-control-height) !important;
   isolation: isolate;
+  line-height: 1 !important;
+  max-height: var(--bf-docs-copy-control-height) !important;
+  min-height: var(--bf-docs-copy-control-height) !important;
   overflow: hidden;
 }
 
@@ -153,11 +161,19 @@ main > article,
 [data-bf-docs-copy-page="true"] :is(button, [role="button"], a),
 [data-bf-docs-copy-page="true"]:is(button, [role="button"], a),
 [data-bf-docs-copy-page-part="true"] {
+  align-items: center !important;
   background: var(--bf-docs-selected-surface) !important;
   border: 0 !important;
   border-radius: 0 !important;
+  box-sizing: border-box !important;
   box-shadow: none !important;
   color: var(--text-primary) !important;
+  display: inline-flex !important;
+  height: 100% !important;
+  justify-content: center !important;
+  line-height: 1 !important;
+  min-height: 0 !important;
+  padding-block: 0 !important;
   transform: none !important;
 }
 
@@ -166,19 +182,30 @@ main > article,
   box-shadow: none !important;
 }
 
+[data-bf-docs-copy-page-part="true"]:not([data-bf-docs-copy-page-arrow="true"]) {
+  gap: 0.5rem !important;
+  justify-content: flex-start !important;
+  padding-inline: 0.85rem !important;
+}
+
 [data-bf-docs-copy-page-part="true"][data-bf-docs-copy-page-arrow="true"] {
+  align-items: center !important;
   background: var(--bf-docs-selected-surface) !important;
   border: 0 !important;
-  border-left: 1px solid var(--bf-docs-selected-border) !important;
+  border-left: var(--bf-docs-copy-border-width) solid var(--bf-docs-selected-border) !important;
   color: var(--docs-active-color) !important;
-  min-width: 2.65rem;
+  flex: 0 0 var(--bf-docs-copy-arrow-width) !important;
+  justify-content: center !important;
+  min-width: var(--bf-docs-copy-arrow-width) !important;
+  padding: 0 !important;
+  width: var(--bf-docs-copy-arrow-width) !important;
 }
 
 [data-bf-docs-copy-page-part="true"][data-bf-docs-copy-page-arrow="true"]:hover,
 [data-bf-docs-copy-page-part="true"][data-bf-docs-copy-page-arrow="true"]:focus-visible {
   background: var(--bf-docs-selected-surface) !important;
   border: 0 !important;
-  border-left: 1px solid var(--bf-docs-selected-border) !important;
+  border-left: var(--bf-docs-copy-border-width) solid var(--bf-docs-selected-border) !important;
   box-shadow: none !important;
   outline: 0 !important;
 }
@@ -187,6 +214,7 @@ main > article,
   background: transparent !important;
   border: 0 !important;
   box-shadow: none !important;
+  margin: 0 auto !important;
   outline: 0 !important;
 }
 
@@ -195,8 +223,12 @@ main > article,
 [data-bf-docs-copy-page-part="true"] svg,
 [data-bf-docs-copy-page-part="true"] [class*="icon"] {
   color: var(--docs-active-color) !important;
+  display: block !important;
+  height: 1.05rem !important;
+  margin: 0 auto !important;
   opacity: 0.95 !important;
   stroke: currentColor !important;
+  width: 1.05rem !important;
 }
 
 [data-bf-docs-copy-menu="true"],
@@ -204,10 +236,11 @@ main > article,
   background: var(--bf-docs-selected-surface) !important;
   background-color: var(--bf-docs-selected-surface) !important;
   background-image: none !important;
-  border: 1px solid var(--bf-docs-selected-border) !important;
+  border: var(--bf-docs-copy-border-width) solid var(--bf-docs-selected-border) !important;
   border-radius: 0 !important;
   box-shadow: none !important;
   color: var(--text-primary) !important;
+  outline: 0 !important;
   overflow: hidden !important;
 }
 

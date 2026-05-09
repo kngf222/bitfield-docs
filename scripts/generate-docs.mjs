@@ -253,6 +253,17 @@ const themeCss = [
   --accent-purple: var(--bf-accent-secondary);
   --accent-emerald: var(--bf-accent-tertiary);
 }`,
+  `@media (scripting: enabled) {
+  html:not([data-bf-docs-ready="true"]) body {
+    opacity: 0 !important;
+    visibility: hidden !important;
+  }
+}
+
+html[data-bf-docs-ready="true"] body {
+  opacity: 1 !important;
+  visibility: visible !important;
+}`,
   '',
   themePickerDiscoCss(),
   '',
@@ -357,6 +368,10 @@ const themeJs = `(() => {
       option.classList.toggle('is-active', selected);
       option.setAttribute('aria-selected', selected ? 'true' : 'false');
     });
+  }
+
+  function markReady() {
+    root.dataset.bfDocsReady = 'true';
   }
 
   function isAccountHref(link) {
@@ -766,18 +781,21 @@ const themeJs = `(() => {
 
   applyTheme(readStoredTheme() || defaultTheme);
 
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', () => {
+  function bootChrome() {
+    try {
       mountPicker();
       scheduleTocScrollSpy();
       markSearchChrome();
       markCopyPageControls();
-    }, { once: true });
+    } finally {
+      markReady();
+    }
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', bootChrome, { once: true });
   } else {
-    mountPicker();
-    scheduleTocScrollSpy();
-    markSearchChrome();
-    markCopyPageControls();
+    bootChrome();
   }
 
   const observer = new MutationObserver(() => {
@@ -803,10 +821,14 @@ const themeJs = `(() => {
   });
 
   window.addEventListener('pageshow', () => {
-    applyTheme(readStoredTheme() || root.dataset.bfDocsTheme || defaultTheme);
-    mountPicker();
-    markSearchChrome();
-    markCopyPageControls();
+    try {
+      applyTheme(readStoredTheme() || root.dataset.bfDocsTheme || defaultTheme);
+      mountPicker();
+      markSearchChrome();
+      markCopyPageControls();
+    } finally {
+      markReady();
+    }
   });
 })();
 `;
