@@ -9,6 +9,16 @@ main {
   color: var(--text-primary) !important;
 }
 
+html {
+  --bf-docs-selected-surface:
+    linear-gradient(90deg, color-mix(in srgb, var(--docs-active-color) 8%, transparent), transparent),
+    color-mix(in srgb, var(--surface-base) 88%, var(--text-primary) 12%);
+  --bf-docs-selected-surface-hover:
+    linear-gradient(90deg, color-mix(in srgb, var(--docs-active-color) 12%, transparent), transparent),
+    color-mix(in srgb, var(--surface-base) 84%, var(--text-primary) 16%);
+  --bf-docs-selected-border: color-mix(in srgb, var(--docs-active-color) 36%, var(--border-primary) 64%);
+}
+
 html[data-bf-docs-theme="paper"],
 html[data-bf-docs-theme$="-light"],
 html[data-theme="paper"],
@@ -121,17 +131,11 @@ main > article,
 }
 
 [data-bf-docs-copy-page="true"] {
-  --copy-page-bg: color-mix(in srgb, var(--surface-base) 88%, var(--text-primary) 12%);
-  --copy-page-bg-hover: color-mix(in srgb, var(--surface-base) 82%, var(--docs-active-color) 18%);
-  --copy-page-border: color-mix(in srgb, var(--docs-active-color) 36%, var(--border-primary) 64%);
-  --copy-page-shadow: color-mix(in srgb, var(--docs-active-color) 16%, transparent);
   align-items: stretch !important;
-  background: var(--copy-page-bg) !important;
-  border: 1px solid var(--copy-page-border) !important;
+  background: var(--bf-docs-selected-surface) !important;
+  border: 1px solid var(--bf-docs-selected-border) !important;
   border-radius: 0 !important;
-  box-shadow:
-    inset 0 1px 0 color-mix(in srgb, var(--docs-active-color) 18%, transparent),
-    0 8px 24px var(--copy-page-shadow) !important;
+  box-shadow: none !important;
   color: var(--text-primary) !important;
   display: inline-flex !important;
   gap: 0 !important;
@@ -141,11 +145,9 @@ main > article,
 
 [data-bf-docs-copy-page="true"]:hover,
 [data-bf-docs-copy-page="true"]:focus-within {
-  background: var(--copy-page-bg-hover) !important;
-  border-color: color-mix(in srgb, var(--docs-active-color) 54%, var(--border-primary) 46%) !important;
-  box-shadow:
-    inset 0 1px 0 color-mix(in srgb, var(--docs-active-color) 24%, transparent),
-    0 10px 28px color-mix(in srgb, var(--docs-active-color) 22%, transparent) !important;
+  background: var(--bf-docs-selected-surface-hover) !important;
+  border-color: var(--docs-active-color) !important;
+  box-shadow: none !important;
 }
 
 [data-bf-docs-copy-page="true"] *,
@@ -156,7 +158,7 @@ main > article,
 [data-bf-docs-copy-page="true"] :is(button, [role="button"], a),
 [data-bf-docs-copy-page="true"]:is(button, [role="button"], a),
 [data-bf-docs-copy-page-part="true"] {
-  background: transparent !important;
+  background: var(--bf-docs-selected-surface) !important;
   border: 0 !important;
   border-radius: 0 !important;
   box-shadow: none !important;
@@ -164,8 +166,14 @@ main > article,
   transform: none !important;
 }
 
+[data-bf-docs-copy-page-part="true"] * {
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
 [data-bf-docs-copy-page-part="true"][data-bf-docs-copy-page-arrow="true"] {
-  border-left: 1px solid var(--copy-page-border) !important;
+  background: var(--bf-docs-selected-surface) !important;
+  border-left: 1px solid var(--bf-docs-selected-border) !important;
   color: var(--docs-active-color) !important;
   min-width: 2.65rem;
 }
@@ -180,15 +188,10 @@ main > article,
 }
 
 [data-bf-docs-copy-menu="true"] {
-  --copy-menu-bg: color-mix(in srgb, var(--surface-base) 91%, var(--text-primary) 9%);
-  --copy-menu-border: color-mix(in srgb, var(--docs-active-color) 28%, var(--border-primary) 72%);
-  background: var(--copy-menu-bg) !important;
-  border: 1px solid var(--copy-menu-border) !important;
+  background: var(--bf-docs-selected-surface) !important;
+  border: 1px solid var(--bf-docs-selected-border) !important;
   border-radius: 0 !important;
-  box-shadow:
-    inset 0 1px 0 color-mix(in srgb, var(--docs-active-color) 15%, transparent),
-    0 18px 42px color-mix(in srgb, var(--docs-active-color) 18%, transparent),
-    0 18px 64px color-mix(in srgb, var(--text-primary) 10%, transparent) !important;
+  box-shadow: none !important;
   color: var(--text-primary) !important;
   overflow: hidden !important;
 }
@@ -211,30 +214,41 @@ main > article,
 
 [data-bf-docs-copy-menu-item="true"]:hover,
 [data-bf-docs-copy-menu-item="true"]:focus-visible {
-  background: color-mix(in srgb, var(--docs-active-color) 14%, transparent) !important;
+  background: color-mix(in srgb, var(--docs-active-color) 10%, transparent) !important;
   color: var(--text-primary) !important;
 }
 
-[data-bf-docs-copy-menu-item="true"] :is(div, span):has(> svg) {
-  background: color-mix(in srgb, var(--surface-base) 82%, var(--text-primary) 18%) !important;
-  border: 1px solid color-mix(in srgb, var(--docs-active-color) 26%, var(--border-primary) 74%) !important;
+[data-bf-docs-copy-menu="true"] :is(a, button, [role="button"], [role="menuitem"], div, span) {
+  border-color: transparent !important;
+  box-shadow: none !important;
+}
+
+[data-bf-docs-copy-menu-item="true"] :is(div, span):has(> svg),
+[data-bf-docs-copy-menu-item="true"] :is(a, button, [role="button"], [role="menuitem"], div, span):not(:has(> svg)) {
+  background: transparent !important;
+  border: 0 !important;
   box-shadow: none !important;
 }
 
 [data-bf-docs-copy-menu-item="true"] svg,
 [data-bf-docs-copy-menu-item="true"] [class*="icon"] {
-  color: var(--docs-active-color) !important;
-  opacity: 0.95 !important;
+  color: var(--text-secondary) !important;
+  opacity: 0.9 !important;
   stroke: currentColor !important;
+}
+
+[data-bf-docs-copy-menu-item="true"]:hover svg,
+[data-bf-docs-copy-menu-item="true"]:focus-visible svg,
+[data-bf-docs-copy-menu-item="true"]:hover [class*="icon"],
+[data-bf-docs-copy-menu-item="true"]:focus-visible [class*="icon"] {
+  color: var(--docs-active-color) !important;
 }
 
 #sidebar a[href][aria-current="page"],
 #sidebar a[href][data-active="true"],
 #sidebar a[href][class*="bg-primary"],
 #sidebar a[href][class*="text-primary"] {
-  background:
-    linear-gradient(90deg, color-mix(in srgb, var(--docs-active-color) 8%, transparent), transparent),
-    color-mix(in srgb, var(--surface-base) 88%, var(--text-primary) 12%) !important;
+  background: var(--bf-docs-selected-surface) !important;
   border: 0 !important;
   box-shadow: none !important;
   color: var(--text-primary) !important;
