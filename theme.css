@@ -45,6 +45,12 @@
   --black-pure: var(--bf-surface);
   --black-rich: var(--bf-surface-raised);
   --surface-base: var(--bf-surface);
+  --cta-hardware-text: rgba(255,255,255,0.92);
+  --cta-hardware-bg:
+    linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0)),
+    linear-gradient(180deg, #171922, #0c0d12);
+  --cta-hardware-edge:
+    linear-gradient(180deg, rgba(255,255,255,0.3), rgba(255,255,255,0.03) 42%, rgba(0,0,0,0.18) 100%);
   --landing-canvas-bg: color-mix(in srgb, var(--surface-base) 94%, #fbfaf6 6%);
   --docs-page-bg: var(--landing-canvas-bg);
   --glass-bg-primary: var(--bf-surface-raised);

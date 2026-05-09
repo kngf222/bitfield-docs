@@ -21,6 +21,8 @@
   let picker;
   let trigger;
   let panel;
+  let tocCleanup;
+  let tocSetupFrame = 0;
 
   function readStoredTheme() {
     try {
@@ -127,6 +129,94 @@
     return option;
   }
 
+  function samePageHeadingId(href) {
+    try {
+      const url = new URL(href, window.location.href);
+      const linkPath = url.pathname.replace(/\/$/, '');
+      const currentPath = window.location.pathname.replace(/\/$/, '');
+      if (!url.hash || linkPath !== currentPath) {
+        return null;
+      }
+      return decodeURIComponent(url.hash.slice(1));
+    } catch {
+      return null;
+    }
+  }
+
+  function setupTocScrollSpy() {
+    if (tocCleanup) {
+      tocCleanup();
+      tocCleanup = null;
+    }
+
+    const toc = document.querySelector('#table-of-contents');
+    if (!toc) return;
+
+    const entries = Array.from(toc.querySelectorAll('a[href*="#"]'))
+      .map((link) => {
+        const id = samePageHeadingId(link.getAttribute('href') || '');
+        const heading = id ? document.getElementById(id) : null;
+        return heading ? { id, link, heading } : null;
+      })
+      .filter(Boolean);
+
+    if (!entries.length) return;
+
+    let activeId = '';
+    let frame = 0;
+
+    const setActive = (nextId) => {
+      if (nextId === activeId) return;
+      activeId = nextId;
+      entries.forEach(({ id, link }) => {
+        link.toggleAttribute('data-bf-toc-active', id === activeId);
+      });
+    };
+
+    const update = () => {
+      const viewportLine = window.scrollY + Math.min(180, window.innerHeight * 0.24);
+      let next = entries[0]?.id || '';
+      for (const entry of entries) {
+        const top = entry.heading.getBoundingClientRect().top + window.scrollY;
+        if (top <= viewportLine) {
+          next = entry.id;
+        }
+      }
+      setActive(next);
+    };
+
+    const requestUpdate = () => {
+      if (frame) return;
+      frame = window.requestAnimationFrame(() => {
+        frame = 0;
+        update();
+      });
+    };
+
+    window.addEventListener('scroll', requestUpdate, { passive: true });
+    window.addEventListener('resize', requestUpdate);
+    window.addEventListener('hashchange', requestUpdate);
+    tocCleanup = () => {
+      if (frame) window.cancelAnimationFrame(frame);
+      window.removeEventListener('scroll', requestUpdate);
+      window.removeEventListener('resize', requestUpdate);
+      window.removeEventListener('hashchange', requestUpdate);
+      entries.forEach(({ link }) => link.removeAttribute('data-bf-toc-active'));
+    };
+
+    update();
+  }
+
+  function scheduleTocScrollSpy() {
+    if (tocSetupFrame) {
+      window.cancelAnimationFrame(tocSetupFrame);
+    }
+    tocSetupFrame = window.requestAnimationFrame(() => {
+      tocSetupFrame = 0;
+      setupTocScrollSpy();
+    });
+  }
+
   function mountPicker() {
     if (!document.body || document.querySelector('.bf-docs-theme-picker')) {
       return true;
@@ -172,13 +262,18 @@
   applyTheme(readStoredTheme() || defaultTheme);
 
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', mountPicker, { once: true });
+    document.addEventListener('DOMContentLoaded', () => {
+      mountPicker();
+      scheduleTocScrollSpy();
+    }, { once: true });
   } else {
     mountPicker();
+    scheduleTocScrollSpy();
   }
 
   const observer = new MutationObserver(() => {
-    if (mountPicker()) observer.disconnect();
+    mountPicker();
+    scheduleTocScrollSpy();
   });
 
   observer.observe(document.documentElement, { childList: true, subtree: true });

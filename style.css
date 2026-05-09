@@ -55,7 +55,7 @@ header::after {
 }
 
 #body-content > *,
-body > div,
+body > div:first-child,
 main > div,
 main > section,
 main > article,
@@ -77,6 +77,9 @@ main > article,
 #sidebar a[href],
 #table-of-contents a[href],
 #navbar a[href]:not(:has(img)) {
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
   border-radius: 0 !important;
   color: var(--text-secondary) !important;
   text-decoration: none !important;
@@ -87,13 +90,33 @@ main > article,
     transform 180ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 
+#navbar a[href]:not(:has(img)) {
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
 #sidebar a[href]:hover,
-#sidebar a[href]:focus-visible,
-#table-of-contents a[href]:hover,
-#table-of-contents a[href]:focus-visible,
-#navbar a[href]:not(:has(img)):hover,
-#navbar a[href]:not(:has(img)):focus-visible {
+#sidebar a[href]:focus-visible {
   background: var(--glass-bg-hover) !important;
+  color: var(--text-primary) !important;
+  transform: translateY(-1px);
+}
+
+#table-of-contents a[href]:hover,
+#table-of-contents a[href]:focus-visible {
+  background: transparent !important;
+  box-shadow: none !important;
+  color: var(--text-primary) !important;
+  transform: none;
+}
+
+#navbar a[href]:not(:has(img)):hover,
+#navbar a[href]:not(:has(img)):focus-visible,
+#navbar a[href]:not(:has(img))[aria-current="page"],
+#navbar a[href]:not(:has(img))[data-active="true"],
+#navbar a[href]:not(:has(img))[class*="bg-"] {
+  background: transparent !important;
+  box-shadow: none !important;
   color: var(--text-primary) !important;
   transform: translateY(-1px);
 }
@@ -105,9 +128,25 @@ main > article,
   background:
     linear-gradient(90deg, color-mix(in srgb, var(--bf-blue) 8%, transparent), transparent),
     color-mix(in srgb, var(--surface-base) 88%, var(--text-primary) 12%) !important;
-  border: 1px solid color-mix(in srgb, var(--text-primary) 12%, transparent) !important;
+  border: 0 !important;
   box-shadow: none !important;
   color: var(--text-primary) !important;
+}
+
+#table-of-contents a[href][aria-current="page"],
+#table-of-contents a[href][aria-current="true"],
+#table-of-contents a[href][data-bf-toc-active],
+#table-of-contents a[href][data-active="true"],
+#table-of-contents a[href][data-current="true"],
+#table-of-contents a[href][data-selected="true"],
+#table-of-contents a[href][data-state="active"],
+#table-of-contents a[href][class*="bg-primary"],
+#table-of-contents a[href][class*="text-primary"] {
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  color: var(--accent-emerald) !important;
+  font-weight: 760 !important;
 }
 
 main [class*="rounded-2xl"],
@@ -121,27 +160,91 @@ main [style*="box-shadow"] {
   box-shadow: none !important;
 }
 
-#topbar-cta-button {
-  background: color-mix(in srgb, var(--text-primary) 86%, var(--surface-base) 14%) !important;
-  border: 1px solid color-mix(in srgb, var(--text-primary) 22%, var(--surface-base) 78%) !important;
-  border-radius: 14px !important;
+#topbar-cta-button,
+#navbar a[href*="account.bitfield.so"],
+header a[href*="account.bitfield.so"],
+nav a[href*="account.bitfield.so"] {
+  align-items: center !important;
+  background: var(--cta-hardware-bg) !important;
+  border: 1px solid color-mix(in srgb, white 20%, transparent) !important;
+  border-radius: 0 !important;
   box-shadow:
-    0 10px 24px color-mix(in srgb, var(--text-primary) 12%, transparent),
-    inset 0 1px 0 color-mix(in srgb, var(--surface-base) 18%, transparent);
-  color: var(--surface-base) !important;
-  font-weight: 800;
+    inset 0 1px 0 rgba(255,255,255,0.08),
+    inset 0 -1px 0 rgba(0,0,0,0.24),
+    0 1px 0 color-mix(in srgb, white 8%, transparent),
+    0 7px 0 color-mix(in srgb, var(--text-primary) 7%, transparent) !important;
+  color: var(--cta-hardware-text) !important;
+  display: inline-flex !important;
+  font-weight: 760 !important;
+  gap: 0.45rem !important;
+  justify-content: center !important;
   letter-spacing: -0.035em;
+  min-height: 2.35rem !important;
+  padding: 0 0.95rem !important;
+  transform: none !important;
   transition:
     box-shadow 180ms ease,
-    transform 180ms cubic-bezier(0.22, 1, 0.36, 1);
+    transform 180ms cubic-bezier(0.22, 1, 0.36, 1) !important;
 }
 
 #topbar-cta-button:hover,
-#topbar-cta-button:focus-visible {
+#topbar-cta-button:focus-visible,
+#navbar a[href*="account.bitfield.so"]:hover,
+#navbar a[href*="account.bitfield.so"]:focus-visible,
+header a[href*="account.bitfield.so"]:hover,
+header a[href*="account.bitfield.so"]:focus-visible,
+nav a[href*="account.bitfield.so"]:hover,
+nav a[href*="account.bitfield.so"]:focus-visible {
+  background: var(--cta-hardware-bg) !important;
   box-shadow:
-    0 14px 30px color-mix(in srgb, var(--text-primary) 16%, transparent),
-    inset 0 1px 0 color-mix(in srgb, var(--surface-base) 22%, transparent);
+    inset 0 1px 0 rgba(255,255,255,0.08),
+    inset 0 -1px 0 rgba(0,0,0,0.24),
+    0 1px 0 color-mix(in srgb, white 8%, transparent),
+    0 8px 0 color-mix(in srgb, var(--text-primary) 8.5%, transparent) !important;
+  color: var(--cta-hardware-text) !important;
+  transform: translateY(-1px) !important;
+}
+
+#navbar button[aria-label*="Search"],
+#navbar button:has(kbd),
+#navbar [role="button"][aria-label*="Search"],
+input[type="search"],
+input[placeholder*="Search Bitfield docs"],
+form:has(input[placeholder*="Search Bitfield docs"]),
+[cmdk-root],
+[role="dialog"]:has(input[placeholder*="Search"]) {
+  background:
+    linear-gradient(180deg, color-mix(in srgb, white 8%, transparent), transparent),
+    color-mix(in srgb, var(--surface-base) 84%, var(--text-primary) 16%) !important;
+  border: 1px solid var(--border-primary) !important;
+  border-radius: 0 !important;
+  box-shadow:
+    inset 0 1px 0 color-mix(in srgb, white 18%, transparent),
+    0 18px 48px color-mix(in srgb, var(--text-primary) 14%, transparent) !important;
+  color: var(--text-primary) !important;
+}
+
+#navbar button[aria-label*="Search"]:hover,
+#navbar button[aria-label*="Search"]:focus-visible,
+#navbar button:has(kbd):hover,
+#navbar button:has(kbd):focus-visible,
+#navbar [role="button"][aria-label*="Search"]:hover,
+#navbar [role="button"][aria-label*="Search"]:focus-visible {
+  background:
+    linear-gradient(180deg, color-mix(in srgb, white 9%, transparent), transparent),
+    color-mix(in srgb, var(--surface-base) 80%, var(--text-primary) 20%) !important;
   transform: translateY(-1px);
+}
+
+[role="dialog"]:has(input[placeholder*="Search"]) *,
+[cmdk-root] * {
+  border-radius: 0 !important;
+}
+
+input[type="search"],
+input[placeholder*="Search Bitfield docs"] {
+  box-shadow: none !important;
+  outline: none !important;
 }
 
 .bf-theme-toggle {
@@ -153,7 +256,8 @@ header .bf-docs-theme-picker,
 nav .bf-docs-theme-picker {
   align-items: center;
   display: inline-flex;
-  margin-left: 0.55rem;
+  margin-left: 0.38rem;
+  margin-right: 0.48rem;
   position: relative;
   z-index: 80;
 }
@@ -263,23 +367,27 @@ nav .bf-docs-theme-picker {
     0 4px 16px color-mix(in srgb, var(--text-primary) 12%, transparent);
   appearance: none;
   border: 0;
-  border-radius: 14px;
-  height: 42px;
-  max-height: 42px;
-  max-width: 42px;
-  min-height: 42px;
-  min-width: 42px;
-  width: 42px;
+  border-radius: 0;
+  height: 36px;
+  max-height: 36px;
+  max-width: 36px;
+  min-height: 36px;
+  min-width: 36px;
+  width: 36px;
 }
 
 .bf-docs-theme-trigger .button-flat-floor,
 .bf-docs-theme-trigger .button-flat-face {
-  height: 42px;
-  max-height: 42px;
-  max-width: 42px;
-  min-height: 42px;
-  min-width: 42px;
-  width: 42px;
+  height: 36px;
+  max-height: 36px;
+  max-width: 36px;
+  min-height: 36px;
+  min-width: 36px;
+  width: 36px;
+}
+
+.bf-docs-theme-trigger .button-flat-floor {
+  transform: translate3d(0, 5px, 0);
 }
 
 .bf-docs-theme-trigger .button-flat-face {
@@ -295,21 +403,21 @@ nav .bf-docs-theme-picker {
 
 .theme-picker-swatch-icon {
   display: grid;
-  gap: 3px;
-  grid-template-columns: repeat(4, 5px);
-  grid-template-rows: repeat(2, 5px);
+  gap: 2px;
+  grid-template-columns: repeat(4, 4px);
+  grid-template-rows: repeat(2, 4px);
   justify-content: center;
 }
 
 .theme-picker-swatch-icon__bit {
   background: color-mix(in srgb, var(--text-primary) 28%, transparent);
   display: block;
-  height: 5px;
+  height: 4px;
   opacity: 0.5;
   transition:
     background-color 180ms ease,
     opacity 180ms ease;
-  width: 5px;
+  width: 4px;
 }
 
 .theme-picker-trigger:hover .theme-picker-swatch-icon__bit,
