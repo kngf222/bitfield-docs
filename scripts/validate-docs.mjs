@@ -43,6 +43,7 @@ const knownPageClasses = new Set([
   'activation-lifecycle',
   'proof-stack',
   'start-onboarding',
+  'concept-curriculum',
 ]);
 
 function hasAny(body, needles) {
@@ -191,6 +192,18 @@ function validateDepthContract(page, body, sourcePage, output = failures) {
       ['next-step section', '## Next'],
       ['Runtime Kit link', '/runtime-kit/'],
       ['account or activation link', ['/start/get-your-key', 'account.bitfield.so', '/activation/', '/concepts/active-devices']],
+    ], output);
+    return;
+  }
+
+  if (page.pageClass === 'concept-curriculum') {
+    requireIncludes(page.route, body, [
+      ['product scene', 'Product scene:'],
+      ['concept visual flow', 'className="bf-flow"'],
+      ['expected result', 'Expected result:'],
+      ['mistakes or confusion section', ['## Common mistakes', '## Common confusion', '## What this prevents']],
+      ['next-step section', '## Next'],
+      ['Runtime Kit, proof, activation, or reference link', ['/runtime-kit/', '/proof/', '/activation/', '/reference/', '/start/']],
     ], output);
   }
 }

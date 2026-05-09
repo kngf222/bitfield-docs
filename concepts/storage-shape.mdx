@@ -9,6 +9,30 @@ description: "How Bitfield keeps local durable data fast without publishing priv
 Bitfield stores data so the current answer can be read directly when the bytes are already local and warm.
 </p>
 
+Product scene: a screen asks for the current value. If the answer is already local and the needed pages are warm, the fastest path is not a general database conversation. It is reading known local bytes for that measured job.
+
+<div className="bf-flow" aria-label="Storage shape flow">
+  <div className="bf-flow-step">
+    <span>Durable</span>
+    <strong>Records and content</strong>
+    <p>The product keeps what happened and the bytes it owns.</p>
+  </div>
+  <div className="bf-flow-arrow">→</div>
+  <div className="bf-flow-step">
+    <span>Current</span>
+    <strong>View points at bytes</strong>
+    <p>The current answer can point at known content.</p>
+  </div>
+  <div className="bf-flow-arrow">→</div>
+  <div className="bf-flow-step">
+    <span>Warm</span>
+    <strong>Local read category</strong>
+    <p>The measured path avoids network and cold storage work.</p>
+  </div>
+</div>
+
+Expected result: you can explain why `warm local read` is a narrow, honest category instead of a universal claim about every operation.
+
 ## What this means
 
 Storage shape = the way Bitfield keeps durable data, content identity, and the current view connected.
@@ -62,5 +86,20 @@ The honest claim is narrower and stronger: Bitfield has a warm local read path, 
 <div className="bf-callout">
 The rule is simple. Explain the mechanism category. Name the measured path. Say where the number stops.
 </div>
+
+## Common mistakes
+
+| Mistake | Why it hurts | Better path |
+|---|---|---|
+| Reading `warm local read` as every read | It turns a measured category into an overclaim | Use [Warm and cold paths](/proof/warm-and-cold-paths) |
+| Treating content identity as the whole speed story | Lookup and exact reads are different jobs | Read [Content-addressed storage](/concepts/content-addressed-storage) |
+| Comparing local reads to network queries | The compared work is different | Use [Comparison guardrails](/proof/comparison-guardrails) |
+| Asking for private layouts | It crosses the public proof boundary | Stay at mechanism-category level |
+
+## Next
+
+- Understand content identity: [Content-addressed storage](/concepts/content-addressed-storage)
+- Check categories: [Warm and cold paths](/proof/warm-and-cold-paths)
+- Read exact proof rows: [Benchmark ledger](/proof/benchmark-ledger)
 
 </div>

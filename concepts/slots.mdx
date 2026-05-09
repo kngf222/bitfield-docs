@@ -9,6 +9,30 @@ description: "What a Bitfield slot is and why slots keep features from tangling 
 A slot is a named door to something your product can ask Bitfield to run.
 </p>
 
+Product scene: a screen has a button: "Find the next step." The screen should not import the search code, the ranking code, the package setup, or the storage details. It should send a named request and handle the reply.
+
+<div className="bf-flow" aria-label="Slot request flow">
+  <div className="bf-flow-step">
+    <span>App</span>
+    <strong>Send request</strong>
+    <p>The app names a target and sends payload bytes.</p>
+  </div>
+  <div className="bf-flow-arrow">→</div>
+  <div className="bf-flow-step">
+    <span>Slot</span>
+    <strong>Own work</strong>
+    <p>The runnable door owns how the work happens.</p>
+  </div>
+  <div className="bf-flow-arrow">→</div>
+  <div className="bf-flow-step">
+    <span>Reply</span>
+    <strong>Return result</strong>
+    <p>The app receives a reply without learning private setup.</p>
+  </div>
+</div>
+
+Expected result: a feature can call a named piece of work without taking a dependency on that piece's private code.
+
 That "something" might answer a question, transform data, render a view, call another system, or do work in the background. The important part is the shape. The app calls the slot by name. The slot owns how it does the work.
 
 ## Why slots exist
@@ -50,5 +74,20 @@ The app sends a target and payload. Bitfield gets that request to the right runn
 ## What this prevents
 
 Slots prevent feature code from learning too much about other feature code. That matters because private details change. Public doors should stay steady.
+
+## Common mistakes
+
+| Mistake | Why it hurts | Better path |
+|---|---|---|
+| Importing the target implementation into the UI | The feature boundary collapses | Use `sendRequestToBitfieldTarget(...)` |
+| Giving every feature a custom connection path | The product becomes hard to change | Use named targets and package boundaries |
+| Treating slots as storage records | A slot is a runnable door, not the stored data itself | Read [Database and runtime](/concepts/database-and-runtime) |
+| Hiding failure handling | Real target calls can fail | Read [Send a request](/runtime-kit/send-request) |
+
+## Next
+
+- Send a target request: [Send a request](/runtime-kit/send-request)
+- Declare a callable slot: [Callable package slot](/runtime-kit/cookbook/callable-package-slot)
+- Look up request behavior: [Runtime Kit API](/reference/runtime-kit-api)
 
 </div>

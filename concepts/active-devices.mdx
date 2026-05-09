@@ -9,6 +9,30 @@ description: "What counts as an active device and how revoking or replacing a de
 An active device is a device, environment, or runtime identity that has used a Bitfield key and has not been revoked or replaced in the account portal.
 </p>
 
+Product scene: you try Bitfield on a laptop. Then you add a phone. Then a friend wants to test. Active devices are the account-visible way to keep that access understandable.
+
+<div className="bf-flow" aria-label="Active device flow">
+  <div className="bf-flow-step">
+    <span>Key</span>
+    <strong>Account access</strong>
+    <p>Your account controls which devices can run with your key.</p>
+  </div>
+  <div className="bf-flow-arrow">→</div>
+  <div className="bf-flow-step">
+    <span>Device</span>
+    <strong>Activation</strong>
+    <p>A device or runtime identity becomes active when authorized.</p>
+  </div>
+  <div className="bf-flow-arrow">→</div>
+  <div className="bf-flow-step">
+    <span>Portal</span>
+    <strong>Replace or revoke</strong>
+    <p>The account portal frees a spot when you stop using one.</p>
+  </div>
+</div>
+
+Expected result: you can explain whether a laptop, phone, server, or runtime identity is using one of the account's active-device spots.
+
 ## What counts
 
 A laptop can count. A phone can count. A tablet can count. A server can count. A Raspberry Pi can count. A runtime environment can count when it uses your key to run Bitfield.
@@ -22,5 +46,21 @@ If you stop using one device, revoke it in the account portal. That frees the sp
 ## Why pricing uses this word
 
 Bitfield pricing is based on active devices because the product is not priced per app, per project, per seat, token, install, revenue share, or feature. The unit is the device or runtime identity currently allowed to run with your key.
+
+## Common confusion
+
+| Confusion | Correct model |
+|---|---|
+| "Is an active device the same as a user?" | No. It is the device or runtime identity currently authorized to run with your key. |
+| "Does a project count?" | The public pricing word is active device, not project. |
+| "Can I move a spot?" | Yes. Revoke or replace the old device in the account portal when that path is available. |
+| "Does a server count?" | It can when it runs Bitfield with your key. |
+| "Where do I manage this?" | Use [account.bitfield.so](https://account.bitfield.so). |
+
+## Next
+
+- Get access and activate your first device: [Get your key](/start/get-your-key)
+- Read the account lifecycle: [Account and key flow](/activation/account-and-key-flow)
+- Build across devices: [Device and deployment shape](/build-your-own-surface/device-deployment)
 
 </div>

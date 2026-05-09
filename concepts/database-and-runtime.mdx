@@ -9,6 +9,30 @@ description: "What Bitfield stores, what it runs, and why those two pieces belon
 Bitfield stores durable truth and runs the pieces that use it.
 </p>
 
+Product scene: a launch screen reads copy, shows a checklist, and has a button that asks for the next step. Storage remembers the copy and checklist. Runtime handles the button target. The app should not wire those worlds together by hand every time.
+
+<div className="bf-flow" aria-label="Database and runtime flow">
+  <div className="bf-flow-step">
+    <span>Database</span>
+    <strong>Remember</strong>
+    <p>Records and content give the product durable truth.</p>
+  </div>
+  <div className="bf-flow-arrow">→</div>
+  <div className="bf-flow-step">
+    <span>Runtime</span>
+    <strong>Run</strong>
+    <p>Slots and targets do the work around that truth.</p>
+  </div>
+  <div className="bf-flow-arrow">→</div>
+  <div className="bf-flow-step">
+    <span>App</span>
+    <strong>Use</strong>
+    <p>Runtime Kit gives app code prepared reads and named requests.</p>
+  </div>
+</div>
+
+Expected result: a feature can read what it needs and ask for work without importing the private setup for every other feature.
+
 ## Database
 
 The database side stores records and content so the product can remember what happened. A durable truth means the product can recover, replay, sync, project into other systems, and keep working when plans change.
@@ -27,6 +51,26 @@ With Bitfield, features talk through the shared place. That means the data path 
 The customer-facing rule is simple: your app talks to Runtime Kit, Runtime Kit talks to Bitfield, and Bitfield keeps the durable shape underneath.
 </div>
 
-Next: read [Storage shape](/concepts/storage-shape) for how durable local data connects to the speed proof.
+## Boundary rules
+
+| Boundary | Reader-facing rule |
+|---|---|
+| App code | Reads prepared data and sends named target requests. |
+| Runtime Kit | Owns the public app-facing calls. |
+| Package | Declares records, package-owned bytes, and callable targets. |
+| Bitfield | Coordinates durable data and runnable pieces underneath. |
+
+## Common mistakes
+
+| Mistake | Why it hurts | Better path |
+|---|---|---|
+| App code imports package setup | The UI learns private feature wiring | Use Runtime Kit reads and requests |
+| Runtime is treated like a job queue only | The data side disappears | Keep storage and runnable pieces in the same model |
+| Database is treated like remote SQL only | Local durable paths and warm-read categories get misunderstood | Read [Storage shape](/concepts/storage-shape) |
+| Slots are treated like React components | The callable boundary gets blurred | Read [Slots](/concepts/slots) |
+
+## Next
+
+Read [Storage shape](/concepts/storage-shape) for how durable local data connects to the speed proof, then [Runtime Kit concept map](/runtime-kit/concept-map) for the app-facing chain.
 
 </div>

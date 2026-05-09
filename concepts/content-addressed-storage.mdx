@@ -9,6 +9,30 @@ description: "What content addresses are and why they matter for speed, integrit
 A content address is a name for bytes that comes from the bytes themselves.
 </p>
 
+Product scene: your product stores the same help text, image bytes, or package-owned file more than once. A normal name tells you where somebody put it. A content address tells you what the bytes are.
+
+<div className="bf-flow" aria-label="Content address flow">
+  <div className="bf-flow-step">
+    <span>Bytes</span>
+    <strong>Content exists</strong>
+    <p>The product has bytes it wants to store or reuse.</p>
+  </div>
+  <div className="bf-flow-arrow">→</div>
+  <div className="bf-flow-step">
+    <span>Identity</span>
+    <strong>Address from content</strong>
+    <p>The address changes when the bytes change.</p>
+  </div>
+  <div className="bf-flow-arrow">→</div>
+  <div className="bf-flow-step">
+    <span>Use</span>
+    <strong>Lookup or read</strong>
+    <p>Bitfield can use the identity as part of the local storage path.</p>
+  </div>
+</div>
+
+Expected result: you can tell the difference between an exact warm local read and a content address lookup.
+
 ## What this means
 
 Content-addressed storage = storing bytes so the content can be found by a fingerprint of the content.
@@ -57,5 +81,20 @@ That boundary is not a lack of proof. It is the difference between explaining ho
 <div className="bf-callout">
 Content address = a name made from the bytes. That is the public idea. The private layout stays private.
 </div>
+
+## Common mistakes
+
+| Mistake | Why it hurts | Better path |
+|---|---|---|
+| Treating content address lookup as exact read | Lookup work is included | Use the claim category in [Benchmark ledger](/proof/benchmark-ledger) |
+| Treating human names as proof of content | A name can point at changed bytes | Use content identity for byte identity |
+| Asking public docs for private hash framing | It crosses the disclosure boundary | Stay with the public concept and proof rows |
+| Saying content addressing makes every job instant | Network, cold storage, writes, and runtime calls are different jobs | Use [Measurement methodology](/proof/methodology) |
+
+## Next
+
+- Learn callable pieces: [Slots](/concepts/slots)
+- Build with package-owned bytes: [Package-owned file](/runtime-kit/cookbook/package-owned-file)
+- Compare proof rows: [Benchmark ledger](/proof/benchmark-ledger)
 
 </div>

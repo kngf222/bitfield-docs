@@ -9,6 +9,30 @@ description: "A customer-facing explanation of Bitfield as a database and runtim
 Bitfield is a database and a runtime that runs on any device.
 </p>
 
+Product scene: you have an idea, then the idea changes. You add a phone screen, a laptop dashboard, a background job, a file, a local mode, and a friend who wants to try it. The hard part is not writing the first feature. The hard part is keeping feature one from trapping feature one hundred.
+
+<div className="bf-flow" aria-label="What Bitfield is flow">
+  <div className="bf-flow-step">
+    <span>Store</span>
+    <strong>Durable truth</strong>
+    <p>Records and content survive restarts and give the product a place to return to.</p>
+  </div>
+  <div className="bf-flow-arrow">+</div>
+  <div className="bf-flow-step">
+    <span>Run</span>
+    <strong>Plug-in pieces</strong>
+    <p>Runnable pieces can read, transform, render, or answer requests through Bitfield.</p>
+  </div>
+  <div className="bf-flow-arrow">+</div>
+  <div className="bf-flow-step">
+    <span>Use</span>
+    <strong>Any device path</strong>
+    <p>The account decides which devices are allowed to run with your key.</p>
+  </div>
+</div>
+
+Expected result: Bitfield should feel like one product surface, not a pile of separate choices you have to glue together before you know what you are building.
+
 A database stores your data and finds it when you ask. A runtime loads programs and gives them what they need to run. Bitfield does both in one product surface you put inside your app.
 
 ## Why it exists
@@ -19,25 +43,53 @@ That works until the product changes. Then every new feature starts depending on
 
 Bitfield changes the shape. Every feature plugs into one place instead of depending directly on each other.
 
-## The model
+## The term ladder
 
 <div className="bf-grid">
   <div className="bf-card">
-    <strong>It stores what happened.</strong>
-    Bitfield keeps durable records so your product has one place to return to.
+    <strong>Database.</strong>
+    The durable side. It remembers records and content.
   </div>
   <div className="bf-card">
-    <strong>It runs what you plug in.</strong>
-    Slots are runnable pieces. They can read, write, transform, render, or talk to other parts through Bitfield.
+    <strong>Runtime.</strong>
+    The runnable side. It loads the pieces that do work.
   </div>
   <div className="bf-card">
-    <strong>It can live where you need it.</strong>
-    Laptop, phone, server, Raspberry Pi, local network, cloud machine, or whatever device your product needs.
+    <strong>Runtime Kit.</strong>
+    The app-facing package. Your app reads prepared data and sends named requests through it.
+  </div>
+  <div className="bf-card">
+    <strong>Slot.</strong>
+    A named runnable door. Your app calls the door, not the private room behind it.
+  </div>
+  <div className="bf-card">
+    <strong>Package.</strong>
+    A product boundary that can declare records, package-owned bytes, and callable targets.
+  </div>
+  <div className="bf-card">
+    <strong>Active device.</strong>
+    A device or runtime identity currently authorized to run with your key.
   </div>
 </div>
+
+## What this prevents
+
+| Wrong shape | Why it breaks later | Bitfield shape |
+|---|---|---|
+| Every feature imports every other feature | Changes spread through the product | Features meet through public names and requests |
+| The UI owns storage details | Screens become hard to move | Runtime Kit gives the UI prepared data and targets |
+| Device access is an afterthought | Trials, phones, laptops, and friends get confusing | Active devices are part of the account path |
+| Speed claims are read as universal magic | Readers compare unlike jobs | Proof pages name measured categories |
 
 ## The point
 
 You get structure without giving up speed. You can start small and keep adding pieces without turning the product into a knot.
+
+## Next
+
+- Understand why database and runtime belong together: [Database and runtime](/concepts/database-and-runtime)
+- Make the first app-facing call: [Quickstart](/start/quickstart)
+- Build the first screen: [Package to screen](/runtime-kit/package-to-screen)
+- Check the speed claim: [How Bitfield is this fast](/proof/how-bitfield-is-fast)
 
 </div>
