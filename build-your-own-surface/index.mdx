@@ -1,0 +1,82 @@
+---
+title: "Build with Bitfield"
+description: "The product-building map: package, surface, target, shell, device, and account loop."
+---
+
+<div className="bf-article">
+
+<p className="bf-lead">
+Build starts with a product moment: somebody opens a screen, sees real data, presses something, and the product changes without turning your software into a tangled mess.
+</p>
+
+The Build tab is the map for that moment. Runtime Kit teaches the public primitives. Build shows how those primitives become a product shape you can keep extending.
+
+<div className="bf-flow" aria-label="Build with Bitfield flow">
+  <div className="bf-flow-step">
+    <span>1</span>
+    <strong>Package</strong>
+    <p>Declare the durable records, package-owned files, and callable slots your feature owns.</p>
+  </div>
+  <div className="bf-flow-arrow">→</div>
+  <div className="bf-flow-step">
+    <span>2</span>
+    <strong>Surface</strong>
+    <p>Render prepared reads and send requests through named public targets.</p>
+  </div>
+  <div className="bf-flow-arrow">→</div>
+  <div className="bf-flow-step">
+    <span>3</span>
+    <strong>Shell</strong>
+    <p>Place surfaces in navigation and layout without teaching the shell product logic.</p>
+  </div>
+  <div className="bf-flow-arrow">→</div>
+  <div className="bf-flow-step">
+    <span>4</span>
+    <strong>Devices</strong>
+    <p>Run the same product shape across activated devices with account-owned access.</p>
+  </div>
+</div>
+
+## The build loop
+
+| Step | What you decide | Where to go |
+|---|---|---|
+| Shape the product screen | What the user sees, what data it needs, what actions it can request | [App surfaces](/build-your-own-surface/app-surfaces) |
+| Shape the package | Which records, package-owned files, and callable slots belong to the feature | [Package authoring](/build-your-own-surface/package-authoring) |
+| Shape the target | Which named request changes something or starts work | [Target design](/build-your-own-surface/target-design) |
+| Shape the shell | Where the surface appears and how the user moves between surfaces | [Product shells](/build-your-own-surface/product-shells) |
+| Shape the rollout | Which devices can run it and what the account/key path looks like | [Device and deployment shape](/build-your-own-surface/device-deployment) |
+| Shape another SDK | Which tiny public functions app code should call | [SDK boundary](/build-your-own-surface/sdk-boundary) |
+
+## What this section is not
+
+This section does not replace the [Runtime Kit](/runtime-kit/javascript) manual. Runtime Kit is the contract layer. Build is the product composition layer.
+
+This section also does not ask the shell to become smart. The shell should know placement, navigation, account state, and device state. The package surface should own product body meaning. The callable target should own the requested action.
+
+## Example product path
+
+You are making a small customer dashboard.
+
+1. The package owns customer records and a package-owned formatter file.
+2. The surface reads a prepared customer list.
+3. The surface sends `customer.archive` when the user archives one customer.
+4. The shell places the surface in a dashboard region.
+5. The account key activates the devices allowed to use it.
+
+Expected result: the same shape scales from a tiny private tool to a product with many features because each feature can keep its package boundary, surface, and target contract clear.
+
+## Common build mistakes
+
+| Mistake | Why it hurts | Fix |
+|---|---|---|
+| Put product action logic in the shell | Every screen starts depending on one growing layout file | Move the action behind a package target and let the shell place surfaces |
+| Read raw package material in app code | The app learns storage shape instead of product meaning | Use prepared reads through the public Runtime Kit surface |
+| Make one target do every action | Payloads become a secret command language | Give each product action a named target and a small payload |
+| Treat account activation as an afterthought | The build works locally but fails when real devices arrive | Decide the active-device path before launch |
+
+## Next
+
+Start with [App surfaces](/build-your-own-surface/app-surfaces), then copy a complete shape from the [Runtime Kit Cookbook](/runtime-kit/cookbook).
+
+</div>

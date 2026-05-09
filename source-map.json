@@ -153,6 +153,30 @@
       "sourceIds": ["runtime-kit-js-public-contract", "runtime-kit-package-boundary", "runtime-kit-public-cookbook-examples"]
     },
     {
+      "route": "build-your-own-surface/index",
+      "sourceIds": ["runtime-kit-js-public-contract", "runtime-kit-package-boundary", "bitfield-public-landing-copy", "bitfield-docs-information-architecture"]
+    },
+    {
+      "route": "build-your-own-surface/app-surfaces",
+      "sourceIds": ["runtime-kit-js-public-contract", "runtime-kit-package-boundary"]
+    },
+    {
+      "route": "build-your-own-surface/package-authoring",
+      "sourceIds": ["runtime-kit-package-boundary", "runtime-kit-public-cookbook-examples"]
+    },
+    {
+      "route": "build-your-own-surface/target-design",
+      "sourceIds": ["runtime-kit-js-public-contract", "runtime-kit-package-boundary"]
+    },
+    {
+      "route": "build-your-own-surface/product-shells",
+      "sourceIds": ["runtime-kit-js-public-contract", "runtime-kit-package-boundary", "bitfield-docs-information-architecture"]
+    },
+    {
+      "route": "build-your-own-surface/device-deployment",
+      "sourceIds": ["runtime-kit-package-boundary", "bitfield-public-landing-copy", "bitfield-public-legal-pages"]
+    },
+    {
       "route": "build-your-own-surface/sdk-boundary",
       "sourceIds": ["runtime-kit-js-public-contract", "runtime-kit-package-boundary"]
     },

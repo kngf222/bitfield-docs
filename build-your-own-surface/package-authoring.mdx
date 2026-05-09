@@ -1,0 +1,100 @@
+---
+title: "Package authoring"
+description: "How to shape package records, package-owned files, and callable slots for a product feature."
+---
+
+<div className="bf-article">
+
+<p className="bf-lead">
+A package is the feature boundary. It names the product material the feature owns so the rest of the product can use it without guessing.
+</p>
+
+Product scene: a customer dashboard owns customer records, a package-owned formatter, and a callable archive target. Those belong together because they change together.
+
+<div className="bf-flow" aria-label="Package authoring flow">
+  <div className="bf-flow-step">
+    <span>Record</span>
+    <strong>Durable product fact</strong>
+    <p>Declare the records the feature owns.</p>
+  </div>
+  <div className="bf-flow-arrow">+</div>
+  <div className="bf-flow-step">
+    <span>File</span>
+    <strong>Package-owned bytes</strong>
+    <p>Attach text, JSON, or other bytes the package needs.</p>
+  </div>
+  <div className="bf-flow-arrow">+</div>
+  <div className="bf-flow-step">
+    <span>Slot</span>
+    <strong>Callable target door</strong>
+    <p>Declare the named target the surface may request.</p>
+  </div>
+</div>
+
+## Authoring rule
+
+Put something in the package when it is part of the feature's contract. Keep it out when it is only local developer convenience.
+
+| Product need | Package shape |
+|---|---|
+| A durable customer, invoice, game room, note, or project item | `record` |
+| Text, JSON, rules, or other bytes owned by the feature | `stored_bytes` |
+| A named action the surface can request | `slot` |
+| A screen placement decision | Surface descriptor or shell placement, not a package record |
+| Account checkout or device activation | Account lifecycle docs, not a feature package |
+
+## Example boundary sketch
+
+```json
+{
+  "records": [
+    {
+      "name": "customers.list",
+      "fields": {
+        "id": "string",
+        "name": "string",
+        "status": "string"
+      }
+    }
+  ],
+  "stored_bytes": [
+    {
+      "name": "customers.copy",
+      "path": "./copy/customers.json"
+    }
+  ],
+  "slots": [
+    {
+      "name": "customers.archive",
+      "methods": ["invoke"]
+    }
+  ]
+}
+```
+
+Expected result: a reader can see the feature boundary before reading the React component. The package says what product material exists and which named action can be called.
+
+## Common failures
+
+| Symptom | Cause | Fix |
+|---|---|---|
+| The surface needs to know file names | The package did not provide a prepared read contract | Add a prepared input and read it through Runtime Kit |
+| One package has unrelated product areas | The package boundary is too wide | Split by feature ownership |
+| The package contains UI placement policy | The shell/surface boundary is blurred | Move placement meaning to the surface descriptor or shell route |
+| A target name is vague | The caller cannot tell what action is safe | Rename it around product action, like `customers.archive` |
+
+## Verify
+
+The package boundary is ready when a teammate or AI agent can answer these questions from the boundary alone:
+
+- What product facts does this feature own?
+- Which bytes are package-owned material?
+- Which callable targets exist?
+- Which surface reads are expected?
+- Which user action maps to each target?
+
+## Next
+
+Use [Target design](/build-your-own-surface/target-design) for the action side and [Package boundary](/reference/package-boundary) for exact field rules.
+
+</div>

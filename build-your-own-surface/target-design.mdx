@@ -1,0 +1,92 @@
+---
+title: "Target design"
+description: "How to design callable targets that stay named, small, and product-shaped."
+---
+
+<div className="bf-article">
+
+<p className="bf-lead">
+A target is the named action a surface can request. Good targets read like product verbs, accept small payloads, and return a shape the surface can render.
+</p>
+
+Product scene: the customer dashboard has an `Archive` button. The target should be `customers.archive`, not a generic `doThing` command with a hidden action string.
+
+<div className="bf-flow" aria-label="Target design flow">
+  <div className="bf-flow-step">
+    <span>Name</span>
+    <strong>Product action</strong>
+    <p>Name the action around the user's intent.</p>
+  </div>
+  <div className="bf-flow-arrow">→</div>
+  <div className="bf-flow-step">
+    <span>Payload</span>
+    <strong>Small input</strong>
+    <p>Pass only what the target needs to do the work.</p>
+  </div>
+  <div className="bf-flow-arrow">→</div>
+  <div className="bf-flow-step">
+    <span>Reply</span>
+    <strong>Renderable result</strong>
+    <p>Return enough for the surface to show success or failure.</p>
+  </div>
+</div>
+
+## Naming rule
+
+Use a name that tells the caller what business action is being requested.
+
+| Good | Bad | Why |
+|---|---|---|
+| `customers.archive` | `customers.command` | The good name says the exact action |
+| `rooms.join` | `roomMutation` | The good name is a product verb |
+| `invoice.send` | `runWorkflow` | The good name does not hide intent in payload |
+
+## Payload rule
+
+The payload should be boring. It should carry identity and user intent, not a second command language.
+
+```ts
+await sendRequestToBitfieldTarget('customers.archive', {
+  customerId: 'cus_123',
+});
+```
+
+Avoid this shape:
+
+```ts
+await sendRequestToBitfieldTarget('customers.command', {
+  action: 'archive',
+  table: 'customers',
+  where: 'id = cus_123'
+});
+```
+
+The second example makes the surface speak storage and command vocabulary. The target name should carry the action.
+
+## Reply rule
+
+Return a result the surface can use.
+
+| Reply field | Purpose |
+|---|---|
+| `ok` | Lets the surface show success or failure |
+| `message` | Lets the surface show human-readable feedback |
+| product id fields | Lets the surface reconcile the specific item |
+| next read name | Optional pointer to the prepared read that should refresh |
+
+Expected result: the surface can send a named product request, show a useful outcome, and avoid turning payloads into hidden command strings.
+
+## Common failures
+
+| Symptom | Cause | Fix |
+|---|---|---|
+| Every button calls the same target | The target is hiding many actions behind one generic door | Split targets by product action |
+| Payloads keep growing | The target boundary is too vague | Name the target more narrowly |
+| The surface cannot show result | Reply shape is not renderable | Return `ok`, message, and product ids |
+| The target knows screen placement | Action and layout are tangled | Keep placement in shell/surface descriptor |
+
+## Next
+
+Use [App surfaces](/build-your-own-surface/app-surfaces) for the caller side and [sendRequestToBitfieldTarget](/reference/runtime-kit-api) for the exact public request function.
+
+</div>

@@ -39,6 +39,7 @@ const knownPageClasses = new Set([
   'runtime-kit-reference',
   'runtime-kit-ai-agent',
   'runtime-kit-operations',
+  'build-curriculum',
 ]);
 
 function hasAny(body, needles) {
@@ -139,6 +140,17 @@ function validateDepthContract(page, body, sourcePage, output = failures) {
       ['symptom table', '## Start with the symptom'],
       ['verification path', ['## Verify', 'The component renders real data']],
       ['safe local state boundary', 'Do not copy one device'],
+    ], output);
+    return;
+  }
+
+  if (page.pageClass === 'build-curriculum') {
+    requireIncludes(page.route, body, [
+      ['build visual flow', 'className="bf-flow"'],
+      ['expected result', 'Expected result:'],
+      ['common failures or mistakes', ['## Common failures', '## Common build mistakes', '## What this prevents']],
+      ['next-step section', '## Next'],
+      ['Runtime Kit or reference link', ['/runtime-kit/', '/reference/']],
     ], output);
   }
 }

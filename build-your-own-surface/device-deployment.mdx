@@ -1,0 +1,67 @@
+---
+title: "Device and deployment shape"
+description: "How to think about account keys, activated devices, local state, and product rollout."
+---
+
+<div className="bf-article">
+
+<p className="bf-lead">
+Bitfield products are not only pages. They run on activated devices with local state, account-owned access, and product packages that should keep working as your idea changes.
+</p>
+
+Product scene: you start with a laptop and phone. Then a friend tests it. Then ten customers use it. The product shape should not change just because the device count grows.
+
+<div className="bf-flow" aria-label="Device rollout flow">
+  <div className="bf-flow-step">
+    <span>Account</span>
+    <strong>Gets key</strong>
+    <p>The customer creates an account and receives access through the account portal.</p>
+  </div>
+  <div className="bf-flow-arrow">→</div>
+  <div className="bf-flow-step">
+    <span>Device</span>
+    <strong>Activates</strong>
+    <p>Each allowed device joins the active-device set for that account.</p>
+  </div>
+  <div className="bf-flow-arrow">→</div>
+  <div className="bf-flow-step">
+    <span>Product</span>
+    <strong>Runs locally</strong>
+    <p>The product reads local Bitfield state and uses packages/surfaces/targets.</p>
+  </div>
+</div>
+
+## Deployment questions
+
+| Question | Why it matters | Page |
+|---|---|---|
+| How does the user get a key? | The product cannot run without account access | [Get your key](/start/get-your-key) |
+| How many devices can try it first? | Trial shape affects first customer experience | [Trials and billing](/activation/trials-and-billing) |
+| Where does local state live? | Users need to understand ownership and no-hand-edit boundaries | [Local state](/runtime-kit/local-state) |
+| Which package runs the feature? | Product behavior should stay package-shaped | [Package authoring](/build-your-own-surface/package-authoring) |
+| Which surface appears first? | The first visible result sells the product path | [App surfaces](/build-your-own-surface/app-surfaces) |
+
+## Rollout shape
+
+Start by proving the product moment on one device. Then invite more devices without changing the product architecture:
+
+1. Keep the package boundary stable.
+2. Keep the surface read/request contract stable.
+3. Keep the shell placement contract stable.
+4. Let account/device access decide who can run it.
+
+Expected result: adding devices does not force you to rewrite feature boundaries.
+
+## Common failures
+
+| Symptom | Cause | Fix |
+|---|---|---|
+| Works on one machine only | Local state and account activation were not part of the build path | Add the key/device path to the launch checklist |
+| Users hand-edit local state | Docs or UI did not explain ownership | Link to local-state boundaries and expose product controls |
+| Every device needs a different feature build | Product package and shell placement are tangled | Separate package, surface, target, and shell concerns |
+
+## Next
+
+Use [Get your key](/start/get-your-key) for the account path, then return to [Build with Bitfield](/build-your-own-surface) to choose the next product seam.
+
+</div>

@@ -1,0 +1,75 @@
+---
+title: "Product shells"
+description: "How shells place surfaces without owning product body logic."
+---
+
+<div className="bf-article">
+
+<p className="bf-lead">
+A shell is the product frame: navigation, layout, active device state, and where surfaces appear. It should place surfaces, not become every feature.
+</p>
+
+Product scene: your app has a sidebar, a main panel, and a details panel. The shell decides those regions exist. Package surfaces decide what product body appears inside them.
+
+<div className="bf-flow" aria-label="Product shell flow">
+  <div className="bf-flow-step">
+    <span>Shell</span>
+    <strong>Places regions</strong>
+    <p>Navigation, route, account state, active device state, and layout regions.</p>
+  </div>
+  <div className="bf-flow-arrow">→</div>
+  <div className="bf-flow-step">
+    <span>Descriptor</span>
+    <strong>Names surface placement</strong>
+    <p>Which product surface belongs in which shell region.</p>
+  </div>
+  <div className="bf-flow-arrow">→</div>
+  <div className="bf-flow-step">
+    <span>Surface</span>
+    <strong>Owns product body</strong>
+    <p>Reads prepared data, renders UI states, and sends named target requests.</p>
+  </div>
+</div>
+
+## Shell ownership
+
+| Shell can own | Shell should not own |
+|---|---|
+| Navigation | Customer archive logic |
+| Region layout | Package record parsing |
+| Active-device banners | Target payload interpretation |
+| Account/key prompts | Product-specific empty states |
+| Surface placement | Package-owned file contents |
+
+## Placeable surface rule
+
+The shell should be able to place a surface from a descriptor without learning the feature story.
+
+```json
+{
+  "surface": "customers.list",
+  "region": "main",
+  "reads": ["customers.list"],
+  "targets": ["customers.archive"]
+}
+```
+
+Expected result: the shell can put the surface in the right place and the surface still owns the customer-specific UI.
+
+## What this prevents
+
+| Bad shape | What happens by month six |
+|---|---|
+| Shell imports every feature component and action helper | Navigation becomes the product's largest dependency knot |
+| Surface placement is hardcoded inside feature logic | Reusing the same feature in another shell becomes painful |
+| Account/device state is copied into every surface | Every screen handles activation differently |
+
+## Verify
+
+You have the right boundary when you can move a surface from `main` to `details` without editing the target implementation or prepared read contract.
+
+## Next
+
+Use [Placeable surfaces](/runtime-kit/placeable-surfaces) for the descriptor mental model and [Device and deployment shape](/build-your-own-surface/device-deployment) for account/device rollout.
+
+</div>

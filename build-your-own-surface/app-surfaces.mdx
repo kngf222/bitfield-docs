@@ -1,0 +1,110 @@
+---
+title: "App surfaces"
+description: "How to design a screen that reads prepared Bitfield data and sends named requests."
+---
+
+<div className="bf-article">
+
+<p className="bf-lead">
+An app surface is the part your user sees. It should read prepared data, render every state, and send named requests. It should not learn package storage details.
+</p>
+
+Product scene: a founder adds a `Customers` screen. The screen needs a list, a loading state, an empty state, and one action: archive a customer.
+
+<div className="bf-flow" aria-label="App surface contract">
+  <div className="bf-flow-step">
+    <span>Read</span>
+    <strong>Prepared input</strong>
+    <p>The surface asks for a stable input name and renders loading, error, empty, and success states.</p>
+  </div>
+  <div className="bf-flow-arrow">→</div>
+  <div className="bf-flow-step">
+    <span>Render</span>
+    <strong>Product body</strong>
+    <p>The user sees product meaning: customers, messages, tasks, rooms, invoices, or whatever your product owns.</p>
+  </div>
+  <div className="bf-flow-arrow">→</div>
+  <div className="bf-flow-step">
+    <span>Act</span>
+    <strong>Named target</strong>
+    <p>The surface sends a small request to a target instead of mutating local files by hand.</p>
+  </div>
+</div>
+
+## Surface contract
+
+| Piece | Surface owns | Surface does not own |
+|---|---|---|
+| Reads | Which prepared input it needs and how to render each state | Storage layout or package admission |
+| Actions | Button intent, payload shape, pending/error/success UI | Target execution details |
+| Layout | Local component structure inside the surface | Global navigation and device/account placement |
+| Copy | User-facing words for the product moment | Private setup details |
+
+## Minimal shape
+
+```tsx
+import { sendRequestToBitfieldTarget, useBitfieldData } from '@bitfield/runtime-kit';
+
+export function CustomersSurface() {
+  const customers = useBitfieldData('customers.list');
+
+  if (customers.loading) return <p>Loading customers...</p>;
+  if (customers.error) return <p>Customers could not load.</p>;
+  if (!customers.data?.length) return <p>No customers yet.</p>;
+
+  return (
+    <ul>
+      {customers.data.map((customer) => (
+        <li key={customer.id}>
+          <span>{customer.name}</span>
+          <button
+            type="button"
+            onClick={() =>
+              sendRequestToBitfieldTarget('customers.archive', { customerId: customer.id })
+            }
+          >
+            Archive
+          </button>
+        </li>
+      ))}
+    </ul>
+  );
+}
+```
+
+Expected result: the screen can render a real product list, survive loading and error states, and send one named product action without knowing how Bitfield stores or runs the feature.
+
+## What not to do
+
+```tsx
+// Bad shape: the screen is trying to become the package loader.
+const rawPackageFile = await fetch('/some-package-file.json');
+const rows = JSON.parse(await rawPackageFile.text());
+```
+
+The surface should not parse package material. Package admission and prepared reads belong behind the public Runtime Kit contract.
+
+## Common failures
+
+| Symptom | Cause | Fix |
+|---|---|---|
+| The component crashes before data arrives | It renders only the success path | Add loading, error, empty, and success states |
+| The screen knows package file names | The surface is bypassing prepared reads | Read through `useBitfieldData(...)` |
+| Every button sends a vague command | The target contract is not product-shaped | Use a named target like `customers.archive` |
+| The UI cannot show success or failure | The request result is ignored | Render pending, success, and failure feedback |
+
+## Verify
+
+| Check | Passes when |
+|---|---|
+| Loading path | The screen shows a visible loading state before data arrives |
+| Error path | The screen shows a visible error state when the read fails |
+| Empty path | The screen explains what the user sees when no records exist |
+| Success path | The screen renders product data, not storage vocabulary |
+| Request path | The button calls a named target with a small payload |
+
+## Next
+
+Use [Package authoring](/build-your-own-surface/package-authoring) to create the package boundary that can feed this surface. Use [Runtime Kit API](/reference/runtime-kit-api) for the exact public function contracts.
+
+</div>

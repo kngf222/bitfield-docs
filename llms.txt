@@ -31,6 +31,12 @@ These pages are public customer documentation. They describe the public product,
 - [Callable package slot](runtime-kit/cookbook/callable-package-slot): Shows how a package declares a callable slot and how app code sends a request to it.
 - [React surface for package data](runtime-kit/cookbook/react-surface-for-package-data): Shows the app-facing read and request shape without exposing package implementation details to React.
 - [Placeable surface product loop](runtime-kit/cookbook/placeable-surface-product-loop): Shows the source-owned cookbook succession for placeable surfaces: package boundary, descriptors, generic shell, surface bodies, and review checklist.
+- [Build with Bitfield](build-your-own-surface/index): Maps the full Bitfield build loop from product moment to package, surface, target, shell, device, and account access.
+- [App surfaces](build-your-own-surface/app-surfaces): Shows how product screens read prepared data, render every state, and send named target requests.
+- [Package authoring](build-your-own-surface/package-authoring): Explains how to draw a feature boundary with records, package-owned files, callable slots, expected results, and failures.
+- [Target design](build-your-own-surface/target-design): Gives naming, payload, reply, and failure rules for callable targets that surfaces can request safely.
+- [Product shells](build-your-own-surface/product-shells): Defines the shell boundary for navigation, layout, account/device state, and surface placement.
+- [Device and deployment shape](build-your-own-surface/device-deployment): Connects product packages and surfaces to account keys, activated devices, local state, and rollout decisions.
 - [Build your own surface](build-your-own-surface/sdk-boundary): Defines the public SDK boundary pattern: simple app functions outside, Bitfield setup behind the plug.
 - [Trials and billing](activation/trials-and-billing): Explains trial billing and active-device ranges without turning pricing into hidden math.
 - [How Bitfield is this fast](proof/how-bitfield-is-fast): Explains warm local reads, memory mapping, content addresses, and non-claims.

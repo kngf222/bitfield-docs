@@ -140,8 +140,14 @@
         "tab": "Build",
         "groups": [
           {
-            "group": "Own your surface",
+            "group": "Build a product",
             "pages": [
+              "build-your-own-surface/index",
+              "build-your-own-surface/app-surfaces",
+              "build-your-own-surface/package-authoring",
+              "build-your-own-surface/target-design",
+              "build-your-own-surface/product-shells",
+              "build-your-own-surface/device-deployment",
               "build-your-own-surface/sdk-boundary"
             ]
           },

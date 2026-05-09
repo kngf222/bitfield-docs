@@ -620,15 +620,21 @@
         }
       ]
     },
-    {
-      "tab": "Build",
-      "groups": [
-        {
-          "group": "Own your surface",
-          "pages": [
-            "build-your-own-surface/sdk-boundary"
-          ]
-        },
+      {
+        "tab": "Build",
+        "groups": [
+          {
+            "group": "Build a product",
+            "pages": [
+              "build-your-own-surface/index",
+              "build-your-own-surface/app-surfaces",
+              "build-your-own-surface/package-authoring",
+              "build-your-own-surface/target-design",
+              "build-your-own-surface/product-shells",
+              "build-your-own-surface/device-deployment",
+              "build-your-own-surface/sdk-boundary"
+            ]
+          },
         {
           "group": "Activation",
           "pages": [
@@ -847,10 +853,59 @@
       "summary": "Shows the source-owned cookbook succession for placeable surfaces: package boundary, descriptors, generic shell, surface bodies, and review checklist."
     },
     {
+      "route": "build-your-own-surface/index",
+      "title": "Build with Bitfield",
+      "description": "The product-building map: package, surface, target, shell, device, and account loop.",
+      "diataxis": "tutorial",
+      "pageClass": "build-curriculum",
+      "summary": "Maps the full Bitfield build loop from product moment to package, surface, target, shell, device, and account access."
+    },
+    {
+      "route": "build-your-own-surface/app-surfaces",
+      "title": "App surfaces",
+      "description": "How to design a screen that reads prepared Bitfield data and sends named requests.",
+      "diataxis": "how-to",
+      "pageClass": "build-curriculum",
+      "summary": "Shows how product screens read prepared data, render every state, and send named target requests."
+    },
+    {
+      "route": "build-your-own-surface/package-authoring",
+      "title": "Package authoring",
+      "description": "How to shape package records, package-owned files, and callable slots for a product feature.",
+      "diataxis": "how-to",
+      "pageClass": "build-curriculum",
+      "summary": "Explains how to draw a feature boundary with records, package-owned files, callable slots, expected results, and failures."
+    },
+    {
+      "route": "build-your-own-surface/target-design",
+      "title": "Target design",
+      "description": "How to design callable targets that stay named, small, and product-shaped.",
+      "diataxis": "how-to",
+      "pageClass": "build-curriculum",
+      "summary": "Gives naming, payload, reply, and failure rules for callable targets that surfaces can request safely."
+    },
+    {
+      "route": "build-your-own-surface/product-shells",
+      "title": "Product shells",
+      "description": "How shells place surfaces without owning product body logic.",
+      "diataxis": "concept",
+      "pageClass": "build-curriculum",
+      "summary": "Defines the shell boundary for navigation, layout, account/device state, and surface placement."
+    },
+    {
+      "route": "build-your-own-surface/device-deployment",
+      "title": "Device and deployment shape",
+      "description": "How to think about account keys, activated devices, local state, and product rollout.",
+      "diataxis": "how-to",
+      "pageClass": "build-curriculum",
+      "summary": "Connects product packages and surfaces to account keys, activated devices, local state, and rollout decisions."
+    },
+    {
       "route": "build-your-own-surface/sdk-boundary",
       "title": "Build your own surface",
       "description": "How to design another app-facing SDK without exposing Bitfield setup details.",
       "diataxis": "how-to",
+      "pageClass": "build-curriculum",
       "summary": "Defines the public SDK boundary pattern: simple app functions outside, Bitfield setup behind the plug."
     },
     {
