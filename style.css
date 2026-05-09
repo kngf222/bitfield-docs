@@ -109,7 +109,7 @@ main a[href]:not(#sidebar a):not(#table-of-contents a):not(#navbar a):not(header
 [role="main"] a[href]:not(#sidebar a):not(#table-of-contents a):not(#navbar a):not(header a),
 #content-area a[href]:not(#sidebar a):not(#table-of-contents a):not(#navbar a):not(header a) {
   color: color-mix(in srgb, var(--docs-active-color) 82%, var(--text-primary) 18%) !important;
-  text-decoration-color: color-mix(in srgb, var(--docs-active-color) 72%, transparent) !important;
+  text-decoration-color: var(--bf-docs-selected-border) !important;
   text-decoration-line: underline !important;
   text-decoration-thickness: 1px !important;
   text-underline-offset: 0.18em !important;
@@ -122,7 +122,7 @@ main a[href]:not(#sidebar a):not(#table-of-contents a):not(#navbar a):not(header
 #content-area a[href]:not(#sidebar a):not(#table-of-contents a):not(#navbar a):not(header a):hover,
 #content-area a[href]:not(#sidebar a):not(#table-of-contents a):not(#navbar a):not(header a):focus-visible {
   color: var(--docs-active-color) !important;
-  text-decoration-color: var(--docs-active-color) !important;
+  text-decoration-color: var(--bf-docs-selected-border) !important;
 }
 
 #sidebar a[href]:hover,
@@ -1034,8 +1034,8 @@ nav .bf-docs-theme-picker {
 }
 
 .bf-callout {
-  background: color-mix(in srgb, var(--docs-active-color) 14%, var(--surface-base) 86%);
-  border: 1px solid color-mix(in srgb, var(--docs-active-color) 48%, var(--text-primary) 20%);
+  background: var(--bf-docs-selected-surface);
+  border: 1px solid var(--bf-docs-selected-border);
   border-radius: 0;
   margin: 1.8rem 0;
   padding: 1.1rem 1.2rem;
