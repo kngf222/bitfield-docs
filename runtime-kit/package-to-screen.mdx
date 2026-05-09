@@ -31,6 +31,32 @@ package folder
   -> button calls "welcome.suggest"
 ```
 
+<div className="bf-flow" aria-label="Package boundary admission flow">
+  <div className="bf-flow-node">
+    <span className="bf-flow-step">01</span>
+    <strong>Package folder</strong>
+    <p>Files start as source material owned by the package.</p>
+  </div>
+  <div className="bf-flow-arrow" aria-hidden="true">→</div>
+  <div className="bf-flow-node">
+    <span className="bf-flow-step">02</span>
+    <strong>Boundary file</strong>
+    <p>`things-to-store-and-run.json` declares records, bytes, and targets.</p>
+  </div>
+  <div className="bf-flow-arrow" aria-hidden="true">→</div>
+  <div className="bf-flow-node">
+    <span className="bf-flow-step">03</span>
+    <strong>Admitted material</strong>
+    <p>Runtime Kit checks the package before app code sees handles.</p>
+  </div>
+  <div className="bf-flow-arrow" aria-hidden="true">→</div>
+  <div className="bf-flow-node">
+    <span className="bf-flow-step">04</span>
+    <strong>Public handles</strong>
+    <p>The app reads prepared inputs and calls target names.</p>
+  </div>
+</div>
+
 That is the whole shape. The rest of this page fills in every step.
 
 ## Before you start

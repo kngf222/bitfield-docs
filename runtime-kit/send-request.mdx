@@ -36,6 +36,26 @@ app action
   -> app decodes bytes according to the public target contract
 ```
 
+<div className="bf-flow" aria-label="Read versus request split">
+  <div className="bf-flow-node">
+    <span className="bf-flow-step">read</span>
+    <strong>Prepared data</strong>
+    <p>`useBitfieldData(...)` reads values already prepared for the surface.</p>
+  </div>
+  <div className="bf-flow-arrow" aria-hidden="true">|</div>
+  <div className="bf-flow-node">
+    <span className="bf-flow-step">act</span>
+    <strong>Target request</strong>
+    <p>`sendRequestToBitfieldTarget(...)` sends bytes to a named target.</p>
+  </div>
+  <div className="bf-flow-arrow" aria-hidden="true">→</div>
+  <div className="bf-flow-node">
+    <span className="bf-flow-step">reply</span>
+    <strong>Reply bytes</strong>
+    <p>The app decodes only what the target contract promises.</p>
+  </div>
+</div>
+
 The request shape is:
 
 ```ts

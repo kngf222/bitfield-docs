@@ -25,6 +25,32 @@ package boundary
   -> local state and activation
 ```
 
+<div className="bf-flow" aria-label="Troubleshooting flow from symptom to verified fix">
+  <div className="bf-flow-node">
+    <span className="bf-flow-step">01</span>
+    <strong>Symptom</strong>
+    <p>Name what the user sees, not what you assume broke.</p>
+  </div>
+  <div className="bf-flow-arrow" aria-hidden="true">→</div>
+  <div className="bf-flow-node">
+    <span className="bf-flow-step">02</span>
+    <strong>Public link</strong>
+    <p>Pick boundary, read, request, reply, local state, or activation.</p>
+  </div>
+  <div className="bf-flow-arrow" aria-hidden="true">→</div>
+  <div className="bf-flow-node">
+    <span className="bf-flow-step">03</span>
+    <strong>Evidence</strong>
+    <p>Capture the safe name, payload shape, state, or error.</p>
+  </div>
+  <div className="bf-flow-arrow" aria-hidden="true">→</div>
+  <div className="bf-flow-node">
+    <span className="bf-flow-step">04</span>
+    <strong>Verify</strong>
+    <p>Fix one link and prove the expected state appears.</p>
+  </div>
+</div>
+
 Do not skip straight to private files. First prove which public link failed.
 
 ## Start with the symptom
