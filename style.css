@@ -231,7 +231,16 @@ main > article,
   width: 1.05rem !important;
 }
 
-[data-bf-docs-copy-menu="true"],
+[data-bf-docs-copy-menu="true"]:not([data-radix-menu-content]) {
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  outline: 0 !important;
+  overflow: visible !important;
+  padding: 0 !important;
+}
+
+[data-radix-menu-content][role="menu"][data-bf-docs-copy-menu="true"],
 [data-radix-menu-content][role="menu"]:has([data-bf-docs-copy-menu-item="true"]) {
   background: var(--bf-docs-selected-surface) !important;
   background-color: var(--bf-docs-selected-surface) !important;
