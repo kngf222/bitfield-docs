@@ -24,4 +24,4 @@ Cookbook-adjacent pages must avoid loose snippets. A recipe needs a scene, exact
 
 These pages may explain public imports, package boundary files, package sets, local state folder meanings, prepared inputs, target names, payloads, reply bytes, and public mistakes.
 
-These pages must not publish private Runtime Kit wiring, unpublished imports, exact proprietary storage layouts, private machine paths beyond customer-visible `~/.bitfield` meanings, hidden prompts, or implementation secrets.
+These pages must not publish private Runtime Kit wiring, unpublished imports, exact proprietary storage layouts, private machine paths beyond customer-visible `~/.bitfield` meanings, AI instruction material, or implementation secrets.

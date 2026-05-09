@@ -23,7 +23,7 @@ These pages are public customer documentation. They describe the public product,
 - [Send a request](runtime-kit/send-request): Shows JSON, text, byte payloads, reply decoding, cancellation, and target-boundary mistakes.
 - [Packages](runtime-kit/packages): Explains package sets, records, stored bytes, callable slots, validation rules, and safe package examples.
 - [Local state](runtime-kit/local-state): Explains stored data, Runtime Kit package state, activation material, and what users should not hand-edit.
-- [Build with AI agents](runtime-kit/ai-build-rules): Gives AI-agent prompts, review checks, and public Runtime Kit boundaries for generated feature work.
+- [Build with AI agents](runtime-kit/ai-build-rules): Gives AI-agent prompt packs, bad-output corrections, review maps, and public Runtime Kit boundaries for generated feature work.
 - [Troubleshooting](runtime-kit/troubleshooting): Maps Runtime Kit symptoms to the public chain link that failed and gives safe repair checks.
 - [Runtime Kit Cookbook](runtime-kit/cookbook/index): Indexes Runtime Kit cookbook entries for packages, package-owned bytes, callable slots, React surfaces, and placeable surface product loops.
 - [Package set with one record](runtime-kit/cookbook/package-set-with-one-record): Shows the smallest package boundary with one durable package record.

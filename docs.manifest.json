@@ -784,7 +784,7 @@
       "title": "Build with AI agents",
       "description": "Give an AI agent the Runtime Kit public contract so it adds features without crossing private boundaries.",
       "diataxis": "how-to",
-      "summary": "Gives AI-agent prompts, review checks, and public Runtime Kit boundaries for generated feature work."
+      "summary": "Gives AI-agent prompt packs, bad-output corrections, review maps, and public Runtime Kit boundaries for generated feature work."
     },
     {
       "route": "runtime-kit/troubleshooting",

@@ -87,6 +87,10 @@ const banned = [
   { parts: ['proprietary internals'], allowedFiles: validatorSelfAllowedFiles },
   { parts: ['private internals'], allowedFiles: validatorSelfAllowedFiles },
   { parts: ['slot internals'], allowedFiles: validatorSelfAllowedFiles },
+  { parts: ['system prompt'], allowedFiles: validatorSelfAllowedFiles },
+  { parts: ['hidden prompt'], allowedFiles: validatorSelfAllowedFiles },
+  { parts: ['developer message'], allowedFiles: validatorSelfAllowedFiles },
+  { parts: ['chain of thought'], allowedFiles: validatorSelfAllowedFiles },
 ].map((rule) => ({
   pattern: rule.parts.join(''),
   allowedFiles: rule.allowedFiles ?? new Set(),
