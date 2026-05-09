@@ -105,6 +105,26 @@ main > article,
   box-shadow: none !important;
 }
 
+main a[href]:not(#sidebar a):not(#table-of-contents a):not(#navbar a):not(header a),
+[role="main"] a[href]:not(#sidebar a):not(#table-of-contents a):not(#navbar a):not(header a),
+#content-area a[href]:not(#sidebar a):not(#table-of-contents a):not(#navbar a):not(header a) {
+  color: color-mix(in srgb, var(--docs-active-color) 82%, var(--text-primary) 18%) !important;
+  text-decoration-color: color-mix(in srgb, var(--docs-active-color) 72%, transparent) !important;
+  text-decoration-line: underline !important;
+  text-decoration-thickness: 1px !important;
+  text-underline-offset: 0.18em !important;
+}
+
+main a[href]:not(#sidebar a):not(#table-of-contents a):not(#navbar a):not(header a):hover,
+main a[href]:not(#sidebar a):not(#table-of-contents a):not(#navbar a):not(header a):focus-visible,
+[role="main"] a[href]:not(#sidebar a):not(#table-of-contents a):not(#navbar a):not(header a):hover,
+[role="main"] a[href]:not(#sidebar a):not(#table-of-contents a):not(#navbar a):not(header a):focus-visible,
+#content-area a[href]:not(#sidebar a):not(#table-of-contents a):not(#navbar a):not(header a):hover,
+#content-area a[href]:not(#sidebar a):not(#table-of-contents a):not(#navbar a):not(header a):focus-visible {
+  color: var(--docs-active-color) !important;
+  text-decoration-color: var(--docs-active-color) !important;
+}
+
 #sidebar a[href]:hover,
 #sidebar a[href]:focus-visible {
   background: var(--glass-bg-hover) !important;
@@ -801,7 +821,7 @@ nav .bf-docs-theme-picker {
 }
 
 .bf-docs-theme-trigger.theme-picker-trigger:focus-visible {
-  outline: 2px solid var(--bf-green);
+  outline: 2px solid var(--docs-active-color);
   outline-offset: 3px;
 }
 
@@ -905,7 +925,7 @@ nav .bf-docs-theme-picker {
 }
 
 .bf-docs-theme-option:focus-visible {
-  outline: 2px solid var(--bf-green);
+  outline: 2px solid var(--docs-active-color);
   outline-offset: 2px;
 }
 
@@ -929,7 +949,7 @@ nav .bf-docs-theme-picker {
 }
 
 .bf-docs-theme-option__check {
-  color: var(--bf-green);
+  color: var(--docs-active-color);
   font-weight: 900;
   opacity: 0;
 }
@@ -1014,8 +1034,8 @@ nav .bf-docs-theme-picker {
 }
 
 .bf-callout {
-  background: color-mix(in srgb, var(--bf-green) 14%, var(--surface-base) 86%);
-  border: 1px solid color-mix(in srgb, var(--bf-green) 48%, var(--text-primary) 20%);
+  background: color-mix(in srgb, var(--docs-active-color) 14%, var(--surface-base) 86%);
+  border: 1px solid color-mix(in srgb, var(--docs-active-color) 48%, var(--text-primary) 20%);
   border-radius: 0;
   margin: 1.8rem 0;
   padding: 1.1rem 1.2rem;
@@ -1040,12 +1060,12 @@ nav .bf-docs-theme-picker {
 }
 
 .bf-green {
-  color: color-mix(in srgb, var(--bf-green) 76%, var(--text-primary) 24%);
+  color: color-mix(in srgb, var(--docs-active-color) 76%, var(--text-primary) 24%);
   font-weight: 800;
 }
 
 .bf-blue {
-  color: var(--bf-blue);
+  color: var(--docs-active-color);
   font-weight: 800;
 }
 
