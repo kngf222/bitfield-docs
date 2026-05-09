@@ -260,6 +260,7 @@ header input[type="search"],
 header input[placeholder*="Search Bitfield docs"],
 header form:has(input[placeholder*="Search Bitfield docs"]) {
   --docs-search-edge: var(--border-secondary);
+  --docs-search-glow: var(--border-secondary);
   background:
     linear-gradient(180deg, var(--docs-search-edge), transparent),
     color-mix(in srgb, var(--surface-base) 84%, var(--text-primary) 16%) !important;
@@ -267,7 +268,7 @@ header form:has(input[placeholder*="Search Bitfield docs"]) {
   border-radius: 0 !important;
   box-shadow:
     inset 0 1px 0 var(--docs-search-edge),
-    0 18px 48px color-mix(in srgb, var(--text-primary) 14%, transparent) !important;
+    0 18px 48px var(--docs-search-glow) !important;
   color: var(--text-primary) !important;
 }
 
@@ -300,6 +301,7 @@ header form:has(input[placeholder*="Search Bitfield docs"]) {
 [data-bf-docs-search-dialog="true"] [data-radix-dialog-content],
 [data-bf-docs-search-dialog="true"] [cmdk-root] {
   --docs-search-edge: var(--border-secondary);
+  --docs-search-glow: var(--border-secondary);
   background:
     linear-gradient(180deg, var(--docs-search-edge), transparent),
     color-mix(in srgb, var(--surface-base) 86%, var(--text-primary) 14%) !important;
@@ -307,7 +309,7 @@ header form:has(input[placeholder*="Search Bitfield docs"]) {
   border-radius: 0 !important;
   box-shadow:
     inset 0 1px 0 var(--docs-search-edge),
-    0 28px 80px color-mix(in srgb, var(--text-primary) 20%, transparent) !important;
+    0 28px 80px var(--docs-search-glow) !important;
   color: var(--text-primary) !important;
   max-width: min(88vw, 64rem) !important;
   min-height: min(72vh, 46rem) !important;
