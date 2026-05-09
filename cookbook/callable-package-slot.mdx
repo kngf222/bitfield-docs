@@ -6,10 +6,35 @@ description: "Declare a package-owned runnable door that app code can ask for wo
 <div className="bf-article">
 
 <p className="bf-lead">
-Use a `slot` when a package needs a named runnable door. App code asks the public target. It does not learn how the runnable thing is built, mounted, or replaced.
+Use a `slot` when a package needs a named runnable door. App code calls the public target and stays out of how the thing behind that door is built, stored, mounted, or replaced.
 </p>
 
+This recipe builds `product.search`, a package-owned target for a search box. The app sends a query. Runtime Kit sends bytes to the target. The target returns reply bytes. The app decodes those bytes according to the public reply contract.
+
+## When to use this
+
+Use a slot when the user action needs work, not just data display.
+
+| Good fit | Not this recipe |
+|---|---|
+| Search, summarize, rank, transform, validate, or generate. | Static copy that a component only reads. |
+| A package-owned target that can change behind the same name. | A direct React helper imported into one component. |
+| Work that should be called by a stable public target name. | A secret account operation that belongs in account infrastructure. |
+
 A slot is a callable door. The package boundary says the door name and the methods it accepts. The implementation behind that door stays behind the plug.
+
+## What you will build
+
+| Contract part | Value |
+|---|---|
+| Package | `search-package` |
+| Boundary file | `search-package/things-to-store-and-run.json` |
+| Thing type | `slot` |
+| Target name | `product.search` |
+| Method | `query` |
+| Call shape | `envelope-bytes-in-envelope-bytes-out` |
+| Artifact | `slots/search-slot.bin` |
+| App call | `sendRequestToBitfieldTarget({ target: 'product.search', payload })` |
 
 ## Folder shape
 
@@ -19,6 +44,8 @@ search-package/
   slots/
     search-slot.bin
 ```
+
+The artifact is package-owned bytes. The app does not import this file. The app calls `product.search`.
 
 ## Boundary file
 
@@ -50,6 +77,15 @@ search-package/
 }
 ```
 
+The boundary declares two public ideas:
+
+| Field | Meaning |
+|---|---|
+| `name: "product.search"` | The target app code calls. |
+| `methods` | The named operations the slot exposes. |
+| `boundary.call_shape` | The public byte-in/byte-out call contract. |
+| `artifact.source_path` | Package-local bytes for the callable thing. |
+
 ## App call
 
 ```ts
@@ -61,12 +97,71 @@ const reply = await sendRequestToBitfieldTarget({
 });
 ```
 
+The app owns the request contract:
+
+| Contract part | Shape |
+|---|---|
+| Target | `product.search` |
+| Payload | `{ query: string }` |
+| Reply | Bytes decoded according to the package target's public reply contract. |
+| Error handling | Caller handles failed request or failed decode visibly. |
+
+Expected result:
+
+```text
+The app asks product.search for work.
+The app does not import slots/search-slot.bin.
+The target name can stay stable while package-owned bytes change behind it.
+```
+
 ## What stays stable
 
 Your app keeps calling `product.search`. The package can change the bytes behind that target without making the React component import implementation code, read a package file, or understand how the slot runs.
 
+## Verify the recipe
+
+Use this checklist before wiring the target into a real screen:
+
+| Check | Pass condition |
+|---|---|
+| Boundary exists | `search-package/things-to-store-and-run.json` exists. |
+| Artifact exists | `search-package/slots/search-slot.bin` exists. |
+| Target name | The slot name is non-empty and stable. |
+| Method list | `methods` includes `query`. |
+| Boundary call shape | The boundary says bytes in, bytes out. |
+| App import | App code imports `sendRequestToBitfieldTarget(...)`, not the artifact. |
+| Payload contract | The caller and target agree on request shape. |
+| Reply contract | The caller decodes bytes only according to the promised reply shape. |
+
+## Common failures
+
+| Symptom | Cause | Fix |
+|---|---|---|
+| Button throws before work starts. | The target name is empty or not declared. | Use the declared public target name. |
+| Package admission fails. | The artifact path is missing or escapes the package. | Put the artifact under `slots/` and update `source_path`. |
+| App code imports the slot file. | The component bypassed Runtime Kit. | Replace the import with `sendRequestToBitfieldTarget(...)`. |
+| UI cannot parse the reply. | The target returned bytes with a different meaning. | Document and honor the reply contract. |
+| Search returns stale results. | Old request finishes after newer input. | Use cancellation when stale work matters. |
+
+## Extend it
+
+After this works, you can add:
+
+1. A React search surface that calls `product.search` from a button or form.
+2. A `stored_bytes` file with package-owned search data.
+3. A record that gives the surface initial search copy.
+4. A second method when the same target needs another public operation.
+
+Do not add a second direct app-to-implementation path. Keep the target name as the public door.
+
 <div className="bf-callout">
 The boundary is public. The implementation details are not. A docs example can show the door name and call shape without publishing how the thing behind it is built.
 </div>
+
+## Next
+
+Read [Send a request](/runtime-kit/send-request) for payload conversion, reply bytes, cancellation, and request errors.
+
+Read [Runtime Kit API](/reference/runtime-kit-api) for the public function contract.
 
 </div>

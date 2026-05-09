@@ -6,10 +6,33 @@ description: "Attach package-owned bytes to a package boundary."
 <div className="bf-article">
 
 <p className="bf-lead">
-Use `stored_bytes` when the package needs to bring a file with it. The file can be text, JSON, an image, or any other bytes your package owns.
+Use `stored_bytes` when a package needs to bring file bytes with it: help text, JSON rules, images, prompts, lookup tables, or any other package-owned material.
 </p>
 
-Stored bytes are package-owned bytes with a stable package name. Bitfield stores the bytes behind that name after the package is admitted.
+This recipe builds a package called `help-package` that carries one text file. The app does not reach into random disk paths. The package declares the file, Runtime Kit checks the path, and the admitted package owns the bytes behind a stable name.
+
+## When to use this
+
+Use `stored_bytes` when the file is part of the package.
+
+| Good fit | Not this recipe |
+|---|---|
+| Help copy shipped with the package. | Customer-uploaded files that need account permissions. |
+| A JSON rules file owned by the package. | Secrets, tokens, or private account material. |
+| An image, prompt, lookup table, or static asset the package brings. | A file outside the package folder. |
+
+The important rule: the package may point at files inside itself. It may not quietly read the rest of the machine.
+
+## What you will build
+
+| Contract part | Value |
+|---|---|
+| Package | `help-package` |
+| Boundary file | `help-package/things-to-store-and-run.json` |
+| Thing type | `stored_bytes` |
+| Public stored-bytes name | `getting-started-help` |
+| Source file | `help/getting-started.txt` |
+| Expected result | Runtime Kit admits package-owned bytes under the package name. |
 
 ## Folder shape
 
@@ -19,6 +42,8 @@ help-package/
   help/
     getting-started.txt
 ```
+
+The source file is inside the package. That is what makes the path safe to admit.
 
 ## Boundary file
 
@@ -35,6 +60,14 @@ help-package/
 }
 ```
 
+The public contract is small:
+
+| Field | Meaning |
+|---|---|
+| `type: "stored_bytes"` | This thing stores package-owned bytes. |
+| `name` | Stable package name for the bytes. |
+| `source_path` | Package-local file path to read during admission. |
+
 ## File content
 
 ```text
@@ -43,10 +76,57 @@ Keep the app-facing Runtime Kit calls boring.
 Let packages grow behind them.
 ```
 
+## Verify the recipe
+
+Use this checklist before adding the bytes to a bigger feature:
+
+| Check | Pass condition |
+|---|---|
+| File exists | `help-package/help/getting-started.txt` exists. |
+| Boundary exists | `help-package/things-to-store-and-run.json` exists. |
+| Thing type | The boundary uses `stored_bytes`. |
+| Path is package-local | `source_path` does not start with `/`, `../`, or another escape. |
+| Public name is stable | `getting-started-help` stays the same when the file content changes. |
+| No secrets | The file contains package material, not keys or account credentials. |
+
+Expected result:
+
+```text
+Runtime Kit can admit help-package.
+The package has stored bytes named getting-started-help.
+The bytes came from help/getting-started.txt inside the package.
+```
+
 ## Why this shape works
 
 The package gives the bytes a public package name: `getting-started-help`. The package also points at the file inside the package folder. Bitfield can reject a file path that tries to escape the package.
 
 That keeps the package boundary clear. The package can bring bytes with it, but it cannot quietly read random files from the machine.
+
+## Common failures
+
+| Symptom | Cause | Fix |
+|---|---|---|
+| Package admission fails because the file is missing. | `source_path` points at a file that is not in the package. | Add the file or correct `source_path`. |
+| Package admission rejects the path. | The path escapes the package folder. | Move the file inside the package and use a package-local path. |
+| The wrong bytes show up later. | The `name` was reused for different meaning. | Keep the name stable for the same concept; use a new name for a new concept. |
+| A public example leaks sensitive data. | The file was treated like a secret store. | Remove the material and rotate it through the account/deployment owner. |
+
+## Extend it
+
+After this works, you can grow the package without changing the shape:
+
+1. Add another `stored_bytes` entry for a second file.
+2. Add a `record` that points a screen at which help file to show.
+3. Add a `slot` target that can search or summarize the package-owned bytes.
+4. Add a React surface that reads prepared data and asks the target for help.
+
+Keep the same rule: the package declares the bytes; app code uses public Runtime Kit surfaces.
+
+## Next
+
+Read [Callable package slot](/cookbook/callable-package-slot) when the package needs a named target that can do work.
+
+Read [Package boundary](/reference/package-boundary) when you need exact field constraints.
 
 </div>
