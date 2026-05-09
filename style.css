@@ -784,7 +784,6 @@ nav .bf-docs-theme-picker {
 
 .bf-docs-theme-trigger .button-flat-face {
   border: 1px solid color-mix(in srgb, var(--text-primary) 14%, var(--surface-base) 86%);
-  border-bottom-color: transparent;
   box-shadow: none;
   padding: 0;
 }
