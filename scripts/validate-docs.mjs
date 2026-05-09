@@ -36,6 +36,14 @@ for (const page of manifest.pages) {
   const file = `${page.route}.mdx`;
   if (!existsSync(file)) {
     failures.push(`Missing page file: ${file}`);
+  } else {
+    const body = readFileSync(file, 'utf8');
+    if (/^#\s+/m.test(body)) {
+      failures.push(`${file} must not declare an in-body H1; Mintlify renders page.title`);
+    }
+    if (body.includes('className="bf-kicker"')) {
+      failures.push(`${file} must not declare an in-body bf-kicker; Mintlify renders the page context`);
+    }
   }
   if (!page.title || !page.description || !page.summary || !page.diataxis) {
     failures.push(`Page metadata incomplete: ${page.route}`);
