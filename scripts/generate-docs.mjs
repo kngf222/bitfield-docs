@@ -568,17 +568,55 @@ const themeJs = `(() => {
     return normalizedControlText(node).includes('copy page');
   }
 
+  function copyMenuScore(node) {
+    const text = normalizedControlText(node);
+    return [
+      'view as markdown',
+      'open in chatgpt',
+      'open in claude',
+      'open in perplexity',
+      'connect to cursor',
+      'connect to vs code',
+    ].filter((label) => text.includes(label)).length;
+  }
+
   function copyPageShell(node) {
+    let shell = node;
     let current = node;
     for (let depth = 0; depth < 4 && current.parentElement; depth += 1) {
       const parent = current.parentElement;
       if (parent.closest('header, #navbar, nav')) break;
-      if (!isCopyPageNode(parent)) break;
       const controls = parent.querySelectorAll('button, [role="button"], a[href]');
-      if (controls.length > 4) break;
+      if (controls.length > 3) break;
+      if (!isCopyPageNode(parent) && !Array.from(controls).some(isCopyPageNode)) break;
+      shell = parent;
       current = parent;
     }
-    return current;
+    return shell;
+  }
+
+  function copyPageMenuShell(node) {
+    let shell = null;
+    let current = node;
+    for (let depth = 0; depth < 8 && current.parentElement; depth += 1) {
+      const parent = current.parentElement;
+      if (parent.matches('main, article, #content-area, header, #navbar, nav')) break;
+      const controls = parent.querySelectorAll('button, [role="button"], [role="menuitem"], a[href]');
+      if (copyMenuScore(parent) >= 2 && controls.length >= 2 && controls.length <= 16) {
+        shell = parent;
+      }
+      current = parent;
+    }
+    return shell;
+  }
+
+  function markCopyPageMenuItems(menu) {
+    menu
+      .querySelectorAll('button, [role="button"], [role="menuitem"], a[href]')
+      .forEach((item) => {
+        if (!isCopyPageNode(item) && copyMenuScore(item) === 0) return;
+        item.setAttribute('data-bf-docs-copy-menu-item', 'true');
+      });
   }
 
   function markCopyPageControls() {
@@ -590,7 +628,22 @@ const themeJs = `(() => {
         shell.setAttribute('data-bf-docs-copy-page', 'true');
         shell
           .querySelectorAll('button, [role="button"], a[href]')
-          .forEach((part) => part.setAttribute('data-bf-docs-copy-page-part', 'true'));
+          .forEach((part) => {
+            part.setAttribute('data-bf-docs-copy-page-part', 'true');
+            if (!isCopyPageNode(part)) {
+              part.setAttribute('data-bf-docs-copy-page-arrow', 'true');
+            }
+          });
+      });
+
+    document
+      .querySelectorAll('button, [role="button"], [role="menuitem"], a[href]')
+      .forEach((node) => {
+        if (copyMenuScore(node) === 0) return;
+        const menu = copyPageMenuShell(node);
+        if (!menu) return;
+        menu.setAttribute('data-bf-docs-copy-menu', 'true');
+        markCopyPageMenuItems(menu);
       });
   }
 
