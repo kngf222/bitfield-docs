@@ -1,58 +1,77 @@
 ---
 title: "Package to screen"
-description: "Build the full public Runtime Kit chain from one package boundary to one React surface."
+description: "Build the first complete Runtime Kit feature: package data, a target request, a React surface, verification, and failure checks."
 ---
 
 <div className="bf-article">
 
 <p className="bf-lead">
-This is the complete public chain: a package declares material, Runtime Kit admits it, a React surface reads prepared data, and a user action sends a request to a named target.
+Build one complete feature the Runtime Kit way: a package declares data and a callable target, Runtime Kit admits that package, a React surface reads prepared data, and a button sends a request to the target.
 </p>
 
-## What this is
+## What you will build
 
-This page shows the shape you should keep in your head when you build with Runtime Kit.
+You are building a small welcome panel for a product launch screen.
 
-The goal is not to teach every private mechanism behind Bitfield. The goal is to make the public path impossible to confuse:
+The panel needs three public pieces:
+
+| Product moment | Runtime Kit shape |
+|---|---|
+| The screen shows welcome copy. | A package `record` becomes prepared data for `useBitfieldData(...)`. |
+| The user clicks for a launch suggestion. | A package `slot` becomes a named target for `sendRequestToBitfieldTarget(...)`. |
+| The screen handles real UI states. | The React surface renders loading, error, empty, and success. |
+
+The screen does not parse package files. The package does not import React. The button does not import the target implementation. Runtime Kit is the public line between those jobs.
 
 ```text
-package boundary
-  -> admitted package material
-  -> prepared read input or callable target
-  -> app surface
+package folder
+  -> things-to-store-and-run.json
+  -> Runtime Kit admits the package
+  -> surface reads "welcome-copy"
+  -> button calls "welcome.suggest"
 ```
 
-If you keep that chain intact, your product stays easier to change. If you break that chain, your app code starts learning the wrong details, and the next feature becomes harder than the last one.
+That is the whole shape. The rest of this page fills in every step.
 
-## The feature we are building
+## Before you start
 
-Imagine a small customer-facing welcome panel.
+You need these public facts before the feature can work:
 
-It needs two things:
-
-| Need | Public Runtime Kit shape |
+| Requirement | What it means |
 |---|---|
-| Show copy on screen. | A package record becomes prepared data for `useBitfieldData(...)`. |
-| Let the user ask for a refreshed suggestion. | A package slot becomes a target for `sendRequestToBitfieldTarget(...)`. |
+| Account and key | Your product has access to Bitfield through the account flow. |
+| Active device | This machine or runtime identity is allowed to use the product. |
+| Package set name | The product has a package set, such as `launch-demo`. |
+| Runtime Kit package | Your app can import `@bitfield/runtime-kit` and `@bitfield/runtime-kit/react`. |
 
-The screen should not import package setup code. The package should not import React. Runtime Kit is the boundary between them.
+This page does not ask you to hand-edit `~/.bitfield`. Runtime Kit and account flows own local activation and package state. If one device behaves differently from another, use [Local state](/runtime-kit/local-state) and [Troubleshooting](/runtime-kit/troubleshooting) instead of copying folders by hand.
 
 ## Step 1: Create the package folder
 
-Use one folder for one package:
+Create one package folder inside the package set you are working on:
 
 ```text
-welcome-package/
-  things-to-store-and-run.json
-  slots/
-    suggestion-slot.bin
+launch-demo/
+  welcome-package/
+    things-to-store-and-run.json
+    slots/
+      suggestion-slot.bin
 ```
 
-The folder is package input. The accepted runtime truth lives behind Runtime Kit after admission.
+The package folder is source material. Runtime Kit is not asking your React app to read this folder. Runtime Kit admits package material first, then gives the app prepared reads and target names.
+
+Success check:
+
+```text
+The package has exactly one boundary file:
+welcome-package/things-to-store-and-run.json
+```
+
+If the file is missing, Runtime Kit has no public package contract to admit.
 
 ## Step 2: Declare the package boundary
 
-`things-to-store-and-run.json` is the public boundary file.
+`things-to-store-and-run.json` declares what this package brings.
 
 ```json
 {
@@ -90,26 +109,44 @@ The folder is package input. The accepted runtime truth lives behind Runtime Kit
 }
 ```
 
-The `record` declares package data. The `slot` declares a callable door. The app surface will not import either implementation directly.
+The `record` is the data the screen will read. The `slot` is the named door the button will call.
 
-## Step 3: Understand what admission changes
+The names that matter later are:
 
-Before Runtime Kit admits the package, this is just a folder.
+| Name | Used by | Meaning |
+|---|---|---|
+| `package::welcome-package::welcome-copy` | Package boundary | Stable package-owned record address. |
+| `welcome-copy` | React surface | Prepared input name exposed to the surface. |
+| `welcome.suggest` | Button/action | Public target name for the request. |
 
-After Runtime Kit admits the package:
+The address and the prepared input are related, but they are not the same thing. The app should read the prepared input name, not build package addresses by hand.
+
+## Step 3: Admit the package
+
+Before admission, this is only a folder with a boundary file.
+
+After admission, Runtime Kit has checked the package and can expose public reads and targets.
 
 | Before admission | After admission |
 |---|---|
-| The boundary file is package input. | Runtime Kit has checked the boundary. |
-| `welcome-copy` is declared as package data. | Runtime Kit can prepare it for an app surface. |
-| `welcome.suggest` is declared as a slot. | App code can ask that target for work. |
-| The package folder is source material. | The app uses public reads and target calls. |
+| `things-to-store-and-run.json` is source material. | Runtime Kit has checked the boundary. |
+| `welcome-copy` exists only as package data. | Runtime Kit can prepare it for a surface. |
+| `welcome.suggest` is only declared. | App code can ask that target for work. |
+| `slots/suggestion-slot.bin` is package-owned material. | App code still calls the target name, not the file. |
 
-That last line matters. App code should not treat the package folder as the live database. App code talks to Runtime Kit.
+Success check:
+
+```text
+The package set contains package "welcome-package".
+The prepared input "welcome-copy" is available to the surface.
+The target "welcome.suggest" is available for requests.
+```
+
+If the package is not available, do not patch React. Check the package boundary first. See [Package boundary failures](/runtime-kit/troubleshooting#package-boundary-failures).
 
 ## Step 4: Read the prepared data
 
-The React surface reads the prepared input name.
+Your React surface reads the prepared input.
 
 ```tsx
 import { useBitfieldData } from '@bitfield/runtime-kit/react';
@@ -135,11 +172,20 @@ export function WelcomePanel() {
 }
 ```
 
-The selector is not a storage path. It is an app-facing prepared input name. Runtime Kit owns how that input gets prepared.
+Expected result:
 
-## Step 5: Send a request from a user action
+```text
+The screen eventually renders:
 
-When the user wants work to happen, call a target.
+Keep shipping.
+Your app can add the next feature without tying this screen to every package behind it.
+```
+
+If the screen stays empty, check the prepared input name and render states. See [Prepared read failures](/runtime-kit/troubleshooting#prepared-read-failures).
+
+## Step 5: Send a request from the button
+
+The button calls a target by name.
 
 ```tsx
 import { sendRequestToBitfieldTarget } from '@bitfield/runtime-kit';
@@ -156,13 +202,30 @@ async function askForSuggestion(topic: string) {
 }
 ```
 
-The app knows the target name and the payload contract. It does not know how the slot runs.
+The request contract is:
 
-## Step 6: Keep read and request roles separate
+| Contract part | Shape |
+|---|---|
+| Target name | `welcome.suggest` |
+| Payload | `{ topic: string }` |
+| Reply | `{ suggestion: string }` encoded as JSON bytes |
+| Error owner | The request caller handles failed request or failed decode. |
 
-Use the hook to read state. Use the request function to ask for work.
+Expected result:
+
+```text
+Calling welcome.suggest with { topic: "launch" } returns reply bytes.
+The app decodes those bytes into { suggestion: string }.
+```
+
+If the request throws before work starts, check the target name and package declaration. If JSON parsing fails, check the reply contract. See [Target request failures](/runtime-kit/troubleshooting#target-request-failures) and [Reply decoding failures](/runtime-kit/troubleshooting#reply-decoding-failures).
+
+## Step 6: Put the read and request together
+
+This is the full surface. It reads prepared data and asks a target for work without importing package setup.
 
 ```tsx
+import { useState } from 'react';
 import { sendRequestToBitfieldTarget } from '@bitfield/runtime-kit';
 import { useBitfieldData } from '@bitfield/runtime-kit/react';
 
@@ -171,14 +234,30 @@ type WelcomeCopy = {
   body: string;
 };
 
+type SuggestionReply = {
+  suggestion: string;
+};
+
 export function WelcomePanel() {
   const welcome = useBitfieldData<WelcomeCopy>('welcome-copy');
+  const [suggestion, setSuggestion] = useState<string | null>(null);
+  const [requestError, setRequestError] = useState<string | null>(null);
 
   async function refreshSuggestion() {
-    await sendRequestToBitfieldTarget({
-      target: 'welcome.suggest',
-      payload: { topic: 'launch' },
-    });
+    setRequestError(null);
+
+    try {
+      const reply = await sendRequestToBitfieldTarget({
+        target: 'welcome.suggest',
+        payload: { topic: 'launch' },
+      });
+
+      const text = new TextDecoder().decode(reply.payload);
+      const data = JSON.parse(text) as SuggestionReply;
+      setSuggestion(data.suggestion);
+    } catch (error) {
+      setRequestError(error instanceof Error ? error.message : 'Request failed.');
+    }
   }
 
   if (welcome.loading) return <section>Loading welcome copy.</section>;
@@ -192,12 +271,42 @@ export function WelcomePanel() {
       <button type="button" onClick={refreshSuggestion}>
         Refresh suggestion
       </button>
+      {requestError ? <p>{requestError}</p> : null}
+      {suggestion ? <p>{suggestion}</p> : null}
     </section>
   );
 }
 ```
 
-This is the shape to preserve as the product grows. Reading and asking for work are different public actions.
+The component owns UI state. It does not own package admission, storage layout, or slot implementation.
+
+## Step 7: Verify the feature
+
+Use this checklist before treating the feature as done:
+
+| Check | Pass condition |
+|---|---|
+| Package boundary exists | `welcome-package/things-to-store-and-run.json` exists. |
+| Record is declared | The boundary has a `record` for `welcome-copy`. |
+| Target is declared | The boundary has a `slot` named `welcome.suggest`. |
+| Read states render | The component renders loading, error, empty, and success. |
+| Request has a contract | The button sends `{ topic: string }` and decodes `{ suggestion: string }`. |
+| No private imports | App code imports only public Runtime Kit surfaces. |
+| No local state edits | No one fixes the feature by editing `~/.bitfield` by hand. |
+
+If any row fails, fix that row before adding a second feature.
+
+## What not to do
+
+Do not make the React component parse `things-to-store-and-run.json`. That moves package admission into the UI.
+
+Do not hardcode package folder paths into app code. The folder is package input, not the app API.
+
+Do not import the slot implementation into the button. Call the target name.
+
+Do not skip loading, error, or empty states. Runtime Kit features still have real user states.
+
+Do not publish package examples that contain private tokens, account secrets, or real customer data.
 
 ## What changes when the feature grows
 
@@ -213,31 +322,41 @@ The public chain can grow without changing its shape.
 
 Runtime Kit is valuable because the feature can get bigger without forcing every screen to learn every layer below it.
 
-## What not to do
-
-Do not make the React component parse `things-to-store-and-run.json`. That moves package admission into the UI.
-
-Do not hardcode package folder paths into app code. The folder is package input, not the app API.
-
-Do not import the slot implementation into the button. Call the target name.
-
-Do not create a new public hook for every new data shape. Keep the public read shape stable and let Runtime Kit prepare the input.
-
-Do not publish package examples that contain private tokens, account secrets, or real customer data.
-
 ## Debug the chain
 
 When something fails, locate which link failed:
 
-| Symptom | Check this link |
-|---|---|
-| Component never receives data. | Is the prepared input name available to this surface? |
-| Target call throws before work starts. | Is the target name non-empty and declared by the package? |
-| Reply cannot be parsed as JSON. | Does this target actually promise JSON reply bytes? |
-| Package cannot be admitted. | Does the boundary choose valid thing types and package-local file paths? |
-| A change works in one product but not another. | Is the package set identity the one you expected? |
+| Symptom | Check this link | Fix path |
+|---|---|---|
+| Package cannot be admitted. | Boundary file and package-owned paths. | [Package boundary failures](/runtime-kit/troubleshooting#package-boundary-failures) |
+| Component never receives data. | Prepared input name and surface scope. | [Prepared read failures](/runtime-kit/troubleshooting#prepared-read-failures) |
+| Button throws before work starts. | Target name and payload shape. | [Target request failures](/runtime-kit/troubleshooting#target-request-failures) |
+| Reply cannot be parsed as JSON. | Reply contract and decoder. | [Reply decoding failures](/runtime-kit/troubleshooting#reply-decoding-failures) |
+| Works on one device but not another. | Activation and package-set state. | [Local state confusion](/runtime-kit/troubleshooting#local-state-confusion) |
 
 Start at the boundary. Then check the prepared input or target. Then check the component.
+
+## The contract to paste into a ticket
+
+When a human or AI agent works on this feature, paste this first:
+
+```md
+## Runtime Kit contract
+
+- Package set: launch-demo
+- Package: welcome-package
+- Boundary file: welcome-package/things-to-store-and-run.json
+- Prepared input: welcome-copy
+- Target: welcome.suggest
+- Request payload: { topic: string }
+- Reply payload: { suggestion: string }
+- React surface: WelcomePanel
+- Public imports only:
+  - @bitfield/runtime-kit
+  - @bitfield/runtime-kit/react
+```
+
+That contract keeps everyone working on the same public surface.
 
 ## Quick reference
 
@@ -246,10 +365,12 @@ Declare record       -> read with useBitfieldData(...)
 Declare slot         -> call with sendRequestToBitfieldTarget(...)
 Change implementation -> keep public input or target stable
 Change app UI        -> keep package admission out of React
-Debug failure        -> identify boundary, read, request, or decode link
+Debug failure        -> identify boundary, read, request, decode, or activation link
 ```
 
 ## Where to go next
+
+Read [JavaScript Runtime Kit](/runtime-kit/javascript) when you want the full mental model.
 
 Read [Packages](/runtime-kit/packages) when you are shaping `things-to-store-and-run.json`.
 

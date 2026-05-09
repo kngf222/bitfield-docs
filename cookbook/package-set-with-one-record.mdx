@@ -6,8 +6,24 @@ description: "Create the smallest complete package boundary: one package, one re
 <div className="bf-article">
 
 <p className="bf-lead">
-This cookbook entry creates the smallest useful package. It declares one record that Bitfield can admit as durable package data.
+Build the smallest complete package recipe: one package set, one package, one boundary file, one durable record, and one verification point.
 </p>
+
+Use this recipe when your product needs stable package-owned data before you add files, callable targets, or a React surface.
+
+## What you will build
+
+You are building a tiny package called `product-copy` inside a package set called `starter-package-set`.
+
+The package declares one record:
+
+| Field | Value |
+|---|---|
+| Package set | `starter-package-set` |
+| Package | `product-copy` |
+| Boundary file | `product-copy/things-to-store-and-run.json` |
+| Record address | `package::product-copy::welcome` |
+| Payload | Welcome copy for a product screen |
 
 A record is addressed data. Addressed means the package gives the data a stable name, so the same package can be admitted again without guessing what the data is.
 
@@ -20,6 +36,15 @@ starter-package-set/
 ```
 
 `starter-package-set` is the collection. `product-copy` is one package inside it. The file inside the package is the boundary Bitfield reads.
+
+Success check:
+
+```text
+The package folder contains exactly one public boundary file:
+starter-package-set/product-copy/things-to-store-and-run.json
+```
+
+If the boundary file is missing, there is no package contract to admit.
 
 ## Boundary file
 
@@ -39,16 +64,76 @@ starter-package-set/
 }
 ```
 
-## What this gives you
+## What each field means
 
-The package now has one durable record named `package::product-copy::welcome`. The address is not a UI label. It is the stable package-owned name that lets Bitfield admit the same record predictably.
+| Field | Meaning |
+|---|---|
+| `package` | The package name Runtime Kit is admitting. |
+| `things` | The public list of things the package brings. |
+| `type: "record"` | This thing is durable package-owned data. |
+| `address` | The stable name for this record inside the package. |
+| `payload` | The JSON value the package owns at that address. |
+
+The package now has one durable record named `package::product-copy::welcome`. The address is not a UI label. It is the stable package-owned name that lets Runtime Kit admit the same record predictably.
+
+## Verify the recipe
+
+Use this checklist before building on top of the recipe:
+
+| Check | Pass condition |
+|---|---|
+| Package folder | `starter-package-set/product-copy/` exists. |
+| Boundary filename | The file is named `things-to-store-and-run.json`. |
+| Boundary JSON | The file parses as JSON. |
+| Package field | `package` equals `product-copy`. |
+| Thing type | The only thing uses `type: "record"`. |
+| Address | The address starts with `package::product-copy::`. |
+| Payload | The payload is product data, not a secret. |
+
+If any row fails, fix the recipe before adding a React component. React cannot repair a broken package boundary.
 
 ## Change the record later
 
 Change the `payload`, keep the `address`, and admit the package again. Same address means same piece of package data. New payload means new content for that piece.
 
+That gives you a safe edit path:
+
+```text
+same address + new payload = update this package-owned record
+new address + new payload  = add a separate package-owned record
+new package name           = create a different package boundary
+```
+
+Do not change all three at once while debugging. Change one thing, verify it, then move to the next.
+
+## Common failures
+
+| Symptom | Cause | Fix |
+|---|---|---|
+| The package is not admitted. | The boundary file is missing or invalid JSON. | Fix `things-to-store-and-run.json` first. |
+| The record cannot be found later. | The address changed between package versions. | Keep the address stable when changing payload only. |
+| Another package overwrote the meaning. | Two examples copied the same package/address names into one set. | Rename the package or address intentionally. |
+| A public example contains secrets. | Someone treated package data like a secret store. | Remove the secret and rotate it outside this docs path. |
+
+## Extend it
+
+After this works, add one capability at a time:
+
+1. Add a second `record` for another piece of product copy.
+2. Add a `stored_bytes` thing when the package owns a file.
+3. Add a `slot` when app code needs a named target to ask for work.
+4. Add a React surface that reads a prepared input created from the record.
+
+The shape stays the same: package declares, Runtime Kit admits, app surfaces read prepared data or call named targets.
+
 <div className="bf-callout">
 Do not put private product secrets in public package examples. Package records are product data. Secrets belong behind your account and deployment controls.
 </div>
+
+## Next
+
+Read [Package-owned file](/cookbook/package-owned-file) when the package needs bytes beside records.
+
+Read [Package to screen](/runtime-kit/package-to-screen) when you want to turn admitted package data into a React surface.
 
 </div>

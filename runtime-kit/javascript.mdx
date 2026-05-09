@@ -13,6 +13,15 @@ Runtime Kit is the public plug between your app and Bitfield. Your app reads pre
 
 Runtime Kit lets a product use Bitfield without turning every screen, feature, and package into one tangled codebase.
 
+Start with the product moment:
+
+```text
+A screen wants data.
+A user clicks a button.
+A package owns the data and the work.
+Runtime Kit keeps the screen from learning package setup.
+```
+
 The public JavaScript surface is intentionally small:
 
 ```ts
@@ -31,7 +40,32 @@ package boundary
 
 React is one surface in that flow. It is not the whole Runtime Kit.
 
-If you want the full build path first, read [Package to screen](/runtime-kit/package-to-screen). It walks through a package boundary, prepared data, a target request, and the React surface that uses both.
+If you want the full build path first, read [Package to screen](/runtime-kit/package-to-screen). It walks through the first complete Runtime Kit feature: package folder, boundary file, package admission, prepared read, target request, React surface, verification, and failure checks.
+
+## Choose your path
+
+Runtime Kit has several reader paths. Pick the one that matches your job.
+
+| If you need to... | Start here | Why |
+|---|---|---|
+| Build the first complete feature. | [Package to screen](/runtime-kit/package-to-screen) | It gives the whole chain in order. |
+| Understand the public model. | This page, then [Placeable surfaces](/runtime-kit/placeable-surfaces) | It explains package/app separation and generic UI placement. |
+| Look up exact API shapes. | [Runtime Kit API](/reference/runtime-kit-api) and [Package boundary](/reference/package-boundary) | Reference pages are for exact contracts. |
+| Debug a broken feature. | [Troubleshooting](/runtime-kit/troubleshooting) | It maps symptoms to the failed public link. |
+| Give an AI agent rails. | [Build with AI agents](/runtime-kit/ai-build-rules) | It tells agents what they may edit and what they must not cross. |
+
+## The first feature shape
+
+Most Runtime Kit features start as the same four-part slice:
+
+| Part | Product question | Public Runtime Kit answer |
+|---|---|---|
+| Package boundary | What does this feature bring? | `things-to-store-and-run.json` declares records, stored bytes, or slots. |
+| Prepared read | What does the screen need to show? | `useBitfieldData(...)` reads a prepared input name. |
+| Target request | What work can the user ask for? | `sendRequestToBitfieldTarget(...)` calls a named target. |
+| Surface state | What does the user see while this happens? | The app renders loading, error, empty, success, and request result states. |
+
+That slice can power a welcome panel, a search box, a settings screen, a local game menu, a support assistant, or a dashboard card. The feature changes. The boundary shape stays steady.
 
 ## The mental model
 
@@ -40,6 +74,8 @@ Think of Runtime Kit as the plug board for your product.
 Your package says what it brings: data to store, bytes it owns, or a callable thing. Bitfield admits that package into local state. Runtime Kit prepares the app-facing view. Your app then does one of two jobs: read data that is already prepared for it, or ask a named target to do work.
 
 The important part is what your app does not do. It does not open storage files. It does not choose data plumbing. It does not parse package boundaries. It does not know how the callable target is backed. That is the point. Your feature code stays calm while the system behind it can get faster, more flexible, and more replaceable.
+
+The fastest way to ruin the shape is to let the first feature cheat. If the first screen imports a package file directly, the second screen will copy that shortcut, the third screen will add a second shortcut, and by month six the product has a maze instead of an architecture.
 
 ## How it works technically
 
@@ -152,6 +188,28 @@ React is the first documented app surface because a lot of products start there.
 | Local state | Keeps customer-visible Bitfield state on the device. |
 | App surfaces | Lets React, and later other SDKs, read and request without learning private setup. |
 
+The public invariant is the same outside React:
+
+```text
+surface asks for prepared data
+surface sends a named target request
+package owns the data and work behind that public boundary
+```
+
+React gives you `useBitfieldData(...)` today. The Runtime Kit idea is bigger than one UI framework.
+
+## Terms to keep straight
+
+| Term | Plain meaning | Common mistake |
+|---|---|---|
+| Package set | A named collection of packages for a product or project. | Treating one package folder like the whole product. |
+| Package | A unit that brings declared data, bytes, or callable doors. | Letting app code import package implementation files. |
+| Boundary file | The public file that says what the package brings. | Adding undeclared files and expecting app code to find them. |
+| Prepared input | A surface-facing name Runtime Kit can read for the app. | Treating the name as a storage path. |
+| Target | A public door app code can ask for work. | Importing the implementation behind the door. |
+| Reply bytes | The bytes returned by a target call. | Parsing bytes without a reply contract. |
+| Placeable surface | A UI contract a shell can arrange without knowing product meaning. | Hardcoding product-specific layout policy into the shell. |
+
 ## Common mistakes
 
 **Treating the hook like a database query**
@@ -205,5 +263,27 @@ React component   -> renders states and user actions
 ```
 
 Repeat that slice for the next feature. The 10th feature should still have the same calm shape as the first.
+
+## Contract to keep beside the code
+
+For each feature, write the public Runtime Kit contract in the feature ticket or README:
+
+```md
+## Runtime Kit contract
+
+- Package set:
+- Package:
+- Boundary file:
+- Prepared inputs:
+- Targets:
+- Request payloads:
+- Reply payloads:
+- React surfaces:
+- Public imports only:
+  - @bitfield/runtime-kit
+  - @bitfield/runtime-kit/react
+```
+
+That tiny contract prevents three common failures: app code reading package files, buttons importing target implementations, and AI agents inventing a second data path.
 
 </div>

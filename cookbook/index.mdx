@@ -1,51 +1,94 @@
 ---
 title: "Start here"
-description: "Complete public examples for package sets, package boundary files, and app-facing Runtime Kit calls."
+description: "Complete public Runtime Kit recipes for package boundaries, prepared reads, target requests, and placeable surfaces."
 ---
 
 <div className="bf-article">
 
 <p className="bf-lead">
-Cookbook entries show a whole shape, not a loose snippet. Each one starts with the file or app surface you own, then shows the Bitfield boundary it talks to.
+Cookbook entries are recipes, not loose snippets. Each recipe starts with the product moment, shows the files or app surface you own, gives the public Runtime Kit boundary, and ends with a check you can use to prove it worked.
 </p>
 
-Use these when you want to copy the shape and adapt the names. The examples stay on the public side of the wall: package files, package-owned content, callable slots, and the two app-facing Runtime Kit calls.
+Use these when you want to copy a working shape and adapt the names. The examples stay on the public side of the wall: package files, package-owned content, callable slots, prepared reads, target requests, and placeable surface descriptors.
 
 The full examples live in `examples/` and are indexed by `cookbook-examples.json`. The docs check makes sure the snippets shown here match those files exactly.
 
+## How to use the cookbook
+
+Every recipe should answer the same questions:
+
+| Recipe question | Why it matters |
+|---|---|
+| When should I use this? | Prevents copying the wrong pattern. |
+| What will I build? | Gives the reader a product scene before the code. |
+| Which files do I own? | Keeps package files, app surfaces, and shell code separate. |
+| What is the Runtime Kit contract? | Names prepared inputs, targets, payloads, replies, and boundaries. |
+| How do I check it worked? | Gives humans and AI agents a pass/fail point. |
+| What breaks most often? | Turns debugging into a known path instead of guessing. |
+| How do I extend it? | Shows the next move without changing the primitive. |
+
+If a recipe does not answer those questions yet, it is not finished.
+
+## Recipes
+
 <div className="bf-grid">
   <div className="bf-card">
-    <strong>Declare a record</strong>
-    Put one durable record behind a package boundary.
+    <strong>Package set with one record</strong>
+    Create the smallest complete package: one package, one record, one stable address, and one check.
   </div>
   <div className="bf-card">
-    <strong>Ship package bytes</strong>
-    Attach package-owned text, JSON, or other bytes.
+    <strong>Package-owned file</strong>
+    Attach package-owned text, JSON, image, or other bytes without letting the package read outside itself.
   </div>
   <div className="bf-card">
-    <strong>Add a callable slot</strong>
-    Declare a named runnable door without teaching app code how it runs.
+    <strong>Callable package slot</strong>
+    Declare a named runnable door so app code can ask for work without importing the implementation.
   </div>
   <div className="bf-card">
-    <strong>Wire a React surface</strong>
-    Read prepared data and ask a target to do work.
+    <strong>React surface for package data</strong>
+    Read prepared data, render every state, and send a target request from one surface.
   </div>
   <div className="bf-card">
-    <strong>Place surfaces</strong>
-    Compose package data, targets, descriptors, and a dumb shell.
+    <strong>Placeable surface product loop</strong>
+    Compose package data, targets, surface descriptors, a dumb shell, and surface bodies.
   </div>
 </div>
 
 ## Start here
 
-- [Package set with one record](/cookbook/package-set-with-one-record) if you want the smallest complete package.
+- [Package to screen](/runtime-kit/package-to-screen) if you have not built the full chain yet.
+- [Package set with one record](/cookbook/package-set-with-one-record) if you want the smallest complete package recipe.
 - [Package-owned file](/cookbook/package-owned-file) if your package needs to bring bytes with it.
 - [Callable package slot](/cookbook/callable-package-slot) if your package needs a target that can answer requests.
 - [React surface for package data](/cookbook/react-surface-for-package-data) if your app needs to show data and trigger work.
-- [Placeable surface product loop](/cookbook/placeable-surface-product-loop) if you want the package-to-shell composition.
+- [Placeable surface product loop](/cookbook/placeable-surface-product-loop) if you want package-to-shell composition.
+
+## Cookbook contract for AI agents
+
+When you ask an AI agent to use a recipe, include this instruction:
+
+```text
+Use the public Runtime Kit recipe. Do not import private Runtime Kit paths.
+Name the package set, package, prepared inputs, targets, request payloads, reply payloads, and files changed.
+Render loading, error, empty, and success states for React reads.
+Call targets with sendRequestToBitfieldTarget(...), not by importing implementation code.
+```
+
+Then make the agent explain back:
+
+```text
+I changed these files:
+I used these public imports:
+The prepared inputs are:
+The targets are:
+The request/reply contracts are:
+The verification step is:
+```
+
+That answer is how you catch boundary violations before they become product architecture.
 
 ## What is not here yet
 
-Account login, credential recovery, key rotation, and account portal flows are not in this cookbook lane yet. Those docs need the final public account contract before they can be written cleanly.
+Account login, credential recovery, key rotation, account portal flows, billing, and support escalation are not in this cookbook lane. Those belong in account and operations docs, not package recipes.
 
 </div>

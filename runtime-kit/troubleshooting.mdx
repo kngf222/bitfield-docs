@@ -29,17 +29,43 @@ Do not skip straight to private files. First prove which public link failed.
 
 ## Start with the symptom
 
-| Symptom | Most likely link |
-|---|---|
-| Package never becomes available. | Package boundary or package admission. |
-| Component stays empty. | Prepared read input. |
-| Component throws immediately. | Missing read scope or unavailable input. |
-| Button call throws before work runs. | Target request shape. |
-| Button call succeeds but UI cannot use the result. | Reply decoding. |
-| Works on one device but not another. | Activation or package set/local state. |
-| AI-generated code imports deep Runtime Kit files. | App boundary violation. |
+| Symptom | Most likely link | First evidence to capture |
+|---|---|---|
+| Package never becomes available. | Package boundary or package admission. | Package name, package set, boundary filename, boundary JSON error. |
+| Component stays empty. | Prepared read input. | Input name, component states, whether `data === null`. |
+| Component throws immediately. | Missing read scope or unavailable input. | Exact error message and component location. |
+| Button call throws before work runs. | Target request shape. | Target name and payload shape. |
+| Button call succeeds but UI cannot use the result. | Reply decoding. | Reply byte format and decoder code. |
+| Works on one device but not another. | Activation or package set/local state. | Device scope and account activation state. |
+| AI-generated code imports deep Runtime Kit files. | App boundary violation. | Import list and files changed. |
 
 Find the link first. Then fix that link.
+
+## First five minutes
+
+Do this before editing code:
+
+| Minute | Action | What you learn |
+|---|---|---|
+| 1 | Write the package set, package name, prepared input, and target name. | Whether everyone is debugging the same feature. |
+| 2 | Check the package boundary exists and names the record or slot. | Whether the package can be admitted. |
+| 3 | Check the component renders loading, error, empty, and success. | Whether the UI is hiding the real state. |
+| 4 | Check the request payload and reply decoder. | Whether the button and target agree on a contract. |
+| 5 | Check whether the issue is one device or every device. | Whether activation/local state is involved. |
+
+If you cannot fill in the contract, that is the bug. Write the contract first, then debug the link that does not match it.
+
+```md
+## Runtime Kit contract
+
+- Package set:
+- Package:
+- Prepared input:
+- Target:
+- Request payload:
+- Reply payload:
+- Device scope: one device or every device
+```
 
 ## Package boundary failures
 
@@ -61,6 +87,27 @@ The package should declare supported thing types:
 
 Fix package boundary problems in the package. Do not work around them in the app surface.
 
+Fast boundary checklist:
+
+```text
+folder exists
+boundary file is named things-to-store-and-run.json
+JSON parses
+top-level package field is non-empty
+things is an array
+each thing has a supported type
+package-owned paths stay inside the package folder
+```
+
+Verify the fix:
+
+| Fix | Verification |
+|---|---|
+| Add missing boundary file. | The package folder contains `things-to-store-and-run.json`. |
+| Fix unknown thing type. | The boundary uses only supported public thing types. |
+| Fix escaped file path. | Every package-owned file path stays inside the package. |
+| Fix missing slot boundary. | The slot declares its public call shape and methods. |
+
 ## Prepared read failures
 
 If `useBitfieldData(...)` does not return the value you expected, check the input name and surface contract.
@@ -80,6 +127,24 @@ Ask:
 | Did app code import only the public React hook? | Deep imports bypass the boundary. |
 
 The correct fix is usually to repair the package/surface contract or the component states, not to create a private read path.
+
+Read failures split into two different problems:
+
+| Problem | What it looks like | Correct fix |
+|---|---|---|
+| The input is not available. | Loading never resolves or Runtime Kit reports unavailable input. | Fix the package/surface contract that prepares the input. |
+| The UI hides the state. | The hook returns loading, error, or null but the component renders nothing helpful. | Render all states visibly. |
+
+Do not solve either problem by reading local files from the component. That creates a second data path and hides the real broken link.
+
+Verify the fix:
+
+```text
+The component shows loading while waiting.
+The component shows a visible error when Runtime Kit reports one.
+The component shows an empty state when data is null.
+The component renders real data when the prepared input is available.
+```
 
 ## Missing read scope errors
 
@@ -115,6 +180,24 @@ Check:
 
 Do not import the code behind the target to "make the button work." That bypasses Runtime Kit.
 
+Request failures split into four common cases:
+
+| Case | What to check | Fix |
+|---|---|---|
+| Empty target | `target` is missing or `''`. | Pass the public target name declared by the package. |
+| Unknown target | The package does not declare that door. | Add or fix the `slot` declaration in the package boundary. |
+| Bad payload | The target expects another shape. | Update the caller or target contract, then document the chosen shape. |
+| Stale request | Old work returns after newer user input. | Use `AbortController` when stale work matters. |
+
+Verify the fix:
+
+| Check | Pass condition |
+|---|---|
+| Target name | Non-empty string and declared by the package. |
+| Payload | Matches the public target contract. |
+| Abort behavior | Search, typeahead, and long work use an abort signal when stale work matters. |
+| App boundary | Button imports `sendRequestToBitfieldTarget(...)`, not target implementation code. |
+
 ## Reply decoding failures
 
 The reply is bytes:
@@ -134,6 +217,31 @@ const data = JSON.parse(text);
 ```
 
 If JSON parsing fails, the request may still have succeeded. The problem may be that the target returned text, binary bytes, an error payload, or a different JSON shape than the app expected.
+
+Write the reply contract beside the caller:
+
+```ts
+type SuggestionReply = {
+  suggestion: string;
+};
+```
+
+Then decode to that contract only after the target promises JSON:
+
+```ts
+const text = new TextDecoder().decode(reply.payload);
+const data = JSON.parse(text) as SuggestionReply;
+```
+
+If the target returns binary data, do not force it through JSON. Keep the reply as bytes and document the binary format.
+
+Debug reply failures with this order:
+
+1. Decode the bytes as text only if the target promises text or JSON.
+2. Parse JSON only if the target promises JSON.
+3. Check whether the reply is an error payload with a different shape.
+4. Check whether the target changed its public reply contract.
+5. Update either the target contract or the decoder, not both blindly.
 
 ## Payload conversion surprises
 
@@ -169,6 +277,14 @@ Use this meaning:
 
 Do not copy one device's local state to another device as a fix. Device permission and package state need the right owner flow.
 
+Safe support note:
+
+```text
+It is OK to say which top-level area seems involved: stored-data, runtime-kit, or check-license.
+Do not paste file contents from those folders into public channels.
+Do not copy those folders between devices.
+```
+
 ## AI-generated code failures
 
 If an AI wrote the code, check for these violations first:
@@ -182,6 +298,14 @@ If an AI wrote the code, check for these violations first:
 | Target reply is parsed without a contract. | Decode according to the target's public reply shape. |
 
 AI tends to connect things directly when the boundary is not repeated clearly. Point it at [Build with AI agents](/runtime-kit/ai-build-rules).
+
+Use this rejection note when reviewing AI output:
+
+```text
+This crosses the Runtime Kit boundary. Keep app code on public imports only.
+Name the prepared input or target instead of importing package implementation code.
+Show loading, error, empty, success, and request-result states.
+```
 
 ## Escalation checklist
 
