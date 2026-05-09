@@ -51,7 +51,7 @@ These pages are public customer documentation. They describe the public product,
 - [Runtime Kit API](reference/runtime-kit-api): Reference for sendRequestToBitfieldTarget, useBitfieldData, payload conversion, cancellation, selectors, return states, valid examples, invalid examples, and public boundaries.
 - [Claim ledger](reference/claim-ledger): Documents the public claim-ledger fields that keep speed claims honest.
 - [Package boundary](reference/package-boundary): Lists package boundary fields, record/stored-bytes/slot thing types, payload choices, method rules, path safety, valid examples, invalid examples, and common failures.
-- [Changelog](changelog/index): The public change log for docs and customer-visible product behavior.
+- [Changelog](changelog/index): The public changelog for customer-visible docs, Runtime Kit, Build, Account, Proof, Start, and Docs changes, with links to changed pages.
 
 ## Public reading rules
 

@@ -44,6 +44,7 @@ const knownPageClasses = new Set([
   'proof-stack',
   'start-onboarding',
   'concept-curriculum',
+  'public-changelog',
 ]);
 
 function hasAny(body, needles) {
@@ -204,6 +205,20 @@ function validateDepthContract(page, body, sourcePage, output = failures) {
       ['mistakes or confusion section', ['## Common mistakes', '## Common confusion', '## What this prevents']],
       ['next-step section', '## Next'],
       ['Runtime Kit, proof, activation, or reference link', ['/runtime-kit/', '/proof/', '/activation/', '/reference/', '/start/']],
+    ], output);
+    return;
+  }
+
+  if (page.pageClass === 'public-changelog') {
+    requireIncludes(page.route, body, [
+      ['changelog visual flow', 'className="bf-flow"'],
+      ['expected result', 'Expected result:'],
+      ['how-to-read section', '## How to read this changelog'],
+      ['latest changes table', '## Latest customer-visible changes'],
+      ['public categories', ['Runtime Kit', 'Build', 'Account', 'Proof', 'Docs', 'Start']],
+      ['changed page links', ['/runtime-kit/', '/build-your-own-surface/', '/activation/', '/proof/', '/start/']],
+      ['off-page boundary', '## What stays off this page'],
+      ['next-step section', '## Next'],
     ], output);
   }
 }

@@ -1031,7 +1031,8 @@
       "title": "Changelog",
       "description": "Customer-facing docs and product updates.",
       "diataxis": "changelog",
-      "summary": "The public change log for docs and customer-visible product behavior."
+      "pageClass": "public-changelog",
+      "summary": "The public changelog for customer-visible docs, Runtime Kit, Build, Account, Proof, Start, and Docs changes, with links to changed pages."
     }
   ]
 }

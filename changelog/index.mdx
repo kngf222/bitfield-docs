@@ -5,11 +5,56 @@ description: "Customer-facing docs and product updates."
 
 <div className="bf-article">
 
-## May 7, 2026
+Bitfield changes quickly, but this page only tracks changes a customer can act on. Use it to see what was added, what became clearer, and which docs changed.
 
-- Replaced the initial template with the Bitfield public docs structure.
-- Added first public pages for quickstart, concepts, Runtime Kit, active devices, and benchmark categories.
-- Added clearer public boundaries around Runtime Kit examples and benchmark claims.
-- Added customer-facing proof pages for warm reads, cold paths, and benchmark categories.
+<div className="bf-flow" aria-label="Changelog update flow">
+  <div className="bf-flow-step">
+    <strong>Customer impact</strong>
+    <span>What can a reader do or understand now?</span>
+  </div>
+  <div className="bf-flow-arrow">→</div>
+  <div className="bf-flow-step">
+    <strong>Category</strong>
+    <span>Runtime Kit, Build, Account, Proof, Docs, or Start.</span>
+  </div>
+  <div className="bf-flow-arrow">→</div>
+  <div className="bf-flow-step">
+    <strong>Changed pages</strong>
+    <span>Every update points to the pages that changed.</span>
+  </div>
+</div>
+
+Expected result: you can open one row, know why it matters, and jump straight to the docs that changed.
+
+## How to read this changelog
+
+| Category | What it means |
+|---|---|
+| Start | First-time reader flow, quickstart, account setup, and first visible result. |
+| Runtime Kit | Public package, read, request, local state, cookbook, and API docs. |
+| Build | Product-building guides: surfaces, packages, targets, shells, devices, and SDK boundaries. |
+| Account | Key access, trial, billing, active devices, cancellation, and recovery docs. |
+| Proof | Speed-claim explanation, benchmark categories, methodology, comparison guardrails, and objections. |
+| Docs | Navigation, structure, search, theme-safe presentation, and public page organization. |
+
+## Latest customer-visible changes
+
+| Date | Category | What changed | Changed pages |
+|---|---|---|---|
+| May 9, 2026 | Concepts | The concept lane now reads like a connected curriculum instead of isolated definitions. It starts with the product scene, then connects database/runtime, storage shape, content addressing, slots, and active devices. | [What is Bitfield](/concepts/what-is-bitfield), [Database and runtime](/concepts/database-and-runtime), [Storage shape](/concepts/storage-shape), [Content-addressed storage](/concepts/content-addressed-storage), [Slots](/concepts/slots), [Active devices](/concepts/active-devices) |
+| May 9, 2026 | Start | The front door now routes readers by job: understand Bitfield, try the first result, get a key, build a first surface, or check the proof. | [Bitfield Docs](/), [Quickstart](/start/quickstart), [Get your key](/start/get-your-key) |
+| May 9, 2026 | Proof | Proof pages now separate mechanism, measured job, safe comparison, unsafe comparison, non-claims, and common objections. | [How Bitfield is this fast](/proof/how-bitfield-is-fast), [Benchmark ledger](/proof/benchmark-ledger), [Measurement methodology](/proof/methodology), [Comparison guardrails](/proof/comparison-guardrails), [Proof objections](/proof/objection-faq), [Claim ledger](/reference/claim-ledger) |
+| May 9, 2026 | Account | Account docs now cover the customer lifecycle from account portal to key access, trial, billing, active devices, plan changes, cancellation, refunds, and support paths. | [Account and key flow](/activation/account-and-key-flow), [Trials and billing](/activation/trials-and-billing), [Active devices](/activation/active-devices), [Plan changes and cancellation](/activation/plan-changes-and-cancellation) |
+| May 9, 2026 | Build | The Build tab is now a curriculum for composing a Bitfield-backed product: app surfaces, package authoring, target design, product shells, device rollout, and SDK boundaries. | [Build with Bitfield](/build-your-own-surface), [App surfaces](/build-your-own-surface/app-surfaces), [Package authoring](/build-your-own-surface/package-authoring), [Target design](/build-your-own-surface/target-design), [Product shells](/build-your-own-surface/product-shells), [Device and deployment shape](/build-your-own-surface/device-deployment), [SDK boundary](/build-your-own-surface/sdk-boundary) |
+| May 9, 2026 | Runtime Kit | Runtime Kit docs now include a concept ladder, first package-to-screen tutorial, recipe-style Runtime Kit Cookbook, strict public API reference, AI build rules, troubleshooting, and visual maps. | [JavaScript Runtime Kit](/runtime-kit/javascript), [Package to screen](/runtime-kit/package-to-screen), [Concept map](/runtime-kit/concept-map), [Placeable surfaces](/runtime-kit/placeable-surfaces), [Runtime Kit Cookbook](/runtime-kit/cookbook), [Runtime Kit API](/reference/runtime-kit-api), [Package boundary](/reference/package-boundary), [Troubleshooting](/runtime-kit/troubleshooting), [Build with AI agents](/runtime-kit/ai-build-rules) |
+| May 7, 2026 | Docs | The public docs replaced the starter template with Bitfield navigation, Bitfield styling, public page groups, Runtime Kit docs, active-device language, and proof categories. | [Bitfield Docs](/), [Quickstart](/start/quickstart), [JavaScript Runtime Kit](/runtime-kit/javascript), [Active devices](/concepts/active-devices), [Warm and cold paths](/proof/warm-and-cold-paths) |
+
+## What stays off this page
+
+This page does not list private engineering chores, repo housekeeping, unpublished implementation work, or team-only release notes. Those details may matter to the team, but they are not customer-visible product changes.
+
+## Next
+
+If you are new, start with [Quickstart](/start/quickstart). If you are deciding whether the speed claim is credible, start with [How Bitfield is this fast](/proof/how-bitfield-is-fast). If you are ready to build, start with [Package to screen](/runtime-kit/package-to-screen).
 
 </div>
