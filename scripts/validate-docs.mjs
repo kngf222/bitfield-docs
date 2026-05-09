@@ -41,6 +41,7 @@ const knownPageClasses = new Set([
   'runtime-kit-operations',
   'build-curriculum',
   'activation-lifecycle',
+  'proof-stack',
 ]);
 
 function hasAny(body, needles) {
@@ -163,6 +164,19 @@ function validateDepthContract(page, body, sourcePage, output = failures) {
       ['common failures section', '## Common failures'],
       ['next-step section', '## Next'],
       ['account or legal route', ['account.bitfield.so', 'https://bitfield.so/terms', 'mailto:support@bitfield.so']],
+    ], output);
+    return;
+  }
+
+  if (page.pageClass === 'proof-stack') {
+    requireIncludes(page.route, body, [
+      ['proof visual flow', 'className="bf-flow"'],
+      ['expected result', 'Expected result:'],
+      ['claim category language', ['category', 'Category', 'measured job']],
+      ['non-claim or boundary language', ['non-claim', 'non-claims', 'not claim', 'not claiming', 'excluded work', 'Boundary']],
+      ['common failures section', '## Common failures'],
+      ['next-step section', '## Next'],
+      ['claim/proof link', ['/reference/claim-ledger', '/proof/benchmark-ledger', '/proof/methodology']],
     ], output);
   }
 }

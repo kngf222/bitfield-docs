@@ -46,22 +46,19 @@ These pages are public customer documentation. They describe the public product,
 - [Warm and cold paths](proof/warm-and-cold-paths): Defines warm local read, cold local read, content address lookup, durable batch write, runtime call, and network command.
 - [Benchmark ledger](proof/benchmark-ledger): Lists public speed claims with the work category attached.
 - [Measurement methodology](proof/methodology): Explains warm reads, cold reads, hash lookup, durable writes, and why each number needs its category.
+- [Comparison guardrails](proof/comparison-guardrails): Explains which proof rows can be compared, which comparisons are category mistakes, and how to keep benchmark work shapes honest.
+- [Proof objections](proof/objection-faq): Answers skeptical questions about cold reads, network latency, batch ceilings, content addressing, and public disclosure boundaries.
 - [Runtime Kit API](reference/runtime-kit-api): Reference for sendRequestToBitfieldTarget, useBitfieldData, payload conversion, cancellation, selectors, return states, valid examples, invalid examples, and public boundaries.
 - [Claim ledger](reference/claim-ledger): Documents the public claim-ledger fields that keep speed claims honest.
 - [Package boundary](reference/package-boundary): Lists package boundary fields, record/stored-bytes/slot thing types, payload choices, method rules, path safety, valid examples, invalid examples, and common failures.
 - [Changelog](changelog/index): The public change log for docs and customer-visible product behavior.
 
-## Public source categories
+## Public reading rules
 
-- bitfield-public-landing-copy: Product language for what Bitfield is, active devices, checkout, and proof framing. Freshness rule: review when public site copy changes.
-- runtime-kit-js-public-contract: JavaScript Runtime Kit exports and app-facing API shape. Freshness rule: review when Runtime Kit package exports change.
-- runtime-kit-package-boundary: Package boundary file, thing types, and local state language. Freshness rule: review when package boundary validation changes.
-- bitfield-public-legal-pages: Public Terms, Refund Policy, and Privacy Policy routes. Freshness rule: review when legal page routes or checkout consent wording changes.
-- bitfield-account-portal-public-lifecycle: Account portal customer lifecycle: account creation, checkout, account page, active-device authorization, plan management, recovery, and deletion. Freshness rule: review when account portal package records or account lifecycle surfaces change.
-- bitfield-public-claim-ledger: Published benchmark numbers, categories, and non-claims. Freshness rule: review when claim-ledger.json changes.
-- fastest-db-public-disclosure-cssot: Public mechanism categories for memory mapping, content addressing, durable append paths, warm/cold cache state, and forbidden private details. Freshness rule: review when benchmark mechanism language or public disclosure boundaries change.
-- bitfield-docs-information-architecture: Docs navigation, page summaries, and reader-intent grouping. Freshness rule: review when docs.manifest.json changes.
-- runtime-kit-public-cookbook-examples: Machine-validated examples used by Runtime Kit Cookbook pages. This source does not define the future whole-product Bitfield Cookbook. Freshness rule: review when cookbook-examples.json, reference/package-boundary.schema.json, or examples/ changes.
+- Keep every speed number attached to its measured category.
+- Keep non-claims attached to benchmark rows.
+- Treat warm local reads, cold local reads, content address lookups, durable batch writes, runtime calls, and network commands as different jobs.
+- Do not infer private implementation details from public mechanism categories.
 
 ## Public API surface
 

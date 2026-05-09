@@ -656,6 +656,8 @@
             "proof/warm-and-cold-paths",
             "proof/benchmark-ledger",
             "proof/methodology",
+            "proof/comparison-guardrails",
+            "proof/objection-faq",
             "reference/claim-ledger"
           ]
         },
@@ -948,6 +950,7 @@
       "title": "How Bitfield is this fast",
       "description": "A speed proof with category boundaries.",
       "diataxis": "concept",
+      "pageClass": "proof-stack",
       "summary": "Explains warm local reads, memory mapping, content addresses, and non-claims."
     },
     {
@@ -955,6 +958,7 @@
       "title": "Warm and cold paths",
       "description": "What each benchmark category includes and what it leaves out.",
       "diataxis": "concept",
+      "pageClass": "proof-stack",
       "summary": "Defines warm local read, cold local read, content address lookup, durable batch write, runtime call, and network command."
     },
     {
@@ -962,6 +966,7 @@
       "title": "Benchmark ledger",
       "description": "Public benchmark claims with category boundaries and non-claims.",
       "diataxis": "reference",
+      "pageClass": "proof-stack",
       "summary": "Lists public speed claims with the work category attached."
     },
     {
@@ -969,7 +974,24 @@
       "title": "Measurement methodology",
       "description": "How to read Bitfield benchmark numbers without comparing unlike jobs.",
       "diataxis": "concept",
+      "pageClass": "proof-stack",
       "summary": "Explains warm reads, cold reads, hash lookup, durable writes, and why each number needs its category."
+    },
+    {
+      "route": "proof/comparison-guardrails",
+      "title": "Comparison guardrails",
+      "description": "How to compare Bitfield speed claims without mixing unlike benchmark jobs.",
+      "diataxis": "concept",
+      "pageClass": "proof-stack",
+      "summary": "Explains which proof rows can be compared, which comparisons are category mistakes, and how to keep benchmark work shapes honest."
+    },
+    {
+      "route": "proof/objection-faq",
+      "title": "Proof objections",
+      "description": "Straight answers to the common objections around Bitfield speed claims.",
+      "diataxis": "concept",
+      "pageClass": "proof-stack",
+      "summary": "Answers skeptical questions about cold reads, network latency, batch ceilings, content addressing, and public disclosure boundaries."
     },
     {
       "route": "reference/runtime-kit-api",
@@ -984,6 +1006,7 @@
       "title": "Claim ledger",
       "description": "The fields every public benchmark claim must carry.",
       "diataxis": "reference",
+      "pageClass": "proof-stack",
       "summary": "Documents the public claim-ledger fields that keep speed claims honest."
     },
     {

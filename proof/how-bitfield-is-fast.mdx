@@ -9,6 +9,30 @@ description: "A speed proof with category boundaries."
 Durable does not mean every read waits for storage hardware. Local does not mean fake. Fast claims only mean something when the measured category is visible.
 </p>
 
+Product scene: a founder sees a shocking speed claim and wants to know whether it is real. The answer is not "trust us." The answer is the proof trail: mechanism, category, ledger row, non-claims, and comparison guardrails.
+
+<div className="bf-flow" aria-label="Speed proof stack">
+  <div className="bf-flow-step">
+    <span>Mechanism</span>
+    <strong>Why less work exists</strong>
+    <p>Local durable shape, warm mapped pages, and content identity remove common read-path work.</p>
+  </div>
+  <div className="bf-flow-arrow">→</div>
+  <div className="bf-flow-step">
+    <span>Category</span>
+    <strong>What was measured</strong>
+    <p>Warm local read, content lookup, durable batch write, or batch ceiling.</p>
+  </div>
+  <div className="bf-flow-arrow">→</div>
+  <div className="bf-flow-step">
+    <span>Boundary</span>
+    <strong>What it is not</strong>
+    <p>Cold storage, network, every query, and every write are not silently included.</p>
+  </div>
+</div>
+
+Expected result: the reader can explain why the number belongs to a specific measured job, not every possible database operation.
+
 ## The short version
 
 Bitfield is fast because the storage shape removes work from the read path. Durable data means the data survives a crash or restart. Warm local read means the needed local file pages are already available and Bitfield knows where to read.
@@ -35,6 +59,17 @@ This is not a promise that a cold disk read takes less than a nanosecond. It is 
 The rule is simple: show the mechanism, show the tradeoff, and say what work is actually being measured.
 </div>
 
-Next: read [Storage shape](/concepts/storage-shape) for the public mechanism model, then read [Warm and cold paths](/proof/warm-and-cold-paths) for the benchmark categories.
+## Common failures
+
+| Failure | Why it is wrong | Fix |
+|---|---|---|
+| Saying the number means every database operation | It ignores category boundaries | Name the measured job first |
+| Comparing warm local read to a remote query | It mixes local work with network/server work | Use [Comparison guardrails](/proof/comparison-guardrails) |
+| Explaining private layouts | It gives away the wrong detail | Stay at public mechanism-category level |
+| Dropping non-claims | Readers overread the headline | Link the [Claim ledger](/reference/claim-ledger) |
+
+## Next
+
+Read [Storage shape](/concepts/storage-shape) for the public mechanism model, then [Warm and cold paths](/proof/warm-and-cold-paths) for benchmark categories.
 
 </div>

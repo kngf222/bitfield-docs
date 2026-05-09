@@ -53,6 +53,22 @@ const sourcePathAllowedFiles = new Set([
   ...cookbookExampleAllowlist(),
 ]);
 const validatorSelfAllowedFiles = new Set(['scripts/validate-public-boundary.mjs']);
+const renderedDocsBanned = [
+  'docs:check',
+  'docs:generate',
+  'docs:mint',
+  'docs.json',
+  'llms.txt',
+  'source-map',
+  'source map',
+  'claim-ledger.json',
+  'forbiddenPublicDetails',
+  'publicUse',
+  'pageClass',
+  'diataxis',
+  'Proof update protocol',
+  'update-protocol',
+];
 
 const banned = [
   { parts: ['/', 'Users', '/'] },
@@ -126,6 +142,13 @@ for (const file of walk(root)) {
   for (const rule of banned) {
     if (body.includes(rule.pattern) && !rule.allowedFiles.has(rel)) {
       failures.push(`${rel}: contains blocked public-boundary phrase: ${rule.pattern}`);
+    }
+  }
+  if (extensionOf(rel) === '.mdx') {
+    for (const pattern of renderedDocsBanned) {
+      if (body.includes(pattern)) {
+        failures.push(`${rel}: rendered docs must not expose implementation/process phrase: ${pattern}`);
+      }
     }
   }
 }

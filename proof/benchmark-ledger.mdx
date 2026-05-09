@@ -9,6 +9,30 @@ description: "Public benchmark claims with category boundaries and non-claims."
 Every number here names the work category. That is the only honest way to compare speed.
 </p>
 
+Product scene: you want the headline numbers, but you also want to know what each number is allowed to mean.
+
+<div className="bf-flow" aria-label="Benchmark ledger flow">
+  <div className="bf-flow-step">
+    <span>Number</span>
+    <strong>Public value</strong>
+    <p>The value and unit from the claim row.</p>
+  </div>
+  <div className="bf-flow-arrow">+</div>
+  <div className="bf-flow-step">
+    <span>Category</span>
+    <strong>Measured job</strong>
+    <p>The work shape that makes the row comparable.</p>
+  </div>
+  <div className="bf-flow-arrow">+</div>
+  <div className="bf-flow-step">
+    <span>Non-claim</span>
+    <strong>Boundary</strong>
+    <p>The work this number must not be used to imply.</p>
+  </div>
+</div>
+
+Expected result: every row can be traced to the [Claim ledger](/reference/claim-ledger) before it is quoted.
+
 <div className="bf-proof-row">
   <strong>0.68ns</strong>
   <span>Warm local read</span>
@@ -41,5 +65,41 @@ Every number here names the work category. That is the only honest way to compar
 - They do not say one isolated write and a full batch have the same wall-clock shape.
 
 For the field-level contract behind each row, read the [claim ledger](/reference/claim-ledger).
+
+## Claim envelopes
+
+Each envelope is the full public shape of the claim. Quote the envelope, not just the number.
+
+| Claim ID | Public value | Measured job | Public mechanism category | Safe comparison | Do not compare with | Non-claims |
+|---|---:|---|---|---|---|---|
+| `h0-warm-local-read` | `0.68` nanoseconds per read | `warm-local-read` | `memory-mapped-local-read`, `content-addressed-storage` | Other warm local reads where the needed bytes are already available locally | Cold disk reads, networked database queries, unrelated benchmark jobs | Not a cold disk read; not a disappearing network trip; not proof that every database benchmark measures the same job |
+| `h1-hash-lookup` | `91.7` nanoseconds per lookup | `content-address-lookup` | `content-addressed-storage` | Other local content identity lookup paths | Exact-position reads with no lookup step, networked app latency | Not the same category as the H0 exact read; not networked application latency |
+| `durable-batch-write-8190` | `316` nanoseconds per written item | `durable-batch-write` | `durable-append-path` | Other saved batch writes with a similar durability boundary | One isolated network write, vendor rows that include different durability or network work | Not every isolated write wall-clock latency; not the same category as a networked managed database write |
+| `current-batched-write-ceiling` | `0.59` nanoseconds per written item | `batched-write-ceiling` | `durable-append-path` | Other optimized full-batch ceiling rows | Every saved write path, every vendor write benchmark | Not every full saved write; not a universal write comparison row |
+
+## How to use a row in copy
+
+Use this shape:
+
+> Bitfield measured `<value> <unit>` for `<category>`. That row is about `<mechanism category>`. It does not claim `<main non-claim>`.
+
+Do not use this shape:
+
+> Bitfield is `<value>` fast.
+
+The second version removes the measured job. Once the measured job is gone, the number becomes easier to misuse.
+
+## Common failures
+
+| Failure | Why it is wrong | Fix |
+|---|---|---|
+| Quoting only the number | The category disappears | Quote number plus category |
+| Removing non-claims | The claim gets overread | Keep the boundary sentence with the row |
+| Comparing batch ceiling to every write | Ceiling is not every write | Use the durable batch row for saved-write comparisons |
+| Adding a number not in the ledger | The public source of truth splits | Add the claim-ledger row first |
+
+## Next
+
+Read [Measurement methodology](/proof/methodology), then [Proof objections](/proof/objection-faq).
 
 </div>

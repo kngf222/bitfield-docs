@@ -172,6 +172,8 @@
               "proof/warm-and-cold-paths",
               "proof/benchmark-ledger",
               "proof/methodology",
+              "proof/comparison-guardrails",
+              "proof/objection-faq",
               "reference/claim-ledger"
             ]
           },

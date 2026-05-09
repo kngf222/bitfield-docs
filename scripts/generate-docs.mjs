@@ -850,13 +850,13 @@ for (const page of manifest.pages) {
 
 llmsLines.push(
   '',
-  '## Public source categories',
+  '## Public reading rules',
   '',
+  '- Keep every speed number attached to its measured category.',
+  '- Keep non-claims attached to benchmark rows.',
+  '- Treat warm local reads, cold local reads, content address lookups, durable batch writes, runtime calls, and network commands as different jobs.',
+  '- Do not infer private implementation details from public mechanism categories.',
 );
-
-for (const source of sourceMap.sources) {
-  llmsLines.push(`- ${source.id}: ${source.publicUse} Freshness rule: ${source.freshness}.`);
-}
 
 llmsLines.push(
   '',

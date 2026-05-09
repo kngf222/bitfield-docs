@@ -1,0 +1,90 @@
+---
+title: "Comparison guardrails"
+description: "How to compare Bitfield speed claims without mixing unlike benchmark jobs."
+---
+
+<div className="bf-article">
+
+<p className="bf-lead">
+A comparison is only fair when both sides measure the same kind of work. Bitfield proof pages name the job first, then the number.
+</p>
+
+Product scene: somebody sees `0.68ns` and wants to compare it to a managed database query over the internet. That is not the same job. One is a warm local read. The other includes network and server work.
+
+<div className="bf-flow" aria-label="Comparison guardrail flow">
+  <div className="bf-flow-step">
+    <span>1</span>
+    <strong>Name the job</strong>
+    <p>Warm read, lookup, durable batch write, runtime call, or network command.</p>
+  </div>
+  <div className="bf-flow-arrow">→</div>
+  <div className="bf-flow-step">
+    <span>2</span>
+    <strong>Name included work</strong>
+    <p>Local bytes, cache state, lookup work, durability boundary, or network hop.</p>
+  </div>
+  <div className="bf-flow-arrow">→</div>
+  <div className="bf-flow-step">
+    <span>3</span>
+    <strong>Name excluded work</strong>
+    <p>Cold storage, internet latency, isolated write latency, or unrelated query planning.</p>
+  </div>
+</div>
+
+Expected result: a reader can tell which comparisons are meaningful and which comparisons are category mistakes.
+
+## Safe comparison table
+
+| Bitfield row | Safe comparison | Unsafe comparison |
+|---|---|---|
+| Warm local read | Other warm local exact-read paths | Networked SQL query |
+| Content address lookup | Other local identity/lookup paths | Exact-position read with no lookup |
+| Durable batch write | Other batch writes with similar durability boundary | One isolated networked write |
+| Batched write ceiling | Other optimized full-batch ceilings | Every possible saved-write path |
+| Runtime Kit request | Other app-to-runtime request/reply paths | Raw storage read by itself |
+
+## The rule
+
+If a vendor number includes a network trip, server scheduling, query planning, or cold storage fetch, it is not the same category as a warm local read.
+
+If a Bitfield number says batch, do not treat it as a single isolated write.
+
+If a Bitfield number says lookup, do not treat it as exact-position read with no lookup.
+
+## Skeptical comparison checklist
+
+Run this before publishing a comparison:
+
+| Question | Pass condition |
+|---|---|
+| What is the measured job on both sides? | Both sides name the same category. |
+| Is the data local or remote? | Local rows compare to local rows; network rows compare to network rows. |
+| Is the data warm or cold? | Warm rows compare to warm rows; cold rows compare to cold rows. |
+| Is lookup included? | Lookup rows compare to lookup rows, not exact-position reads. |
+| Is durability included? | Saved-write rows compare to saved-write rows with a similar boundary. |
+| Is this a batch ceiling? | Ceiling rows compare to ceiling rows, not every write. |
+| Are non-claims still attached? | The comparison carries the boundary sentence. |
+
+## Category mismatch examples
+
+| Misread | What actually changed |
+|---|---|
+| `0.68ns` warm local read vs managed database query | Added network, server scheduling, and query work to one side only |
+| `91.7ns` content address lookup vs exact local read | Added content identity resolution to one side only |
+| `0.59ns` batched write ceiling vs one user pressing save | Replaced a full-batch ceiling with isolated interaction latency |
+| Durable batch row vs remote write API | Mixed local saved-write batch work with networked service work |
+
+## Common failures
+
+| Bad comparison | Why it is wrong | Correct move |
+|---|---|---|
+| Warm local read vs remote query | The remote query includes network/server work | Compare against local warm read paths |
+| Batch ceiling vs isolated write | The batch row divides work across a full batch | Use durable batch rows for saved-write comparisons |
+| Content lookup vs exact read | The lookup row includes identity resolution | Compare against lookup paths |
+| Headline vs headline | Headline rows often hide category | Read the category and non-claims first |
+
+## Next
+
+Read [Warm and cold paths](/proof/warm-and-cold-paths), then use the [Benchmark ledger](/proof/benchmark-ledger) and [Claim ledger](/reference/claim-ledger) to check the exact claim row.
+
+</div>

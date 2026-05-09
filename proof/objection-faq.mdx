@@ -1,0 +1,81 @@
+---
+title: "Proof objections"
+description: "Straight answers to the common objections around Bitfield speed claims."
+---
+
+<div className="bf-article">
+
+<p className="bf-lead">
+The point of the proof stack is not to make the number sound bigger. It is to make the claim harder to misread.
+</p>
+
+Product scene: a skeptical engineer asks the right question: "What exactly did you measure, and what did you leave out?"
+
+<div className="bf-flow" aria-label="Proof objection flow">
+  <div className="bf-flow-step">
+    <span>Ask</span>
+    <strong>What job?</strong>
+    <p>Every answer starts by naming the measured category.</p>
+  </div>
+  <div className="bf-flow-arrow">→</div>
+  <div className="bf-flow-step">
+    <span>Bound</span>
+    <strong>What is excluded?</strong>
+    <p>Cold disk, network, and unrelated work are not silently included.</p>
+  </div>
+  <div className="bf-flow-arrow">→</div>
+  <div className="bf-flow-step">
+    <span>Route</span>
+    <strong>Where is the row?</strong>
+    <p>The benchmark ledger and claim ledger carry the public claim contract.</p>
+  </div>
+</div>
+
+Expected result: a skeptical reader gets a clear answer without us publishing private implementation details.
+
+## Objections
+
+| Objection | Answer |
+|---|---|
+| "Is 0.68ns a cold disk read?" | No. It is a warm local read. Cold storage fetch is a different category. |
+| "Does this remove network latency?" | No. Network commands are their own category. A local read row does not include the internet. |
+| "Is every Bitfield operation sub-nanosecond?" | No. The row names the measured job. Runtime calls, lookups, writes, and networked work have different shapes. |
+| "Can I compare this to any database benchmark?" | Only if the other benchmark measures the same job. Use [Comparison guardrails](/proof/comparison-guardrails). |
+| "Why not publish every implementation detail?" | Public docs explain mechanism categories and claim boundaries. Private layouts, binary encodings, scheduling logic, and raw work logs stay out of rendered docs. |
+| "Is content addressing the whole reason?" | No. Content addressing is one mechanism category. Warm local reads, local durable storage shape, and removed request work also matter. |
+| "Does batch mean every single write has that wall-clock latency?" | No. Batch rows divide work across written items. Isolated writes are a different job. |
+
+## What a good answer includes
+
+Every public answer to a speed objection should include:
+
+- the measured category
+- the mechanism category
+- the non-claim
+- the next proof page
+- the claim ledger row
+
+## Better answers to hard questions
+
+| Question | Strong public answer |
+|---|---|
+| "So is Bitfield faster than every database?" | Bitfield's fastest rows are for specific local categories. Compare those rows only to the same category. If you are measuring networked queries, use a networked category. |
+| "Is this benchmark cherry-picked?" | The public claim ledger keeps the number attached to the measured job and non-claims. A row without those fields is not a valid public speed claim. |
+| "Why should I trust a number without raw work logs?" | Public docs show the claim contract, mechanism category, boundaries, and allowed uses. Raw work logs are not the public source of truth because they are not written for safe public reuse. |
+| "Does this prove my app will feel instant?" | No single storage number proves whole-app feel. It proves that this measured part of the system has that public category and boundary. App feel also depends on UI, network, device, and workload. |
+| "Can an AI agent use this safely?" | Yes, when it reads the claim row, keeps the category attached, and does not turn a warm local read into a universal database claim. |
+
+## Common failures
+
+| Failure | Why it hurts | Fix |
+|---|---|---|
+| Answering with only the headline number | Sounds like marketing | Lead with the measured category |
+| Saying "all reads" | Overclaims the warm path | Say warm local read when that is the row |
+| Explaining private implementation details | Leaks the wrong thing | Stay at public mechanism category level |
+| Comparing to a network benchmark directly | Mixes unlike jobs | Use comparison guardrails |
+
+## Next
+
+Read [Measurement methodology](/proof/methodology) and [Claim ledger](/reference/claim-ledger).
+
+</div>

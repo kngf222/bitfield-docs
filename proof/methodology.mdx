@@ -9,6 +9,30 @@ description: "How to read Bitfield benchmark numbers without comparing unlike jo
 Benchmark numbers are only useful when you know what job was measured.
 </p>
 
+Product scene: a new proof row is about to be published. Before the number goes public, it must name the category, included work, excluded work, and claim-ledger row.
+
+<div className="bf-flow" aria-label="Measurement methodology flow">
+  <div className="bf-flow-step">
+    <span>Classify</span>
+    <strong>Measured job</strong>
+    <p>Pick the benchmark category before writing copy.</p>
+  </div>
+  <div className="bf-flow-arrow">→</div>
+  <div className="bf-flow-step">
+    <span>Bound</span>
+    <strong>Included and excluded work</strong>
+    <p>Name what the measurement includes and what it does not include.</p>
+  </div>
+  <div className="bf-flow-arrow">→</div>
+  <div className="bf-flow-step">
+    <span>Ledger</span>
+    <strong>Public claim row</strong>
+    <p>Put the value, unit, category, mechanism, and non-claims in the claim ledger.</p>
+  </div>
+</div>
+
+Expected result: no number ships as a slogan. It ships as a bounded claim.
+
 The wrong way to read a benchmark is to take one number from one category and compare it to a different number from another category. A warm local read, a cold local read, a content address lookup, a durable batch write, a runtime call, and a network command are different jobs.
 
 ## The categories
@@ -47,5 +71,46 @@ Every public speed row needs:
 - A list of what the number is not claiming.
 
 That is why the [benchmark ledger](/proof/benchmark-ledger) and [claim ledger](/reference/claim-ledger) exist.
+
+## Measurement envelope
+
+Every public benchmark claim needs this envelope before it appears in a page:
+
+| Field | Required public answer |
+|---|---|
+| Category | What job was measured, such as warm local read, content address lookup, durable batch write, or runtime call. |
+| Unit | What the number counts, such as nanoseconds per read, lookup, request, or written item. |
+| Cache and setup state | Whether the needed bytes are warm, cold, local, remote, preloaded, or fetched during the measurement. |
+| Included work | The exact public work boundary: read, lookup, durable batch write, runtime request, or network command. |
+| Excluded work | The work the number does not include, such as cold storage, internet latency, server scheduling, unrelated query planning, or isolated write latency. |
+| Repetition and statistic | The public statistic used for the row. If this is not ready to publish, the row is not ready to publish. |
+| Claim row | The public claim entry that owns the value, unit, category, mechanism, and non-claims. |
+| Source family | The public proof source family connected to the page. |
+| Pages that repeat it | The public pages allowed to repeat the row. |
+
+## Publishability test
+
+Before a number ships, answer these questions in order:
+
+1. Can a reader tell what job was measured without asking us?
+2. Can a reader tell which work was excluded?
+3. Can a skeptical engineer compare it only to the same category?
+4. Can an AI agent find the claim row and avoid stretching it?
+5. Can the page explain the public mechanism without exposing private implementation details?
+
+If any answer is no, the number is not ready for public docs.
+
+## Common failures
+
+| Failure | Why it is wrong | Fix |
+|---|---|---|
+| Publishing without a category | The number cannot be compared | Add the measured job first |
+| Publishing without non-claims | The number becomes too broad | Add explicit exclusions |
+| Mixing warm, cold, and network paths | The measurement identity changes | Split the categories |
+| Publishing private work logs | The docs leak the wrong source material | Curate public claim rows instead |
+
+## Next
+
+Read [Comparison guardrails](/proof/comparison-guardrails), then check the exact rows in the [Claim ledger](/reference/claim-ledger).
 
 </div>

@@ -9,6 +9,30 @@ description: "What each benchmark category includes and what it leaves out."
 Benchmark numbers only mean something when the measured job is named.
 </p>
 
+Product scene: someone asks whether a cold disk fetch, local warm read, and network command can be compared as one "database speed" number. They cannot. The path label is part of the claim.
+
+<div className="bf-flow" aria-label="Warm and cold path split">
+  <div className="bf-flow-step">
+    <span>Warm</span>
+    <strong>Already local and ready</strong>
+    <p>The needed local pages are available and the read shape is known.</p>
+  </div>
+  <div className="bf-flow-arrow">≠</div>
+  <div className="bf-flow-step">
+    <span>Cold</span>
+    <strong>Setup or fetch included</strong>
+    <p>The machine still has storage or setup work before bytes are ready.</p>
+  </div>
+  <div className="bf-flow-arrow">≠</div>
+  <div className="bf-flow-step">
+    <span>Network</span>
+    <strong>Remote command included</strong>
+    <p>The request crosses a network before the app sees the result.</p>
+  </div>
+</div>
+
+Expected result: a reader does not silently convert one benchmark category into another.
+
 ## The categories
 
 Warm local read = the needed data is already local, the operating system already has the needed file pages ready, and Bitfield knows where to read.
@@ -69,5 +93,18 @@ If a row says one category, read it as that category. Do not silently turn it in
 The number is allowed to be shocking. The category is not allowed to be blurry.
 
 Every public speed claim needs the number, unit, measured category, mechanism, and non-claims. If any of those are missing, the number is not ready for public docs.
+
+## Common failures
+
+| Failure | Why it is wrong | Fix |
+|---|---|---|
+| Treating warm and cold as the same path | Cache/setup state changes the work | Label warm and cold separately |
+| Comparing local to network without saying so | Network adds a different job | Use network-command category |
+| Reading batch as isolated write | Batch rows divide work across items | Keep batch wording visible |
+| Calling lookup the same as exact read | Lookup includes identity resolution | Compare lookup to lookup |
+
+## Next
+
+Use [Benchmark ledger](/proof/benchmark-ledger) for current rows and [Comparison guardrails](/proof/comparison-guardrails) before comparing to another system.
 
 </div>

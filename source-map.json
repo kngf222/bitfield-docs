@@ -219,6 +219,14 @@
       "sourceIds": ["bitfield-public-claim-ledger", "fastest-db-public-disclosure-cssot"]
     },
     {
+      "route": "proof/comparison-guardrails",
+      "sourceIds": ["bitfield-public-claim-ledger", "fastest-db-public-disclosure-cssot"]
+    },
+    {
+      "route": "proof/objection-faq",
+      "sourceIds": ["bitfield-public-claim-ledger", "fastest-db-public-disclosure-cssot"]
+    },
+    {
       "route": "reference/runtime-kit-api",
       "sourceIds": ["runtime-kit-js-public-contract"]
     },
