@@ -15,7 +15,7 @@ html {
   --bf-docs-selected-border: color-mix(in srgb, var(--docs-active-color) 36%, var(--border-primary) 64%);
   --bf-docs-copy-border-width: 1px;
   --bf-docs-copy-control-height: 2.5rem;
-  --bf-docs-copy-label-width: 7rem;
+  --bf-docs-copy-label-width: 8rem;
   --bf-docs-copy-arrow-width: 2.35rem;
 }
 
@@ -190,17 +190,30 @@ main > article,
   justify-content: center !important;
   min-width: var(--bf-docs-copy-label-width) !important;
   padding-inline: 0.75rem !important;
+  white-space: nowrap !important;
   width: var(--bf-docs-copy-label-width) !important;
 }
 
 #page-context-menu-button[data-bf-docs-copy-page="true"] > :is(div, span),
 [data-bf-docs-copy-page-part="true"]:not([data-bf-docs-copy-page-arrow="true"]) > :is(div, span) {
   align-items: center !important;
+  align-self: stretch !important;
+  background: transparent !important;
   display: inline-flex !important;
+  flex: 1 1 auto !important;
   gap: 0.5rem !important;
+  height: 100% !important;
   justify-content: center !important;
   min-width: 0 !important;
+  white-space: nowrap !important;
   width: 100% !important;
+}
+
+#page-context-menu-button[data-bf-docs-copy-page="true"] span,
+[data-bf-docs-copy-page-part="true"]:not([data-bf-docs-copy-page-arrow="true"]) span {
+  display: inline-block !important;
+  flex: 0 0 auto !important;
+  white-space: nowrap !important;
 }
 
 [data-bf-docs-copy-page-part="true"][data-bf-docs-copy-page-arrow="true"] {
