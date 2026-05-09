@@ -874,7 +874,7 @@
       "title": "Runtime Kit API",
       "description": "Reference for the current public Runtime Kit JavaScript values.",
       "diataxis": "reference",
-      "summary": "Reference for sendRequestToBitfieldTarget, useBitfieldData, payload conversion, selectors, return values, and public boundaries."
+      "summary": "Reference for sendRequestToBitfieldTarget, useBitfieldData, payload conversion, cancellation, selectors, return states, valid examples, invalid examples, and public boundaries."
     },
     {
       "route": "reference/claim-ledger",
@@ -888,7 +888,7 @@
       "title": "Package boundary",
       "description": "Reference for things-to-store-and-run.json.",
       "diataxis": "reference",
-      "summary": "Lists the public package boundary fields and thing types."
+      "summary": "Lists package boundary fields, record/stored-bytes/slot thing types, payload choices, method rules, path safety, valid examples, invalid examples, and common failures."
     },
     {
       "route": "changelog/index",

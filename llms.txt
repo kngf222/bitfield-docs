@@ -36,9 +36,9 @@ These pages are public customer documentation. They describe the public product,
 - [Warm and cold paths](proof/warm-and-cold-paths): Defines warm local read, cold local read, content address lookup, durable batch write, runtime call, and network command.
 - [Benchmark ledger](proof/benchmark-ledger): Lists public speed claims with the work category attached.
 - [Measurement methodology](proof/methodology): Explains warm reads, cold reads, hash lookup, durable writes, and why each number needs its category.
-- [Runtime Kit API](reference/runtime-kit-api): Reference for sendRequestToBitfieldTarget, useBitfieldData, payload conversion, selectors, return values, and public boundaries.
+- [Runtime Kit API](reference/runtime-kit-api): Reference for sendRequestToBitfieldTarget, useBitfieldData, payload conversion, cancellation, selectors, return states, valid examples, invalid examples, and public boundaries.
 - [Claim ledger](reference/claim-ledger): Documents the public claim-ledger fields that keep speed claims honest.
-- [Package boundary](reference/package-boundary): Lists the public package boundary fields and thing types.
+- [Package boundary](reference/package-boundary): Lists package boundary fields, record/stored-bytes/slot thing types, payload choices, method rules, path safety, valid examples, invalid examples, and common failures.
 - [Changelog](changelog/index): The public change log for docs and customer-visible product behavior.
 
 ## Public source categories

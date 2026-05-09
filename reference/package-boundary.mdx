@@ -6,8 +6,19 @@ description: "Reference for things-to-store-and-run.json."
 <div className="bf-article">
 
 <p className="bf-lead">
-`things-to-store-and-run.json` is the public file where a package declares what Bitfield should admit.
+`things-to-store-and-run.json` is the public package boundary file. It tells Runtime Kit what package-owned records, bytes, and callable targets may be admitted.
 </p>
+
+Use this page when you need exact field rules. If you want to copy a working file, use [Package set with one record](/runtime-kit/cookbook/package-set-with-one-record), [Package-owned file](/runtime-kit/cookbook/package-owned-file), or [Callable package slot](/runtime-kit/cookbook/callable-package-slot).
+
+## File location
+
+```text
+<package-name>/
+  things-to-store-and-run.json
+```
+
+Runtime Kit reads this boundary file from the package folder. Other package files only matter when the boundary file refers to them through package-local paths such as `source_path`.
 
 ## Minimum file
 
@@ -18,28 +29,24 @@ description: "Reference for things-to-store-and-run.json."
 }
 ```
 
-## Top-level fields
+| Field | Type | Required | Constraints | Meaning |
+|---|---|---:|---|---|
+| `package` | string | yes | Must name the package whose folder owns this boundary. | Separates package-owned records, bytes, and targets. |
+| `things` | array | yes | Each item must be a supported thing type. | Declares records, stored bytes, and slots. |
 
-| Field | Type | Required | Meaning |
-|---|---|---:|---|
-| `package` | string | yes | Package name inside the package set. |
-| `things` | array | yes | Records, stored bytes, or slots declared by the package. |
+Unknown top-level fields may be rejected. The public machine-readable schema is [`reference/package-boundary.schema.json`](/reference/package-boundary.schema.json), and Runtime Kit Cookbook examples are checked against it during `docs:check`.
 
-Unknown top-level fields may be rejected by the package compiler.
+## Thing type overview
 
-## Thing types
-
-| Type | Required fields | Meaning |
-|---|---|---|
-| `record` | `type`, `address`, one payload choice | Store or remove one addressed record. |
-| `stored_bytes` | `type`, `name`, `source_path` | Store package-owned bytes under a package-owned name. |
-| `slot` | `type`, `name`, `methods`, `boundary`, artifact or build data | Make one runnable thing callable. |
+| Thing type | Required fields | Public result | Use this recipe |
+|---|---|---|---|
+| `record` | `type`, `address`, one payload action | One package-owned durable record is admitted. | [Package set with one record](/runtime-kit/cookbook/package-set-with-one-record) |
+| `stored_bytes` | `type`, `name`, `source_path` | Package-owned bytes are stored under a package-owned name. | [Package-owned file](/runtime-kit/cookbook/package-owned-file) |
+| `slot` | `type`, `name`, `methods`, `boundary`, artifact or build data | One callable target door is admitted. | [Callable package slot](/runtime-kit/cookbook/callable-package-slot) |
 
 Unknown thing types are rejected before they become active.
 
-The machine-readable public schema lives at [`reference/package-boundary.schema.json`](/reference/package-boundary.schema.json). Runtime Kit Cookbook recipes are checked against that schema during `docs:check`.
-
-## Record
+## `record`
 
 ```json
 {
@@ -49,46 +56,202 @@ The machine-readable public schema lives at [`reference/package-boundary.schema.
 }
 ```
 
-A record chooses exactly one payload action:
+| Field | Type | Required | Constraints | Meaning |
+|---|---|---:|---|---|
+| `type` | string | yes | Must be `"record"`. | Selects the record thing shape. |
+| `address` | string | yes | Should be a package-owned public address. | Names the durable record. |
+| `payload` | JSON value | one payload action required | Mutually exclusive with `payload_text`, `payload_base64`, and `remove`. | Stores a JSON payload. |
+| `payload_text` | string | one payload action required | Mutually exclusive with other payload actions. | Stores text bytes. |
+| `payload_base64` | string | one payload action required | Mutually exclusive with other payload actions. | Stores decoded bytes from base64 text. |
+| `remove` | boolean | one payload action required | Use `true`; mutually exclusive with payload fields. | Retracts/removes the record. |
 
-- `payload`
-- `payload_text`
-- `payload_base64`
-- `remove: true`
+Valid text record:
 
-## Stored bytes
+```json
+{
+  "type": "record",
+  "address": "package::sample-package::intro",
+  "payload_text": "Welcome to the product."
+}
+```
+
+Invalid record:
+
+```json
+{
+  "type": "record",
+  "address": "package::sample-package::intro",
+  "payload": { "title": "Welcome" },
+  "payload_text": "Welcome"
+}
+```
+
+This is invalid because a record must choose exactly one payload action.
+
+## `stored_bytes`
 
 ```json
 {
   "type": "stored_bytes",
-  "name": "help.txt",
-  "source_path": "help.txt"
+  "name": "help/getting-started.txt",
+  "source_path": "help/getting-started.txt"
 }
 ```
 
-`source_path` must point inside the package. The package compiler must not accept a path that escapes the package folder.
+| Field | Type | Required | Constraints | Meaning |
+|---|---|---:|---|---|
+| `type` | string | yes | Must be `"stored_bytes"`. | Selects the stored-bytes thing shape. |
+| `name` | string | yes | Package-owned public name. | Final package-owned byte name. |
+| `source_path` | string | yes | Must resolve inside the package folder. | File to read from the submitted package. |
 
-## Slot
+Valid package-owned file:
+
+```json
+{
+  "type": "stored_bytes",
+  "name": "help/getting-started.txt",
+  "source_path": "help/getting-started.txt"
+}
+```
+
+Invalid package-owned file:
+
+```json
+{
+  "type": "stored_bytes",
+  "name": "secret.txt",
+  "source_path": "../secret.txt"
+}
+```
+
+This is invalid because `source_path` escapes the package folder. A package can only bring files it owns.
+
+## `slot`
 
 ```json
 {
   "type": "slot",
-  "name": "sample-slot",
+  "name": "help.search",
   "methods": [{ "name": "query" }],
   "boundary": {
     "call_shape": "envelope-bytes-in-envelope-bytes-out",
     "methods": [{ "name": "query" }]
   },
   "artifact": {
-    "source_path": "slots/sample-slot.bin"
+    "source_path": "slots/help-search.bin"
   }
 }
 ```
 
-A slot declares the public door and the artifact or build data needed to admit it. Implementation details stay behind the plug.
+| Field | Type | Required | Constraints | Meaning |
+|---|---|---:|---|---|
+| `type` | string | yes | Must be `"slot"`. | Selects the callable-slot thing shape. |
+| `name` | string | yes | Public target name. | The name app code calls through `sendRequestToBitfieldTarget(...)`. |
+| `methods` | array of method objects | yes | Must list public methods, usually `{ "name": "query" }`. | Declares the package's callable method names. |
+| `boundary` | object | yes | Must include `call_shape` and matching public methods. | Describes the call boundary. |
+| `boundary.call_shape` | string | yes | Public recipes use `"envelope-bytes-in-envelope-bytes-out"`. | States that the target receives bytes and returns bytes. |
+| `boundary.methods` | array of method objects | yes | Should match `methods`. | Repeats the callable public methods at the boundary. |
+| `artifact.source_path` | string | artifact path choice | Must resolve inside the package folder. | Prebuilt package-owned target bytes. |
 
-## Error shape
+Valid slot:
 
-Package compiler errors are machine-readable. A UI should use the error code and message it receives instead of copying error strings into its own local table.
+```json
+{
+  "type": "slot",
+  "name": "launch.next-step",
+  "methods": [{ "name": "query" }],
+  "boundary": {
+    "call_shape": "envelope-bytes-in-envelope-bytes-out",
+    "methods": [{ "name": "query" }]
+  },
+  "artifact": {
+    "source_path": "slots/next-step.bin"
+  }
+}
+```
+
+Invalid slot:
+
+```json
+{
+  "type": "slot",
+  "name": "launch.next-step",
+  "methods": [],
+  "boundary": {
+    "call_shape": "envelope-bytes-in-envelope-bytes-out",
+    "methods": [{ "name": "query" }]
+  },
+  "artifact": {
+    "source_path": "../next-step.bin"
+  }
+}
+```
+
+This is invalid for two public reasons: the public method list is empty, and the artifact path escapes the package folder.
+
+## Complete valid package boundary
+
+```json
+{
+  "package": "launch-product",
+  "things": [
+    {
+      "type": "record",
+      "address": "package::launch-product::welcome-copy",
+      "payload": {
+        "headline": "Your launch stays fast.",
+        "body": "Every feature stays behind a package boundary."
+      }
+    },
+    {
+      "type": "stored_bytes",
+      "name": "help/getting-started.txt",
+      "source_path": "help/getting-started.txt"
+    },
+    {
+      "type": "slot",
+      "name": "help.search",
+      "methods": [{ "name": "query" }],
+      "boundary": {
+        "call_shape": "envelope-bytes-in-envelope-bytes-out",
+        "methods": [{ "name": "query" }]
+      },
+      "artifact": {
+        "source_path": "slots/help-search.bin"
+      }
+    }
+  ]
+}
+```
+
+This file is valid because every declared item is package-owned, each path stays inside the package folder, and the callable target has a public name and method boundary.
+
+## Common failures
+
+| Symptom | Cause | Fix |
+|---|---|---|
+| Package admission rejects the file immediately. | Missing top-level `package` or `things`. | Add both fields, even when `things` is empty. |
+| Record cannot be admitted. | The record picked zero or more than one payload action. | Use exactly one of `payload`, `payload_text`, `payload_base64`, or `remove: true`. |
+| Stored bytes cannot be found. | `source_path` does not exist inside the package folder. | Put the file inside the package and point `source_path` to that package-local path. |
+| Stored bytes or slot artifact is rejected. | The path escapes the package folder. | Remove `../` and absolute paths. Package boundaries cannot claim outside files. |
+| App code cannot call the target. | Slot `name`, `methods`, and `boundary.methods` do not describe the public callable door clearly. | Use a stable target name and include `{ "name": "query" }` in both method lists when the recipe is query-shaped. |
+
+## Public versus non-public
+
+| Public boundary may say | Public boundary should not say |
+|---|---|
+| Package name, record address, stored byte name, package-local source path, target name, method names. | Local absolute paths, private runner setup, hidden build machines, package compiler implementation details. |
+| Payload shape owned by your package. | Runtime Kit internal storage layout. |
+| Target call boundary: bytes in, bytes out. | How the target implementation is wired internally. |
+
+## Related pages
+
+| Need | Page |
+|---|---|
+| First package boundary | [Package set with one record](/runtime-kit/cookbook/package-set-with-one-record) |
+| Package-owned bytes | [Package-owned file](/runtime-kit/cookbook/package-owned-file) |
+| Callable target | [Callable package slot](/runtime-kit/cookbook/callable-package-slot) |
+| App request API | [Runtime Kit API](/reference/runtime-kit-api) |
+| Package guide | [Packages](/runtime-kit/packages) |
 
 </div>

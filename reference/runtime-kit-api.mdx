@@ -6,8 +6,10 @@ description: "Reference for the current public Runtime Kit JavaScript values."
 <div className="bf-article">
 
 <p className="bf-lead">
-The current public JavaScript Runtime Kit API exposes one request function and one React read hook.
+The public JavaScript Runtime Kit API has one request function and one React read hook. Everything else stays behind the plug.
 </p>
+
+Use this page when you need exact names, shapes, and failure boundaries. If you want to build a first feature, start with [Package to screen](/runtime-kit/package-to-screen). If you want copyable recipes, start with [Runtime Kit Cookbook](/runtime-kit/cookbook/index).
 
 ## Public imports
 
@@ -20,7 +22,13 @@ import {
 import { useBitfieldData } from '@bitfield/runtime-kit/react';
 ```
 
-The request and reply types are exported from `@bitfield/runtime-kit`. The React hook exports the hook value only.
+| Import path | Public value | Use it for | Not public from that path |
+|---|---|---|---|
+| `@bitfield/runtime-kit` | `sendRequestToBitfieldTarget(...)` | User actions that call a named target. | Read hooks, package parsing, target implementations, connection setup. |
+| `@bitfield/runtime-kit` | `BitfieldTargetRequest`, `BitfieldTargetReply` | TypeScript request/reply annotation. | Target-specific payload/reply schemas. |
+| `@bitfield/runtime-kit/react` | `useBitfieldData(...)` | React surfaces that read prepared data. | Providers, scopes, selector factories, subscriptions, address readers. |
+
+The source guard is `packages/js/src/public-surface.test.ts`: the root package exports only `sendRequestToBitfieldTarget`, and the React subpath exports only `useBitfieldData`.
 
 ## `sendRequestToBitfieldTarget(...)`
 
@@ -31,48 +39,105 @@ function sendRequestToBitfieldTarget(
 ): Promise<BitfieldTargetReply>;
 ```
 
-### Request
+This function sends one payload to one named target and returns reply bytes.
+
+### Request type
 
 ```ts
 type BitfieldTargetRequest = {
-  target: string;
-  payload?: unknown;
+  readonly target: string;
+  readonly payload?: unknown;
 };
 ```
 
-| Field | Required | Meaning |
-|---|---:|---|
-| `target` | yes | Public name of the callable target. |
-| `payload` | no | Data sent to the target. Runtime Kit turns it into bytes. |
-
-### Reply
-
-```ts
-type BitfieldTargetReply = {
-  payload: Uint8Array;
-};
-```
-
-The reply is bytes. Decode it according to the target contract.
+| Field | Type | Required | Constraints | Example | Common error |
+|---|---|---:|---|---|---|
+| `target` | `string` | yes | Must be a non-empty public target name. | `"help.search"` | Empty or non-string targets fail before the request is sent. |
+| `payload` | `unknown` | no | Converted to bytes before dispatch. Use the target contract to decide how to encode meaning. | `{ query: "pricing" }` | Sending a shape the target does not understand returns a target-level failure. |
 
 ### Payload conversion
 
-| Input | Sent as |
-|---|---|
-| `Uint8Array` | The same bytes. |
-| `string` | Text bytes. |
-| object, array, number, or boolean | JSON bytes. |
-| `null` or omitted | Empty bytes. |
+| Payload value | Bytes sent | Use when | Watch out |
+|---|---|---|---|
+| `Uint8Array` | Same bytes. | You already own exact bytes. | The target must know the byte format. |
+| `string` | UTF-8 text bytes. | The target expects text. | This is not JSON unless the string itself is JSON text. |
+| object or array | `JSON.stringify(value)` as UTF-8 bytes. | The target expects JSON. | Functions, symbols, and unsupported JSON values do not become useful data. |
+| number or boolean | `JSON.stringify(value)` as UTF-8 bytes. | The target expects a JSON scalar. | The target still receives bytes, not a JavaScript value. |
+| `null` or omitted | Empty bytes. | The target needs no payload. | If the target needs JSON `null`, wrap it, for example `{ value: null }`. |
 
-If a target contract needs a JSON `null`, wrap it in an object, such as `{ value: null }`, so the payload is not treated as empty.
+### Reply type
 
-### Errors
+```ts
+type BitfieldTargetReply = {
+  readonly payload: Uint8Array;
+};
+```
 
-The function throws an `Error` if the request cannot complete. App code should catch errors at user-action boundaries and render a recoverable state.
+| Field | Type | Meaning | Decode rule |
+|---|---|---|---|
+| `payload` | `Uint8Array` | Opaque reply bytes from the target. | Decode according to the target contract, not according to Runtime Kit guesses. |
 
-### Guide
+### Cancellation
 
-Read [Send a request](/runtime-kit/send-request) for examples and patterns.
+Pass an `AbortSignal` as the second argument when the request is tied to a UI lifetime or a changing user input.
+
+```ts
+const controller = new AbortController();
+
+const replyPromise = sendRequestToBitfieldTarget(
+  {
+    target: 'help.search',
+    payload: { query: 'activate device' },
+  },
+  controller.signal,
+);
+
+controller.abort();
+```
+
+Runtime Kit passes the signal to the target transport. App code should still render a recoverable state because the user action may already have left the screen.
+
+### Complete valid example
+
+```ts
+import { sendRequestToBitfieldTarget } from '@bitfield/runtime-kit';
+
+type SearchReply = {
+  results: { title: string; url: string }[];
+};
+
+export async function searchHelp(query: string): Promise<SearchReply> {
+  const reply = await sendRequestToBitfieldTarget({
+    target: 'help.search',
+    payload: { query },
+  });
+
+  return JSON.parse(new TextDecoder().decode(reply.payload)) as SearchReply;
+}
+```
+
+This is valid because the app calls the public target name, sends a target-owned JSON payload, and decodes the reply according to the target's documented contract.
+
+### Invalid example
+
+```ts
+import { runSearchDirectly } from '../slots/help-search';
+
+export async function searchHelp(query: string) {
+  return runSearchDirectly({ query });
+}
+```
+
+This is invalid because the app imports the target implementation. The public boundary is the target name plus bytes. Direct implementation imports make the app depend on how the target is built.
+
+### Error categories
+
+| Symptom | Public category | What app code should do |
+|---|---|---|
+| `sendRequestToBitfieldTarget(...) requires a non-empty target` | Bad request shape | Fix the caller. This is not a retry problem. |
+| Runtime Kit says it is not booted or not connected | App surface is mounted without the Runtime Kit owner wiring | Show a setup/support state. Do not import setup machinery into app components. |
+| Request fails after dispatch | Target or transport failure | Render failure state, keep the user action retryable, and log the target name plus safe payload shape. |
+| Reply cannot be decoded | Caller and target disagree on reply contract | Fix the target contract or caller decoder together. |
 
 ## `useBitfieldData(...)`
 
@@ -91,41 +156,85 @@ function useBitfieldData<T>(
 };
 ```
 
-### Return value
-
-| Field | Meaning |
-|---|---|
-| `data` | The current prepared value, or `null` if no value is ready. |
-| `loading` | `true` while Runtime Kit is preparing or waiting for the value. |
-| `error` | The read error, or `null` when no error exists. |
+This hook reads prepared data for a React surface. A prepared input is a public name that Runtime Kit already resolved behind the surface. It is not a storage path.
 
 ### Selector forms
 
-| Selector | Meaning |
+| Selector | Meaning | Example | Use when |
+|---|---|---|---|
+| omitted | Read the default prepared input for the current surface. | `useBitfieldData<WelcomeCopy>()` | The surface owns one main data input. |
+| string | Read a named prepared input. | `useBitfieldData<Checklist>('launch-checklist')` | The surface has multiple named inputs. |
+| object with `input` | Read a named prepared input. | `useBitfieldData({ input: 'welcome-copy' })` | You want object form for clarity or future params. |
+| object with `input` and `params` | Read a parameterized prepared input. | `useBitfieldData({ input: 'help-results', params: { query } })` | Runtime Kit owns a prepared input that accepts local selection params. |
+
+### Return state
+
+| Field | Type | Meaning | Render obligation |
+|---|---|---|---|
+| `data` | `T | null` | Current prepared value, or no ready value yet. | Render empty/loading state instead of assuming data exists. |
+| `loading` | `boolean` | Runtime Kit is preparing or waiting for the value. | Show a loading state that can coexist with stale or empty UI. |
+| `error` | `Error | null` | The read failed. | Show a recoverable error state and keep the component mounted safely. |
+
+### Complete valid example
+
+```tsx
+import { useBitfieldData } from '@bitfield/runtime-kit/react';
+
+type WelcomeCopy = {
+  headline: string;
+  body: string;
+};
+
+export function WelcomePanel() {
+  const welcome = useBitfieldData<WelcomeCopy>('welcome-copy');
+
+  if (welcome.loading) return <p>Loading welcome copy...</p>;
+  if (welcome.error) return <p>Could not load welcome copy.</p>;
+  if (!welcome.data) return <p>No welcome copy yet.</p>;
+
+  return (
+    <section>
+      <h2>{welcome.data.headline}</h2>
+      <p>{welcome.data.body}</p>
+    </section>
+  );
+}
+```
+
+This is valid because the component asks for a prepared input by name and renders every public state: loading, error, empty, and ready.
+
+### Invalid example
+
+```tsx
+import { readPackageRecord } from '@bitfield/runtime-kit/internal/records';
+
+export function WelcomePanel() {
+  const welcome = readPackageRecord('package::launch-product::welcome-copy');
+  return <h2>{welcome.headline}</h2>;
+}
+```
+
+This is invalid because React code imports private machinery and guesses a storage address. The surface should ask for the prepared input name.
+
+## Boundary summary
+
+| Public app code may do | Public app code must not do |
 |---|---|
-| omitted | Read the default prepared input for this surface. |
-| string | Read a named prepared input. |
-| object with `input` and `params` | Read a named or selected input with local selection params. |
+| Import `sendRequestToBitfieldTarget` from `@bitfield/runtime-kit`. | Import connection setup, transport, target implementation, package parser, or address helpers. |
+| Import `useBitfieldData` from `@bitfield/runtime-kit/react`. | Import read scopes, providers, selector factories, subscription lanes, or address readers. |
+| Send target names and payload bytes/data. | Call target implementation files directly. |
+| Read prepared input names. | Build storage addresses or parse package files inside components. |
+| Decode replies according to the target contract. | Assume Runtime Kit understands target-specific JSON fields. |
 
-Selector names are app-surface names. They are not storage paths. Do not import React selector helper types from unpublished paths.
+## Related pages
 
-### Guide
-
-Read [Read data in React](/runtime-kit/use-bitfield-data) for component examples and common mistakes.
-
-## Public versus private
-
-| Public app code may use | App code should not use |
+| Need | Page |
 |---|---|
-| `@bitfield/runtime-kit` | Unpublished Runtime Kit source paths. |
-| `@bitfield/runtime-kit/react` | Private setup or low-level Runtime Kit machinery. |
-| `sendRequestToBitfieldTarget(...)` | Direct imports of the target implementation. |
-| `useBitfieldData(...)` | Hand-built storage addresses or package parsing inside components. |
-
-This boundary is deliberate. Runtime Kit can improve the machinery behind the public surface without making app code change every time.
-
-## Version note
-
-This page documents the current public JavaScript surface. If the package exports change, this reference and the Runtime Kit guides must be reviewed together.
+| First end-to-end feature | [Package to screen](/runtime-kit/package-to-screen) |
+| Read-hook guide | [Read data in React](/runtime-kit/use-bitfield-data) |
+| Request guide | [Send a request](/runtime-kit/send-request) |
+| Package fields | [Package boundary](/reference/package-boundary) |
+| Complete recipes | [Runtime Kit Cookbook](/runtime-kit/cookbook/index) |
+| AI-agent guardrails | [Build with AI agents](/runtime-kit/ai-build-rules) |
 
 </div>
