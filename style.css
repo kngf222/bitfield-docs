@@ -259,16 +259,11 @@ main [style*="box-shadow"] {
 header input[type="search"],
 header input[placeholder*="Search Bitfield docs"],
 header form:has(input[placeholder*="Search Bitfield docs"]) {
-  --docs-search-edge: var(--border-secondary);
-  --docs-search-glow: var(--border-secondary);
-  background:
-    linear-gradient(180deg, var(--docs-search-edge), transparent),
-    color-mix(in srgb, var(--surface-base) 84%, var(--text-primary) 16%) !important;
+  --docs-search-glow: color-mix(in srgb, var(--border-secondary) 48%, transparent);
+  background: color-mix(in srgb, var(--surface-base) 86%, var(--text-primary) 14%) !important;
   border: 1px solid var(--border-primary) !important;
   border-radius: 0 !important;
-  box-shadow:
-    inset 0 1px 0 var(--docs-search-edge),
-    0 18px 48px var(--docs-search-glow) !important;
+  box-shadow: 0 10px 30px var(--docs-search-glow) !important;
   color: var(--text-primary) !important;
 }
 
@@ -280,9 +275,7 @@ header form:has(input[placeholder*="Search Bitfield docs"]) {
 #navbar button:has(kbd):focus-visible,
 #navbar [role="button"][aria-label*="Search"]:hover,
 #navbar [role="button"][aria-label*="Search"]:focus-visible {
-  background:
-    linear-gradient(180deg, var(--docs-search-edge), transparent),
-    color-mix(in srgb, var(--surface-base) 80%, var(--text-primary) 20%) !important;
+  background: color-mix(in srgb, var(--surface-base) 82%, var(--text-primary) 18%) !important;
   transform: translateY(-1px);
 }
 
