@@ -1,0 +1,18 @@
+---
+title: "Shallow recipe"
+description: "A fixture that must fail Runtime Kit recipe depth validation."
+---
+
+<div className="bf-article">
+
+<p className="bf-lead">
+This fixture intentionally looks like a recipe starter but omits the required checks.
+</p>
+
+## What you will build
+
+```json
+{ "package": "too-thin", "things": [] }
+```
+
+</div>

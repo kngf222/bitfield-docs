@@ -735,6 +735,7 @@
       "title": "Package to screen",
       "description": "Build the full public Runtime Kit chain from one package boundary to one React surface.",
       "diataxis": "tutorial",
+      "pageClass": "runtime-kit-tutorial",
       "summary": "Walks from a package boundary through admitted material, prepared reads, target requests, and React rendering."
     },
     {
@@ -742,6 +743,7 @@
       "title": "Runtime Kit concept map",
       "description": "How package boundaries, prepared reads, callable targets, local state, and placeable surfaces fit together.",
       "diataxis": "concept",
+      "pageClass": "runtime-kit-concept",
       "summary": "Explains the full Runtime Kit concept chain with product scenes, visual flow, anti-patterns, and links to tutorial, recipe, and reference pages."
     },
     {
@@ -749,6 +751,7 @@
       "title": "Placeable surfaces",
       "description": "Understand the generic surface descriptor shape that lets a shell place product UI without knowing product meaning.",
       "diataxis": "concept",
+      "pageClass": "runtime-kit-concept",
       "summary": "Explains the placeable-surface composition primitive with visual maps: package material becomes prepared reads and targets, descriptors declare regions and allowed names, and a dumb shell/sidebar places surfaces without product-specific branches."
     },
     {
@@ -784,6 +787,7 @@
       "title": "Build with AI agents",
       "description": "Give an AI agent the Runtime Kit public contract so it adds features without crossing private boundaries.",
       "diataxis": "how-to",
+      "pageClass": "runtime-kit-ai-agent",
       "summary": "Gives AI-agent prompt packs, bad-output corrections, review maps, and public Runtime Kit boundaries for generated feature work."
     },
     {
@@ -791,6 +795,7 @@
       "title": "Troubleshooting",
       "description": "Find which Runtime Kit boundary broke: package admission, prepared reads, target requests, replies, local state, or activation.",
       "diataxis": "how-to",
+      "pageClass": "runtime-kit-operations",
       "summary": "Maps Runtime Kit symptoms to the public chain link that failed and gives safe repair checks."
     },
     {
@@ -798,6 +803,7 @@
       "title": "Runtime Kit Cookbook",
       "description": "Complete public Runtime Kit recipes for package sets, package boundary files, prepared reads, target requests, and app-facing surfaces.",
       "diataxis": "cookbook",
+      "pageClass": "runtime-kit-recipe-index",
       "summary": "Indexes Runtime Kit cookbook entries for packages, package-owned bytes, callable slots, React surfaces, and placeable surface product loops."
     },
     {
@@ -805,6 +811,7 @@
       "title": "Package set with one record",
       "description": "Create the smallest complete package boundary: one package, one record, one clear address.",
       "diataxis": "cookbook",
+      "pageClass": "runtime-kit-recipe",
       "summary": "Shows the smallest package boundary with one durable package record."
     },
     {
@@ -812,6 +819,7 @@
       "title": "Package-owned file",
       "description": "Attach package-owned bytes to a package boundary.",
       "diataxis": "cookbook",
+      "pageClass": "runtime-kit-recipe",
       "summary": "Shows how a package declares package-owned bytes without reaching outside its folder."
     },
     {
@@ -819,6 +827,7 @@
       "title": "Callable package slot",
       "description": "Declare a package-owned runnable door that app code can ask for work.",
       "diataxis": "cookbook",
+      "pageClass": "runtime-kit-recipe",
       "summary": "Shows how a package declares a callable slot and how app code sends a request to it."
     },
     {
@@ -826,6 +835,7 @@
       "title": "React surface for package data",
       "description": "Read package-prepared data and send a target request from one React surface.",
       "diataxis": "cookbook",
+      "pageClass": "runtime-kit-recipe",
       "summary": "Shows the app-facing read and request shape without exposing package implementation details to React."
     },
     {
@@ -833,6 +843,7 @@
       "title": "Placeable surface product loop",
       "description": "Build a full product loop with package records, target requests, surface descriptors, a dumb shell, and surface bodies.",
       "diataxis": "cookbook",
+      "pageClass": "runtime-kit-recipe",
       "summary": "Shows the source-owned cookbook succession for placeable surfaces: package boundary, descriptors, generic shell, surface bodies, and review checklist."
     },
     {
@@ -882,6 +893,7 @@
       "title": "Runtime Kit API",
       "description": "Reference for the current public Runtime Kit JavaScript values.",
       "diataxis": "reference",
+      "pageClass": "runtime-kit-reference",
       "summary": "Reference for sendRequestToBitfieldTarget, useBitfieldData, payload conversion, cancellation, selectors, return states, valid examples, invalid examples, and public boundaries."
     },
     {
@@ -896,6 +908,7 @@
       "title": "Package boundary",
       "description": "Reference for things-to-store-and-run.json.",
       "diataxis": "reference",
+      "pageClass": "runtime-kit-reference",
       "summary": "Lists package boundary fields, record/stored-bytes/slot thing types, payload choices, method rules, path safety, valid examples, invalid examples, and common failures."
     },
     {

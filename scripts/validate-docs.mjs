@@ -31,13 +31,142 @@ const allowedClaimCategories = new Set([
   'durable-batch-write',
   'batched-write-ceiling',
 ]);
+const knownPageClasses = new Set([
+  'runtime-kit-tutorial',
+  'runtime-kit-concept',
+  'runtime-kit-recipe-index',
+  'runtime-kit-recipe',
+  'runtime-kit-reference',
+  'runtime-kit-ai-agent',
+  'runtime-kit-operations',
+]);
+
+function hasAny(body, needles) {
+  return needles.some((needle) => body.includes(needle));
+}
+
+function requireIncludes(route, body, requirements, output = failures) {
+  for (const [label, needles] of requirements) {
+    const list = Array.isArray(needles) ? needles : [needles];
+    if (!hasAny(body, list)) {
+      output.push(`${route}: missing ${label}`);
+    }
+  }
+}
+
+function validateDepthContract(page, body, sourcePage, output = failures) {
+  if (!page.pageClass) return;
+  if (!knownPageClasses.has(page.pageClass)) {
+    output.push(`${page.route}: unknown pageClass ${page.pageClass}`);
+    return;
+  }
+
+  if (!sourcePage?.sourceIds?.length) {
+    output.push(`${page.route}: depth gate requires source-map sourceIds`);
+  }
+
+  if (page.pageClass === 'runtime-kit-recipe') {
+    requireIncludes(page.route, body, [
+      ['recipe product/build section', '## What you will build'],
+      ['source-owned code snippet', '```'],
+      ['verification section', '## Verify'],
+      ['common failures section', '## Common failures'],
+      ['next links section', '## Next'],
+      ['reference link', '/reference/'],
+    ], output);
+    if (!sourcePage?.sourceIds?.includes('runtime-kit-public-cookbook-examples')) {
+      output.push(`${page.route}: recipe must source-map to runtime-kit-public-cookbook-examples`);
+    }
+    return;
+  }
+
+  if (page.pageClass === 'runtime-kit-recipe-index') {
+    requireIncludes(page.route, body, [
+      ['recipe flow visual', 'className="bf-flow"'],
+      ['recipe contract section', '## Runtime Kit Cookbook contract for AI agents'],
+      ['job route map', '## Choose by job'],
+      ['future whole-product Cookbook boundary', 'future whole-product Bitfield Cookbook'],
+    ], output);
+    return;
+  }
+
+  if (page.pageClass === 'runtime-kit-concept') {
+    requireIncludes(page.route, body, [
+      ['product scene', 'Product scene:'],
+      ['visual flow or structured map', ['className="bf-flow"', 'className="bf-lane-map"']],
+      ['anti-pattern or bad-shape section', ['Anti-pattern', '## What this prevents']],
+      ['tutorial link', '/runtime-kit/package-to-screen'],
+      ['recipe link', '/runtime-kit/cookbook/'],
+      ['reference link', '/reference/'],
+    ], output);
+    return;
+  }
+
+  if (page.pageClass === 'runtime-kit-reference') {
+    requireIncludes(page.route, body, [
+      ['field or parameter table', '| Field |'],
+      ['valid example', ['Complete valid example', 'Complete valid package boundary', 'Valid slot:', 'Valid package-owned file:']],
+      ['invalid example', ['Invalid example', 'Invalid record:', 'Invalid package-owned file:', 'Invalid slot:']],
+      ['public boundary section', ['## Boundary summary', '## Public versus non-public']],
+      ['related links section', ['## Related pages', '## Related pages']],
+    ], output);
+    return;
+  }
+
+  if (page.pageClass === 'runtime-kit-tutorial') {
+    requireIncludes(page.route, body, [
+      ['visual flow', 'className="bf-flow"'],
+      ['expected result', 'Expected result:'],
+      ['anti-pattern section', '## What not to do'],
+      ['next links section', '## Where to go next'],
+    ], output);
+    return;
+  }
+
+  if (page.pageClass === 'runtime-kit-ai-agent') {
+    requireIncludes(page.route, body, [
+      ['prompt packs', '## Prompt packs'],
+      ['bad-output corrections', '## Bad output and corrected output'],
+      ['full review map', '## Full Runtime Kit review map'],
+      ['public import rails', 'Use only the public Runtime Kit surface'],
+    ], output);
+    return;
+  }
+
+  if (page.pageClass === 'runtime-kit-operations') {
+    requireIncludes(page.route, body, [
+      ['troubleshooting visual', 'className="bf-flow"'],
+      ['symptom table', '## Start with the symptom'],
+      ['verification path', ['## Verify', 'The component renders real data']],
+      ['safe local state boundary', 'Do not copy one device'],
+    ], output);
+  }
+}
+
+const depthGateFixtureFailures = [];
+validateDepthContract(
+  {
+    route: 'scripts/fixtures/docs-depth/shallow-recipe',
+    pageClass: 'runtime-kit-recipe',
+  },
+  readFileSync('scripts/fixtures/docs-depth/shallow-recipe.mdx.fixture', 'utf8'),
+  { sourceIds: [] },
+  depthGateFixtureFailures,
+);
+if (
+  !depthGateFixtureFailures.some((failure) => failure.includes('missing common failures section')) ||
+  !depthGateFixtureFailures.some((failure) => failure.includes('recipe must source-map'))
+) {
+  failures.push('docs depth fixture failed to prove shallow recipe rejection');
+}
 
 for (const page of manifest.pages) {
   const file = `${page.route}.mdx`;
+  let body = '';
   if (!existsSync(file)) {
     failures.push(`Missing page file: ${file}`);
   } else {
-    const body = readFileSync(file, 'utf8');
+    body = readFileSync(file, 'utf8');
     if (/^#\s+/m.test(body)) {
       failures.push(`${file} must not declare an in-body H1; Mintlify renders page.title`);
     }
@@ -62,6 +191,9 @@ for (const page of manifest.pages) {
         failures.push(`source-map.json page ${page.route} references unknown source: ${sourceId}`);
       }
     }
+  }
+  if (body) {
+    validateDepthContract(page, body, sourcePage);
   }
 }
 
