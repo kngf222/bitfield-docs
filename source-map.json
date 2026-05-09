@@ -45,9 +45,9 @@
       "freshness": "review when docs.manifest.json changes"
     },
     {
-      "id": "bitfield-public-cookbook-examples",
+      "id": "runtime-kit-public-cookbook-examples",
       "kind": "public-example-contract",
-      "publicUse": "Machine-validated package and Runtime Kit examples used by public cookbook pages.",
+      "publicUse": "Machine-validated examples used by Runtime Kit Cookbook pages. This source does not define the future whole-product Bitfield Cookbook.",
       "freshness": "review when cookbook-examples.json, reference/package-boundary.schema.json, or examples/ changes"
     }
   ],
@@ -125,28 +125,28 @@
       "sourceIds": ["runtime-kit-js-public-contract", "runtime-kit-package-boundary"]
     },
     {
-      "route": "cookbook/index",
-      "sourceIds": ["runtime-kit-package-boundary", "runtime-kit-js-public-contract", "bitfield-docs-information-architecture", "bitfield-public-cookbook-examples"]
+      "route": "runtime-kit/cookbook/index",
+      "sourceIds": ["runtime-kit-package-boundary", "runtime-kit-js-public-contract", "bitfield-docs-information-architecture", "runtime-kit-public-cookbook-examples"]
     },
     {
-      "route": "cookbook/package-set-with-one-record",
-      "sourceIds": ["runtime-kit-package-boundary", "bitfield-public-cookbook-examples"]
+      "route": "runtime-kit/cookbook/package-set-with-one-record",
+      "sourceIds": ["runtime-kit-package-boundary", "runtime-kit-public-cookbook-examples"]
     },
     {
-      "route": "cookbook/package-owned-file",
-      "sourceIds": ["runtime-kit-package-boundary", "bitfield-public-cookbook-examples"]
+      "route": "runtime-kit/cookbook/package-owned-file",
+      "sourceIds": ["runtime-kit-package-boundary", "runtime-kit-public-cookbook-examples"]
     },
     {
-      "route": "cookbook/callable-package-slot",
-      "sourceIds": ["runtime-kit-package-boundary", "runtime-kit-js-public-contract", "bitfield-public-cookbook-examples"]
+      "route": "runtime-kit/cookbook/callable-package-slot",
+      "sourceIds": ["runtime-kit-package-boundary", "runtime-kit-js-public-contract", "runtime-kit-public-cookbook-examples"]
     },
     {
-      "route": "cookbook/react-surface-for-package-data",
-      "sourceIds": ["runtime-kit-js-public-contract", "runtime-kit-package-boundary", "bitfield-public-cookbook-examples"]
+      "route": "runtime-kit/cookbook/react-surface-for-package-data",
+      "sourceIds": ["runtime-kit-js-public-contract", "runtime-kit-package-boundary", "runtime-kit-public-cookbook-examples"]
     },
     {
-      "route": "cookbook/placeable-surface-product-loop",
-      "sourceIds": ["runtime-kit-js-public-contract", "runtime-kit-package-boundary", "bitfield-public-cookbook-examples"]
+      "route": "runtime-kit/cookbook/placeable-surface-product-loop",
+      "sourceIds": ["runtime-kit-js-public-contract", "runtime-kit-package-boundary", "runtime-kit-public-cookbook-examples"]
     },
     {
       "route": "build-your-own-surface/sdk-boundary",

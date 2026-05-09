@@ -79,8 +79,8 @@
       },
       {
         "eyebrow": "Runtime Kit",
-        "label": "Cookbook",
-        "href": "/cookbook",
+        "label": "Runtime Kit Cookbook",
+        "href": "/runtime-kit/cookbook",
         "description": "Copy a complete public package shape."
       },
       {
@@ -599,15 +599,15 @@
           ]
         },
         {
-          "group": "Cookbook",
+          "group": "Runtime Kit Cookbook",
           "pages": [
-            "cookbook/index",
+            "runtime-kit/cookbook/index",
             "runtime-kit/package-to-screen",
-            "cookbook/package-set-with-one-record",
-            "cookbook/package-owned-file",
-            "cookbook/callable-package-slot",
-            "cookbook/react-surface-for-package-data",
-            "cookbook/placeable-surface-product-loop"
+            "runtime-kit/cookbook/package-set-with-one-record",
+            "runtime-kit/cookbook/package-owned-file",
+            "runtime-kit/cookbook/callable-package-slot",
+            "runtime-kit/cookbook/react-surface-for-package-data",
+            "runtime-kit/cookbook/placeable-surface-product-loop"
           ]
         },
         {
@@ -786,42 +786,42 @@
       "summary": "Maps Runtime Kit symptoms to the public chain link that failed and gives safe repair checks."
     },
     {
-      "route": "cookbook/index",
-      "title": "Start here",
-      "description": "Complete public examples for package sets, package boundary files, and app-facing Runtime Kit calls.",
+      "route": "runtime-kit/cookbook/index",
+      "title": "Runtime Kit Cookbook",
+      "description": "Complete public Runtime Kit recipes for package sets, package boundary files, prepared reads, target requests, and app-facing surfaces.",
       "diataxis": "cookbook",
-      "summary": "Indexes complete package and Runtime Kit cookbook entries that stay inside the public contract."
+      "summary": "Indexes Runtime Kit cookbook entries for packages, package-owned bytes, callable slots, React surfaces, and placeable surface product loops."
     },
     {
-      "route": "cookbook/package-set-with-one-record",
+      "route": "runtime-kit/cookbook/package-set-with-one-record",
       "title": "Package set with one record",
       "description": "Create the smallest complete package boundary: one package, one record, one clear address.",
       "diataxis": "cookbook",
       "summary": "Shows the smallest package boundary with one durable package record."
     },
     {
-      "route": "cookbook/package-owned-file",
+      "route": "runtime-kit/cookbook/package-owned-file",
       "title": "Package-owned file",
       "description": "Attach package-owned bytes to a package boundary.",
       "diataxis": "cookbook",
       "summary": "Shows how a package declares package-owned bytes without reaching outside its folder."
     },
     {
-      "route": "cookbook/callable-package-slot",
+      "route": "runtime-kit/cookbook/callable-package-slot",
       "title": "Callable package slot",
       "description": "Declare a package-owned runnable door that app code can ask for work.",
       "diataxis": "cookbook",
       "summary": "Shows how a package declares a callable slot and how app code sends a request to it."
     },
     {
-      "route": "cookbook/react-surface-for-package-data",
+      "route": "runtime-kit/cookbook/react-surface-for-package-data",
       "title": "React surface for package data",
       "description": "Read package-prepared data and send a target request from one React surface.",
       "diataxis": "cookbook",
       "summary": "Shows the app-facing read and request shape without exposing package implementation details to React."
     },
     {
-      "route": "cookbook/placeable-surface-product-loop",
+      "route": "runtime-kit/cookbook/placeable-surface-product-loop",
       "title": "Placeable surface product loop",
       "description": "Build a full product loop with package records, target requests, surface descriptors, a dumb shell, and surface bodies.",
       "diataxis": "cookbook",

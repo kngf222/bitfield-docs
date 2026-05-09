@@ -7,7 +7,7 @@
   const defaultTheme = "paper";
   const storageKey = 'bitfield-docs-theme';
   const accountUrl = "https://account.bitfield.so";
-  const searchSuggestions = [{"eyebrow":"Start","label":"Quickstart","href":"/start/quickstart","description":"Get your key and make your first call."},{"eyebrow":"Concepts","label":"What is Bitfield?","href":"/concepts/what-is-bitfield","description":"Understand the runtime and database."},{"eyebrow":"Runtime Kit","label":"Cookbook","href":"/cookbook","description":"Copy a complete public package shape."},{"eyebrow":"Account","label":"Get your key","href":"/start/get-your-key","description":"Create the account and activate devices."},{"eyebrow":"Proof","label":"How Bitfield is this fast","href":"/proof/how-bitfield-is-fast","description":"Read the speed mechanism and claim boundary."}];
+  const searchSuggestions = [{"eyebrow":"Start","label":"Quickstart","href":"/start/quickstart","description":"Get your key and make your first call."},{"eyebrow":"Concepts","label":"What is Bitfield?","href":"/concepts/what-is-bitfield","description":"Understand the runtime and database."},{"eyebrow":"Runtime Kit","label":"Runtime Kit Cookbook","href":"/runtime-kit/cookbook","description":"Copy a complete public package shape."},{"eyebrow":"Account","label":"Get your key","href":"/start/get-your-key","description":"Create the account and activate devices."},{"eyebrow":"Proof","label":"How Bitfield is this fast","href":"/proof/how-bitfield-is-fast","description":"Read the speed mechanism and claim boundary."}];
   const swatchColors = ["#e05a5a","#f5cc42","#22c0ba","#9060ee","#f5a03a","#35be7a","#3d7ced","#e0609a"];
   const swatchTiming = [
     { delay: 0.1, duration: 7.3 },

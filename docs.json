@@ -115,15 +115,15 @@
             ]
           },
           {
-            "group": "Cookbook",
+            "group": "Runtime Kit Cookbook",
             "pages": [
-              "cookbook/index",
+              "runtime-kit/cookbook/index",
               "runtime-kit/package-to-screen",
-              "cookbook/package-set-with-one-record",
-              "cookbook/package-owned-file",
-              "cookbook/callable-package-slot",
-              "cookbook/react-surface-for-package-data",
-              "cookbook/placeable-surface-product-loop"
+              "runtime-kit/cookbook/package-set-with-one-record",
+              "runtime-kit/cookbook/package-owned-file",
+              "runtime-kit/cookbook/callable-package-slot",
+              "runtime-kit/cookbook/react-surface-for-package-data",
+              "runtime-kit/cookbook/placeable-surface-product-loop"
             ]
           },
           {

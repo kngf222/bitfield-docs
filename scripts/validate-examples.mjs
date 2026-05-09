@@ -8,7 +8,11 @@ const boundarySchema = JSON.parse(readFileSync('reference/package-boundary.schem
 const pageRoutes = new Set(manifest.pages.map((page) => page.route));
 const cookbookRoutes = new Set(
   manifest.pages
-    .filter((page) => page.route.startsWith('cookbook/') && page.route !== 'cookbook/index')
+    .filter(
+      (page) =>
+        page.diataxis === 'cookbook' &&
+        page.route !== 'runtime-kit/cookbook/index',
+    )
     .map((page) => page.route),
 );
 const sourcePages = new Map(sourceMap.pages.map((page) => [page.route, page]));
