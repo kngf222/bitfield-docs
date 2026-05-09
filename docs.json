@@ -83,6 +83,7 @@
           {
             "group": "Understand",
             "pages": [
+              "manifesto",
               "concepts/what-is-bitfield",
               "concepts/database-and-runtime",
               "concepts/storage-shape",

@@ -45,6 +45,7 @@ const knownPageClasses = new Set([
   'start-onboarding',
   'concept-curriculum',
   'public-changelog',
+  'public-manifesto',
 ]);
 
 function hasAny(body, needles) {
@@ -219,6 +220,18 @@ function validateDepthContract(page, body, sourcePage, output = failures) {
       ['changed page links', ['/runtime-kit/', '/build-your-own-surface/', '/activation/', '/proof/', '/start/']],
       ['off-page boundary', '## What stays off this page'],
       ['next-step section', '## Next'],
+    ], output);
+    return;
+  }
+
+  if (page.pageClass === 'public-manifesto') {
+    requireIncludes(page.route, body, [
+      ['manifesto wrapper', 'bf-manifesto'],
+      ['manifesto body', 'bf-manifesto-body'],
+      ['signature block', 'bf-manifesto-signature'],
+      ['founder title', 'Founder of Bitfield'],
+      ['core thesis', 'All future software will run on Bitfield'],
+      ['curiosity thesis', 'curiosity are allowed to live and grow forever'],
     ], output);
   }
 }

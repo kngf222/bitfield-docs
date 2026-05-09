@@ -55,6 +55,12 @@
       "kind": "public-example-contract",
       "publicUse": "Machine-validated examples used by Runtime Kit Cookbook pages. This source does not define the future whole-product Bitfield Cookbook.",
       "freshness": "review when cookbook-examples.json, reference/package-boundary.schema.json, or examples/ changes"
+    },
+    {
+      "id": "bitfield-founder-manifesto",
+      "kind": "public-founder-writing",
+      "publicUse": "Founder-authored manifesto language for why Bitfield exists.",
+      "freshness": "review when founder manifesto copy changes"
     }
   ],
   "pages": [
@@ -69,6 +75,10 @@
     {
       "route": "start/get-your-key",
       "sourceIds": ["bitfield-public-landing-copy", "bitfield-public-legal-pages", "bitfield-account-portal-public-lifecycle"]
+    },
+    {
+      "route": "manifesto",
+      "sourceIds": ["bitfield-founder-manifesto"]
     },
     {
       "route": "concepts/what-is-bitfield",

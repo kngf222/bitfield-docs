@@ -1065,6 +1065,50 @@ nav .bf-docs-theme-picker {
   padding: 1.1rem 1.2rem;
 }
 
+.bf-manifesto {
+  max-width: 52rem;
+}
+
+.bf-manifesto-body {
+  color: var(--text-secondary);
+  font-size: clamp(1.05rem, 1vw + 0.8rem, 1.35rem);
+  letter-spacing: -0.035em;
+  line-height: 1.68;
+  margin-top: 2.4rem;
+}
+
+.bf-manifesto-body p {
+  margin: 0 0 1.35rem;
+  text-wrap: pretty;
+}
+
+.bf-manifesto-body p:last-child {
+  margin-bottom: 0;
+}
+
+.bf-manifesto-signoff {
+  border-top: 1px solid var(--bf-docs-selected-border);
+  margin-top: 3rem;
+  padding-top: 1.4rem;
+}
+
+.bf-manifesto-signature {
+  color: var(--text-primary);
+  font-family: "Belgiansignature", "Snell Roundhand", "Brush Script MT", cursive;
+  font-size: clamp(3.2rem, 8vw, 6.6rem);
+  letter-spacing: 0.01em;
+  line-height: 0.9;
+}
+
+.bf-manifesto-founder {
+  color: var(--docs-active-color);
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  margin-top: 0.55rem;
+  text-transform: uppercase;
+}
+
 .bf-flow {
   align-items: stretch;
   display: grid;

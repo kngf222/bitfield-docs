@@ -9,6 +9,7 @@ These pages are public customer documentation. They describe the public product,
 - [Bitfield Docs](index): The public entry point and path chooser for understanding Bitfield, trying it, building a first screen, checking proof, or managing account access.
 - [Quickstart](start/quickstart): A first-result tutorial for account access, device activation, Runtime Kit imports, reading prepared data, sending a target request, and handling first failures.
 - [Get your key](start/get-your-key): Explains the account portal path for account creation, trial or plan access, email confirmation, key access, first device activation, recovery, and next steps.
+- [Manifesto](manifesto): Jibran Akhtar's founder manifesto for Bitfield: future software, growing ideas, curiosity, and why Bitfield exists.
 - [What is Bitfield?](concepts/what-is-bitfield): Explains Bitfield without assuming the reader already knows database or runtime vocabulary.
 - [Database and runtime](concepts/database-and-runtime): Defines the public database and runtime model.
 - [Storage shape](concepts/storage-shape): Explains local durable truth, memory-mapped local files, content identity, and the current view.
