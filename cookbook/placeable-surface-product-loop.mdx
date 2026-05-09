@@ -11,6 +11,38 @@ This cookbook entry is the cookbook. It builds the same shape explained in [Plac
 
 The snippets on this page come from `examples/product-cookbook/placeable-surface-product-loop/` and are checked by `cookbook-examples.json`.
 
+## When to use this
+
+Use this recipe when the product is bigger than one component.
+
+| Good fit | Not this recipe |
+|---|---|
+| A product shell with multiple surfaces: launch, help, support, settings, billing, or dashboards. | A single component reading one prepared input. |
+| A sidebar/tab/region system that should stay generic. | A one-off hardcoded marketing page. |
+| Product areas that need different prepared inputs and targets. | A pure package-boundary example with no UI shell. |
+| AI agents keep adding layout special cases. | A reference lookup for one function signature. |
+
+The point is not "make a dashboard." The point is to keep arrangement generic while product meaning lives in package data, targets, descriptors, and surface bodies.
+
+## What you will build
+
+| Layer | File | Public contract |
+|---|---|---|
+| Package boundary | `launch-product/things-to-store-and-run.json` | Records `welcome-copy`, `checklist`; targets `launch.next-step`, `help.search`. |
+| Surface descriptors | `app/surfaces.ts` | Surface ids, labels, regions, component keys, prepared inputs, targets. |
+| Dumb shell | `app/ProductShell.tsx` | Renders labels, active surface, and region from descriptors. |
+| Main surface | `app/LaunchHomeSurface.tsx` | Reads `welcome-copy` and `launch-checklist`; calls `launch.next-step`. |
+| Help surface | `app/LaunchHelpSurface.tsx` | Calls `help.search` with cancellation. |
+
+Expected result:
+
+```text
+The shell can show Launch, Help, and Support without hardcoded product branches.
+Launch can read package-prepared copy/checklist and call launch.next-step.
+Help can call help.search.
+Adding another surface means adding descriptor data and a surface body, not editing shell policy.
+```
+
 ## Step 1: package records and targets
 
 The package owns product facts and callable targets.
@@ -65,6 +97,15 @@ The package owns product facts and callable targets.
 
 Runtime Kit admits this package set and prepares the public read/request surface for the app.
 
+The package contract is:
+
+| Public name | Kind | Used by |
+|---|---|---|
+| `welcome-copy` | Record/prepared input source | `LaunchHomeSurface` |
+| `launch-checklist` | Record/prepared input source | `LaunchHomeSurface` |
+| `launch.next-step` | Callable target | `LaunchHomeSurface` |
+| `help.search` | Callable target | `LaunchHelpSurface` |
+
 ## Step 2: surface descriptors
 
 A descriptor says where the surface can appear and which Runtime Kit names the surface body may use.
@@ -115,6 +156,18 @@ export const launchSurfaces: PlaceableSurface[] = [
 
 Notice what is missing: no dashboard branch, no help branch, no support branch in the shell. The product-specific names are data on the descriptor.
 
+Descriptor contract:
+
+| Field | Why it exists |
+|---|---|
+| `id` | Stable surface identity. |
+| `label` | Text the shell can render without knowing product meaning. |
+| `region` | Generic placement target such as `main`, `rail`, or `panel`. |
+| `order` | Generic sort key. |
+| `componentKey` | Registry key for the render body. |
+| `preparedInputs` | Public read names this surface may use. |
+| `targets` | Public target names this surface may call. |
+
 ## Step 3: dumb shell
 
 The shell receives surface descriptors and a render registry. It builds navigation from descriptor labels and chooses the active surface by id.
@@ -164,6 +217,16 @@ export function ProductShell({ surfaces, registry }: ProductShellProps) {
 ```
 
 That shell can place any future surface that follows the descriptor. It does not change when you add analytics, onboarding, billing, settings, or a new customer-facing product area.
+
+Shell verification:
+
+| Check | Pass condition |
+|---|---|
+| Navigation | Renders from `surface.label`, not hardcoded product strings. |
+| Active state | Tracks `surface.id`, not component names. |
+| Placement | Uses `surface.region`, not product-specific branches. |
+| Render body | Resolves through `surface.componentKey` and registry. |
+| Future surface | Adding a descriptor can add a surface without editing shell policy. |
 
 ## Step 4: surface body
 
@@ -227,6 +290,14 @@ export function LaunchHomeSurface({ surface }: { surface: PlaceableSurface }) {
 
 This surface can be moved from `main` to `panel`, opened beside another surface, or reused in a different shell. The product work stays with the surface body. The arrangement stays with the shell.
 
+Surface body contract:
+
+| Surface | Reads | Calls | Must render |
+|---|---|---|---|
+| `launch.home` | `welcome-copy`, `launch-checklist` | `launch.next-step` | loading, error, empty, success |
+| `launch.help` | none in this fixture | `help.search` | request entry point and request failure in a real UI |
+| `launch.support` | none in this fixture | none | public contract placeholder or future body |
+
 ## Step 5: second surface, same request primitive
 
 ```tsx
@@ -258,7 +329,7 @@ export function LaunchHelpSurface() {
 
 The app has another capability. The shell still did not change.
 
-## Review the loop
+## Verify the full loop
 
 Before you call the feature done, write this checklist beside it:
 
@@ -291,5 +362,56 @@ Public request/reply contracts:
 ```
 
 If an AI agent built the feature, make it return this checklist before you accept the code. If a teammate built it, use the same checklist in review.
+
+## Common failures
+
+| Symptom | Cause | Fix |
+|---|---|---|
+| Shell needs a new `if (surface.id === ...)` branch for every product area. | Product meaning leaked into arrangement. | Move product meaning into descriptors and registry entries. |
+| Surface calls a target not listed on its descriptor. | The surface contract and body drifted. | Add the target to the descriptor or remove the call. |
+| Surface reads a prepared input not listed on its descriptor. | The read contract and body drifted. | Add the input to the descriptor or change the surface body. |
+| Adding Help requires editing Launch code. | Surface bodies are coupled. | Keep each surface body behind its own `componentKey`. |
+| AI agent imports package setup into shell. | Agent treated the shell like product code. | Reject the output; shell only arranges descriptors. |
+| Reply parsing crashes. | Target reply contract changed or was never written. | Document request/reply shape and decode only that shape. |
+
+## Safe variations
+
+You can extend this recipe without changing the primitive:
+
+1. Add `launch.analytics` in the `rail` region with its own prepared input.
+2. Move `launch.help` from `panel` to `main` by changing `region`.
+3. Add `settings.billing` with a new component key and target.
+4. Add a second shell that renders the same descriptors differently for mobile.
+5. Add a support surface that reads account/device status once that public contract exists.
+
+The shell stays generic in every variation. The product grows by adding descriptors, package material, and surface bodies.
+
+## AI review checklist
+
+When an AI builds a product loop from this recipe, require this answer before accepting the code:
+
+```text
+Package records:
+Package stored bytes:
+Package targets:
+Surface descriptors:
+Shell generic proof:
+Surface bodies:
+Prepared input use:
+Target request use:
+Request/reply contracts:
+Files changed:
+Validation run:
+```
+
+Reject the work if the shell names product concepts in branches, if a surface reads/calls names missing from its descriptor, or if app code imports package implementation files.
+
+## Next
+
+Read [Placeable surfaces](/runtime-kit/placeable-surfaces) when you need the concept behind this recipe.
+
+Read [Package boundary](/reference/package-boundary) for exact package thing fields.
+
+Read [Runtime Kit API](/reference/runtime-kit-api) for the public read/request functions.
 
 </div>
