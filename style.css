@@ -292,6 +292,12 @@ header form:has(input[placeholder*="Search Bitfield docs"]) {
 }
 
 [data-bf-docs-search-dialog="true"] {
+  color: var(--text-primary) !important;
+}
+
+[data-bf-docs-search-dialog="true"] [id^="headlessui-dialog-panel"],
+[data-bf-docs-search-dialog="true"] [data-radix-dialog-content],
+[data-bf-docs-search-dialog="true"] [cmdk-root] {
   background:
     linear-gradient(180deg, color-mix(in srgb, white 8%, transparent), transparent),
     color-mix(in srgb, var(--surface-base) 86%, var(--text-primary) 14%) !important;
@@ -303,8 +309,16 @@ header form:has(input[placeholder*="Search Bitfield docs"]) {
   color: var(--text-primary) !important;
   max-width: min(88vw, 64rem) !important;
   min-height: min(72vh, 46rem) !important;
-  padding: 0.85rem !important;
+  overflow: hidden auto !important;
+  padding: clamp(1rem, 2.2vw, 1.6rem) !important;
   width: min(88vw, 64rem) !important;
+}
+
+[data-bf-docs-search-dialog="true"] :is(div, form):has(> [data-bf-docs-search-field="true"] + .bf-docs-search-defaults) {
+  border-bottom: 0 !important;
+  height: auto !important;
+  min-height: 0 !important;
+  padding: 0 !important;
 }
 
 [data-bf-docs-search-field="true"] {
@@ -315,7 +329,7 @@ header form:has(input[placeholder*="Search Bitfield docs"]) {
   border: 1px solid var(--border-primary) !important;
   box-shadow: inset 0 1px 0 color-mix(in srgb, white 16%, transparent) !important;
   display: flex !important;
-  min-height: 3.45rem !important;
+  min-height: 3.75rem !important;
   position: relative !important;
 }
 
@@ -336,7 +350,7 @@ header form:has(input[placeholder*="Search Bitfield docs"]) {
   color: var(--text-primary) !important;
   flex: 1 1 auto !important;
   font-size: 1.05rem !important;
-  min-height: 3.45rem !important;
+  min-height: 3.75rem !important;
   outline: none !important;
   padding: 0 1rem 0 3.2rem !important;
   width: 100% !important;
@@ -349,8 +363,8 @@ input[placeholder*="Search Bitfield docs"] {
 }
 
 .bf-docs-search-defaults {
-  margin-top: 1.1rem;
-  padding: 0.25rem 0.1rem 0;
+  margin-top: 1.25rem;
+  padding: 0 0.1rem 0.2rem;
 }
 
 .bf-docs-search-defaults[hidden] {
