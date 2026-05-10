@@ -188,7 +188,7 @@ function validateDepthContract(page, body, sourcePage, output = failures) {
       ['public handles table', '## Public handles'],
       ['data-flow map', '## Data-flow map'],
       ['file boundary section', '## File-by-file public boundary'],
-      ['boundary mistakes section', ['## Agent mistakes to reject', '## Generated-code mistakes to reject', '## Boundary mistakes to reject']],
+      ['boundary mistakes section', ['## Agent mistakes to reject', '## Generated-code mistakes to reject', '## Boundary mistakes to reject', '## Boundary mistakes']],
       ['review checklist', '## Review checklist'],
       ['adapter-neutral language', ['React is one adapter', 'future SDK', 'native shell']],
       ['next links section', '## Next'],
