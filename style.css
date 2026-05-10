@@ -1182,6 +1182,82 @@ nav .bf-docs-theme-picker {
   font-weight: 800;
 }
 
+.mermaid,
+[class*="mermaid"] {
+  background: var(--bf-docs-selected-surface) !important;
+  border: 1px solid var(--bf-docs-selected-border) !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  color: var(--text-primary) !important;
+  margin: 2rem 0 !important;
+  overflow-x: auto;
+  padding: 1rem !important;
+}
+
+.mermaid svg,
+[class*="mermaid"] svg {
+  color: var(--text-primary) !important;
+  display: block;
+  height: auto;
+  margin: 0 auto;
+  max-width: 100%;
+}
+
+.mermaid :is(.node rect, .node polygon, .node circle, .node ellipse),
+[class*="mermaid"] :is(.node rect, .node polygon, .node circle, .node ellipse) {
+  fill: var(--docs-page-bg) !important;
+  stroke: var(--bf-docs-selected-border) !important;
+  stroke-width: 1px !important;
+}
+
+.mermaid :is(.node.traditional rect, .node.traditional polygon, .node.traditional circle, .node.traditional ellipse),
+[class*="mermaid"] :is(.node.traditional rect, .node.traditional polygon, .node.traditional circle, .node.traditional ellipse) {
+  fill: color-mix(in srgb, var(--surface-base) 86%, var(--text-primary) 14%) !important;
+}
+
+.mermaid :is(.node.classify rect, .node.classify polygon, .node.classify circle, .node.classify ellipse),
+[class*="mermaid"] :is(.node.classify rect, .node.classify polygon, .node.classify circle, .node.classify ellipse) {
+  fill: color-mix(in srgb, var(--docs-active-color) 12%, var(--surface-base) 88%) !important;
+  stroke: color-mix(in srgb, var(--docs-active-color) 42%, var(--bf-docs-selected-border) 58%) !important;
+}
+
+.mermaid :is(.node.bitfield rect, .node.bitfield polygon, .node.bitfield circle, .node.bitfield ellipse),
+[class*="mermaid"] :is(.node.bitfield rect, .node.bitfield polygon, .node.bitfield circle, .node.bitfield ellipse) {
+  fill: var(--bf-docs-selected-surface-hover) !important;
+  stroke: var(--docs-active-color) !important;
+}
+
+.mermaid :is(.node.private rect, .node.private polygon, .node.private circle, .node.private ellipse),
+[class*="mermaid"] :is(.node.private rect, .node.private polygon, .node.private circle, .node.private ellipse) {
+  fill: color-mix(in srgb, var(--surface-base) 92%, var(--text-secondary) 8%) !important;
+  stroke: var(--bf-docs-selected-border) !important;
+}
+
+.mermaid :is(.nodeLabel, .label, .edgeLabel, .labelBkg, text),
+[class*="mermaid"] :is(.nodeLabel, .label, .edgeLabel, .labelBkg, text) {
+  color: var(--text-primary) !important;
+  fill: var(--text-primary) !important;
+  font-family: var(--bf-font-body) !important;
+}
+
+.mermaid :is(.edgeLabel, .edgeLabel p),
+[class*="mermaid"] :is(.edgeLabel, .edgeLabel p) {
+  background: var(--bf-docs-selected-surface) !important;
+  color: var(--text-secondary) !important;
+}
+
+.mermaid :is(.flowchart-link, .edgePath path, path.relation),
+[class*="mermaid"] :is(.flowchart-link, .edgePath path, path.relation) {
+  stroke: var(--docs-active-color) !important;
+  stroke-width: 1.4px !important;
+}
+
+.mermaid marker path,
+[class*="mermaid"] marker path {
+  fill: var(--docs-active-color) !important;
+  stroke: var(--docs-active-color) !important;
+}
+
 .bf-lane-map {
   display: grid;
   gap: 0;
