@@ -4,7 +4,7 @@
     "description": "World's fastest plug-in runtime and database for founders who can't afford to slow down when plans change.",
     "typography": {
       "display": "\"SF Pro Display\", -apple-system, BlinkMacSystemFont, \"Segoe UI\", sans-serif",
-      "body": "\"SF Pro Text\", -apple-system, BlinkMacSystemFont, \"Segoe UI\", sans-serif",
+      "body": "-apple-system, BlinkMacSystemFont, \"SF Pro Text\", \"Segoe UI\", sans-serif",
       "fontFaces": [
         {
           "family": "SF Pro Text",

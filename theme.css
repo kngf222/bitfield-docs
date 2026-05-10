@@ -50,7 +50,7 @@
 
 :root {
   --bf-font-display: "SF Pro Display", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  --bf-font-body: "SF Pro Text", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --bf-font-body: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", sans-serif;
   --bf-red: #FB6A5F;
   --bf-orange: #FF9B5F;
   --bf-yellow: #FFD767;
