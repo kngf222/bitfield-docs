@@ -57,6 +57,12 @@
       "freshness": "review when cookbook-examples.json, reference/package-boundary.schema.json, or examples/ changes"
     },
     {
+      "id": "runtime-kit-public-package-cooperation",
+      "kind": "public-example-contract",
+      "publicUse": "Public-safe Runtime Kit package cooperation examples: shared product facts, prepared inputs, named target requests, private UI state, and package-owned bytes.",
+      "freshness": "review when public Runtime Kit package cooperation examples or public JS exports change"
+    },
+    {
       "id": "bitfield-founder-manifesto",
       "kind": "public-founder-writing",
       "publicUse": "Founder-authored manifesto language for why Bitfield exists.",
@@ -119,6 +125,38 @@
     {
       "route": "runtime-kit/placeable-surfaces",
       "sourceIds": ["runtime-kit-js-public-contract", "runtime-kit-package-boundary"]
+    },
+    {
+      "route": "runtime-kit/build-without-tangled-code/index",
+      "sourceIds": ["runtime-kit-js-public-contract", "runtime-kit-package-boundary", "runtime-kit-public-package-cooperation", "bitfield-docs-information-architecture"]
+    },
+    {
+      "route": "runtime-kit/build-without-tangled-code/share-state-between-packages",
+      "sourceIds": ["runtime-kit-js-public-contract", "runtime-kit-package-boundary", "runtime-kit-public-package-cooperation"]
+    },
+    {
+      "route": "runtime-kit/build-without-tangled-code/read-data-another-package-prepared",
+      "sourceIds": ["runtime-kit-js-public-contract", "runtime-kit-package-boundary", "runtime-kit-public-package-cooperation"]
+    },
+    {
+      "route": "runtime-kit/build-without-tangled-code/ask-another-package-to-do-work",
+      "sourceIds": ["runtime-kit-js-public-contract", "runtime-kit-package-boundary", "runtime-kit-public-package-cooperation"]
+    },
+    {
+      "route": "runtime-kit/build-without-tangled-code/keep-private-ui-state-private",
+      "sourceIds": ["runtime-kit-js-public-contract", "runtime-kit-package-boundary", "runtime-kit-public-package-cooperation"]
+    },
+    {
+      "route": "runtime-kit/build-without-tangled-code/store-files-inside-a-package",
+      "sourceIds": ["runtime-kit-js-public-contract", "runtime-kit-package-boundary", "runtime-kit-public-package-cooperation"]
+    },
+    {
+      "route": "runtime-kit/build-without-tangled-code/let-many-packages-work-together",
+      "sourceIds": ["runtime-kit-js-public-contract", "runtime-kit-package-boundary", "runtime-kit-public-package-cooperation"]
+    },
+    {
+      "route": "runtime-kit/build-without-tangled-code/rules-for-ai-agents",
+      "sourceIds": ["runtime-kit-js-public-contract", "runtime-kit-package-boundary", "runtime-kit-public-package-cooperation"]
     },
     {
       "route": "runtime-kit/use-bitfield-data",

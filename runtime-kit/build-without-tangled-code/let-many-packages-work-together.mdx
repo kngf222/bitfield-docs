@@ -1,0 +1,111 @@
+---
+title: "Let many packages work together"
+description: "Combine Bitfield state, prepared inputs, and target requests so many packages cooperate without sharing private objects."
+---
+
+<div className="bf-article">
+
+<p className="bf-lead">
+When many packages need to cooperate, do not create one giant store that everyone imports. Let packages meet through Bitfield state, prepared inputs, and target requests.
+</p>
+
+Product scene: a command center has a file tree, file editor, AI chat, project preview, notifications, keyboard shortcuts, and a sidebar. Each package has its own job. They still need to feel like one product.
+
+Expected result: packages cooperate through public Bitfield handles without becoming one tangled codebase.
+
+## Traditional app shape
+
+```ts
+import { appStore } from '../app-store';
+import { previewService } from '../project-preview/service';
+import { notificationService } from '../notifications/service';
+import { chatContext } from '../chat/context';
+
+export async function runEverything() {
+  const file = appStore.fileTree.selectedFile;
+  chatContext.attachFile(file);
+  await previewService.refresh(appStore.currentProject);
+  notificationService.setMode(appStore.settings.notificationMode);
+}
+```
+
+This code is convenient because everything is reachable. It is dangerous for the same reason.
+
+## Bitfield shape
+
+```text
+selected-file -> shared Bitfield state
+current-project -> shared Bitfield state
+project-preview-surface -> prepared input
+notification-mode.update -> target request
+chat.attach-context -> target request
+```
+
+Each package uses the public handle it needs. No package imports every other package.
+
+## Cooperation map
+
+<div className="bf-lane-map" aria-label="Many packages cooperating through Bitfield">
+  <div className="bf-lane-card">
+    <span>State</span>
+    <strong>selected-file</strong>
+    <p>Editor, AI context, and breadcrumbs read the same product fact.</p>
+  </div>
+  <div className="bf-lane-card">
+    <span>Input</span>
+    <strong>project-preview-surface</strong>
+    <p>Preview UI reads a prepared view of project status and URL.</p>
+  </div>
+  <div className="bf-lane-card">
+    <span>Request</span>
+    <strong>notification-mode.update</strong>
+    <p>A settings surface asks the notification package to change mode.</p>
+  </div>
+  <div className="bf-lane-card">
+    <span>Private</span>
+    <strong>open menu</strong>
+    <p>Temporary UI details stay inside the package rendering them.</p>
+  </div>
+</div>
+
+## What this prevents
+
+| Bad shape | Why it breaks | Better shape |
+|---|---|---|
+| One giant app store. | Every feature depends on every other feature's shape. | Shared product facts in Bitfield. |
+| One central service imports all packages. | Adding a package means editing the central service. | Packages expose inputs and targets. |
+| Shell coordinates product meaning. | Layout becomes business logic. | Shell places; packages read/call. |
+| AI agent patches whichever file is easiest. | The code compiles but boundaries collapse. | Agent chooses state, input, target, private UI state, or package bytes. |
+
+React is one adapter that can show this chain. The chain itself is Runtime Kit: shared product facts, prepared inputs, target requests, private UI state, and package boundaries.
+
+## Complete translation example
+
+| Product need | Traditional answer | Bitfield answer |
+|---|---|---|
+| Editor needs active file. | Import file tree store. | Read `selected-file`. |
+| AI chat needs active file. | Import editor state. | Read `selected-file`. |
+| Preview panel needs URL. | Import project preview service. | Read `project-preview-surface`. |
+| Button refreshes preview. | Call preview implementation. | Request `project-preview.refresh-status`. |
+| Keyboard changes selected agent. | Import selected-agent service. | Request `selected-agent.update`. |
+| Dropdown opens. | Global app store. | Private UI state. |
+
+## AI agent should know
+
+When more than two packages are involved, do not solve it by creating `appStore`, `platformStore`, `globalState`, or `sharedService`. First classify each relationship:
+
+```text
+same fact needed by many packages -> Bitfield state
+prepared view from package material -> prepared input
+work to run -> target request
+visual-only detail -> private UI state
+bytes shipped with package -> package boundary
+```
+
+## Next
+
+- Start with the overview: [Build without tangled code](/runtime-kit/build-without-tangled-code)
+- Build a full example: [Placeable surface product loop](/runtime-kit/cookbook/placeable-surface-product-loop)
+- Review AI rules: [Rules for AI agents](/runtime-kit/build-without-tangled-code/rules-for-ai-agents)
+
+</div>

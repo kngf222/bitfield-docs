@@ -1,0 +1,129 @@
+---
+title: "Rules for AI agents"
+description: "Tell AI agents how to build Bitfield features without falling back to traditional coupled app architecture."
+---
+
+<div className="bf-article">
+
+<p className="bf-lead">
+AI agents will default to traditional app architecture unless the docs teach the Bitfield translation directly. Give the agent a concrete job, the public handles it may use, and the private boundaries it must not cross.
+</p>
+
+Product scene: you ask an AI agent to add a feature. It creates a store, imports another package, parses a JSON file, or calls an implementation directly. The code may compile, but it trains the app back into the old architecture.
+
+Expected result: the agent chooses the Bitfield path before writing code.
+
+## The prompt to paste
+
+```text
+Build this the Bitfield way.
+
+Do not create a shared mutable app object.
+Do not import another package's private store, service, file, or implementation.
+Do not make React, Swift, Kotlin, Rust, Python, or any other shell become the coordinator.
+
+Classify the job first:
+- shared product fact -> Bitfield state
+- data another package prepared -> prepared input
+- work another package should run -> target request
+- visual-only state -> private UI state
+- bytes shipped with a package -> package boundary
+
+Before editing, state which category each new value or action belongs to.
+After editing, report the public input names, target names, package files, private UI state, and tests/checks.
+```
+
+## Bad output and corrected output
+
+Traditional app shape: the agent reaches for a shared store, direct import, package file read, or framework coordinator because that is what most public examples show.
+
+### Bad: shared object import
+
+```ts
+import { fileTreeStore } from '../file-tree/store';
+
+const selected = fileTreeStore.selectedFile;
+```
+
+Correct:
+
+```ts
+const selected = readInput('selected-file');
+```
+
+React adapter example:
+
+```tsx
+const selected = useBitfieldData<string>('selected-file');
+```
+
+### Bad: direct implementation call
+
+```ts
+import { refreshPreviewStatus } from '../project-preview/refresh';
+
+await refreshPreviewStatus(projectId);
+```
+
+Correct:
+
+```ts
+await sendRequestToBitfieldTarget({
+  target: 'project-preview.refresh-status',
+  payload: { projectId },
+});
+```
+
+### Bad: consumer parses package files
+
+```ts
+const boundary = await fetch('/packages/help-package/things-to-store-and-run.json');
+```
+
+Correct:
+
+```ts
+const help = readInput('getting-started-help');
+```
+
+### Bad: every state value becomes global
+
+```ts
+await writeBitfieldState('hovered-sidebar-row', rowId);
+```
+
+Correct:
+
+```ts
+const [hoveredRow, setHoveredRow] = useState<string | null>(null);
+```
+
+## Review checklist
+
+| Question | Correct answer |
+|---|---|
+| Did the agent create a shared app store? | It should not. Use Bitfield state for shared product facts. |
+| Did the agent import another package's private code? | It should not. Use prepared inputs or target requests. |
+| Did the agent put visual-only UI state in Bitfield? | It should not. Keep visual-only state private. |
+| Did the agent parse `things-to-store-and-run.json` from app code? | It should not. Runtime Kit handles package boundaries. |
+| Did the agent call implementation code directly? | It should not. Send a target request. |
+| Did the agent make React the architecture? | It should not. React is one adapter around Bitfield reads/requests. |
+| Did the agent name public inputs and target requests clearly? | It should. Names should describe the real product job. |
+
+## Common failures
+
+| Agent phrase | What it probably means | Correction |
+|---|---|---|
+| "I'll add a context provider." | It is making React coordinate product state. | Ask whether this is Bitfield state or private UI state. |
+| "I'll import the service." | It is crossing package boundaries. | Use a named target request. |
+| "I'll read the package JSON." | It is bypassing Runtime Kit. | Use a prepared input. |
+| "I'll add a global store." | It is rebuilding traditional shared state. | Classify each value first. |
+| "I'll pass this through props." | It may be making the shell coordinate product meaning. | Use Bitfield state when multiple packages need it. |
+
+## Next
+
+- Share state correctly: [Share state between packages](/runtime-kit/build-without-tangled-code/share-state-between-packages)
+- Ask for work correctly: [Ask another package to do work](/runtime-kit/build-without-tangled-code/ask-another-package-to-do-work)
+- Use the larger agent page: [Build with AI agents](/runtime-kit/ai-build-rules)
+
+</div>

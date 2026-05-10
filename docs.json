@@ -117,6 +117,19 @@
             ]
           },
           {
+            "group": "Build without tangled code",
+            "pages": [
+              "runtime-kit/build-without-tangled-code/index",
+              "runtime-kit/build-without-tangled-code/share-state-between-packages",
+              "runtime-kit/build-without-tangled-code/read-data-another-package-prepared",
+              "runtime-kit/build-without-tangled-code/ask-another-package-to-do-work",
+              "runtime-kit/build-without-tangled-code/keep-private-ui-state-private",
+              "runtime-kit/build-without-tangled-code/store-files-inside-a-package",
+              "runtime-kit/build-without-tangled-code/let-many-packages-work-together",
+              "runtime-kit/build-without-tangled-code/rules-for-ai-agents"
+            ]
+          },
+          {
             "group": "Runtime Kit Cookbook",
             "pages": [
               "runtime-kit/cookbook/index",

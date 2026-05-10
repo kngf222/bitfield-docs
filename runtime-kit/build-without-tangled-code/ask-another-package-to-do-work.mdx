@@ -1,0 +1,107 @@
+---
+title: "Ask another package to do work"
+description: "Send a request to a named target instead of importing and calling another package's implementation."
+---
+
+<div className="bf-article">
+
+<p className="bf-lead">
+When a package needs another package to run work, call a named Bitfield target. Do not import the implementation function directly.
+</p>
+
+Product scene: a keyboard package changes the selected agent. A notifications package changes the notification mode. A search box asks a search target for results. In traditional code, these become direct service calls. In Bitfield, they are target requests.
+
+Expected result: the caller knows the target name and payload shape, not the implementation file behind the work.
+
+## Traditional app shape
+
+```ts
+import { updateSelectedAgent } from '../selected-agent/service';
+
+export async function onShortcut(agentId: string) {
+  await updateSelectedAgent(agentId);
+}
+```
+
+That shortcut now depends on the selected-agent package implementation. If the implementation moves, changes runtime, or becomes a slot, the caller changes too.
+
+## Bitfield shape
+
+```ts
+import { sendRequestToBitfieldTarget } from '@bitfield/runtime-kit';
+
+export async function onShortcut(agentId: string) {
+  await sendRequestToBitfieldTarget({
+    target: 'selected-agent.update',
+    payload: { value: agentId },
+  });
+}
+```
+
+The target name is the public door. The implementation behind it can change without making the caller import new code.
+
+## Code translation
+
+| Traditional code | Bitfield code |
+|---|---|
+| Import a service function. | Call `sendRequestToBitfieldTarget(...)`. |
+| Pass private objects. | Send a small public payload. |
+| Return whatever the function returns. | Decode reply bytes according to the target contract. |
+| Catch implementation errors. | Handle request failure and bad replies. |
+
+## Good target requests
+
+```ts
+await sendRequestToBitfieldTarget({
+  target: 'notification-mode.update',
+  payload: { modeId: 'quiet' },
+});
+```
+
+```ts
+const reply = await sendRequestToBitfieldTarget({
+  target: 'project-preview.refresh-status',
+  payload: { projectId: 'app' },
+});
+```
+
+```ts
+const reply = await sendRequestToBitfieldTarget({
+  target: 'help.search',
+  payload: { query: 'activation key' },
+});
+```
+
+Each request names the job and sends the smallest public payload needed for that job.
+
+## What this prevents
+
+| Bad shape | Why it breaks | Better shape |
+|---|---|---|
+| Button imports target implementation. | UI and work runtime become one thing. | Button sends a target request. |
+| Caller passes a huge private object. | Target contract depends on caller private code. | Caller sends a small public payload. |
+| Caller assumes every reply is JSON. | Non-JSON targets break the caller. | Decode according to the target contract. |
+| Caller updates Bitfield state and runs side effects itself. | Work logic spreads across packages. | Request the package target that owns that job. |
+
+React is one adapter that can send a target request. The same target should make sense from a keyboard shortcut, a terminal command, a Swift screen, a background job, or a future shell.
+
+## Common failures
+
+| Symptom | Likely mistake | Fix |
+|---|---|---|
+| Button works only in one package. | It imported a local implementation. | Move the call to a target request. |
+| Reply parsing breaks. | The caller guessed the reply shape. | Document the target contract and decode only that. |
+| Work runs twice. | UI code both updates state and calls a worker. | Pick the target request as the work boundary. |
+| AI creates a new service file. | It used traditional app training data. | Tell it to call a named target. |
+
+## AI agent should know
+
+If generated code imports a function from another package to "do work," stop. The public shape is a target request. The caller may know the target name, payload, reply contract, and error states. It must not know the implementation file.
+
+## Next
+
+- Look up request details: [Runtime Kit API](/reference/runtime-kit-api)
+- Build a callable package target: [Callable package slot](/runtime-kit/cookbook/callable-package-slot)
+- Learn when to read instead of request: [Read data another package prepared](/runtime-kit/build-without-tangled-code/read-data-another-package-prepared)
+
+</div>

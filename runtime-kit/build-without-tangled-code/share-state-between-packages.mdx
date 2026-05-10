@@ -1,0 +1,122 @@
+---
+title: "Share state between packages"
+description: "Use Bitfield state for shared product facts instead of sharing another package's private object."
+---
+
+<div className="bf-article">
+
+<p className="bf-lead">
+When two packages need the same state, do not make one package read another package's private object. Put the shared product fact in Bitfield and let each package read the view it needs.
+</p>
+
+Product scene: a file tree chooses a file, then the editor, breadcrumbs, command palette, and AI context panel all need to know which file is active. That state is no longer a private file-tree detail. It is product coordination state.
+
+Expected result: every package sees the same selected file without importing the file tree, sharing memory with it, or duplicating its private store.
+
+## Traditional app shape
+
+```ts
+// file-tree/store.ts
+export const fileTreeStore = {
+  selectedFile: '/app/components/Header.tsx',
+};
+
+// editor/open-file.ts
+import { fileTreeStore } from '../file-tree/store';
+
+export function openEditor() {
+  return openFile(fileTreeStore.selectedFile);
+}
+```
+
+This works until it does not. The editor now knows the file tree exists. If the file tree changes its store shape, moves packages, or becomes a different UI, the editor breaks.
+
+## Bitfield shape
+
+```text
+Bitfield state:
+selected-file = /app/components/Header.tsx
+
+file tree updates selected-file
+file editor reads selected-file
+breadcrumbs read selected-file
+AI context reads selected-file
+```
+
+No package reads the file tree's private object. They all read the shared Bitfield fact.
+
+## Code translation
+
+Traditional:
+
+```ts
+import { fileTreeStore } from '../file-tree/store';
+
+const selected = fileTreeStore.selectedFile;
+```
+
+Bitfield:
+
+```ts
+const selectedFile = readInput('selected-file');
+```
+
+React adapter example:
+
+```tsx
+import { useBitfieldData } from '@bitfield/runtime-kit/react';
+
+export function FileEditorShell() {
+  const selectedFile = useBitfieldData<string>('selected-file');
+
+  if (selectedFile.loading) return <p>Loading file</p>;
+  if (selectedFile.error) return <p>Could not read the selected file.</p>;
+  if (!selectedFile.data) return <p>No file selected.</p>;
+
+  return <Editor filePath={selectedFile.data} />;
+}
+```
+
+React is only the adapter shown here. The same rule applies to any shell: read the named Bitfield input instead of importing the file tree.
+
+## More examples
+
+| Shared product fact | Traditional mistake | Bitfield shape |
+|---|---|---|
+| Current project | Every panel imports `projectStore.current`. | Packages read `current-project`. |
+| Selected agent | Keyboard, chat, and timeline import one agent store. | Packages read `selected-agent`. |
+| Active conversation | Chat, sidebar, and notifications pass props through the shell. | Packages read `active-conversation`. |
+| Preview status | Dashboard imports preview service private code. | Packages read `project-preview-status`. |
+
+## What this prevents
+
+| Bad shape | Why it breaks | Better shape |
+|---|---|---|
+| Package A imports Package B's store. | Package A now depends on Package B's private code. | Package A reads a named Bitfield input. |
+| Each package keeps its own copy. | Copies drift and disagree. | Packages read the same Bitfield fact. |
+| The shell passes the value through every layer. | The shell becomes the coordinator for product meaning. | Packages read the shared fact directly. |
+| A package stores every click in Bitfield. | Temporary UI noise becomes product state. | Only coordination state goes into Bitfield. |
+
+## Common mistake
+
+Do not put every piece of state in Bitfield.
+
+```text
+private hover state -> keep private
+dropdown open state -> keep private
+draft field text before submit -> usually private
+selected file used by many packages -> Bitfield state
+current project used by many packages -> Bitfield state
+```
+
+## AI agent should know
+
+When generated code imports another package's store, stop. Ask whether the value is a shared product fact. If yes, read a Bitfield input. If no, keep it private to the package that uses it.
+
+## Next
+
+- Learn when state should stay private: [Keep private UI state private](/runtime-kit/build-without-tangled-code/keep-private-ui-state-private)
+- Read prepared values: [Read data another package prepared](/runtime-kit/build-without-tangled-code/read-data-another-package-prepared)
+- Look up the React read adapter: [Runtime Kit API](/reference/runtime-kit-api)
+
+</div>

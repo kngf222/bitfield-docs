@@ -39,6 +39,7 @@ const knownPageClasses = new Set([
   'runtime-kit-reference',
   'runtime-kit-ai-agent',
   'runtime-kit-operations',
+  'runtime-kit-boundary-translation',
   'build-curriculum',
   'activation-lifecycle',
   'proof-stack',
@@ -147,6 +148,22 @@ function validateDepthContract(page, body, sourcePage, output = failures) {
       ['verification path', ['## Verify', 'The component renders real data']],
       ['safe local state boundary', 'Do not copy one device'],
     ], output);
+    return;
+  }
+
+  if (page.pageClass === 'runtime-kit-boundary-translation') {
+    requireIncludes(page.route, body, [
+      ['traditional shape', ['Traditional app shape', 'Traditional:', 'Traditional mistake', 'traditional app-code instinct']],
+      ['Bitfield shape', ['Bitfield shape', 'Bitfield:', 'Bitfield path']],
+      ['code or structured example', ['```', '|']],
+      ['anti-pattern or prevention section', ['## What this prevents', '## Common mistake', '## Common failures', '## Bad output and corrected output']],
+      ['adapter-neutral language', ['React is only the adapter', 'React is one adapter', 'any shell', 'future adapters']],
+      ['next links section', '## Next'],
+      ['Runtime Kit or reference link', ['/runtime-kit/', '/reference/']],
+    ], output);
+    if (!sourcePage?.sourceIds?.includes('runtime-kit-public-package-cooperation')) {
+      output.push(`${page.route}: boundary translation page must source-map to runtime-kit-public-package-cooperation`);
+    }
     return;
   }
 

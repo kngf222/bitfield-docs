@@ -1,0 +1,93 @@
+---
+title: "Store files inside a package"
+description: "Keep package-owned bytes behind the package boundary instead of letting consumers reach into loose app files."
+---
+
+<div className="bf-article">
+
+<p className="bf-lead">
+When a package ships files or bytes, keep them inside the package boundary. Consumer packages should receive prepared data or target replies, not random file paths into another package.
+</p>
+
+Product scene: a help package ships markdown, a theme package ships images, and a file-preview package ships a small parser. A consumer wants the rendered result. The consumer should not reach into the package folder and read whatever file happens to be there.
+
+Expected result: package bytes move with the package, and consumers use public reads or requests instead of private file paths.
+
+## Traditional app shape
+
+```ts
+const helpText = await fetch('/packages/help/content/getting-started.md');
+```
+
+or:
+
+```ts
+import helpText from '../help/content/getting-started.md?raw';
+```
+
+Now the consumer knows where the help package stores its files. Rename the folder and consumers break.
+
+## Bitfield shape
+
+```text
+help package boundary declares package-owned bytes
+Runtime Kit admits the bytes with the package
+consumer reads prepared help content or asks a help target
+```
+
+The package decides what bytes it brings. The consumer uses the public handle exposed by the package boundary.
+
+## Boundary example
+
+```json
+{
+  "package": "help-package",
+  "things": [
+    {
+      "type": "stored_bytes",
+      "address": "package::help-package::bytes::getting-started",
+      "file": "content/getting-started.md",
+      "content_type": "text/markdown"
+    }
+  ]
+}
+```
+
+The important part is not the exact content. The important part is the boundary: the package file reference stays inside the package.
+
+## What this prevents
+
+| Bad shape | Why it breaks | Better shape |
+|---|---|---|
+| Consumer imports another package's file. | Folder structure becomes public API by accident. | Consumer reads prepared data. |
+| Consumer builds a local filesystem path. | It only works on one machine/shell. | Package declares package-owned bytes. |
+| Package references files outside itself. | The package cannot move cleanly. | Keep package file references inside the package folder. |
+| AI copies bytes into app code. | Data and code boundaries blur. | Keep bytes in package material and expose a public read/target. |
+
+React is one adapter that might render the bytes, but React does not define the package boundary. A web shell, native shell, terminal shell, or future adapter should receive prepared data from the same package-owned material.
+
+## Good consumer code
+
+```ts
+const help = readInput('getting-started-help');
+```
+
+React adapter example:
+
+```tsx
+const help = useBitfieldData<{ title: string; body: string }>('getting-started-help');
+```
+
+The consumer asks for help content by public input name. It does not know which package file produced it.
+
+## AI agent should know
+
+If generated code imports `../some-package/content/file.md`, stop. Package files are package material. Consumers should read a prepared input or request a target.
+
+## Next
+
+- Build package-owned bytes: [Package-owned file](/runtime-kit/cookbook/package-owned-file)
+- Learn package rules: [Packages](/runtime-kit/packages)
+- Look up boundary fields: [Package boundary](/reference/package-boundary)
+
+</div>

@@ -1,0 +1,95 @@
+---
+title: "Build without tangled code"
+description: "Translate normal coupled app code into Bitfield package state, prepared reads, target requests, and private UI state."
+---
+
+<div className="bf-article">
+
+<p className="bf-lead">
+Most software gets tangled because one part of the app starts reaching into another part's private state. Runtime Kit gives you a different shape: put shared product facts in Bitfield, read prepared views, and ask named targets to do work.
+</p>
+
+Product scene: you are building a product with files, panels, settings, search, AI context, background jobs, and multiple package areas. The first version works. Then feature twenty needs to know what feature seven selected. Feature thirty needs to run the same work from a different place. The traditional fix is another store, another service import, another prop path, or another global. That is the knot this section is here to prevent.
+
+Expected result: after reading this section, a person or AI agent can see a normal app-code instinct and translate it into the Bitfield shape without guessing, importing private code, or making React the architecture.
+
+## The translation
+
+<div className="bf-flow" aria-label="Traditional app coupling translated into Bitfield boundaries">
+  <div className="bf-flow-node">
+    <span className="bf-flow-step">01</span>
+    <strong>Traditional instinct</strong>
+    <p>Import another feature's store, service, file path, or implementation.</p>
+  </div>
+  <div className="bf-flow-arrow" aria-hidden="true">→</div>
+  <div className="bf-flow-node">
+    <span className="bf-flow-step">02</span>
+    <strong>Name the shared job</strong>
+    <p>Is this shared state, prepared data, work to request, private UI state, or package-owned bytes?</p>
+  </div>
+  <div className="bf-flow-arrow" aria-hidden="true">→</div>
+  <div className="bf-flow-node">
+    <span className="bf-flow-step">03</span>
+    <strong>Use the Bitfield path</strong>
+    <p>Bitfield state, prepared input, target request, local UI state, or package boundary.</p>
+  </div>
+</div>
+
+## The real split
+
+| If the code wants to... | Do this | Do not do this |
+|---|---|---|
+| Share state across packages. | Put the shared product fact in Bitfield and read it as an input. | Share a mutable object from one package. |
+| Read data another package prepared. | Read a prepared input. | Import the producer package or parse its files. |
+| Ask another package to do work. | Send a request to a named target. | Call the implementation function directly. |
+| Track hover, open menus, draft text, or drag position. | Keep it private in the component/package. | Store it in Bitfield just because state exists. |
+| Ship files with a package. | Keep bytes inside the package boundary. | Reach into random app folders from consumer code. |
+| Coordinate many packages. | Combine Bitfield facts, prepared inputs, and target requests. | Make one package become the hidden central store for everyone. |
+
+## Why this section exists
+
+AI agents are trained on traditional app code. They will naturally write stores, services, imports, reducers, contexts, and direct calls because that is what most public code teaches.
+
+Traditional app shape: one feature reaches into another feature's state or implementation because that is the shortest path in ordinary app code.
+
+Bitfield needs different training data. The pattern is not "make a better global store." The pattern is:
+
+```text
+shared product fact -> Bitfield state
+prepared data -> named input
+work to run -> named target request
+visual-only detail -> private local UI state
+package material -> package boundary
+```
+
+React, Swift, Kotlin, Rust, Python, terminal shells, web shells, and future adapters all wrap the same idea. React is one example, not the architecture.
+
+## What this prevents
+
+| Traditional shape | Why it gets tangled | Bitfield shape |
+|---|---|---|
+| `editor` reads `fileTree.selectedFile`. | Editor now knows file tree private code. | Editor reads the `selected-file` input. |
+| A button imports `runSearch()` from another package. | The button is tied to the implementation. | The button sends a request to `search.run`. |
+| A panel parses another package's JSON file. | Consumer code learns package storage layout. | The panel reads data the package prepared. |
+| A shell branches on every product area. | The shell becomes product-specific. | The shell reads descriptors and places what it is given. |
+| An agent adds a new app store for every problem. | The app grows competing sources of truth. | The agent chooses Bitfield state, local state, input, or target. |
+
+## Read these pages by job
+
+| Your job | Page |
+|---|---|
+| Two packages need the same state. | [Share state between packages](/runtime-kit/build-without-tangled-code/share-state-between-packages) |
+| A package prepared data and another package needs to read it. | [Read data another package prepared](/runtime-kit/build-without-tangled-code/read-data-another-package-prepared) |
+| A package needs another package to run work. | [Ask another package to do work](/runtime-kit/build-without-tangled-code/ask-another-package-to-do-work) |
+| You are unsure whether state belongs in Bitfield. | [Keep private UI state private](/runtime-kit/build-without-tangled-code/keep-private-ui-state-private) |
+| A package ships files or bytes. | [Store files inside a package](/runtime-kit/build-without-tangled-code/store-files-inside-a-package) |
+| Several packages need to cooperate. | [Let many packages work together](/runtime-kit/build-without-tangled-code/let-many-packages-work-together) |
+| An AI agent keeps writing traditional architecture. | [Rules for AI agents](/runtime-kit/build-without-tangled-code/rules-for-ai-agents) |
+
+## Next
+
+- Build the first full chain: [Package to screen](/runtime-kit/package-to-screen)
+- Understand the pieces together: [Runtime Kit concept map](/runtime-kit/concept-map)
+- Look up the public API: [Runtime Kit API](/reference/runtime-kit-api)
+
+</div>

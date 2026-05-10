@@ -86,9 +86,9 @@
       },
       {
         "eyebrow": "Runtime Kit",
-        "label": "Runtime Kit Cookbook",
-        "href": "/runtime-kit/cookbook",
-        "description": "Copy a complete public package shape."
+        "label": "Build without tangled code",
+        "href": "/runtime-kit/build-without-tangled-code",
+        "description": "Translate normal app code into Bitfield boundaries."
       },
       {
         "eyebrow": "Account",
@@ -608,6 +608,19 @@
           ]
         },
         {
+          "group": "Build without tangled code",
+          "pages": [
+            "runtime-kit/build-without-tangled-code/index",
+            "runtime-kit/build-without-tangled-code/share-state-between-packages",
+            "runtime-kit/build-without-tangled-code/read-data-another-package-prepared",
+            "runtime-kit/build-without-tangled-code/ask-another-package-to-do-work",
+            "runtime-kit/build-without-tangled-code/keep-private-ui-state-private",
+            "runtime-kit/build-without-tangled-code/store-files-inside-a-package",
+            "runtime-kit/build-without-tangled-code/let-many-packages-work-together",
+            "runtime-kit/build-without-tangled-code/rules-for-ai-agents"
+          ]
+        },
+        {
           "group": "Runtime Kit Cookbook",
           "pages": [
             "runtime-kit/cookbook/index",
@@ -789,6 +802,70 @@
       "diataxis": "concept",
       "pageClass": "runtime-kit-concept",
       "summary": "Explains the placeable-surface composition primitive with visual maps: package material becomes prepared reads and targets, descriptors declare regions and allowed names, and a dumb shell/sidebar places surfaces without product-specific branches."
+    },
+    {
+      "route": "runtime-kit/build-without-tangled-code/index",
+      "title": "Build without tangled code",
+      "description": "Translate normal coupled app code into Bitfield package state, prepared reads, target requests, and private UI state.",
+      "diataxis": "how-to",
+      "pageClass": "runtime-kit-boundary-translation",
+      "summary": "Shows how to translate traditional app coupling into Bitfield state, prepared inputs, target requests, private UI state, and package boundaries."
+    },
+    {
+      "route": "runtime-kit/build-without-tangled-code/share-state-between-packages",
+      "title": "Share state between packages",
+      "description": "Use Bitfield state for shared product facts instead of sharing another package's private object.",
+      "diataxis": "how-to",
+      "pageClass": "runtime-kit-boundary-translation",
+      "summary": "Explains when a value becomes shared product state and shows the selected-file shape without package-to-package store imports."
+    },
+    {
+      "route": "runtime-kit/build-without-tangled-code/read-data-another-package-prepared",
+      "title": "Read data another package prepared",
+      "description": "Read a prepared input instead of importing another package or parsing its storage.",
+      "diataxis": "how-to",
+      "pageClass": "runtime-kit-boundary-translation",
+      "summary": "Shows how consumers read named prepared data while the preparing package keeps its files, records, and storage shape private."
+    },
+    {
+      "route": "runtime-kit/build-without-tangled-code/ask-another-package-to-do-work",
+      "title": "Ask another package to do work",
+      "description": "Send a target request instead of calling another package's implementation.",
+      "diataxis": "how-to",
+      "pageClass": "runtime-kit-boundary-translation",
+      "summary": "Shows how buttons, shortcuts, and package actions ask named targets to run work without importing implementation functions."
+    },
+    {
+      "route": "runtime-kit/build-without-tangled-code/keep-private-ui-state-private",
+      "title": "Keep private UI state private",
+      "description": "Decide what stays in local UI state and what becomes Bitfield state.",
+      "diataxis": "how-to",
+      "pageClass": "runtime-kit-boundary-translation",
+      "summary": "Separates hover state, open menus, draft text, and drag details from shared product facts that multiple packages need."
+    },
+    {
+      "route": "runtime-kit/build-without-tangled-code/store-files-inside-a-package",
+      "title": "Store files inside a package",
+      "description": "Ship package-owned bytes without making consumers reach into package files.",
+      "diataxis": "how-to",
+      "pageClass": "runtime-kit-boundary-translation",
+      "summary": "Shows the package-owned file boundary and the consumer-side mistake of reading another package's files directly."
+    },
+    {
+      "route": "runtime-kit/build-without-tangled-code/let-many-packages-work-together",
+      "title": "Let many packages work together",
+      "description": "Combine shared state, prepared reads, target requests, and private UI state across several packages.",
+      "diataxis": "how-to",
+      "pageClass": "runtime-kit-boundary-translation",
+      "summary": "Walks a multi-package product chain where files, editors, AI context, notifications, and shells cooperate without centralizing product meaning."
+    },
+    {
+      "route": "runtime-kit/build-without-tangled-code/rules-for-ai-agents",
+      "title": "Rules for AI agents",
+      "description": "Tell AI agents how to build Bitfield features without falling back to traditional coupled app architecture.",
+      "diataxis": "how-to",
+      "pageClass": "runtime-kit-boundary-translation",
+      "summary": "Provides prompt rules, bad-output corrections, and review checks that keep generated code on public Runtime Kit boundaries."
     },
     {
       "route": "runtime-kit/use-bitfield-data",

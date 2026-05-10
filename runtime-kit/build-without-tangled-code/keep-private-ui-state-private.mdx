@@ -1,0 +1,97 @@
+---
+title: "Keep private UI state private"
+description: "Keep visual-only state local, and move only cross-package coordination state into Bitfield."
+---
+
+<div className="bf-article">
+
+<p className="bf-lead">
+Not every state value belongs in Bitfield. Put state in Bitfield when it coordinates packages. Keep hover, menu, drag, focus, and draft UI details private.
+</p>
+
+Product scene: a sidebar has hover state, an editor has unsaved text, a file tree has a selected file, and an AI panel needs the selected file for context. These are not the same kind of state.
+
+Expected result: Bitfield carries product facts that multiple packages need. Components still keep visual-only details close to where they happen.
+
+## The rule
+
+```text
+Only this component cares -> keep it private
+Many packages need to react -> put it in Bitfield
+```
+
+## Traditional mistake
+
+```ts
+await writeBitfieldState('hovered-sidebar-item', itemId);
+await writeBitfieldState('dropdown-open', true);
+await writeBitfieldState('drag-position', { x, y });
+```
+
+This turns visual noise into product state. It creates unnecessary churn and makes the product harder to reason about.
+
+## Bitfield shape
+
+```tsx
+function SidebarItem() {
+  const [isHovered, setHovered] = useState(false);
+  return <button onMouseEnter={() => setHovered(true)} />;
+}
+```
+
+Private UI state stays private.
+
+Shared product state becomes Bitfield state:
+
+```text
+selected-file
+current-project
+active-conversation
+selected-agent
+```
+
+## The decision table
+
+| State | Where it belongs | Why |
+|---|---|---|
+| Hovered button | Private UI state | Only the button cares. |
+| Dropdown open | Private UI state | Usually only one component cares. |
+| Current drag position | Private UI state | It changes too often and is visual. |
+| Unsaved textarea draft | Usually private UI state | It is not real product state until submitted. |
+| Selected file used by editor and AI context | Bitfield state | Multiple packages coordinate around it. |
+| Current project used by many panels | Bitfield state | It changes what many packages show. |
+| Active conversation used by chat, timeline, and notifications | Bitfield state | It is a shared product fact. |
+
+## What this prevents
+
+| Bad shape | Why it breaks | Better shape |
+|---|---|---|
+| Every UI event writes Bitfield state. | Shared state becomes noisy and expensive to understand. | Keep visual-only state private. |
+| Shared product facts stay in React state. | Other packages cannot reliably react. | Put coordination state in Bitfield. |
+| The shell owns product state because it sits above children. | The shell becomes the product brain. | Packages read shared facts from Bitfield. |
+| AI stores everything globally. | The app has too many sources of truth. | Classify state before writing code. |
+
+React is one adapter example. Swift view state, Kotlin state, terminal prompt state, and future shell state follow the same rule: visual-only state stays near the UI that uses it.
+
+## AI agent should know
+
+Before adding state, classify it:
+
+```text
+Is this only visual?
+  keep it private
+
+Does another package need to read it?
+  make it Bitfield state
+
+Does changing it require work to run?
+  send a target request
+```
+
+## Next
+
+- Learn shared state: [Share state between packages](/runtime-kit/build-without-tangled-code/share-state-between-packages)
+- Learn target requests: [Ask another package to do work](/runtime-kit/build-without-tangled-code/ask-another-package-to-do-work)
+- Understand local customer-visible state: [Local state](/runtime-kit/local-state)
+
+</div>
