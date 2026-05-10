@@ -1,0 +1,409 @@
+---
+title: "Translate traditional code"
+description: "Turn stores, service imports, direct calls, and shell branching into Bitfield state, prepared reads, target requests, and package records."
+---
+
+<div className="bf-article">
+
+<p className="bf-lead">
+Most agents know the old app shape first. This page shows the exact translation: when code reaches for a store, service import, direct function call, package file, or shell branch, replace it with the Runtime Kit boundary that matches the job.
+</p>
+
+Product scene: an AI agent is adding a file tree, editor, preview button, command palette action, sidebar item, or dashboard panel. The agent writes code that works inside one app today, but it does it by teaching one package the private shape of another package. That is the moment to stop and translate.
+
+Expected result: the agent can point at each line of traditional code and say which Bitfield path replaces it: shared product fact, prepared input, target request, private UI state, or package boundary.
+
+## Start with the job
+
+Traditional app shape usually starts with the nearest import. Bitfield shape starts with the job the code is doing.
+
+| The code is trying to... | Traditional mistake | Bitfield replacement |
+|---|---|---|
+| Let many packages know the same selected thing. | Put it in one feature store and import that store everywhere. | Put the selected thing in Bitfield state and read the named input. |
+| Use data another package prepared. | Import the producer package or parse its files. | Read the prepared input. |
+| Ask another package to run work. | Call the implementation function directly. | Send a target request. |
+| Keep hover, debounce, menu, or draft timing. | Put visual timing in global product state. | Keep it as private UI state. |
+| Let a shell show package-provided UI entries. | Hardcode every feature in the shell. | Read package records/descriptors and place what they say. |
+| Ship help text, templates, or other package material. | Fetch another package's file from app code. | Let the package own the bytes and expose prepared data. |
+
+React is one adapter for these reads and requests. A future native shell, command-line shell, game shell, or embedded device shell should use the same public handles instead of learning another package's private code.
+
+## What this prevents
+
+Traditional app-code instinct makes the shortest path look correct: import the store, call the service, parse the file, add the shell branch, or move visual timing into a global object. That works until the next package needs the same thing from a different place.
+
+Bitfield shape prevents that knot by making each package meet other packages through public handles:
+
+| Prevent this | Use this instead |
+|---|---|
+| Another package's private store becomes the shared source. | Bitfield state or a prepared input. |
+| Another package's implementation function becomes the API. | A target request. |
+| A package file path becomes the public contract. | Package-owned bytes admitted through the package boundary. |
+| A shell becomes a product-specific registry. | Published records/descriptors. |
+| Visual timing becomes global product state. | Private UI state. |
+
+## Example 1: selected text for the next agent request
+
+Product job: a note editor lets the user highlight text. Another agent-request area should use that highlighted text. The editor also needs a small debounce so it does not publish every tiny mouse movement.
+
+Traditional mistake: the editor imports the agent panel store and mutates it directly.
+
+```ts
+import { agentRequestStore } from '../agent-request/store';
+
+export function onSelectionChanged(selection: EditorSelection) {
+  agentRequestStore.selectedText = {
+    source: 'note',
+    title: selection.title,
+    text: selection.text,
+  };
+}
+```
+
+That couples the editor to the agent panel. The editor now knows where the agent panel keeps state, what the state object is called, and how the panel expects it to be shaped.
+
+Bitfield replacement: keep the debounce timer private to the editor, then send the public request that updates the shared product fact.
+
+```ts
+import { sendRequestToBitfieldTarget } from '@bitfield/runtime-kit';
+
+const UPDATE_SELECTED_TEXT_FOR_NEXT_AGENT_REQUEST_ACTION =
+  'action:update-selected-text-for-next-agent-request';
+
+export async function writeSelectedTextForNextAgentRequest(value: {
+  source: 'note';
+  identifier: string;
+  title: string;
+  selectedText: string;
+}) {
+  await sendRequestToBitfieldTarget({
+    target: 'slot::workflow',
+    payload: {
+      operation: 'execute_definition',
+      definition_id: UPDATE_SELECTED_TEXT_FOR_NEXT_AGENT_REQUEST_ACTION,
+      include_steps: false,
+      include_output: false,
+      input: { value },
+    },
+  });
+}
+```
+
+The private debounce still belongs in the editor UI. The selected text that another package needs goes through a public target request.
+
+Bitfield shape:
+
+```text
+editor private state -> debounce timer
+shared product fact -> selected text for next agent request
+work boundary -> target request
+agent request area -> reads the prepared/shared value
+```
+
+Review check: no editor code imports the agent-request package store.
+
+## Example 2: sidebar entries without shell branches
+
+Product job: the sidebar needs to show product entries from many packages. Today it may show journal items, previews, dashboards, or support links. Tomorrow it may show package entries nobody has built yet.
+
+Traditional mistake: the sidebar imports every feature and grows one branch per product area.
+
+```tsx
+import { JournalNavItem } from '../journal/show/JournalNavItem';
+import { ProjectPreviewNavItem } from '../project-preview/show/ProjectPreviewNavItem';
+import { ComplianceNavItem } from '../roi/show/ComplianceNavItem';
+
+export function AppSidebar({ currentArea }: { currentArea: string }) {
+  return (
+    <nav>
+      {currentArea === 'journal' ? <JournalNavItem /> : null}
+      {currentArea === 'preview' ? <ProjectPreviewNavItem /> : null}
+      {currentArea === 'roi' ? <ComplianceNavItem /> : null}
+    </nav>
+  );
+}
+```
+
+That makes the shell product-specific. Every new package now edits the shell, and the shell becomes the hidden central registry.
+
+Bitfield replacement: the sidebar reads published package records, finds the descriptors it knows how to place, and renders from those records.
+
+```tsx
+import { useBitfieldData } from '@bitfield/runtime-kit/react';
+
+export function AppSidebar() {
+  const publishedRecords = useBitfieldData('published-records');
+  const records = readPublishedRecords(publishedRecords.data);
+  const entries = findPlaceableSurfaces(records);
+
+  return (
+    <nav>
+      {entries.map((entry) => (
+        <SidebarItem
+          key={entry.id}
+          label={entry.label}
+          target={entry.surfaceTarget}
+        />
+      ))}
+    </nav>
+  );
+}
+```
+
+The shell knows how to place entries. It does not know the product story behind each package.
+
+Bitfield shape:
+
+```text
+package publishes descriptor records
+sidebar reads published-records
+sidebar filters records it can place
+sidebar renders label + target
+package remains owner of its product meaning
+```
+
+Review check: adding a package entry should not require importing that package's React component into the sidebar.
+
+## Example 3: preview work without importing the preview runner
+
+Product job: a button starts or refreshes a project preview. A status panel then reads the preview state.
+
+Traditional mistake: the button imports the preview implementation and calls it.
+
+```ts
+import { startPreviewServer } from '../project-preview/private/start-preview-server';
+import { previewStore } from '../project-preview/private/preview-store';
+
+export async function onPreviewClick(projectId: string) {
+  const status = await startPreviewServer(projectId);
+  previewStore.status = status;
+}
+```
+
+That makes the button responsible for preview implementation details. It knows the private runner, private store, and return shape.
+
+Bitfield replacement: the button asks the public target to do the work. The status panel reads the prepared preview data.
+
+```ts
+import { sendRequestToBitfieldTarget } from '@bitfield/runtime-kit';
+
+export async function startProjectPreview(projectId: string) {
+  await sendRequestToBitfieldTarget({
+    target: 'slot::workflow',
+    payload: {
+      operation: 'execute_definition',
+      definition_id: 'action:start-project-preview',
+      include_steps: false,
+      include_output: false,
+      input: { projectId },
+    },
+  });
+}
+```
+
+```tsx
+import { useBitfieldData } from '@bitfield/runtime-kit/react';
+
+export function ProjectPreviewStatus() {
+  const preview = useBitfieldData('project-preview-status');
+  return <PreviewBadge state={preview.data?.state ?? 'unknown'} />;
+}
+```
+
+Bitfield shape:
+
+```text
+button -> target request
+preview owner -> runs preview work
+status panel -> prepared input
+button does not parse preview storage
+status panel does not call preview runner
+```
+
+Review check: read paths and work paths stay separate. Requesting work is not the same as reading prepared state.
+
+## Example 4: dashboard data without raw storage reads
+
+Product job: a compliance or health dashboard shows a prepared view of project facts. The dashboard should render the view and offer actions. It should not become a database client for another package's private storage shape.
+
+Traditional mistake: the dashboard imports low-level readers and assembles the other package's model itself.
+
+```ts
+import { readProjectFiles } from '../project/private/files';
+import { readComplianceRows } from '../roi/private/rows';
+
+export async function loadComplianceDashboard(projectId: string) {
+  const files = await readProjectFiles(projectId);
+  const rows = await readComplianceRows(projectId);
+  return buildDashboardView(files, rows);
+}
+```
+
+That leaks storage shape into the consumer. The dashboard has to know where project files live, how compliance rows are shaped, and how those rows become a screen.
+
+Bitfield replacement: the dashboard reads the prepared data that the owner exposes.
+
+```tsx
+import { useBitfieldData } from '@bitfield/runtime-kit/react';
+
+export function ComplianceDashboard() {
+  const compliance = useBitfieldData('project-compliance');
+
+  if (compliance.status === 'loading') return <LoadingState />;
+  if (compliance.status === 'error') return <ErrorState error={compliance.error} />;
+
+  const feed = decodeProjectComplianceFeed(compliance.data);
+  return <ComplianceList items={feed.items} />;
+}
+```
+
+The dashboard still owns its render states. It does not own the producer package's storage shape.
+
+Bitfield shape:
+
+```text
+producer package -> prepares project-compliance
+dashboard -> reads project-compliance
+dashboard -> renders loading, error, empty, success
+dashboard actions -> target requests when work is needed
+```
+
+Review check: if the dashboard needs to know how another package stores rows, the boundary is wrong.
+
+## Example 5: package-owned help content
+
+Product job: a package ships help text or starter content that another area can display.
+
+Traditional mistake: consumer code reaches into the package's file path.
+
+```ts
+const markdown = await fetch('/packages/getting-started/help/start-here.md')
+  .then((response) => response.text());
+```
+
+That turns a file path into a public API. Moving the package file breaks the consumer.
+
+Bitfield replacement: the package owns the bytes. The consumer reads prepared content or a package-owned record.
+
+```tsx
+const help = useBitfieldData('getting-started-help');
+```
+
+Bitfield shape:
+
+```text
+package boundary -> declares package-owned bytes
+Runtime Kit -> admits package material
+consumer -> reads prepared help data
+consumer -> never depends on the package file path
+```
+
+Review check: a package file path is not a public product contract.
+
+## Larger chain
+
+Traditional app-code instinct: one handler coordinates everything.
+
+```ts
+import { fileTreeStore } from '../file-tree/store';
+import { editorStore } from '../editor/store';
+import { startPreviewServer } from '../project-preview/private/start-preview-server';
+import { agentRequestStore } from '../agent-request/store';
+import { notificationStore } from '../notifications/store';
+
+export async function onFileSelected(file: FileRecord) {
+  fileTreeStore.selectedFile = file.id;
+  editorStore.open(file);
+  agentRequestStore.context = { fileId: file.id, title: file.title };
+  notificationStore.mode = 'quiet';
+  await startPreviewServer(file.projectId);
+}
+```
+
+Bitfield shape: each job goes through the boundary that matches it.
+
+```text
+selected file -> shared Bitfield state / prepared input
+editor draft and cursor -> private UI state
+agent context from selection -> target request or prepared input
+notification mode -> target request or shared product fact
+preview start -> target request
+preview status -> prepared input
+sidebar entry -> published package descriptor
+```
+
+Bitfield replacement:
+
+```ts
+await sendRequestToBitfieldTarget({
+  target: 'slot::workflow',
+  payload: {
+    operation: 'execute_definition',
+    definition_id: 'action:update-selected-text-for-next-agent-request',
+    input: { value: selectedTextContext },
+  },
+});
+
+await sendRequestToBitfieldTarget({
+  target: 'slot::workflow',
+  payload: {
+    operation: 'execute_definition',
+    definition_id: 'action:start-project-preview',
+    input: { projectId },
+  },
+});
+```
+
+```tsx
+const selectedFile = useBitfieldData('selected-file');
+const previewStatus = useBitfieldData('project-preview-status');
+const publishedRecords = useBitfieldData('published-records');
+
+const [editorDraft, setEditorDraft] = useState('');
+const [hoveredRow, setHoveredRow] = useState<string | null>(null);
+```
+
+The important difference is not that the code is longer or shorter. The important difference is that the editor, preview, sidebar, notifications, and agent request area no longer import each other.
+
+## Review checklist
+
+| Question | Correct answer |
+|---|---|
+| Did a package import another package's store, service, component, private file, or implementation? | No. It used a prepared input, package descriptor, or target request. |
+| Did a shell gain a branch for one product package? | No. It read records/descriptors and placed what it was given. |
+| Did the UI store hover, cursor, debounce, or open-menu state in Bitfield? | No. Visual-only state stayed private. |
+| Did the code call a runner directly because it was convenient? | No. It sent a target request. |
+| Did a consumer parse another package's package file? | No. The package owned bytes and exposed prepared data. |
+| Did React become the product architecture? | No. React is one adapter around reads, requests, and private UI state. |
+
+## Prompt for AI agents
+
+```text
+Translate the traditional code before editing.
+
+For every import, state whether it is:
+- public Runtime Kit adapter
+- same-package helper
+- another package private dependency
+
+Reject another-package private dependencies.
+
+For every state value, classify it:
+- shared product fact
+- prepared input
+- target request
+- private UI state
+- package-owned bytes
+
+Then write the Bitfield version using public reads, public target requests,
+package records/descriptors, and private UI state only.
+```
+
+## Next
+
+- See the shared-state version: [Share state between packages](/runtime-kit/build-without-tangled-code/share-state-between-packages)
+- See the work-request version: [Ask another package to do work](/runtime-kit/build-without-tangled-code/ask-another-package-to-do-work)
+- Review agent rules: [Rules for AI agents](/runtime-kit/build-without-tangled-code/rules-for-ai-agents)
+- Check public calls: [Runtime Kit API](/reference/runtime-kit-api)
+
+</div>

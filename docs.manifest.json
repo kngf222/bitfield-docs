@@ -611,6 +611,7 @@
           "group": "Build without tangled code",
           "pages": [
             "runtime-kit/build-without-tangled-code/index",
+            "runtime-kit/build-without-tangled-code/translate-traditional-code",
             "runtime-kit/build-without-tangled-code/share-state-between-packages",
             "runtime-kit/build-without-tangled-code/read-data-another-package-prepared",
             "runtime-kit/build-without-tangled-code/ask-another-package-to-do-work",
@@ -811,6 +812,14 @@
       "diataxis": "how-to",
       "pageClass": "runtime-kit-boundary-translation",
       "summary": "Shows how to translate traditional app coupling into Bitfield state, prepared inputs, target requests, private UI state, and package boundaries."
+    },
+    {
+      "route": "runtime-kit/build-without-tangled-code/translate-traditional-code",
+      "title": "Translate traditional code",
+      "description": "Turn stores, service imports, direct calls, and shell branching into Bitfield state, prepared reads, target requests, and package records.",
+      "diataxis": "how-to",
+      "pageClass": "runtime-kit-boundary-translation",
+      "summary": "Shows source-grounded translations from traditional stores, direct imports, service calls, shell branching, and package-file reads into Bitfield reads, requests, descriptors, and private UI state."
     },
     {
       "route": "runtime-kit/build-without-tangled-code/share-state-between-packages",

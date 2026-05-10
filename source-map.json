@@ -131,6 +131,10 @@
       "sourceIds": ["runtime-kit-js-public-contract", "runtime-kit-package-boundary", "runtime-kit-public-package-cooperation", "bitfield-docs-information-architecture"]
     },
     {
+      "route": "runtime-kit/build-without-tangled-code/translate-traditional-code",
+      "sourceIds": ["runtime-kit-js-public-contract", "runtime-kit-package-boundary", "runtime-kit-public-package-cooperation"]
+    },
+    {
       "route": "runtime-kit/build-without-tangled-code/share-state-between-packages",
       "sourceIds": ["runtime-kit-js-public-contract", "runtime-kit-package-boundary", "runtime-kit-public-package-cooperation"]
     },

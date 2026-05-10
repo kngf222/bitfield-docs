@@ -7,7 +7,7 @@ This folder owns the public Runtime Kit documentation pages rendered by Mintlify
 - `javascript.mdx` explains the overall public Runtime Kit map, first-feature shape, terms, mistakes, and routing.
 - `package-to-screen.mdx` walks a complete first feature from package boundary to React surface, target request, verification, and failure checks.
 - `placeable-surfaces.mdx` explains the generic surface descriptor primitive and visual product-shell flow.
-- `build-without-tangled-code/` teaches the translation from traditional coupled app code into Bitfield state, prepared inputs, target requests, private UI state, and package boundaries.
+- `build-without-tangled-code/` teaches the translation from traditional coupled app code into Bitfield state, prepared inputs, target requests, private UI state, package records/descriptors, and package boundaries.
 - `use-bitfield-data.mdx` documents the public React read shape.
 - `send-request.mdx` documents target requests and reply bytes.
 - `packages.mdx` documents package boundary concepts and thing types.

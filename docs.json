@@ -120,6 +120,7 @@
             "group": "Build without tangled code",
             "pages": [
               "runtime-kit/build-without-tangled-code/index",
+              "runtime-kit/build-without-tangled-code/translate-traditional-code",
               "runtime-kit/build-without-tangled-code/share-state-between-packages",
               "runtime-kit/build-without-tangled-code/read-data-another-package-prepared",
               "runtime-kit/build-without-tangled-code/ask-another-package-to-do-work",
