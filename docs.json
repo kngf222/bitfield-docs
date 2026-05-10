@@ -61,8 +61,8 @@
       "weight": 600
     },
     "body": {
-      "family": "SF Pro Display",
-      "source": "/fonts/SF-Pro-Display-Regular.woff2",
+      "family": "SF Pro Text",
+      "source": "/fonts/SF-Pro-Text-Regular.woff2",
       "format": "woff2",
       "weight": 400
     }
