@@ -14,24 +14,43 @@ Product scene: an AI agent is adding a file tree, editor, preview button, comman
 Expected result: the agent can point at each line of traditional code and say which Bitfield path replaces it: shared product fact, prepared input, target request, private UI state, or package boundary.
 
 ```mermaid
-%%{init: {'flowchart': {'nodeSpacing': 56, 'rankSpacing': 76, 'curve': 'linear'}}}%%
+%%{init: {'flowchart': {'defaultRenderer': 'elk', 'nodeSpacing': 40, 'rankSpacing': 56, 'curve': 'linear'}}}%%
 flowchart LR
-  Bad["Editor imports agentRequestStore"] --> Breaks["Editor now knows agent panel state"]
-  Breaks --> Local["Debounce timer stays in editor"]
-  Local --> Request["Editor sends action:update-selected-text-for-next-agent-request"]
-  Request --> Read["Agent request area reads selected text"]
+  subgraph Bad["Traditional code"]
+    BadStore["Editor imports<br/>agentRequestStore"]
+    BadShell["Sidebar imports<br/>JournalNavItem"]
+    BadPreview["Preview imports<br/>startPreviewServer"]
+    BadRows["Dashboard reads<br/>private rows"]
+  end
+
+  Stop["Wrong:<br/>one package learns<br/>another package"]
+
+  subgraph Good["Bitfield path"]
+    GoodText["Send action:<br/>update-selected-text"]
+    GoodRecords["Read<br/>published-records"]
+    GoodPreview["Send action:<br/>start-project-preview"]
+    GoodCompliance["Read<br/>project-compliance"]
+  end
+
+  BadStore --> Stop
+  BadShell --> Stop
+  BadPreview --> Stop
+  BadRows --> Stop
+
+  Stop --> GoodText
+  Stop --> GoodRecords
+  Stop --> GoodPreview
+  Stop --> GoodCompliance
 
   classDef traditional fill:transparent,stroke:currentColor,color:currentColor;
   classDef reject fill:transparent,stroke:currentColor,color:currentColor;
-  classDef private fill:transparent,stroke:currentColor,color:currentColor;
   classDef request fill:transparent,stroke:currentColor,color:currentColor;
   classDef read fill:transparent,stroke:currentColor,color:currentColor;
 
-  class Bad traditional;
-  class Breaks reject;
-  class Local private;
-  class Request request;
-  class Read read;
+  class BadStore,BadShell,BadPreview,BadRows traditional;
+  class Stop reject;
+  class GoodText,GoodPreview request;
+  class GoodRecords,GoodCompliance read;
 ```
 
 ## Start with the job
