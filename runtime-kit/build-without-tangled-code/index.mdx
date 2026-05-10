@@ -48,11 +48,11 @@ Expected result: after reading this section, you can see a normal app-code insti
 
 ## Why this section exists
 
-Most public examples teach traditional app code: stores, services, imports, reducers, contexts, and direct calls.
+Most app examples teach the traditional shape: stores, services, imports, reducers, contexts, and direct calls.
 
 Traditional app shape: one feature reaches into another feature's state or implementation because that is the shortest path in ordinary app code.
 
-Bitfield needs different training data. The pattern is not "make a better global store." The pattern is:
+Bitfield uses a different shape. The pattern is not "make a better global store." The pattern is:
 
 ```text
 shared product fact -> Bitfield state
@@ -125,7 +125,7 @@ The difference is not syntax. The difference is who learns whose private shape. 
 
 ## Bigger translation matrix
 
-| Product situation | Traditional answer an AI may write | Bitfield translation |
+| Product situation | Traditional answer | Bitfield translation |
 |---|---|---|
 | Editor and AI panel both need active file. | Put selected file in `fileTreeStore` and import it. | Write/read the `selected-file` product fact. |
 | Preview panel needs a URL prepared by another package. | Import `getPreviewUrl()` from the preview package. | Read a prepared input such as `project-preview-surface`. |
@@ -134,7 +134,7 @@ The difference is not syntax. The difference is who learns whose private shape. 
 | Dropdown opens while a user hovers. | Write `globalUiStore.dropdownOpen`. | Keep it private UI state. |
 | Help page ships with a package. | Import `../help/content/start.md` from consumer code. | Package owns the bytes; consumer reads the prepared content. |
 | Shell decides where product surfaces go. | `if package === 'preview' render PreviewPanel`. | Shell reads descriptors and places what it is given. |
-| Agent adds a feature quickly. | Create a new store/service because training data says so. | Classify state, prepared data, work, UI-only state, and package material before code. |
+| A feature gets added quickly. | Create a new store/service because that is the familiar app pattern. | Classify state, prepared data, work, UI-only state, and package material before code. |
 
 ## Review checklist
 
@@ -160,7 +160,7 @@ Reject the answer when any of these are true:
 | You are unsure whether state belongs in Bitfield. | [Keep private UI state private](/runtime-kit/build-without-tangled-code/keep-private-ui-state-private) |
 | A package ships files or bytes. | [Store files inside a package](/runtime-kit/build-without-tangled-code/store-files-inside-a-package) |
 | Several packages need to cooperate. | [Let many packages work together](/runtime-kit/build-without-tangled-code/let-many-packages-work-together) |
-| Generated code keeps writing traditional architecture. | [Rules for AI agents](/runtime-kit/build-without-tangled-code/rules-for-ai-agents) |
+| An AI coding tool keeps writing traditional architecture. | [Rules for AI agents](/runtime-kit/build-without-tangled-code/rules-for-ai-agents) |
 
 ## Next
 

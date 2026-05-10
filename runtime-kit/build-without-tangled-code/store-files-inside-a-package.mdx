@@ -89,7 +89,7 @@ const previewSurface = readInput('project-preview-surface');
 
 The preview package decides how the surface is prepared. The shell receives a public view.
 
-### Agent prompt template
+### Review template
 
 Traditional mistake:
 
@@ -141,7 +141,7 @@ The caller asks for search results. The help package can change its index format
 | Consumer imports another package's file. | Folder structure becomes public API by accident. | Consumer reads prepared data. |
 | Consumer builds a local filesystem path. | It only works on one machine/shell. | Package declares package-owned bytes. |
 | Package references files outside itself. | The package cannot move cleanly. | Keep package file references inside the package folder. |
-| AI copies bytes into app code. | Data and code boundaries blur. | Keep bytes in package material and expose a public read/target. |
+| App code copies package bytes into itself. | Data and code boundaries blur. | Keep bytes in package material and expose a public read/target. |
 
 React is one adapter that might render the bytes, but React does not define the package boundary. A web shell, native shell, terminal shell, or future adapter should receive prepared data from the same package-owned material.
 
@@ -202,7 +202,7 @@ The consumer asks for help content by public input name. It does not know which 
 
 ## Review check
 
-If generated code imports `../some-package/content/file.md`, stop. Package files are package material. Consumers should read a prepared input or request a target.
+If consumer code imports `../some-package/content/file.md`, stop. Package files are package material. Consumers should read a prepared input or request a target.
 
 ## Next
 

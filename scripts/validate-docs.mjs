@@ -96,7 +96,7 @@ function validateDepthContract(page, body, sourcePage, output = failures) {
   if (page.pageClass === 'runtime-kit-recipe-index') {
     requireIncludes(page.route, body, [
       ['recipe flow visual', 'className="bf-flow"'],
-      ['recipe contract section', ['## Runtime Kit Cookbook contract for AI agents', '## Generated-code contract']],
+      ['recipe contract section', ['## Runtime Kit Cookbook contract for AI agents', '## Recipe review contract']],
       ['job route map', '## Choose by job'],
       ['future whole-product Cookbook boundary', 'future whole-product Bitfield Cookbook'],
     ], output);
@@ -188,7 +188,7 @@ function validateDepthContract(page, body, sourcePage, output = failures) {
       ['public handles table', '## Public handles'],
       ['data-flow map', '## Data-flow map'],
       ['file boundary section', '## File-by-file public boundary'],
-      ['generated-code mistakes section', ['## Agent mistakes to reject', '## Generated-code mistakes to reject']],
+      ['boundary mistakes section', ['## Agent mistakes to reject', '## Generated-code mistakes to reject', '## Boundary mistakes to reject']],
       ['review checklist', '## Review checklist'],
       ['adapter-neutral language', ['React is one adapter', 'future SDK', 'native shell']],
       ['next links section', '## Next'],

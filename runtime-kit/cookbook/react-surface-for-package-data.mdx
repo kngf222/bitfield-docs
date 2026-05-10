@@ -173,11 +173,11 @@ That is the path to a tangled app. The UI disappears when data is missing, and t
 | User sees no error | Component ignores `welcome.error` or request errors. | Render read and request failures separately. |
 | Button works only in local dev | Component imported a target implementation directly. | Call the public target name. |
 | Data shape crashes render | Component assumed fields that the prepared input does not provide. | Align `WelcomeData` with the public prepared input contract. |
-| AI-generated code creates storage addresses | Agent treated the hook like a database query. | Reject the output and point it to the prepared input contract. |
+| Component code creates storage addresses | The hook was treated like a database query. | Move back to the prepared input contract. |
 
-## AI review checklist
+## Review checklist
 
-When an AI edits this surface, make it answer:
+Before accepting this surface, answer:
 
 ```text
 Prepared input:

@@ -53,7 +53,7 @@ Runtime Kit has several reader paths. Pick the one that matches your job.
 | Understand the public model. | This page, then [Placeable surfaces](/runtime-kit/placeable-surfaces) | It explains package/app separation and generic UI placement. |
 | Look up exact API shapes. | [Runtime Kit API](/reference/runtime-kit-api) and [Package boundary](/reference/package-boundary) | Reference pages are for exact contracts. |
 | Debug a broken feature. | [Troubleshooting](/runtime-kit/troubleshooting) | It maps symptoms to the failed public link. |
-| Give generated code rails. | [Build with AI agents](/runtime-kit/ai-build-rules) | It tells code generators what they may edit and what they must not cross. |
+| Keep generated changes inside the public boundary. | [Build with AI agents](/runtime-kit/ai-build-rules) | Use this only when an AI coding tool is writing the feature. |
 
 ## The first feature shape
 
@@ -137,7 +137,7 @@ App code should not own Runtime Kit setup:
 | Features import each other because it is the fastest way to ship today. | Features talk through package data and named targets. |
 | A React component learns storage and package details. | A React component reads `{ data, loading, error }`. |
 | Replacing a feature means tracing imports across the app. | Replacing a package keeps the public data shape or target name stable. |
-| AI code generation tangles new features into old ones. | The AI has a smaller public surface and clearer boundaries to follow. |
+| Fast feature work tangles new features into old ones. | The public surface is smaller and the boundaries are clearer. |
 
 ## The two app-facing calls
 
@@ -241,7 +241,7 @@ Package records and stored bytes are product material. Do not put private keys, 
 | Declare package data or runnable doors | `things-to-store-and-run.json` |
 | Understand package shapes | [Packages](/runtime-kit/packages) |
 | Look up exact API shape | [Runtime Kit API](/reference/runtime-kit-api) |
-| Give generated code safe rails | [Build with AI agents](/runtime-kit/ai-build-rules) |
+| Keep AI-written changes inside the public boundary | [Build with AI agents](/runtime-kit/ai-build-rules) |
 | Find a broken link in the chain | [Troubleshooting](/runtime-kit/troubleshooting) |
 
 ## Now build the bigger version
@@ -285,6 +285,6 @@ For each feature, write the public Runtime Kit contract in the feature ticket or
   - @bitfield/runtime-kit/react
 ```
 
-That tiny contract prevents three common failures: app code reading package files, buttons importing target implementations, and generated code inventing a second data path.
+That tiny contract prevents three common failures: app code reading package files, buttons importing target implementations, and new features inventing a second data path.
 
 </div>
