@@ -33,6 +33,22 @@ Before editing, state which category each new value or action belongs to.
 After editing, report the public input names, target names, package files, private UI state, and tests/checks.
 ```
 
+## Classification protocol
+
+Before writing code, the agent must fill this out:
+
+| Question | Answer format |
+|---|---|
+| What product fact is shared? | `shared fact: selected-file` or `none` |
+| What prepared data is read? | `prepared input: project-preview-surface` or `none` |
+| What work is requested? | `target request: selected-agent.update` or `none` |
+| What state is visual-only? | `private UI state: dropdownOpen, hoveredRow` |
+| What package material is used? | `package bytes: getting-started-help` or `none` |
+| What public adapter is used? | `React read hook`, `target request`, `native shell read`, or another public adapter |
+| What private boundary is avoided? | `no package store imports`, `no package file parsing`, `no direct implementation call` |
+
+If the agent cannot fill this table out, it should not edit yet.
+
 ## Bad output and corrected output
 
 Traditional app shape: the agent reaches for a shared store, direct import, package file read, or framework coordinator because that is what most public examples show.
@@ -98,6 +114,51 @@ Correct:
 const [hoveredRow, setHoveredRow] = useState<string | null>(null);
 ```
 
+### Bad: React context becomes product architecture
+
+```tsx
+export const ProductContext = createContext({
+  selectedFile: null,
+  currentProject: null,
+  notificationMode: 'normal',
+  setSelectedAgent() {},
+});
+```
+
+Correct:
+
+```tsx
+const selectedFile = useBitfieldData<string>('selected-file');
+const currentProject = useBitfieldData<Project>('current-project');
+const notificationMode = useBitfieldData<string>('notification-mode');
+
+await sendRequestToBitfieldTarget({
+  target: 'selected-agent.update',
+  payload: { agentId },
+});
+```
+
+React can hold visual-only state. It should not become the product coordination layer.
+
+### Bad: mixed read and work boundary
+
+```ts
+const preview = await refreshPreviewAndReturnGlobalStore(projectStore.current.id);
+```
+
+Correct:
+
+```ts
+await sendRequestToBitfieldTarget({
+  target: 'project-preview.refresh-status',
+  payload: { projectId },
+});
+
+const preview = readInput('project-preview-surface');
+```
+
+Request work through the target. Read prepared state through the input.
+
 ## Review checklist
 
 | Question | Correct answer |
@@ -119,6 +180,35 @@ const [hoveredRow, setHoveredRow] = useState<string | null>(null);
 | "I'll read the package JSON." | It is bypassing Runtime Kit. | Use a prepared input. |
 | "I'll add a global store." | It is rebuilding traditional shared state. | Classify each value first. |
 | "I'll pass this through props." | It may be making the shell coordinate product meaning. | Use Bitfield state when multiple packages need it. |
+
+## Required self-report
+
+At the end of generated work, the agent should report this exact shape:
+
+```text
+Shared product facts:
+- selected-file
+
+Prepared inputs:
+- project-preview-surface
+- getting-started-help
+
+Target requests:
+- project-preview.refresh-status
+- selected-agent.update
+
+Private UI state:
+- dropdownOpen
+- hoveredRow
+
+Boundaries not crossed:
+- no package store imports
+- no package file parsing
+- no direct implementation call
+- React used only as adapter
+```
+
+If the report says "none" for everything but the code adds a feature that coordinates multiple packages, the agent probably hid traditional coupling in the implementation. Review the imports and state placement before accepting it.
 
 ## Next
 

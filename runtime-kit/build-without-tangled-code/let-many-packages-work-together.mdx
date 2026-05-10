@@ -68,6 +68,48 @@ Each package uses the public handle it needs. No package imports every other pac
   </div>
 </div>
 
+## Larger chain
+
+Start with a normal product flow:
+
+```text
+1. User selects a file.
+2. Editor opens that file.
+3. AI context panel uses that file.
+4. Preview panel shows the current project preview.
+5. Keyboard shortcut changes the selected agent.
+6. Notification package shows whether work finished.
+7. Help package provides context text for the command palette.
+```
+
+Traditional app architecture tends to collapse that into one central store:
+
+```ts
+appStore.selectedFile = fileTreeStore.selectedFile;
+appStore.editor.open(appStore.selectedFile);
+appStore.ai.attachFile(appStore.selectedFile);
+appStore.preview.refresh(appStore.currentProject);
+appStore.selectedAgent = keyboardStore.nextAgent();
+appStore.notifications.mode = settingsStore.notificationMode;
+appStore.help.index = helpPackage.searchIndex;
+```
+
+That looks convenient until every package has to know the central store shape and the central store has to know every package.
+
+Bitfield shape:
+
+```text
+selected-file -> product fact read by editor and AI context
+current-project -> product fact read by preview and package filters
+project-preview-surface -> prepared input rendered by preview shell
+selected-agent.update -> target request from keyboard or command palette
+notification-mode.update -> target request from settings or shortcuts
+getting-started-help -> prepared input from package-owned help content
+dropdown open state -> private UI state inside the surface
+```
+
+Now each package meets the others through a named public boundary. There is no hidden central product object.
+
 ## What this prevents
 
 | Bad shape | Why it breaks | Better shape |
@@ -89,6 +131,74 @@ React is one adapter that can show this chain. The chain itself is Runtime Kit: 
 | Button refreshes preview. | Call preview implementation. | Request `project-preview.refresh-status`. |
 | Keyboard changes selected agent. | Import selected-agent service. | Request `selected-agent.update`. |
 | Dropdown opens. | Global app store. | Private UI state. |
+
+## Add a new package without retangling
+
+Imagine you add a "recent activity" package.
+
+Traditional addition:
+
+```ts
+import { editorStore } from '../editor/store';
+import { previewService } from '../project-preview/service';
+import { notificationSettings } from '../notifications/settings';
+
+export function RecentActivity() {
+  return buildActivity(editorStore.file, previewService.status, notificationSettings.mode);
+}
+```
+
+Bitfield addition:
+
+```ts
+const selectedFile = readInput('selected-file');
+const preview = readInput('project-preview-surface');
+const notificationMode = readInput('notification-mode');
+```
+
+The new package reads the public facts it needs. Existing packages do not change.
+
+Traditional mistake:
+
+```ts
+recentActivityStore.copyFrom(appStore);
+```
+
+Bitfield replacement:
+
+```ts
+const activityInputs = [
+  readInput('selected-file'),
+  readInput('project-preview-surface'),
+  readInput('notification-mode'),
+];
+```
+
+## Multi-package review checklist
+
+| Check | Good answer |
+|---|---|
+| Does adding the new package require editing existing package imports? | No. |
+| Does the shell branch on product meaning? | No. It places descriptors and surfaces. |
+| Does one package become the central product store? | No. Shared facts live in Bitfield. |
+| Can keyboard, command palette, and buttons request the same work? | Yes. They send the same target request. |
+| Can a non-React shell follow the same chain? | Yes. React is one adapter, not the architecture. |
+
+## Why this scales past the first screen
+
+The first screen can survive traditional coupling. The tenth screen usually cannot. The problem is not that stores, services, or contexts are evil. The problem is that they make a feature's private shape become the way the rest of the product thinks.
+
+Bitfield keeps the product language outside any one package:
+
+| Product language | Public handle |
+|---|---|
+| "The file the user is working on" | `selected-file` |
+| "The project the workspace is showing" | `current-project` |
+| "The preview surface to render" | `project-preview-surface` |
+| "Change the selected agent" | `selected-agent.update` |
+| "Search help" | `help.search` |
+
+That is what lets package eleven join the product without becoming a patch inside package two.
 
 ## AI agent should know
 

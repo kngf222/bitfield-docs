@@ -74,6 +74,81 @@ React, Swift, Kotlin, Rust, Python, terminal shells, web shells, and future adap
 | A shell branches on every product area. | The shell becomes product-specific. | The shell reads descriptors and places what it is given. |
 | An agent adds a new app store for every problem. | The app grows competing sources of truth. | The agent chooses Bitfield state, local state, input, or target. |
 
+## The story an AI agent usually writes
+
+An AI agent sees the product request: "When I select a file, show it in the editor, let the AI panel use it, and let the command palette open actions for it."
+
+Traditional app-code instinct:
+
+```ts
+import { fileTreeStore } from '../file-tree/store';
+import { editorStore } from '../editor/store';
+import { aiContextStore } from '../ai/context';
+import { openCommandPalette } from '../command-palette/actions';
+
+export function onFileSelected(filePath: string) {
+  fileTreeStore.selectedFile = filePath;
+  editorStore.open(fileTreeStore.selectedFile);
+  aiContextStore.attachFile(fileTreeStore.selectedFile);
+  openCommandPalette({ filePath: fileTreeStore.selectedFile });
+}
+```
+
+That code feels fast because everything is reachable. It is also the start of the knot. The editor now knows file tree shape. The AI context knows editor timing. The command palette knows where selection came from. Every future package has to learn the old package graph before it can do a simple job.
+
+Bitfield shape:
+
+```text
+selected-file becomes a Bitfield product fact
+editor reads selected-file
+AI context reads selected-file
+command palette reads selected-file or asks a target to run work
+each package keeps its own private UI details private
+```
+
+React adapter example:
+
+```tsx
+const selectedFile = useBitfieldData<string>('selected-file');
+```
+
+Request example:
+
+```ts
+await sendRequestToBitfieldTarget({
+  target: 'command-palette.open-for-file',
+  payload: { input: 'selected-file' },
+});
+```
+
+The difference is not syntax. The difference is who learns whose private shape. In the traditional code, every package learns every other package. In the Bitfield code, packages meet at named public facts, prepared inputs, and targets.
+
+## Bigger translation matrix
+
+| Product situation | Traditional answer an AI may write | Bitfield translation |
+|---|---|---|
+| Editor and AI panel both need active file. | Put selected file in `fileTreeStore` and import it. | Write/read the `selected-file` product fact. |
+| Preview panel needs a URL prepared by another package. | Import `getPreviewUrl()` from the preview package. | Read a prepared input such as `project-preview-surface`. |
+| Keyboard shortcut changes selected agent. | Import `selectedAgentService.set(...)`. | Send a target request such as `selected-agent.update`. |
+| Notification mode changes from settings and command palette. | Both call the same implementation file. | Both send the public target request for notification mode. |
+| Dropdown opens while a user hovers. | Write `globalUiStore.dropdownOpen`. | Keep it private UI state. |
+| Help page ships with a package. | Import `../help/content/start.md` from consumer code. | Package owns the bytes; consumer reads the prepared content. |
+| Shell decides where product surfaces go. | `if package === 'preview' render PreviewPanel`. | Shell reads descriptors and places what it is given. |
+| Agent adds a feature quickly. | Create a new store/service because training data says so. | Classify state, prepared data, work, UI-only state, and package material before code. |
+
+## Review checklist
+
+Reject the answer when any of these are true:
+
+| Check | Reject when you see | Accept when you see |
+|---|---|---|
+| Package boundary | A package imports another package's store, service, or file. | It uses a public input or target. |
+| Shared state | A value used by many packages lives inside one package object. | It is a named Bitfield product fact. |
+| Prepared data | Consumer code parses producer package files. | Consumer reads data the package prepared. |
+| Work request | A button calls another package implementation. | It sends a named target request. |
+| UI-only state | Hover, focus, draft text, or open menu state is written as product state. | It stays local to the UI that uses it. |
+| Adapter boundary | React context becomes the architecture. | React is one adapter over Runtime Kit reads and requests. |
+
 ## Read these pages by job
 
 | Your job | Page |

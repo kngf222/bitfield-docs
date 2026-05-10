@@ -89,6 +89,123 @@ source-by-label:
 
 This lets the consumer read a projected view. It does not make the consumer learn the producer's private data layout.
 
+## Four prepared-read situations
+
+### Preview surface
+
+Traditional mistake:
+
+```ts
+import { getPreviewUrl } from '../project-preview/build-preview';
+
+const url = await getPreviewUrl(projectId);
+```
+
+Bitfield replacement:
+
+```ts
+const preview = readInput('project-preview-surface');
+```
+
+The preview package prepares the public view. The consumer renders the view without learning how the preview package builds it.
+
+### Selected file content
+
+Traditional mistake:
+
+```ts
+import { readSelectedFileText } from '../file-editor/files';
+
+const text = await readSelectedFileText();
+```
+
+Bitfield replacement:
+
+```ts
+const selectedFile = readInput('selected-file');
+const fileContent = readInput('selected-file-content');
+```
+
+The selected file fact and the prepared content are separate public reads. The consumer does not become the file package.
+
+### Help content
+
+Traditional mistake:
+
+```ts
+const markdown = await fetch('/packages/help/content/getting-started.md').then((r) => r.text());
+```
+
+Bitfield replacement:
+
+```ts
+const help = readInput('getting-started-help');
+```
+
+The package can change how it ships or prepares the help content while the consumer keeps the same public read.
+
+### Worktree records
+
+Traditional mistake:
+
+```ts
+import { records } from '../git-worktree/private-record-cache';
+
+const current = records.filter((record) => record.projectId === projectId);
+```
+
+Bitfield replacement:
+
+```ts
+const worktrees = readInput('git-worktree-records');
+```
+
+The consumer asks for the public prepared records it needs. It does not import the producer's cache or storage shape.
+
+## Consumer boundary checklist
+
+| Question | Correct answer |
+|---|---|
+| Does the consumer import the package that prepared the data? | No. It reads a prepared input. |
+| Does the consumer parse another package's boundary file? | No. Runtime Kit resolves package material. |
+| Does the consumer build storage addresses by string operations? | No. It uses public input names or descriptors. |
+| Does the consumer assume producer field names are permanent? | No. Descriptor data maps the public view. |
+| Does the consumer work outside React? | Yes. Any shell can follow the same input boundary. |
+
+## Full before and after
+
+Traditional feature request: "Show the preview URL beside the current file and include help text if the user opens the command palette."
+
+Bad implementation:
+
+```ts
+import { fileTreeStore } from '../file-tree/store';
+import { getPreviewUrl } from '../project-preview/private-preview';
+import helpMarkdown from '../help/content/getting-started.md?raw';
+
+export async function buildPanel() {
+  return {
+    file: fileTreeStore.selectedFile,
+    previewUrl: await getPreviewUrl(fileTreeStore.projectId),
+    help: helpMarkdown,
+  };
+}
+```
+
+This code makes one consumer learn three private things: file tree state shape, preview implementation, and help package folder layout.
+
+Bitfield replacement:
+
+```ts
+const selectedFile = readInput('selected-file');
+const preview = readInput('project-preview-surface');
+const help = readInput('getting-started-help');
+```
+
+The consumer reads three public handles. Each preparing package can change its private code without forcing this panel to change.
+
+The same translation works for a native app, terminal view, or future shell. The adapter changes. The public inputs do not.
+
 ## What this prevents
 
 | Bad shape | Why it breaks | Better shape |

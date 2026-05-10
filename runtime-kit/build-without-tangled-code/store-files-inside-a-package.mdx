@@ -55,6 +55,85 @@ The package decides what bytes it brings. The consumer uses the public handle ex
 
 The important part is not the exact content. The important part is the boundary: the package file reference stays inside the package.
 
+## Four file situations
+
+### Help markdown
+
+Traditional mistake:
+
+```ts
+const help = await fetch('/packages/help/content/getting-started.md').then((r) => r.text());
+```
+
+Bitfield replacement:
+
+```ts
+const help = readInput('getting-started-help');
+```
+
+The help package owns the file. The consumer reads prepared help content.
+
+### Preview HTML
+
+Traditional mistake:
+
+```ts
+import previewHtml from '../project-preview/dist/index.html?raw';
+```
+
+Bitfield replacement:
+
+```ts
+const previewSurface = readInput('project-preview-surface');
+```
+
+The preview package decides how the surface is prepared. The shell receives a public view.
+
+### Agent prompt template
+
+Traditional mistake:
+
+```ts
+import template from '../agent-package/templates/review.md';
+```
+
+Bitfield replacement:
+
+```ts
+const reviewTemplate = readInput('agent-review-template');
+```
+
+The package can ship the template as package material. The caller should not reach into its folder.
+
+### Search index
+
+Traditional mistake:
+
+```ts
+import index from '../help/search-index.json';
+```
+
+Bitfield replacement:
+
+```ts
+await sendRequestToBitfieldTarget({
+  target: 'help.search',
+  payload: { query },
+});
+```
+
+The caller asks for search results. The help package can change its index format without breaking the caller.
+
+## Consumer rules
+
+| Rule | Meaning |
+|---|---|
+| A consumer may read a public prepared input. | It can use the handle the package exposes. |
+| A consumer may send a public target request. | It can ask the package to do work. |
+| A consumer may not import package files directly. | Folder structure is not public API. |
+| A consumer may not copy bytes into app code. | Package material should stay package material. |
+| A consumer may not assume file format unless the package exposes that format. | The public contract is the prepared input or target reply. |
+
 ## What this prevents
 
 | Bad shape | Why it breaks | Better shape |
@@ -65,6 +144,47 @@ The important part is not the exact content. The important part is the boundary:
 | AI copies bytes into app code. | Data and code boundaries blur. | Keep bytes in package material and expose a public read/target. |
 
 React is one adapter that might render the bytes, but React does not define the package boundary. A web shell, native shell, terminal shell, or future adapter should receive prepared data from the same package-owned material.
+
+## Review checklist
+
+| Check | Good answer |
+|---|---|
+| Does consumer code import another package file? | No. It reads a prepared input or sends a target request. |
+| Does the package reference material outside itself? | No. Package material stays inside the package boundary. |
+| Does the consumer assume the file format? | Only when the public prepared input or reply contract says so. |
+| Can the package move without breaking consumers? | Yes. Consumers rely on public handles, not folders. |
+
+## Full before and after
+
+Traditional feature request: "Add a help panel that shows package help and lets the user search it."
+
+Bad implementation:
+
+```ts
+import help from '../help/content/getting-started.md?raw';
+import searchIndex from '../help/search-index.json';
+
+export function HelpPanel() {
+  return renderHelp(help, searchIndex);
+}
+```
+
+This consumer now depends on two package files and one package layout. If the help package changes how it stores content or search data, the consumer breaks.
+
+Bitfield replacement:
+
+```ts
+const help = readInput('getting-started-help');
+
+const results = await sendRequestToBitfieldTarget({
+  target: 'help.search',
+  payload: { query },
+});
+```
+
+The consumer gets content and search through public handles. The package can keep markdown, JSON, a generated index, or something else behind that boundary.
+
+For React, Swift, Kotlin, terminal, or future adapters, the consumer rule stays the same: do not reach into the package folder.
 
 ## Good consumer code
 

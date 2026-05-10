@@ -79,6 +79,15 @@ export function FileEditorShell() {
 
 React is only the adapter shown here. The same rule applies to any shell: read the named Bitfield input instead of importing the file tree.
 
+## Review checklist
+
+| Check | Good answer |
+|---|---|
+| Does more than one package need the value? | It is a shared product fact or prepared input, not one package's private object. |
+| Does the code import another package store? | Replace it with a named read. |
+| Is the value only visual? | Keep it private instead of sharing it. |
+| Can a non-React shell read the same value? | Yes. The name is Runtime Kit-level, not React-only. |
+
 ## More examples
 
 | Shared product fact | Traditional mistake | Bitfield shape |
@@ -87,6 +96,119 @@ React is only the adapter shown here. The same rule applies to any shell: read t
 | Selected agent | Keyboard, chat, and timeline import one agent store. | Packages read `selected-agent`. |
 | Active conversation | Chat, sidebar, and notifications pass props through the shell. | Packages read `active-conversation`. |
 | Preview status | Dashboard imports preview service private code. | Packages read `project-preview-status`. |
+
+## One product fact, many readers
+
+The mental model is simple: a product fact is not owned by the first UI that touched it. The file tree might be the place where a user selected a file, but "the selected file" is not the file tree's private object once the editor, AI panel, breadcrumbs, and command palette all need it.
+
+Traditional code turns the first UI into the source every other package must know:
+
+```ts
+import { fileTreeStore } from '../file-tree/store';
+
+export function buildContext() {
+  return { filePath: fileTreeStore.selectedFile };
+}
+```
+
+Bitfield code turns the fact into a named product value:
+
+```ts
+const selectedFile = readInput('selected-file');
+```
+
+React adapter example:
+
+```tsx
+const selectedFile = useBitfieldData<string>('selected-file');
+```
+
+The AI panel does not know whether the value came from a tree, command palette, recent-files list, command-line launch, or another device later. It knows the product fact it needs.
+
+## Four shared-state situations
+
+### Selected file
+
+Traditional mistake:
+
+```ts
+import { selectedFile } from '../file-tree/state';
+```
+
+Bitfield replacement:
+
+```ts
+const selectedFile = readInput('selected-file');
+```
+
+Use this when multiple packages react to the same selected file.
+
+### Current project
+
+Traditional mistake:
+
+```ts
+import { currentProject } from '../workspace/project-store';
+```
+
+Bitfield replacement:
+
+```ts
+const project = readInput('current-project');
+```
+
+Use this when panels, package filters, build actions, and account surfaces all need the same project context.
+
+### Selected agent
+
+Traditional mistake:
+
+```ts
+selectedAgentStore.set(agentId);
+```
+
+Bitfield replacement:
+
+```ts
+await sendRequestToBitfieldTarget({
+  target: 'selected-agent.update',
+  payload: { agentId },
+});
+```
+
+Then readers use the selected-agent product fact instead of importing the setter package.
+
+### Notification mode
+
+Traditional mistake:
+
+```ts
+import { notificationSettings } from '../notifications/settings';
+
+notificationSettings.mode = 'quiet';
+```
+
+Bitfield replacement:
+
+```ts
+await sendRequestToBitfieldTarget({
+  target: 'notification-mode.update',
+  payload: { mode: 'quiet' },
+});
+```
+
+Readers should observe the public mode value. Callers should not mutate notification package objects.
+
+## What not to store as shared state
+
+| Value | Keep private or share? | Reason |
+|---|---|---|
+| Row hover | Private | It is only visual. |
+| Editor scroll position | Usually private | It belongs to the current surface unless another package truly needs it. |
+| Selected file | Share | Editor, AI context, breadcrumbs, and commands may need it. |
+| Current project | Share | It changes what many packages show. |
+| Modal open state | Usually private | The modal package can own it unless other packages coordinate around it. |
+| Notification mode | Share through a target and fact | Multiple callers can ask for the change, and multiple readers may show it. |
 
 ## What this prevents
 

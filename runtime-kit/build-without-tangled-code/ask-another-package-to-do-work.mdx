@@ -74,6 +74,129 @@ const reply = await sendRequestToBitfieldTarget({
 
 Each request names the job and sends the smallest public payload needed for that job.
 
+## Four request situations
+
+### Refresh a preview
+
+Traditional mistake:
+
+```ts
+import { refreshPreview } from '../project-preview/refresh';
+
+await refreshPreview(projectId);
+```
+
+Bitfield replacement:
+
+```ts
+await sendRequestToBitfieldTarget({
+  target: 'project-preview.refresh-status',
+  payload: { projectId },
+});
+```
+
+The caller knows the job name and payload. It does not know the implementation file.
+
+### Change selected agent
+
+Traditional mistake:
+
+```ts
+import { selectedAgentStore } from '../agents/store';
+
+selectedAgentStore.set(agentId);
+```
+
+Bitfield replacement:
+
+```ts
+await sendRequestToBitfieldTarget({
+  target: 'selected-agent.update',
+  payload: { agentId },
+});
+```
+
+The same request can come from a keyboard shortcut, command palette, sidebar, or future shell.
+
+### Update notification mode
+
+Traditional mistake:
+
+```ts
+import { setNotificationMode } from '../notifications/mode';
+
+await setNotificationMode('quiet');
+```
+
+Bitfield replacement:
+
+```ts
+await sendRequestToBitfieldTarget({
+  target: 'notification-mode.update',
+  payload: { mode: 'quiet' },
+});
+```
+
+Settings and command surfaces can call the same public target without sharing notification package code.
+
+### Search help content
+
+Traditional mistake:
+
+```ts
+import { searchHelpIndex } from '../help/search-index';
+
+const results = searchHelpIndex(query);
+```
+
+Bitfield replacement:
+
+```ts
+const results = await sendRequestToBitfieldTarget({
+  target: 'help.search',
+  payload: { query },
+});
+```
+
+The caller sends the question. The package that owns the searchable material decides how to answer.
+
+## Request versus state
+
+| You need to... | Use | Reason |
+|---|---|---|
+| Show the currently selected file. | Prepared input or Bitfield state read. | Nothing has to run just to observe it. |
+| Change which file is selected. | Target request or state write through the package contract. | A change may need validation, side effects, or fan-out. |
+| Render preview URL. | Prepared input. | The preview package already prepared the view. |
+| Refresh preview URL. | Target request. | Work has to run. |
+| Toggle a dropdown. | Private UI state. | It is visual-only. |
+| Change notification mode. | Target request. | Multiple callers can request the same product action. |
+
+## Reply and error boundary
+
+The caller may know the reply contract. It must not know the implementation path.
+
+```ts
+const reply = await sendRequestToBitfieldTarget({
+  target: 'project-preview.refresh-status',
+  payload: { projectId },
+});
+
+if (!reply.ok) {
+  showError(reply.error.message);
+}
+```
+
+If the target returns bytes, text, JSON, or a structured result, the page that defines the target should say that. The caller should decode only the documented reply shape.
+
+## Review checklist
+
+| Check | Good answer |
+|---|---|
+| Does the caller import implementation code? | No. It sends a target request. |
+| Is the payload small and public? | Yes. It contains only the fields the target contract needs. |
+| Is the caller guessing the reply shape? | No. It decodes the documented reply contract. |
+| Can the same request come from another shell? | Yes. React is one adapter, not the action owner. |
+
 ## What this prevents
 
 | Bad shape | Why it breaks | Better shape |

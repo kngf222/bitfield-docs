@@ -62,6 +62,10 @@ function requireIncludes(route, body, requirements, output = failures) {
   }
 }
 
+function countMatches(body, pattern) {
+  return [...body.matchAll(pattern)].length;
+}
+
 function validateDepthContract(page, body, sourcePage, output = failures) {
   if (!page.pageClass) return;
   if (!knownPageClasses.has(page.pageClass)) {
@@ -158,9 +162,17 @@ function validateDepthContract(page, body, sourcePage, output = failures) {
       ['code or structured example', ['```', '|']],
       ['anti-pattern or prevention section', ['## What this prevents', '## Common mistake', '## Common failures', '## Bad output and corrected output']],
       ['adapter-neutral language', ['React is only the adapter', 'React is one adapter', 'any shell', 'future adapters']],
+      ['scenario section', ['## Four ', '## Larger chain', '## The story an AI agent usually writes', '## Classification protocol']],
+      ['review language', ['## Review checklist', 'checklist', '## Consumer boundary checklist', '## Multi-package review checklist']],
       ['next links section', '## Next'],
       ['Runtime Kit or reference link', ['/runtime-kit/', '/reference/']],
     ], output);
+    if (countMatches(body, /Traditional (shape|mistake|answer|addition|over-globalized|under-shared|app-code instinct)|Bad:/g) < 3) {
+      output.push(`${page.route}: boundary translation page needs at least three traditional/bad examples`);
+    }
+    if (countMatches(body, /Bitfield (replacement|answer|addition|shape)|Better answer|Correct:/g) < 3) {
+      output.push(`${page.route}: boundary translation page needs at least three Bitfield/correct replacements`);
+    }
     if (!sourcePage?.sourceIds?.includes('runtime-kit-public-package-cooperation')) {
       output.push(`${page.route}: boundary translation page must source-map to runtime-kit-public-package-cooperation`);
     }

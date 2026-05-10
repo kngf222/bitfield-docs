@@ -62,6 +62,82 @@ selected-agent
 | Current project used by many panels | Bitfield state | It changes what many packages show. |
 | Active conversation used by chat, timeline, and notifications | Bitfield state | It is a shared product fact. |
 
+## Four decisions in real product code
+
+### Hovered row
+
+Traditional over-globalized answer:
+
+```ts
+await writeBitfieldState('hovered-row', rowId);
+```
+
+Better answer:
+
+```tsx
+const [hoveredRow, setHoveredRow] = useState<string | null>(null);
+```
+
+The hover is not a product fact. It is only a visual detail for the current surface.
+
+### Open command menu
+
+Traditional over-globalized answer:
+
+```ts
+globalUiStore.commandMenuOpen = true;
+```
+
+Better answer:
+
+```ts
+setCommandMenuOpen(true);
+```
+
+Keep it private unless another package has a real product reason to observe it.
+
+### Selected file
+
+Traditional under-shared answer:
+
+```tsx
+const [selectedFile, setSelectedFile] = useState<string | null>(null);
+```
+
+Better answer when editor, AI panel, breadcrumbs, and command palette need it:
+
+```ts
+const selectedFile = readInput('selected-file');
+```
+
+That value coordinates packages, so it should not be trapped inside one component.
+
+### Draft text
+
+Traditional over-shared answer:
+
+```ts
+await writeBitfieldState('draft-message-text', text);
+```
+
+Better answer:
+
+```tsx
+const [draftText, setDraftText] = useState('');
+```
+
+Only promote it when the draft becomes product data, such as a saved message, note, command, or package record.
+
+## Promotion rules
+
+| Ask this | If yes | If no |
+|---|---|---|
+| Does another package need this value? | Consider Bitfield state or prepared input. | Keep it private. |
+| Does changing it run real product work? | Send a target request. | Keep it private or write product state through the right boundary. |
+| Is it only animation, hover, focus, drag, scroll, or draft typing? | Keep it private. | Continue classifying. |
+| Would losing it on refresh break product meaning? | It may be product state. | It is probably UI state. |
+| Would two packages disagree if they each kept a copy? | Put one public fact in Bitfield. | Keep package-local state. |
+
 ## What this prevents
 
 | Bad shape | Why it breaks | Better shape |
@@ -72,6 +148,43 @@ selected-agent
 | AI stores everything globally. | The app has too many sources of truth. | Classify state before writing code. |
 
 React is one adapter example. Swift view state, Kotlin state, terminal prompt state, and future shell state follow the same rule: visual-only state stays near the UI that uses it.
+
+## Review checklist
+
+| Check | Good answer |
+|---|---|
+| Is the value hover, focus, scroll, drag, or draft typing? | Keep it private. |
+| Does another package need it to make product decisions? | Promote it to a shared fact or prepared input. |
+| Does changing it run work? | Use a target request. |
+| Is React context being used as product coordination? | Replace it with Runtime Kit reads and requests. |
+
+## Full before and after
+
+Traditional feature request: "When the user clicks a file row, highlight it, open it in the editor, and show the AI panel context."
+
+Bad implementation:
+
+```tsx
+const [hoveredRow, setHoveredRow] = useGlobalStore('hoveredRow');
+const [selectedFile, setSelectedFile] = useState<string | null>(null);
+
+function onClick(filePath: string) {
+  setSelectedFile(filePath);
+}
+```
+
+This gets both decisions backwards. Hover is visual-only but became global. Selected file coordinates packages but stayed trapped in one component.
+
+Bitfield replacement:
+
+```tsx
+const [hoveredRow, setHoveredRow] = useState<string | null>(null);
+const selectedFile = useBitfieldData<string>('selected-file');
+```
+
+Then the click path updates the public selected-file fact through the package's public boundary. The editor and AI panel read that fact. The hover remains private.
+
+The rule is not "local state bad" or "Bitfield state good." The rule is: put each value where its readers are.
 
 ## AI agent should know
 
