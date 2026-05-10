@@ -37,7 +37,7 @@ const knownPageClasses = new Set([
   'runtime-kit-recipe-index',
   'runtime-kit-recipe',
   'runtime-kit-reference',
-  'runtime-kit-coding-tool',
+  'runtime-kit-ai-agent',
   'runtime-kit-operations',
   'runtime-kit-boundary-translation',
   'runtime-kit-boundary-case-study',
@@ -96,7 +96,7 @@ function validateDepthContract(page, body, sourcePage, output = failures) {
   if (page.pageClass === 'runtime-kit-recipe-index') {
     requireIncludes(page.route, body, [
       ['recipe flow visual', 'className="bf-flow"'],
-      ['recipe review section', ['## Runtime Kit Cookbook rules for coding tools', '## Runtime Kit Cookbook contract for AI coding tools', '## Recipe review contract', '## Recipe review checklist']],
+      ['recipe review section', ['## Runtime Kit Cookbook rules for AI agents', '## Runtime Kit Cookbook contract for AI agents', '## Recipe review contract', '## Recipe review checklist']],
       ['job route map', '## Choose by job'],
       ['future whole-product Cookbook boundary', 'future whole-product Bitfield Cookbook'],
     ], output);
@@ -136,7 +136,7 @@ function validateDepthContract(page, body, sourcePage, output = failures) {
     return;
   }
 
-  if (page.pageClass === 'runtime-kit-coding-tool') {
+  if (page.pageClass === 'runtime-kit-ai-agent') {
     requireIncludes(page.route, body, [
       ['prompt packs', '## Prompt packs'],
       ['bad-output corrections', '## Bad output and corrected output'],

@@ -1,21 +1,21 @@
 ---
-title: "Build with coding tools"
-description: "Give an AI coding tool the Runtime Kit public names so it adds features without importing private implementation code."
+title: "Build with AI agents"
+description: "Give an AI agent the Runtime Kit public names so it adds features without importing private implementation code."
 ---
 
 <div className="bf-article">
 
 <p className="bf-lead">
-Runtime Kit gives AI coding tools three public moves: read named data, send an action request, and edit `things-to-store-and-run.json` without importing private implementation code.
+Runtime Kit gives AI agents three public moves: read named data, send an action request, and edit `things-to-store-and-run.json` without importing private implementation code.
 </p>
 
 ## What this is
 
-This page is for founders and developers who ask an AI coding tool to build with Bitfield.
+This page is for founders and developers who ask an AI agent to build with Bitfield.
 
-The tool needs rails. Without rails, it will do the fastest-looking thing: import unpublished code, parse files in UI code, wire features directly together, or create a second data path. That can work for one screen and punish you later.
+An AI agent needs rails. Without rails, it will do the fastest-looking thing: import unpublished code, parse files in UI code, wire features directly together, or create a second data path. That can work for one screen and punish you later.
 
-Runtime Kit gives the tool a better instruction set:
+Runtime Kit gives the agent a better instruction set:
 
 ```text
 If you are writing app code:
@@ -28,9 +28,9 @@ If you are declaring package material:
   expose stable data names and action names
 ```
 
-That is the whole point. The tool can move fast without turning your product into a knot.
+That is the whole point. An AI agent can move fast without turning your product into a knot.
 
-## The instruction to give your coding tool
+## The instruction to give your AI agent
 
 Paste this into your AI coding session before asking it to build a Bitfield feature:
 
@@ -51,13 +51,13 @@ If a feature needs new data, add it to things-to-store-and-run.json first.
 If a feature needs work to run, declare a stable action name and call that action.
 ```
 
-That prompt is not magic. It tells the coding tool which files and names it may use.
+That prompt is not magic. It tells an AI agent which files and names it may use.
 
 ## The public work split
 
-Give the coding tool one of these jobs at a time:
+Give an AI agent one of these jobs at a time:
 
-| Job | What the tool should edit | What the tool should not edit |
+| Job | What the agent should edit | What the agent should not edit |
 |---|---|---|
 | Add package data. | `things-to-store-and-run.json` in the package. | React components. |
 | Add a screen. | React screen code that imports the public hook. | Package admission or storage setup. |
@@ -65,7 +65,7 @@ Give the coding tool one of these jobs at a time:
 | Add package-owned bytes. | Package-local files plus an entry in `things-to-store-and-run.json`. | Random local files outside the package. |
 | Fix a broken read. | Data name and component states. | Low-level reader machinery. |
 
-This split matters because AI coding tools are good at adding code quickly. Runtime Kit makes the fast path the safer path.
+This split matters because AI agents are good at adding code quickly. Runtime Kit makes the fast path the safer path.
 
 ## Good request examples
 
@@ -88,11 +88,11 @@ Decode the reply bytes as JSON only because this action's reply shape says it
 returns JSON.
 ```
 
-These requests are specific enough that the AI can succeed without inventing a new architecture.
+These requests are specific enough that the agent can succeed without inventing a new architecture.
 
 ## Prompt packs
 
-Use these when you want the tool to build one specific Runtime Kit shape.
+Use these when you want the agent to build one specific Runtime Kit shape.
 
 ### First feature prompt
 
@@ -233,7 +233,7 @@ These requests invite tangled code:
 | "Call the search implementation." | "Call `product.search` with this payload shape." |
 | "Make it work however you can." | "Stay inside the public Runtime Kit imports and explain any missing package file, data name, or action name." |
 
-The better request names the screen, data name, action name, and files the coding tool may touch.
+The better request names the screen, data name, action name, and files an AI agent may touch.
 
 ## Bad output and corrected output
 
@@ -340,11 +340,11 @@ Before you accept AI output, check these exact things:
 | Secrets | No private keys, tokens, account files, or customer data are in package examples. |
 | Package files | UI code does not parse package files or build storage paths. |
 
-If any row fails, reject the change and make the coding tool repair that exact file, name, or action first.
+If any row fails, reject the change and make an AI agent repair that exact file, name, or action first.
 
 ## Full Runtime Kit review map
 
-Make the coding tool fill this out before you accept the work:
+Make an AI agent fill this out before you accept the work:
 
 | Required answer | Why it matters |
 |---|---|
@@ -361,11 +361,11 @@ Make the coding tool fill this out before you accept the work:
 | Render states | Confirms loading, error, empty, and success are handled. |
 | Verification | Gives the command, test, manual check, or docs validation used. |
 
-If any row is blank, the coding tool has not described the concrete public files and names clearly enough.
+If any row is blank, an AI agent has not described the concrete public files and names clearly enough.
 
-## What the coding tool should explain back
+## What an AI agent should explain back
 
-Ask the coding tool to summarize the chain it used:
+Ask an AI agent to summarize the chain it used:
 
 ```text
 Tell me:
@@ -376,23 +376,23 @@ Tell me:
 5. Which unpublished Runtime Kit code you did not import.
 ```
 
-If the coding tool cannot answer those five points, the work is not ready.
+If an AI agent cannot answer those five points, the work is not ready.
 
 ## Common mistakes
 
-**Letting the coding tool invent a new public API**
+**Letting an AI agent invent a new public API**
 
-If the coding tool adds a new hook, provider, context, or subscription import, stop it. The current public imports are one request function and one React read hook.
+If an AI agent adds a new hook, provider, context, or subscription import, stop it. The current public imports are one request function and one React read hook.
 
-**Letting the coding tool move package setup into React**
+**Letting an AI agent move package setup into React**
 
 React renders named data. Package admission belongs behind Runtime Kit.
 
-**Letting the coding tool make action names too implementation-specific**
+**Letting an AI agent make action names too implementation-specific**
 
 Use stable product names like `product.search` or `welcome.suggest`. Do not expose the private runner, file name, or implementation choice in the action name.
 
-**Letting the coding tool ignore empty and error states**
+**Letting an AI agent ignore empty and error states**
 
 AI often writes the happy path only. Runtime Kit components should render loading, error, empty, and success states every time.
 
@@ -434,6 +434,6 @@ Use only @bitfield/runtime-kit and @bitfield/runtime-kit/react.
 Do not import unpublished Runtime Kit code.
 ```
 
-That prompt makes the coding tool build the package and the screen together while keeping the public files and names intact.
+That prompt makes an AI agent build the package and the screen together while keeping the public files and names intact.
 
 </div>

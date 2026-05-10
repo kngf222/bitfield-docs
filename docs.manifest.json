@@ -626,7 +626,7 @@
             "runtime-kit/build-without-tangled-code/store-files-inside-a-package",
             "runtime-kit/build-without-tangled-code/let-many-packages-work-together",
             "runtime-kit/build-without-tangled-code/build-a-file-preview-flow",
-            "runtime-kit/build-without-tangled-code/rules-for-coding-tools"
+            "runtime-kit/build-without-tangled-code/rules-for-ai-agents"
           ]
         },
         {
@@ -879,18 +879,18 @@
     {
       "route": "runtime-kit/build-without-tangled-code/build-a-file-preview-flow",
       "title": "Build a file preview flow",
-      "description": "A source-grounded case study that translates one file, preview, help, notification, and tool flow from traditional architecture into Runtime Kit public files and names.",
+      "description": "A source-grounded case study that translates one file, preview, help, notification, and agent flow from traditional architecture into Runtime Kit public files and names.",
       "diataxis": "how-to",
       "pageClass": "runtime-kit-boundary-case-study",
       "summary": "Follows a realistic file, preview, help, keyboard, notification, and private UI flow from traditional coupled code into public Runtime Kit handles."
     },
     {
-      "route": "runtime-kit/build-without-tangled-code/rules-for-coding-tools",
-      "title": "Rules for coding tools",
-      "description": "Tell AI coding tools how to build Bitfield features without falling back to traditional coupled app architecture.",
+      "route": "runtime-kit/build-without-tangled-code/rules-for-ai-agents",
+      "title": "Rules for AI agents",
+      "description": "Tell AI agents how to build Bitfield features without falling back to traditional coupled app architecture.",
       "diataxis": "how-to",
       "pageClass": "runtime-kit-boundary-translation",
-      "summary": "Provides prompt rules, bad-output corrections, and review checks that keep generated code on public Runtime Kit public files and names."
+      "summary": "Provides prompt rules, bad-output corrections, and review checks that keep generated code on public Runtime Kit files and names."
     },
     {
       "route": "runtime-kit/use-bitfield-data",
@@ -922,11 +922,11 @@
     },
     {
       "route": "runtime-kit/ai-build-rules",
-      "title": "Build with coding tools",
-      "description": "Give an AI coding tool the Runtime Kit public names so it adds features without crossing private boundaries.",
+      "title": "Build with AI agents",
+      "description": "Give an AI agent the Runtime Kit public names so it adds features without crossing private boundaries.",
       "diataxis": "how-to",
-      "pageClass": "runtime-kit-coding-tool",
-      "summary": "Gives AI-coding-tool prompt packs, bad-output corrections, review maps, and public Runtime Kit public files and names for generated feature work."
+      "pageClass": "runtime-kit-ai-agent",
+      "summary": "Gives AI-agent prompt packs, bad-output corrections, review maps, and public Runtime Kit files and names for generated feature work."
     },
     {
       "route": "runtime-kit/troubleshooting",

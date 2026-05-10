@@ -128,7 +128,7 @@
               "runtime-kit/build-without-tangled-code/store-files-inside-a-package",
               "runtime-kit/build-without-tangled-code/let-many-packages-work-together",
               "runtime-kit/build-without-tangled-code/build-a-file-preview-flow",
-              "runtime-kit/build-without-tangled-code/rules-for-coding-tools"
+              "runtime-kit/build-without-tangled-code/rules-for-ai-agents"
             ]
           },
           {

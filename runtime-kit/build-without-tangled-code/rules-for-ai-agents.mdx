@@ -1,17 +1,17 @@
 ---
-title: "Rules for coding tools"
-description: "Tell AI coding tools how to build Bitfield features without falling back to traditional coupled app architecture."
+title: "Rules for AI agents"
+description: "Tell AI agents how to build Bitfield features without falling back to traditional coupled app architecture."
 ---
 
 <div className="bf-article">
 
 <p className="bf-lead">
-AI coding tools will default to traditional app architecture unless the docs teach the Bitfield translation directly. Give the tool a concrete job, the public names it may use, and the private files it must not import or parse.
+AI agents will default to traditional app architecture unless the docs teach the Bitfield translation directly. Give the agent a concrete job, the public names it may use, and the private files it must not import or parse.
 </p>
 
-Product scene: you ask an AI coding tool to add a feature. It creates a store, imports another package, parses a JSON file, or calls an implementation directly. The code may compile, but it trains the app back into the old architecture.
+Product scene: you ask an AI agent to add a feature. It creates a store, imports another package, parses a JSON file, or calls an implementation directly. The code may compile, but it trains the app back into the old architecture.
 
-Expected result: the tool chooses the Bitfield path before writing code.
+Expected result: the agent chooses the Bitfield path before writing code.
 
 ## The prompt to paste
 
@@ -35,7 +35,7 @@ After editing, report the public data names, action names, package files, privat
 
 ## Classification protocol
 
-Before writing code, the tool must fill this out:
+Before writing code, the agent must fill this out:
 
 | Question | Answer format |
 |---|---|
@@ -47,13 +47,13 @@ Before writing code, the tool must fill this out:
 | What public adapter is used? | `React read hook`, `action request`, `native shell read`, or another public adapter |
 | What private file/code is avoided? | `no package store imports`, `no package file parsing`, `no direct implementation call` |
 
-If the tool cannot fill this table out, it should not edit yet.
+If the agent cannot fill this table out, it should not edit yet.
 
 Before accepting the edit, compare it against the concrete translation page: [Translate traditional code](/runtime-kit/build-without-tangled-code/translate-traditional-code). That page shows the exact store, service import, direct call, shell branch, package-file read, and private UI state mistakes this checklist is meant to catch.
 
 ## Bad output and corrected output
 
-Traditional app shape: the tool reaches for a shared store, direct import, package file read, or framework coordinator because that is what most public examples show.
+Traditional app shape: the agent reaches for a shared store, direct import, package file read, or framework coordinator because that is what most public examples show.
 
 ### Bad: shared object import
 
@@ -165,17 +165,17 @@ Request work through the action name. Read data through the data name.
 
 | Question | Correct answer |
 |---|---|
-| Did the tool create a shared app store? | It should not. Use Bitfield state for shared product facts. |
-| Did the tool import another package's private code? | It should not. Use data names or action requests. |
-| Did the tool put visual-only UI state in Bitfield? | It should not. Keep visual-only state private. |
-| Did the tool parse `things-to-store-and-run.json` from app code? | It should not. Runtime Kit handles package files. |
-| Did the tool call implementation code directly? | It should not. Send an action request. |
-| Did the tool make React the architecture? | It should not. React is one adapter around Bitfield reads/requests. |
-| Did the tool name data and action requests clearly? | It should. Names should describe the real product job. |
+| Did the agent create a shared app store? | It should not. Use Bitfield state for shared product facts. |
+| Did the agent import another package's private code? | It should not. Use data names or action requests. |
+| Did the agent put visual-only UI state in Bitfield? | It should not. Keep visual-only state private. |
+| Did the agent parse `things-to-store-and-run.json` from app code? | It should not. Runtime Kit handles package files. |
+| Did the agent call implementation code directly? | It should not. Send an action request. |
+| Did the agent make React the architecture? | It should not. React is one adapter around Bitfield reads/requests. |
+| Did the agent name data and action requests clearly? | It should. Names should describe the real product job. |
 
 ## Common failures
 
-| Tool phrase | What it probably means | Correction |
+| Agent phrase | What it probably means | Correction |
 |---|---|---|
 | "I'll add a context provider." | It is making React coordinate product state. | Ask whether this is Bitfield state or private UI state. |
 | "I'll import the service." | It is importing private package code. | Use a named action request. |
@@ -185,7 +185,7 @@ Request work through the action name. Read data through the data name.
 
 ## Required self-report
 
-At the end of generated work, the tool should report this exact shape:
+At the end of generated work, the agent should report this exact shape:
 
 ```text
 Shared product facts:
@@ -210,12 +210,12 @@ Private files/code not used:
 - React used only as adapter
 ```
 
-If the report says "none" for everything but the code adds a feature that coordinates multiple packages, the tool probably hid traditional coupling in the implementation. Review the imports and state placement before accepting it.
+If the report says "none" for everything but the code adds a feature that coordinates multiple packages, the agent probably hid traditional coupling in the implementation. Review the imports and state placement before accepting it.
 
 ## Next
 
 - Share state correctly: [Share state between packages](/runtime-kit/build-without-tangled-code/share-state-between-packages)
 - Ask for work correctly: [Ask another package to do work](/runtime-kit/build-without-tangled-code/ask-another-package-to-do-work)
-- Use the larger coding-tool page: [Build with coding tools](/runtime-kit/ai-build-rules)
+- Use the larger agent page: [Build with AI agents](/runtime-kit/ai-build-rules)
 
 </div>

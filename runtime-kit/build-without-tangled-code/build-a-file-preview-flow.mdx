@@ -57,7 +57,7 @@ export async function openWorkspaceFlow(filePath: string, agentId: string) {
 }
 ```
 
-This code is not bad because it is long. It is bad because every package knows the shape of every other package. The editor knows the file tree. The preview caller knows the preview service. The help consumer knows the help folder. The keyboard path knows the tool store. Notification changes happen by direct implementation call.
+This code is not bad because it is long. It is bad because every package knows the shape of every other package. The editor knows the file tree. The preview caller knows the preview service. The help consumer knows the help folder. The keyboard path knows the selected-agent store. Notification changes happen by direct implementation call.
 
 ## Bitfield translation
 

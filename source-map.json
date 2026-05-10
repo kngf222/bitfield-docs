@@ -163,7 +163,7 @@
       "sourceIds": ["runtime-kit-js-public-contract", "runtime-kit-package-boundary", "runtime-kit-public-package-cooperation"]
     },
     {
-      "route": "runtime-kit/build-without-tangled-code/rules-for-coding-tools",
+      "route": "runtime-kit/build-without-tangled-code/rules-for-ai-agents",
       "sourceIds": ["runtime-kit-js-public-contract", "runtime-kit-package-boundary", "runtime-kit-public-package-cooperation"]
     },
     {

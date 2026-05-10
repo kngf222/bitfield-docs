@@ -12,7 +12,7 @@ This folder owns the Runtime Kit pages that teach the translation from tradition
 - `store-files-inside-a-package.mdx` explains package-owned bytes and consumer boundaries.
 - `let-many-packages-work-together.mdx` shows a multi-package cooperation chain.
 - `build-a-file-preview-flow.mdx` is a source-grounded case study for file, preview, help, keyboard, notification, and UI-private boundaries.
-- `rules-for-coding-tools.mdx` gives prompt and review rules for coding tools that default to traditional app architecture.
+- `rules-for-ai-agents.mdx` gives prompt and review rules for AI agents that default to traditional app architecture.
 
 ## Standard
 

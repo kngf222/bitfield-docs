@@ -29,12 +29,12 @@ These pages are public customer documentation. They describe the public product,
 - [Store files inside a package](runtime-kit/build-without-tangled-code/store-files-inside-a-package): Shows the package-owned file boundary and the consumer-side mistake of reading another package's files directly.
 - [Let many packages work together](runtime-kit/build-without-tangled-code/let-many-packages-work-together): Walks a multi-package product chain where files, editors, AI context, notifications, and shells cooperate without centralizing product meaning.
 - [Build a file preview flow](runtime-kit/build-without-tangled-code/build-a-file-preview-flow): Follows a realistic file, preview, help, keyboard, notification, and private UI flow from traditional coupled code into public Runtime Kit handles.
-- [Rules for coding tools](runtime-kit/build-without-tangled-code/rules-for-coding-tools): Provides prompt rules, bad-output corrections, and review checks that keep generated code on public Runtime Kit public files and names.
+- [Rules for AI agents](runtime-kit/build-without-tangled-code/rules-for-ai-agents): Provides prompt rules, bad-output corrections, and review checks that keep generated code on public Runtime Kit files and names.
 - [Read data in React](runtime-kit/use-bitfield-data): Shows selectors, render states, request pairing, and what React components should not own.
 - [Send a request](runtime-kit/send-request): Shows JSON, text, byte payloads, reply decoding, cancellation, and action-request mistakes.
 - [Packages](runtime-kit/packages): Explains package sets, records, stored bytes, callable slots, validation rules, and safe package examples.
 - [Local state](runtime-kit/local-state): Explains stored data, Runtime Kit package state, activation material, and what users should not hand-edit.
-- [Build with coding tools](runtime-kit/ai-build-rules): Gives AI-coding-tool prompt packs, bad-output corrections, review maps, and public Runtime Kit public files and names for generated feature work.
+- [Build with AI agents](runtime-kit/ai-build-rules): Gives AI-agent prompt packs, bad-output corrections, review maps, and public Runtime Kit files and names for generated feature work.
 - [Troubleshooting](runtime-kit/troubleshooting): Maps Runtime Kit symptoms to the public chain link that failed and gives safe repair checks.
 - [Runtime Kit Cookbook](runtime-kit/cookbook/index): Indexes Runtime Kit cookbook entries for packages, package-owned bytes, callable slots, React surfaces, and placeable surface product loops.
 - [Package set with one record](runtime-kit/cookbook/package-set-with-one-record): Shows the smallest package file with one durable package record.

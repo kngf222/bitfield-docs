@@ -111,8 +111,6 @@ const banned = [
   { parts: ["don't call it"], allowedFiles: validatorSelfAllowedFiles },
   { parts: ['bad wording'], allowedFiles: validatorSelfAllowedFiles },
   { parts: ['we used to say'], allowedFiles: validatorSelfAllowedFiles },
-  { parts: ['AI agent'], allowedFiles: validatorSelfAllowedFiles },
-  { parts: ['AI agents'], allowedFiles: validatorSelfAllowedFiles },
   { parts: ['agent mistakes'], allowedFiles: validatorSelfAllowedFiles },
   { parts: ['smell'], allowedFiles: validatorSelfAllowedFiles },
   { parts: ['smells'], allowedFiles: validatorSelfAllowedFiles },
