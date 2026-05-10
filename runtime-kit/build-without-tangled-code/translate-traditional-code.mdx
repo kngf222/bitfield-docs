@@ -14,26 +14,24 @@ Product scene: an AI agent is adding a file tree, editor, preview button, comman
 Expected result: the agent can point at each line of traditional code and say which Bitfield path replaces it: shared product fact, prepared input, target request, private UI state, or package boundary.
 
 ```mermaid
-%%{init: {'flowchart': {'nodeSpacing': 60, 'rankSpacing': 78, 'curve': 'linear'}}}%%
+%%{init: {'flowchart': {'nodeSpacing': 56, 'rankSpacing': 76, 'curve': 'linear'}}}%%
 flowchart LR
-  Store["Store import"] --> Classify["Classify the job"]
-  Service["Service call"] --> Classify
-  File["Package file read"] --> Classify
-  Branch["Shell branch"] --> Classify
-  Classify --> State["Bitfield state"]
-  Classify --> Read["Prepared input"]
-  Classify --> Request["Target request"]
-  Classify --> Local["Private UI state"]
+  Bad["Editor imports agentRequestStore"] --> Breaks["Editor now knows agent panel state"]
+  Breaks --> Local["Debounce timer stays in editor"]
+  Local --> Request["Editor sends action:update-selected-text-for-next-agent-request"]
+  Request --> Read["Agent request area reads selected text"]
 
   classDef traditional fill:transparent,stroke:currentColor,color:currentColor;
-  classDef classify fill:transparent,stroke:currentColor,color:currentColor;
-  classDef bitfield fill:transparent,stroke:currentColor,color:currentColor;
+  classDef reject fill:transparent,stroke:currentColor,color:currentColor;
   classDef private fill:transparent,stroke:currentColor,color:currentColor;
+  classDef request fill:transparent,stroke:currentColor,color:currentColor;
+  classDef read fill:transparent,stroke:currentColor,color:currentColor;
 
-  class Store,Service,File,Branch traditional;
-  class Classify classify;
-  class State,Read,Request bitfield;
+  class Bad traditional;
+  class Breaks reject;
   class Local private;
+  class Request request;
+  class Read read;
 ```
 
 ## Start with the job

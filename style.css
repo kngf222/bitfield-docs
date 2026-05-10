@@ -1227,6 +1227,20 @@ nav .bf-docs-theme-picker {
   stroke: var(--docs-active-color) !important;
 }
 
+.mermaid :is(.node.request rect, .node.request polygon, .node.request circle, .node.request ellipse),
+.mermaid :is(.node.read rect, .node.read polygon, .node.read circle, .node.read ellipse),
+[class*="mermaid"] :is(.node.request rect, .node.request polygon, .node.request circle, .node.request ellipse),
+[class*="mermaid"] :is(.node.read rect, .node.read polygon, .node.read circle, .node.read ellipse) {
+  fill: var(--bf-docs-selected-surface-hover) !important;
+  stroke: var(--docs-active-color) !important;
+}
+
+.mermaid :is(.node.reject rect, .node.reject polygon, .node.reject circle, .node.reject ellipse),
+[class*="mermaid"] :is(.node.reject rect, .node.reject polygon, .node.reject circle, .node.reject ellipse) {
+  fill: color-mix(in srgb, var(--surface-base) 82%, var(--text-primary) 18%) !important;
+  stroke: color-mix(in srgb, var(--docs-active-color) 24%, var(--text-primary) 76%) !important;
+}
+
 .mermaid :is(.node.private rect, .node.private polygon, .node.private circle, .node.private ellipse),
 [class*="mermaid"] :is(.node.private rect, .node.private polygon, .node.private circle, .node.private ellipse) {
   fill: color-mix(in srgb, var(--surface-base) 92%, var(--text-secondary) 8%) !important;
