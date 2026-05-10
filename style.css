@@ -1010,6 +1010,11 @@ nav .bf-docs-theme-picker {
   max-width: 44rem;
 }
 
+.bf-article > span[data-as="p"] {
+  display: block;
+  margin: 1em 0;
+}
+
 .bf-kicker {
   color: var(--docs-active-color);
   font-size: 0.78rem;
