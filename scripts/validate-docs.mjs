@@ -96,7 +96,7 @@ function validateDepthContract(page, body, sourcePage, output = failures) {
   if (page.pageClass === 'runtime-kit-recipe-index') {
     requireIncludes(page.route, body, [
       ['recipe flow visual', 'className="bf-flow"'],
-      ['recipe contract section', '## Runtime Kit Cookbook contract for AI agents'],
+      ['recipe contract section', ['## Runtime Kit Cookbook contract for AI agents', '## Generated-code contract']],
       ['job route map', '## Choose by job'],
       ['future whole-product Cookbook boundary', 'future whole-product Bitfield Cookbook'],
     ], output);
@@ -163,7 +163,7 @@ function validateDepthContract(page, body, sourcePage, output = failures) {
       ['code or structured example', ['```', '|']],
       ['anti-pattern or prevention section', ['## What this prevents', '## Common mistake', '## Common failures', '## Bad output and corrected output']],
       ['adapter-neutral language', ['React is only the adapter', 'React is one adapter', 'any shell', 'future adapters']],
-      ['scenario section', ['## Four ', '## Larger chain', '## The story an AI agent usually writes', '## Classification protocol']],
+      ['scenario section', ['## Four ', '## Larger chain', '## The story traditional code usually writes', '## Classification protocol']],
       ['review language', ['## Review checklist', 'checklist', '## Consumer boundary checklist', '## Multi-package review checklist']],
       ['next links section', '## Next'],
       ['Runtime Kit or reference link', ['/runtime-kit/', '/reference/']],
@@ -188,7 +188,7 @@ function validateDepthContract(page, body, sourcePage, output = failures) {
       ['public handles table', '## Public handles'],
       ['data-flow map', '## Data-flow map'],
       ['file boundary section', '## File-by-file public boundary'],
-      ['agent mistakes section', '## Agent mistakes to reject'],
+      ['generated-code mistakes section', ['## Agent mistakes to reject', '## Generated-code mistakes to reject']],
       ['review checklist', '## Review checklist'],
       ['adapter-neutral language', ['React is one adapter', 'future SDK', 'native shell']],
       ['next links section', '## Next'],

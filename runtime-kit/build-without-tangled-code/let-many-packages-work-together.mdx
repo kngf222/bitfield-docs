@@ -117,7 +117,7 @@ Now each package meets the others through a named public boundary. There is no h
 | One giant app store. | Every feature depends on every other feature's shape. | Shared product facts in Bitfield. |
 | One central service imports all packages. | Adding a package means editing the central service. | Packages expose inputs and targets. |
 | Shell coordinates product meaning. | Layout becomes business logic. | Shell places; packages read/call. |
-| AI agent patches whichever file is easiest. | The code compiles but boundaries collapse. | Agent chooses state, input, target, private UI state, or package bytes. |
+| Code gets patched wherever it is easiest. | The code compiles but boundaries collapse. | Choose state, input, target, private UI state, or package bytes. |
 
 React is one adapter that can show this chain. The chain itself is Runtime Kit: shared product facts, prepared inputs, target requests, private UI state, and package boundaries.
 
@@ -200,7 +200,7 @@ Bitfield keeps the product language outside any one package:
 
 That is what lets package eleven join the product without becoming a patch inside package two.
 
-## AI agent should know
+## Review check
 
 When more than two packages are involved, do not solve it by creating `appStore`, `platformStore`, `globalState`, or `sharedService`. First classify each relationship:
 
@@ -216,6 +216,6 @@ bytes shipped with package -> package boundary
 
 - Start with the overview: [Build without tangled code](/runtime-kit/build-without-tangled-code)
 - Build a full example: [Placeable surface product loop](/runtime-kit/cookbook/placeable-surface-product-loop)
-- Review AI rules: [Rules for AI agents](/runtime-kit/build-without-tangled-code/rules-for-ai-agents)
+- Review generated-code rules: [Rules for AI agents](/runtime-kit/build-without-tangled-code/rules-for-ai-agents)
 
 </div>

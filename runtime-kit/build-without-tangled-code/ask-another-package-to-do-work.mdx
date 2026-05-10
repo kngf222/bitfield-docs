@@ -215,9 +215,9 @@ React is one adapter that can send a target request. The same target should make
 | Button works only in one package. | It imported a local implementation. | Move the call to a target request. |
 | Reply parsing breaks. | The caller guessed the reply shape. | Document the target contract and decode only that. |
 | Work runs twice. | UI code both updates state and calls a worker. | Pick the target request as the work boundary. |
-| AI creates a new service file. | It used traditional app training data. | Tell it to call a named target. |
+| A new service file appears just to cross the boundary. | It copied the traditional app shape. | Call a named target. |
 
-## AI agent should know
+## Review check
 
 If generated code imports a function from another package to "do work," stop. The public shape is a target request. The caller may know the target name, payload, reply contract, and error states. It must not know the implementation file.
 

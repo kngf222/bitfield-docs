@@ -94,13 +94,13 @@ The preview package decides how the surface is prepared. The shell receives a pu
 Traditional mistake:
 
 ```ts
-import template from '../agent-package/templates/review.md';
+import template from '../review-package/templates/review.md';
 ```
 
 Bitfield replacement:
 
 ```ts
-const reviewTemplate = readInput('agent-review-template');
+const reviewTemplate = readInput('review-template');
 ```
 
 The package can ship the template as package material. The caller should not reach into its folder.
@@ -200,7 +200,7 @@ const help = useBitfieldData<{ title: string; body: string }>('getting-started-h
 
 The consumer asks for help content by public input name. It does not know which package file produced it.
 
-## AI agent should know
+## Review check
 
 If generated code imports `../some-package/content/file.md`, stop. Package files are package material. Consumers should read a prepared input or request a target.
 

@@ -6,12 +6,12 @@ description: "Turn stores, service imports, direct calls, and shell branching in
 <div className="bf-article">
 
 <p className="bf-lead">
-Most agents know the old app shape first. This page shows the exact translation: when code reaches for a store, service import, direct function call, package file, or shell branch, replace it with the Runtime Kit boundary that matches the job.
+Most app code starts from the old shape first. This page shows the exact translation: when code reaches for a store, service import, direct function call, package file, or shell branch, replace it with the Runtime Kit boundary that matches the job.
 </p>
 
-Product scene: an AI agent is adding a file tree, editor, preview button, command palette action, sidebar item, or dashboard panel. The agent writes code that works inside one app today, but it does it by teaching one package the private shape of another package. That is the moment to stop and translate.
+Product scene: you are adding a file tree, editor, preview button, command palette action, sidebar item, or dashboard panel. The code works inside one app today, but it does it by teaching one package the private shape of another package. That is the moment to stop and translate.
 
-Expected result: the agent can point at each line of traditional code and say which Bitfield path replaces it: shared product fact, prepared input, target request, private UI state, or package boundary.
+Expected result: you can point at each line of traditional code and say which Bitfield path replaces it: shared product fact, prepared input, target request, private UI state, or package boundary.
 
 Traditional code lets one package become the private source every other package must know. The file tree owns the selected file, but the editor, preview button, command palette, and dashboard all point into the file tree's private store.
 
@@ -94,17 +94,17 @@ Bitfield shape prevents that knot by making each package meet other packages thr
 | A shell becomes a product-specific registry. | Published records/descriptors. |
 | Visual timing becomes global product state. | Private UI state. |
 
-## Example 1: selected text for the next agent request
+## Example 1: selected text for the next assistant request
 
-Product job: a note editor lets the user highlight text. Another agent-request area should use that highlighted text. The editor also needs a small debounce so it does not publish every tiny mouse movement.
+Product job: a note editor lets the user highlight text. Another assistant request area should use that highlighted text. The editor also needs a small debounce so it does not publish every tiny mouse movement.
 
-Traditional mistake: the editor imports the agent panel store and mutates it directly.
+Traditional mistake: the editor imports the assistant panel store and mutates it directly.
 
 ```ts
-import { agentRequestStore } from '../agent-request/store';
+import { assistantRequestStore } from '../assistant-request/store';
 
 export function onSelectionChanged(selection: EditorSelection) {
-  agentRequestStore.selectedText = {
+  assistantRequestStore.selectedText = {
     source: 'note',
     title: selection.title,
     text: selection.text,
@@ -112,17 +112,17 @@ export function onSelectionChanged(selection: EditorSelection) {
 }
 ```
 
-That couples the editor to the agent panel. The editor now knows where the agent panel keeps state, what the state object is called, and how the panel expects it to be shaped.
+That couples the editor to the assistant panel. The editor now knows where the assistant panel keeps state, what the state object is called, and how the panel expects it to be shaped.
 
 Bitfield replacement: keep the debounce timer private to the editor, then send the public request that updates the shared product fact.
 
 ```ts
 import { sendRequestToBitfieldTarget } from '@bitfield/runtime-kit';
 
-const UPDATE_SELECTED_TEXT_FOR_NEXT_AGENT_REQUEST_ACTION =
-  'action:update-selected-text-for-next-agent-request';
+const UPDATE_SELECTED_TEXT_FOR_NEXT_ASSISTANT_REQUEST_ACTION =
+  'action:update-selected-text-for-next-assistant-request';
 
-export async function writeSelectedTextForNextAgentRequest(value: {
+export async function writeSelectedTextForNextAssistantRequest(value: {
   source: 'note';
   identifier: string;
   title: string;
@@ -132,7 +132,7 @@ export async function writeSelectedTextForNextAgentRequest(value: {
     target: 'slot::workflow',
     payload: {
       operation: 'execute_definition',
-      definition_id: UPDATE_SELECTED_TEXT_FOR_NEXT_AGENT_REQUEST_ACTION,
+      definition_id: UPDATE_SELECTED_TEXT_FOR_NEXT_ASSISTANT_REQUEST_ACTION,
       include_steps: false,
       include_output: false,
       input: { value },
@@ -147,12 +147,12 @@ Bitfield shape:
 
 ```text
 editor private state -> debounce timer
-shared product fact -> selected text for next agent request
+shared product fact -> selected text for next assistant request
 work boundary -> target request
-agent request area -> reads the prepared/shared value
+assistant request area -> reads the prepared/shared value
 ```
 
-Review check: no editor code imports the agent-request package store.
+Review check: no editor code imports the assistant-request package store.
 
 ## Example 2: sidebar entries without shell branches
 
@@ -360,13 +360,13 @@ Traditional app-code instinct: one handler coordinates everything.
 import { fileTreeStore } from '../file-tree/store';
 import { editorStore } from '../editor/store';
 import { startPreviewServer } from '../project-preview/private/start-preview-server';
-import { agentRequestStore } from '../agent-request/store';
+import { assistantRequestStore } from '../assistant-request/store';
 import { notificationStore } from '../notifications/store';
 
 export async function onFileSelected(file: FileRecord) {
   fileTreeStore.selectedFile = file.id;
   editorStore.open(file);
-  agentRequestStore.context = { fileId: file.id, title: file.title };
+  assistantRequestStore.context = { fileId: file.id, title: file.title };
   notificationStore.mode = 'quiet';
   await startPreviewServer(file.projectId);
 }
@@ -377,7 +377,7 @@ Bitfield shape: each job goes through the boundary that matches it.
 ```text
 selected file -> shared Bitfield state / prepared input
 editor draft and cursor -> private UI state
-agent context from selection -> target request or prepared input
+assistant context from selection -> target request or prepared input
 notification mode -> target request or shared product fact
 preview start -> target request
 preview status -> prepared input
@@ -391,7 +391,7 @@ await sendRequestToBitfieldTarget({
   target: 'slot::workflow',
   payload: {
     operation: 'execute_definition',
-    definition_id: 'action:update-selected-text-for-next-agent-request',
+    definition_id: 'action:update-selected-text-for-next-assistant-request',
     input: { value: selectedTextContext },
   },
 });
@@ -415,7 +415,7 @@ const [editorDraft, setEditorDraft] = useState('');
 const [hoveredRow, setHoveredRow] = useState<string | null>(null);
 ```
 
-The important difference is not that the code is longer or shorter. The important difference is that the editor, preview, sidebar, notifications, and agent request area no longer import each other.
+The important difference is not that the code is longer or shorter. The important difference is that the editor, preview, sidebar, notifications, and assistant request area no longer import each other.
 
 ## Review checklist
 
@@ -428,7 +428,7 @@ The important difference is not that the code is longer or shorter. The importan
 | Did a consumer parse another package's package file? | No. The package owned bytes and exposed prepared data. |
 | Did React become the product architecture? | No. React is one adapter around reads, requests, and private UI state. |
 
-## Prompt for AI agents
+## Generated-code prompt
 
 ```text
 Translate the traditional code before editing.
@@ -455,7 +455,7 @@ package records/descriptors, and private UI state only.
 
 - See the shared-state version: [Share state between packages](/runtime-kit/build-without-tangled-code/share-state-between-packages)
 - See the work-request version: [Ask another package to do work](/runtime-kit/build-without-tangled-code/ask-another-package-to-do-work)
-- Review agent rules: [Rules for AI agents](/runtime-kit/build-without-tangled-code/rules-for-ai-agents)
+- Review generated-code rules: [Rules for AI agents](/runtime-kit/build-without-tangled-code/rules-for-ai-agents)
 - Check public calls: [Runtime Kit API](/reference/runtime-kit-api)
 
 </div>

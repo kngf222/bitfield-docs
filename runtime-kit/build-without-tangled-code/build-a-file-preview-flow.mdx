@@ -1,6 +1,6 @@
 ---
 title: "Build a file preview flow"
-description: "A source-grounded case study that translates one file, preview, help, notification, and agent flow from traditional architecture into Runtime Kit boundaries."
+description: "A source-grounded case study that translates one file, preview, help, notification, and selection flow from traditional architecture into Runtime Kit boundaries."
 ---
 
 <div className="bf-article">
@@ -11,7 +11,7 @@ This case study follows one realistic product flow end to end: a user selects a 
 
 Product scene: you are building a command center with a file tree, file editor, web preview, help panel, keyboard shortcuts, AI context, and notifications. The product needs to feel connected, but the packages must not import each other.
 
-Expected result: a human or AI agent can see the exact traditional code shape that causes tangles, then translate it into public Runtime Kit handles without reaching into package files, private stores, or implementation functions.
+Expected result: you can see the exact traditional code shape that causes tangles, then translate it into public Runtime Kit handles without reaching into package files, private stores, or implementation functions.
 
 ## Source facts this case uses
 
@@ -29,7 +29,7 @@ Do not copy package private folders or local source paths from an example. The p
 
 ## Traditional implementation
 
-This is the kind of code an AI agent will often write because it looks natural in ordinary app training data:
+This is the kind of code ordinary app examples make feel natural:
 
 ```ts
 import { fileTreeStore } from '../file-tree/store';
@@ -148,7 +148,7 @@ The adapter can be React, a native shell, a terminal shell, or a future SDK. The
 | Notification package | Expose a notification-mode target and public resulting state. | Require settings UI to import notification implementation. |
 | Shell or adapter | Place surfaces and call public Runtime Kit reads/requests. | Become the product brain with a giant switch statement. |
 
-## Agent mistakes to reject
+## Generated-code mistakes to reject
 
 | Agent output | Why it is wrong | Correct shape |
 |---|---|---|

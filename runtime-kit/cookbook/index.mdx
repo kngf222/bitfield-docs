@@ -25,7 +25,7 @@ Every recipe should answer the same questions:
 | What will I build? | Gives the reader a product scene before the code. |
 | Which files do I own? | Keeps package files, app surfaces, and shell code separate. |
 | What is the Runtime Kit contract? | Names prepared inputs, targets, payloads, replies, and boundaries. |
-| How do I check it worked? | Gives humans and AI agents a pass/fail point. |
+| How do I check it worked? | Gives every builder a pass/fail point. |
 | What breaks most often? | Turns debugging into a known path instead of guessing. |
 | How do I extend it? | Shows the next move without changing the primitive. |
 
@@ -99,12 +99,12 @@ If a recipe does not answer those questions yet, it is not finished.
 | Declare one durable package record. | [Package set with one record](/runtime-kit/cookbook/package-set-with-one-record) | Stable package-owned data address and payload update path. |
 | Ship package-owned bytes. | [Package-owned file](/runtime-kit/cookbook/package-owned-file) | Package-local file ownership and path safety. |
 | Add a callable target. | [Callable package slot](/runtime-kit/cookbook/callable-package-slot) | Target name, method list, artifact path, and app request boundary. |
-| Render package data in React. | [React surface for package data](/runtime-kit/cookbook/react-surface-for-package-data) | Read states, request states, public imports, and AI review checks. |
+| Render package data in React. | [React surface for package data](/runtime-kit/cookbook/react-surface-for-package-data) | Read states, request states, public imports, and review checks. |
 | Compose a product shell. | [Placeable surface product loop](/runtime-kit/cookbook/placeable-surface-product-loop) | Descriptors, dumb shell, surface bodies, prepared inputs, and targets. |
 
-## Runtime Kit Cookbook contract for AI agents
+## Generated-code contract
 
-When you ask an AI agent to use a recipe, include this instruction:
+When code is generated from a recipe, include this instruction:
 
 ```text
 Use the public Runtime Kit recipe. Do not import private Runtime Kit paths.
@@ -113,7 +113,7 @@ Render loading, error, empty, and success states for React reads.
 Call targets with sendRequestToBitfieldTarget(...), not by importing implementation code.
 ```
 
-Then make the agent explain back:
+Then require this explanation back:
 
 ```text
 I changed these files:

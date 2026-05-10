@@ -11,7 +11,7 @@ Most software gets tangled because one part of the app starts reaching into anot
 
 Product scene: you are building a product with files, panels, settings, search, AI context, background jobs, and multiple package areas. The first version works. Then feature twenty needs to know what feature seven selected. Feature thirty needs to run the same work from a different place. The traditional fix is another store, another service import, another prop path, or another global. That is the knot this section is here to prevent.
 
-Expected result: after reading this section, a person or AI agent can see a normal app-code instinct and translate it into the Bitfield shape without guessing, importing private code, or making React the architecture.
+Expected result: after reading this section, you can see a normal app-code instinct and translate it into the Bitfield shape without guessing, importing private code, or making React the architecture.
 
 ## The translation
 
@@ -48,7 +48,7 @@ Expected result: after reading this section, a person or AI agent can see a norm
 
 ## Why this section exists
 
-AI agents are trained on traditional app code. They will naturally write stores, services, imports, reducers, contexts, and direct calls because that is what most public code teaches.
+Most public examples teach traditional app code: stores, services, imports, reducers, contexts, and direct calls.
 
 Traditional app shape: one feature reaches into another feature's state or implementation because that is the shortest path in ordinary app code.
 
@@ -72,11 +72,11 @@ React, Swift, Kotlin, Rust, Python, terminal shells, web shells, and future adap
 | A button imports `runSearch()` from another package. | The button is tied to the implementation. | The button sends a request to `search.run`. |
 | A panel parses another package's JSON file. | Consumer code learns package storage layout. | The panel reads data the package prepared. |
 | A shell branches on every product area. | The shell becomes product-specific. | The shell reads descriptors and places what it is given. |
-| An agent adds a new app store for every problem. | The app grows competing sources of truth. | The agent chooses Bitfield state, local state, input, or target. |
+| A new app store appears for every problem. | The app grows competing sources of truth. | Choose Bitfield state, local state, input, or target. |
 
-## The story an AI agent usually writes
+## The story traditional code usually writes
 
-An AI agent sees the product request: "When I select a file, show it in the editor, let the AI panel use it, and let the command palette open actions for it."
+The product request says: "When I select a file, show it in the editor, let the AI panel use it, and let the command palette open actions for it."
 
 Traditional app-code instinct:
 
@@ -153,14 +153,14 @@ Reject the answer when any of these are true:
 
 | Your job | Page |
 |---|---|
-| An agent wrote stores, service imports, direct calls, or shell branches. | [Translate traditional code](/runtime-kit/build-without-tangled-code/translate-traditional-code) |
+| The code has stores, service imports, direct calls, or shell branches. | [Translate traditional code](/runtime-kit/build-without-tangled-code/translate-traditional-code) |
 | Two packages need the same state. | [Share state between packages](/runtime-kit/build-without-tangled-code/share-state-between-packages) |
 | A package prepared data and another package needs to read it. | [Read data another package prepared](/runtime-kit/build-without-tangled-code/read-data-another-package-prepared) |
 | A package needs another package to run work. | [Ask another package to do work](/runtime-kit/build-without-tangled-code/ask-another-package-to-do-work) |
 | You are unsure whether state belongs in Bitfield. | [Keep private UI state private](/runtime-kit/build-without-tangled-code/keep-private-ui-state-private) |
 | A package ships files or bytes. | [Store files inside a package](/runtime-kit/build-without-tangled-code/store-files-inside-a-package) |
 | Several packages need to cooperate. | [Let many packages work together](/runtime-kit/build-without-tangled-code/let-many-packages-work-together) |
-| An AI agent keeps writing traditional architecture. | [Rules for AI agents](/runtime-kit/build-without-tangled-code/rules-for-ai-agents) |
+| Generated code keeps writing traditional architecture. | [Rules for AI agents](/runtime-kit/build-without-tangled-code/rules-for-ai-agents) |
 
 ## Next
 

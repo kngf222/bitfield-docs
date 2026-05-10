@@ -53,7 +53,7 @@ Runtime Kit has several reader paths. Pick the one that matches your job.
 | Understand the public model. | This page, then [Placeable surfaces](/runtime-kit/placeable-surfaces) | It explains package/app separation and generic UI placement. |
 | Look up exact API shapes. | [Runtime Kit API](/reference/runtime-kit-api) and [Package boundary](/reference/package-boundary) | Reference pages are for exact contracts. |
 | Debug a broken feature. | [Troubleshooting](/runtime-kit/troubleshooting) | It maps symptoms to the failed public link. |
-| Give an AI agent rails. | [Build with AI agents](/runtime-kit/ai-build-rules) | It tells agents what they may edit and what they must not cross. |
+| Give generated code rails. | [Build with AI agents](/runtime-kit/ai-build-rules) | It tells code generators what they may edit and what they must not cross. |
 
 ## The first feature shape
 
@@ -241,7 +241,7 @@ Package records and stored bytes are product material. Do not put private keys, 
 | Declare package data or runnable doors | `things-to-store-and-run.json` |
 | Understand package shapes | [Packages](/runtime-kit/packages) |
 | Look up exact API shape | [Runtime Kit API](/reference/runtime-kit-api) |
-| Give an AI agent safe rails | [Build with AI agents](/runtime-kit/ai-build-rules) |
+| Give generated code safe rails | [Build with AI agents](/runtime-kit/ai-build-rules) |
 | Find a broken link in the chain | [Troubleshooting](/runtime-kit/troubleshooting) |
 
 ## Now build the bigger version
@@ -285,6 +285,6 @@ For each feature, write the public Runtime Kit contract in the feature ticket or
   - @bitfield/runtime-kit/react
 ```
 
-That tiny contract prevents three common failures: app code reading package files, buttons importing target implementations, and AI agents inventing a second data path.
+That tiny contract prevents three common failures: app code reading package files, buttons importing target implementations, and generated code inventing a second data path.
 
 </div>

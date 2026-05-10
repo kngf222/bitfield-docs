@@ -20,7 +20,7 @@ Use this recipe when the product is bigger than one component.
 | A product shell with multiple surfaces: launch, help, support, settings, billing, or dashboards. | A single component reading one prepared input. |
 | A sidebar/tab/region system that should stay generic. | A one-off hardcoded marketing page. |
 | Product areas that need different prepared inputs and targets. | A pure package-boundary example with no UI shell. |
-| AI agents keep adding layout special cases. | A reference lookup for one function signature. |
+| Each new surface keeps adding layout special cases. | A reference lookup for one function signature. |
 
 The point is not "make a dashboard." The point is to keep arrangement generic while product meaning lives in package data, targets, descriptors, and surface bodies.
 
@@ -361,7 +361,7 @@ Public request/reply contracts:
   help.search -> { query: string } -> { results: Array<{ title: string; excerpt: string }> }
 ```
 
-If an AI agent built the feature, make it return this checklist before you accept the code. If a teammate built it, use the same checklist in review.
+Before you accept the feature, make the builder return this checklist. Use the same checklist for generated code, teammate code, and your own code.
 
 ## Common failures
 
@@ -371,7 +371,7 @@ If an AI agent built the feature, make it return this checklist before you accep
 | Surface calls a target not listed on its descriptor. | The surface contract and body drifted. | Add the target to the descriptor or remove the call. |
 | Surface reads a prepared input not listed on its descriptor. | The read contract and body drifted. | Add the input to the descriptor or change the surface body. |
 | Adding Help requires editing Launch code. | Surface bodies are coupled. | Keep each surface body behind its own `componentKey`. |
-| AI agent imports package setup into shell. | Agent treated the shell like product code. | Reject the output; shell only arranges descriptors. |
+| Package setup is imported into the shell. | The shell was treated like product code. | Reject the output; shell only arranges descriptors. |
 | Reply parsing crashes. | Target reply contract changed or was never written. | Document request/reply shape and decode only that shape. |
 
 ## Safe variations
