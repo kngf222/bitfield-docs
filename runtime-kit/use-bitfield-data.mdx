@@ -25,7 +25,7 @@ That shape is the point. Your component can render data, loading, and error stat
 
 ## The mental model
 
-The component asks for data by using the hook. Runtime Kit decides what prepared input that component is allowed to read. The component receives the latest app-facing value.
+The component asks for data by using the hook. Runtime Kit decides what data name that component is allowed to read. The component receives the latest app-facing value.
 
 This is not a normal fetch call. The component is not asking a server for a record by URL. It is reading a prepared app value. Runtime Kit may prepare that value from local data, package records, package-owned bytes, derived values, or another public package surface. The component does not need to know that path.
 
@@ -44,8 +44,8 @@ For the exact selector forms, return-state contract, and invalid examples, read 
 
 | Public concept | Meaning |
 |---|---|
-| Prepared data | Data Runtime Kit has already made available to the app surface. |
-| Selector | A public way to pick which prepared input you want. |
+| Named data | Data Runtime Kit has already made available to the app surface. |
+| Selector | A public way to pick which data name you want. |
 | `data` | The current materialized value, or `null` if none is ready. |
 | `loading` | `true` while Runtime Kit is preparing or waiting for the value. |
 | `error` | An `Error` when the read surface cannot provide the value. |
@@ -88,7 +88,7 @@ export function WelcomePanel() {
 
 ## Read a named input
 
-Use a string selector when the surface exposes more than one prepared input.
+Use a string selector when the surface exposes more than one data name.
 
 ```tsx
 const welcome = useBitfieldData<WelcomeData>('welcome');
@@ -204,7 +204,7 @@ Return shape:
 
 ## Now build the bigger version
 
-Build a real screen with two prepared inputs and one request.
+Build a real screen with two data names and one request.
 
 ```tsx
 import { sendRequestToBitfieldTarget } from '@bitfield/runtime-kit';
@@ -239,6 +239,6 @@ export function LaunchPanel() {
 }
 ```
 
-The component is doing real work, but it still only knows prepared input names, a target name, and public payload shapes.
+The component is doing real work, but it still only knows data names, an action name, and public payload shapes.
 
 </div>

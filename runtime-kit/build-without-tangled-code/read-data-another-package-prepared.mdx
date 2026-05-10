@@ -1,12 +1,12 @@
 ---
 title: "Read data another package prepared"
-description: "Read prepared inputs instead of importing producer packages, parsing their files, or guessing storage addresses."
+description: "Read data names instead of importing producer packages, parsing their files, or guessing storage addresses."
 ---
 
 <div className="bf-article">
 
 <p className="bf-lead">
-When one package prepares data and another package needs it, the consumer should read a prepared input. It should not import the producer package, parse its files, or guess the storage address.
+When one package prepares data and another package needs it, the consumer should read a data name. It should not import the producer package, parse its files, or guess the storage address.
 </p>
 
 Product scene: a project-preview package prepares a list of preview URLs and statuses. A web-frame package wants to render the active URL. The web-frame should not know how project-preview stores those records. It should read the view it was given.
@@ -30,12 +30,12 @@ This ties the web frame to the project-preview package. The consumer now knows t
 
 ```text
 producer package prepares records
-Runtime Kit exposes a prepared input
+Runtime Kit exposes a data name
 consumer package reads that input
 consumer decodes only the public view it asked for
 ```
 
-The consumer can read `source-by-label`, `source-by-address`, `selected-file`, `current-project`, or any other input that the package boundary exposes. It does not read producer private code.
+The consumer can read `source-by-label`, `source-by-address`, `selected-file`, `current-project`, or any other input that the package file exposes. It does not read producer private code.
 
 ## Code translation
 
@@ -166,7 +166,7 @@ The consumer asks for the public prepared records it needs. It does not import t
 
 | Question | Correct answer |
 |---|---|
-| Does the consumer import the package that prepared the data? | No. It reads a prepared input. |
+| Does the consumer import the package that prepared the data? | No. It reads a data name. |
 | Does the consumer parse another package's boundary file? | No. Runtime Kit resolves package material. |
 | Does the consumer build storage addresses by string operations? | No. It uses public input names or descriptors. |
 | Does the consumer assume producer field names are permanent? | No. Descriptor data maps the public view. |
@@ -202,7 +202,7 @@ const preview = readInput('project-preview-surface');
 const help = readInput('getting-started-help');
 ```
 
-The consumer reads three public handles. Each preparing package can change its private code without forcing this panel to change.
+The consumer reads three public names. Each preparing package can change its private code without forcing this panel to change.
 
 The same translation works for a native app, terminal view, or future shell. The adapter changes. The public inputs do not.
 
@@ -210,16 +210,16 @@ The same translation works for a native app, terminal view, or future shell. The
 
 | Bad shape | Why it breaks | Better shape |
 |---|---|---|
-| Consumer imports producer package. | Moving the producer breaks the consumer. | Consumer reads a prepared input. |
-| Consumer parses `things-to-store-and-run.json`. | UI code becomes package-loader code. | Runtime Kit resolves the package boundary. |
+| Consumer imports producer package. | Moving the producer breaks the consumer. | Consumer reads a data name. |
+| Consumer parses `things-to-store-and-run.json`. | UI code becomes package-loader code. | Runtime Kit resolves the package file. |
 | Consumer builds storage addresses by string concatenation. | Address rules leak into app code. | Consumer uses a named input. |
 | Consumer assumes producer field names forever. | Producer cannot change its private shape safely. | Descriptor data maps the public view. |
 
-React is one adapter for reading a prepared input. A Swift, Kotlin, terminal, or future shell should follow the same boundary: read the named input, not the package that prepared it.
+React is one adapter for reading a data name. A Swift, Kotlin, terminal, or future shell should follow the same boundary: read the named input, not the package that prepared it.
 
 ## Review check
 
-If consumer code says `import ... from '../other-package'`, ask why. A consumer package should receive a prepared input or a target name. It should not inspect another package's source files.
+If consumer code says `import ... from '../other-package'`, ask why. A consumer package should receive a data name or an action name. It should not inspect another package's source files.
 
 ## Next
 

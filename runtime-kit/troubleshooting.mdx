@@ -1,12 +1,12 @@
 ---
 title: "Troubleshooting"
-description: "Find which Runtime Kit boundary broke: package admission, prepared reads, target requests, replies, local state, or activation."
+description: "Find which Runtime Kit boundary broke: package admission, named data reads, target requests, replies, local state, or activation."
 ---
 
 <div className="bf-article">
 
 <p className="bf-lead">
-When a Runtime Kit feature breaks, do not guess. Identify which public link failed: package boundary, prepared read, target request, reply decoding, local state, or activation.
+When a Runtime Kit feature breaks, do not guess. Identify which public link failed: package file, named data read, target request, reply decoding, local state, or activation.
 </p>
 
 ## What this is
@@ -16,9 +16,9 @@ Runtime Kit deliberately hides private implementation details from app code. Tha
 Use this chain:
 
 ```text
-package boundary
+package file
   -> package admission
-  -> prepared read input
+  -> named data read input
   -> React surface
   -> target request
   -> reply decoding
@@ -57,8 +57,8 @@ Do not skip straight to private files. First prove which public link failed.
 
 | Symptom | Most likely link | First evidence to capture |
 |---|---|---|
-| Package never becomes available. | Package boundary or package admission. | Package name, package set, boundary filename, boundary JSON error. |
-| Component stays empty. | Prepared read input. | Input name, component states, whether `data === null`. |
+| Package never becomes available. | Package file or package admission. | Package name, package set, boundary filename, boundary JSON error. |
+| Component stays empty. | Named data read input. | Input name, component states, whether `data === null`. |
 | Component throws immediately. | Missing read scope or unavailable input. | Exact error message and component location. |
 | Button call throws before work runs. | Target request shape. | Target name and payload shape. |
 | Button call succeeds but UI cannot use the result. | Reply decoding. | Reply byte format and decoder code. |
@@ -74,7 +74,7 @@ Do this before editing code:
 | Minute | Action | What you learn |
 |---|---|---|
 | 1 | Write the package set, package name, prepared input, and target name. | Whether everyone is debugging the same feature. |
-| 2 | Check the package boundary exists and names the record or slot. | Whether the package can be admitted. |
+| 2 | Check the package file exists and names the record or slot. | Whether the package can be admitted. |
 | 3 | Check the component renders loading, error, empty, and success. | Whether the UI is hiding the real state. |
 | 4 | Check the request payload and reply decoder. | Whether the button and target agree on a contract. |
 | 5 | Check whether the issue is one device or every device. | Whether activation/local state is involved. |
@@ -93,7 +93,7 @@ If you cannot fill in the contract, that is the bug. Write the contract first, t
 - Device scope: one device or every device
 ```
 
-## Package boundary failures
+## Package file failures
 
 Check the boundary file before blaming React.
 
@@ -111,7 +111,7 @@ The package should declare supported thing types:
 | `stored_bytes` | The file path does not stay inside the package. |
 | `slot` | The slot has no boundary or no method list. |
 
-Fix package boundary problems in the package. Do not work around them in the app surface.
+Fix package file problems in the package. Do not work around them in the app surface.
 
 Fast boundary checklist:
 
@@ -134,7 +134,7 @@ Verify the fix:
 | Fix escaped file path. | Every package-owned file path stays inside the package. |
 | Fix missing slot boundary. | The slot declares its public call shape and methods. |
 
-## Prepared read failures
+## Named data read failures
 
 If `useBitfieldData(...)` does not return the value you expected, check the input name and surface contract.
 
@@ -186,7 +186,7 @@ Do not fix this by importing private provider or scope code into the component. 
 
 ## Target request failures
 
-The request function needs a non-empty public target name.
+The request function needs a non-empty public action name.
 
 ```ts
 await sendRequestToBitfieldTarget({
@@ -210,9 +210,9 @@ Request failures split into four common cases:
 
 | Case | What to check | Fix |
 |---|---|---|
-| Empty target | `target` is missing or `''`. | Pass the public target name declared by the package. |
-| Unknown target | The package does not declare that door. | Add or fix the `slot` declaration in the package boundary. |
-| Bad payload | The target expects another shape. | Update the caller or target contract, then document the chosen shape. |
+| Empty target | `target` is missing or `''`. | Pass the public action name declared by the package. |
+| Unknown target | The package does not declare that door. | Add or fix the `slot` declaration in the package file. |
+| Bad payload | The target expects another shape. | Update the caller or action reply shape, then document the chosen shape. |
 | Stale request | Old work returns after newer user input. | Use `AbortController` when stale work matters. |
 
 Verify the fix:
@@ -220,7 +220,7 @@ Verify the fix:
 | Check | Pass condition |
 |---|---|
 | Target name | Non-empty string and declared by the package. |
-| Payload | Matches the public target contract. |
+| Payload | Matches the public action reply shape. |
 | Abort behavior | Search, typeahead, and long work use an abort signal when stale work matters. |
 | App boundary | Button imports `sendRequestToBitfieldTarget(...)`, not target implementation code. |
 
@@ -235,7 +235,7 @@ const reply = await sendRequestToBitfieldTarget({
 });
 ```
 
-Decode according to the target contract:
+Decode according to the action reply shape:
 
 ```ts
 const text = new TextDecoder().decode(reply.payload);
@@ -244,7 +244,7 @@ const data = JSON.parse(text);
 
 If JSON parsing fails, the request may still have succeeded. The problem may be that the target returned text, binary bytes, an error payload, or a different JSON shape than the app expected.
 
-Write the reply contract beside the caller:
+Write the reply shape beside the caller:
 
 ```ts
 type SuggestionReply = {
@@ -266,8 +266,8 @@ Debug reply failures with this order:
 1. Decode the bytes as text only if the target promises text or JSON.
 2. Parse JSON only if the target promises JSON.
 3. Check whether the reply is an error payload with a different shape.
-4. Check whether the target changed its public reply contract.
-5. Update either the target contract or the decoder, not both blindly.
+4. Check whether the target changed its public reply shape.
+5. Update either the action reply shape or the decoder, not both blindly.
 
 ## Payload conversion surprises
 
@@ -318,12 +318,12 @@ Check for these violations before debugging private files:
 | Violation | Fix |
 |---|---|
 | Imports from unpublished Runtime Kit paths. | Replace with public imports only. |
-| React component parses package files. | Move package material to the boundary and read prepared data. |
+| React component parses package files. | Move package material to the boundary and read named data. |
 | Button imports target implementation. | Call `sendRequestToBitfieldTarget(...)`. |
 | Component ignores loading/error/empty. | Add all four states. |
 | Target reply is parsed without a contract. | Decode according to the target's public reply shape. |
 
-Code tends to connect things directly when the boundary is not repeated clearly. Use [Build with AI agents](/runtime-kit/ai-build-rules) only when the feature is being generated by an AI coding tool.
+Code tends to connect things directly when the boundary is not repeated clearly. Use [Build with coding tools](/runtime-kit/ai-build-rules) only when the feature is being generated by an AI coding tool.
 
 Use this note when a change crosses the Runtime Kit boundary:
 
@@ -340,7 +340,7 @@ Before asking for support, capture the public facts:
 1. The package name.
 2. The package set name.
 3. The public input name that failed.
-4. The public target name that failed.
+4. The public action name that failed.
 5. The payload shape, without secrets or customer data.
 6. The visible error message.
 7. Whether the problem happens on one device or every device.
@@ -352,7 +352,7 @@ Do not paste local state contents, device permission files, private keys, tokens
 ```text
 No data       -> check prepared input and render states
 Request fails -> check target name and payload shape
-Decode fails  -> check reply contract
+Decode fails  -> check reply shape
 Device differs -> check activation and package set
 Boundary crossed -> remove private imports and direct implementation calls
 ```
@@ -372,7 +372,7 @@ Add a small public debug note beside every Runtime Kit feature.
 - Reply shape: { nextStep: string; reason: string }
 ```
 
-When something breaks, compare the bug to that contract. If the prepared input is missing, fix the package/surface link. If the target reply has a different shape, fix the target contract or the decoder. If one device behaves differently, check activation and package-set state before touching the UI.
+When something breaks, compare the bug to that contract. If the prepared input is missing, fix the package/surface link. If the target reply has a different shape, fix the action reply shape or the decoder. If one device behaves differently, check activation and package-set state before touching the UI.
 
 That gives support and developers the same map without exposing local state contents or private implementation files.
 

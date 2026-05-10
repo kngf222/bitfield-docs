@@ -17,8 +17,8 @@
     {
       "id": "runtime-kit-package-boundary",
       "kind": "public-contract",
-      "publicUse": "Package boundary file, thing types, and local state language.",
-      "freshness": "review when package boundary validation changes"
+      "publicUse": "Package file file, thing types, and local state language.",
+      "freshness": "review when package file validation changes"
     },
     {
       "id": "bitfield-public-legal-pages",
@@ -59,7 +59,7 @@
     {
       "id": "runtime-kit-public-package-cooperation",
       "kind": "public-example-contract",
-      "publicUse": "Public-safe Runtime Kit package cooperation examples: shared product facts, prepared inputs, named target requests, private UI state, and package-owned bytes.",
+      "publicUse": "Public-safe Runtime Kit package cooperation examples: shared product facts, data names, named action requests, private UI state, and package-owned bytes.",
       "freshness": "review when public Runtime Kit package cooperation examples or public JS exports change"
     },
     {
@@ -163,7 +163,7 @@
       "sourceIds": ["runtime-kit-js-public-contract", "runtime-kit-package-boundary", "runtime-kit-public-package-cooperation"]
     },
     {
-      "route": "runtime-kit/build-without-tangled-code/rules-for-ai-agents",
+      "route": "runtime-kit/build-without-tangled-code/rules-for-coding-tools",
       "sourceIds": ["runtime-kit-js-public-contract", "runtime-kit-package-boundary", "runtime-kit-public-package-cooperation"]
     },
     {

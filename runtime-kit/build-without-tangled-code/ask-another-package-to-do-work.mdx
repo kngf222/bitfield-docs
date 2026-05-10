@@ -9,9 +9,9 @@ description: "Send a request to a named target instead of importing and calling 
 When a package needs another package to run work, call a named Bitfield target. Do not import the implementation function directly.
 </p>
 
-Product scene: a keyboard package changes the selected agent. A notifications package changes the notification mode. A search box asks a search target for results. In traditional code, these become direct service calls. In Bitfield, they are target requests.
+Product scene: a keyboard package changes the selected agent. A notifications package changes the notification mode. A search box asks a search target for results. In traditional code, these become direct service calls. In Bitfield, they are action requests.
 
-Expected result: the caller knows the target name and payload shape, not the implementation file behind the work.
+Expected result: the caller knows the action name and payload shape, not the implementation file behind the work.
 
 ## Traditional app shape
 
@@ -38,7 +38,7 @@ export async function onShortcut(agentId: string) {
 }
 ```
 
-The target name is the public door. The implementation behind it can change without making the caller import new code.
+The action name is the public door. The implementation behind it can change without making the caller import new code.
 
 ## Code translation
 
@@ -46,10 +46,10 @@ The target name is the public door. The implementation behind it can change with
 |---|---|
 | Import a service function. | Call `sendRequestToBitfieldTarget(...)`. |
 | Pass private objects. | Send a small public payload. |
-| Return whatever the function returns. | Decode reply bytes according to the target contract. |
+| Return whatever the function returns. | Decode reply bytes according to the action reply shape. |
 | Catch implementation errors. | Handle request failure and bad replies. |
 
-## Good target requests
+## Good action requests
 
 ```ts
 await sendRequestToBitfieldTarget({
@@ -137,7 +137,7 @@ await sendRequestToBitfieldTarget({
 });
 ```
 
-Settings and command surfaces can call the same public target without sharing notification package code.
+Settings and command surfaces can call the same public action without sharing notification package code.
 
 ### Search help content
 
@@ -164,16 +164,16 @@ The caller sends the question. The package that owns the searchable material dec
 
 | You need to... | Use | Reason |
 |---|---|---|
-| Show the currently selected file. | Prepared input or Bitfield state read. | Nothing has to run just to observe it. |
-| Change which file is selected. | Target request or state write through the package contract. | A change may need validation, side effects, or fan-out. |
-| Render preview URL. | Prepared input. | The preview package already prepared the view. |
-| Refresh preview URL. | Target request. | Work has to run. |
+| Show the currently selected file. | Data name or Bitfield state read. | Nothing has to run just to observe it. |
+| Change which file is selected. | Action request or state write through the package contract. | A change may need validation, side effects, or fan-out. |
+| Render preview URL. | Data name. | The preview package already prepared the view. |
+| Refresh preview URL. | Action request. | Work has to run. |
 | Toggle a dropdown. | Private UI state. | It is visual-only. |
-| Change notification mode. | Target request. | Multiple callers can request the same product action. |
+| Change notification mode. | Action request. | Multiple callers can request the same product action. |
 
 ## Reply and error boundary
 
-The caller may know the reply contract. It must not know the implementation path.
+The caller may know the reply shape. It must not know the implementation path.
 
 ```ts
 const reply = await sendRequestToBitfieldTarget({
@@ -192,34 +192,34 @@ If the target returns bytes, text, JSON, or a structured result, the page that d
 
 | Check | Good answer |
 |---|---|
-| Does the caller import implementation code? | No. It sends a target request. |
-| Is the payload small and public? | Yes. It contains only the fields the target contract needs. |
-| Is the caller guessing the reply shape? | No. It decodes the documented reply contract. |
+| Does the caller import implementation code? | No. It sends an action request. |
+| Is the payload small and public? | Yes. It contains only the fields the action reply shape needs. |
+| Is the caller guessing the reply shape? | No. It decodes the documented reply shape. |
 | Can the same request come from another shell? | Yes. React is one adapter, not the action owner. |
 
 ## What this prevents
 
 | Bad shape | Why it breaks | Better shape |
 |---|---|---|
-| Button imports target implementation. | UI and work runtime become one thing. | Button sends a target request. |
-| Caller passes a huge private object. | Target contract depends on caller private code. | Caller sends a small public payload. |
-| Caller assumes every reply is JSON. | Non-JSON targets break the caller. | Decode according to the target contract. |
+| Button imports target implementation. | UI and work runtime become one thing. | Button sends an action request. |
+| Caller passes a huge private object. | Action reply shape depends on caller private code. | Caller sends a small public payload. |
+| Caller assumes every reply is JSON. | Non-JSON targets break the caller. | Decode according to the action reply shape. |
 | Caller updates Bitfield state and runs side effects itself. | Work logic spreads across packages. | Request the package target that owns that job. |
 
-React is one adapter that can send a target request. The same target should make sense from a keyboard shortcut, a terminal command, a Swift screen, a background job, or a future shell.
+React is one adapter that can send an action request. The same target should make sense from a keyboard shortcut, a terminal command, a Swift screen, a background job, or a future shell.
 
 ## Common failures
 
 | Symptom | Likely mistake | Fix |
 |---|---|---|
-| Button works only in one package. | It imported a local implementation. | Move the call to a target request. |
-| Reply parsing breaks. | The caller guessed the reply shape. | Document the target contract and decode only that. |
-| Work runs twice. | UI code both updates state and calls a worker. | Pick the target request as the work boundary. |
+| Button works only in one package. | It imported a local implementation. | Move the call to an action request. |
+| Reply parsing breaks. | The caller guessed the reply shape. | Document the action reply shape and decode only that. |
+| Work runs twice. | UI code both updates state and calls a worker. | Pick the action request as the work boundary. |
 | A new service file appears just to cross the boundary. | It copied the traditional app shape. | Call a named target. |
 
 ## Review check
 
-If caller code imports a function from another package to "do work," stop. The public shape is a target request. The caller may know the target name, payload, reply contract, and error states. It must not know the implementation file.
+If caller code imports a function from another package to "do work," stop. The public shape is an action request. The caller may know the action name, payload, reply shape, and error states. It must not know the implementation file.
 
 ## Next
 

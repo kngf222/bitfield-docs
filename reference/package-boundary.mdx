@@ -1,12 +1,12 @@
 ---
-title: "Package boundary"
+title: "`things-to-store-and-run.json`"
 description: "Reference for things-to-store-and-run.json."
 ---
 
 <div className="bf-article">
 
 <p className="bf-lead">
-`things-to-store-and-run.json` is the public package boundary file. It tells Runtime Kit what package-owned records, bytes, and callable targets may be admitted.
+`things-to-store-and-run.json` is the package file Runtime Kit checks. It lists the records, package-owned files, and callable actions the package brings.
 </p>
 
 Use this page when you need exact field rules. If you want to copy a working file, use [Package set with one record](/runtime-kit/cookbook/package-set-with-one-record), [Package-owned file](/runtime-kit/cookbook/package-owned-file), or [Callable package slot](/runtime-kit/cookbook/callable-package-slot).
@@ -18,7 +18,7 @@ Use this page when you need exact field rules. If you want to copy a working fil
   things-to-store-and-run.json
 ```
 
-Runtime Kit reads this boundary file from the package folder. Other package files only matter when the boundary file refers to them through package-local paths such as `source_path`.
+Runtime Kit reads this file from the package folder. Other package files only matter when `things-to-store-and-run.json` refers to them through package-local paths such as `source_path`.
 
 ## Minimum file
 
@@ -31,7 +31,7 @@ Runtime Kit reads this boundary file from the package folder. Other package file
 
 | Field | Type | Required | Constraints | Meaning |
 |---|---|---:|---|---|
-| `package` | string | yes | Must name the package whose folder owns this boundary. | Separates package-owned records, bytes, and targets. |
+| `package` | string | yes | Must name the package whose folder owns this file. | Separates package-owned records, bytes, and actions. |
 | `things` | array | yes | Each item must be a supported thing type. | Declares records, stored bytes, and slots. |
 
 Unknown top-level fields may be rejected. The public machine-readable schema is [`reference/package-boundary.schema.json`](/reference/package-boundary.schema.json), and Runtime Kit Cookbook examples are kept aligned with it.
@@ -42,7 +42,7 @@ Unknown top-level fields may be rejected. The public machine-readable schema is 
 |---|---|---|---|
 | `record` | `type`, `address`, one payload action | One package-owned durable record is admitted. | [Package set with one record](/runtime-kit/cookbook/package-set-with-one-record) |
 | `stored_bytes` | `type`, `name`, `source_path` | Package-owned bytes are stored under a package-owned name. | [Package-owned file](/runtime-kit/cookbook/package-owned-file) |
-| `slot` | `type`, `name`, `methods`, `boundary`, artifact or build data | One callable target door is admitted. | [Callable package slot](/runtime-kit/cookbook/callable-package-slot) |
+| `slot` | `type`, `name`, `methods`, `boundary`, artifact or build data | One callable action is admitted. | [Callable package slot](/runtime-kit/cookbook/callable-package-slot) |
 
 Unknown thing types are rejected before they become active.
 
@@ -145,13 +145,13 @@ This is invalid because `source_path` escapes the package folder. A package can 
 
 | Field | Type | Required | Constraints | Meaning |
 |---|---|---:|---|---|
-| `type` | string | yes | Must be `"slot"`. | Selects the callable-slot thing shape. |
-| `name` | string | yes | Public target name. | The name app code calls through `sendRequestToBitfieldTarget(...)`. |
+| `type` | string | yes | Must be `"slot"`. | Selects the package item that app code can ask to do work. |
+| `name` | string | yes | Public action name. | The name app code calls through `sendRequestToBitfieldTarget(...)`. |
 | `methods` | array of method objects | yes | Must list public methods, usually `{ "name": "query" }`. | Declares the package's callable method names. |
-| `boundary` | object | yes | Must include `call_shape` and matching public methods. | Describes the call boundary. |
-| `boundary.call_shape` | string | yes | Public recipes use `"envelope-bytes-in-envelope-bytes-out"`. | States that the target receives bytes and returns bytes. |
-| `boundary.methods` | array of method objects | yes | Should match `methods`. | Repeats the callable public methods at the boundary. |
-| `artifact.source_path` | string | artifact path choice | Must resolve inside the package folder. | Prebuilt package-owned target bytes. |
+| `boundary` | object | yes | Must include `call_shape` and matching public methods. | Describes what bytes the callable action receives and returns. |
+| `boundary.call_shape` | string | yes | Public recipes use `"envelope-bytes-in-envelope-bytes-out"`. | States that the action receives bytes and returns bytes. |
+| `boundary.methods` | array of method objects | yes | Should match `methods`. | Repeats the public methods for the callable action. |
+| `artifact.source_path` | string | artifact path choice | Must resolve inside the package folder. | Prebuilt package-owned bytes for the callable action. |
 
 Valid slot:
 
@@ -189,7 +189,7 @@ Invalid slot:
 
 This is invalid for two public reasons: the public method list is empty, and the artifact path escapes the package folder.
 
-## Complete valid package boundary
+## Complete valid package file
 
 ```json
 {
@@ -200,7 +200,7 @@ This is invalid for two public reasons: the public method list is empty, and the
       "address": "package::launch-product::welcome-copy",
       "payload": {
         "headline": "Your launch stays fast.",
-        "body": "Every feature stays behind a package boundary."
+        "body": "Every feature keeps its package data and callable actions listed in one package file."
       }
     },
     {
@@ -224,7 +224,7 @@ This is invalid for two public reasons: the public method list is empty, and the
 }
 ```
 
-This file is valid because every declared item is package-owned, each path stays inside the package folder, and the callable target has a public name and method boundary.
+This file is valid because every declared item is package-owned, each path stays inside the package folder, and the callable action has a public name plus bytes-in/bytes-out call details.
 
 ## Common failures
 
@@ -233,22 +233,22 @@ This file is valid because every declared item is package-owned, each path stays
 | Package admission rejects the file immediately. | Missing top-level `package` or `things`. | Add both fields, even when `things` is empty. |
 | Record cannot be admitted. | The record picked zero or more than one payload action. | Use exactly one of `payload`, `payload_text`, `payload_base64`, or `remove: true`. |
 | Stored bytes cannot be found. | `source_path` does not exist inside the package folder. | Put the file inside the package and point `source_path` to that package-local path. |
-| Stored bytes or slot artifact is rejected. | The path escapes the package folder. | Remove `../` and absolute paths. Package boundaries cannot claim outside files. |
-| App code cannot call the target. | Slot `name`, `methods`, and `boundary.methods` do not describe the public callable door clearly. | Use a stable target name and include `{ "name": "query" }` in both method lists when the recipe is query-shaped. |
+| Stored bytes or slot artifact is rejected. | The path escapes the package folder. | Remove `../` and absolute paths. A package cannot claim outside files. |
+| App code cannot call the action. | Slot `name`, `methods`, and `boundary.methods` do not describe the callable action clearly. | Use a stable action name and include `{ "name": "query" }` in both method lists when the recipe is query-shaped. |
 
-## Public versus non-public
+## What app code may rely on
 
-| Public boundary may say | Public boundary should not say |
+| Public package file may say | App code should not depend on |
 |---|---|
-| Package name, record address, stored byte name, package-local source path, target name, method names. | Local absolute paths, private runner setup, hidden build machines, package compiler implementation details. |
+| Package name, record address, stored byte name, package-local source path, action name, method names. | Local absolute paths, private runner setup, hidden build machines, package compiler implementation details. |
 | Payload shape owned by your package. | Runtime Kit internal storage layout. |
-| Target call boundary: bytes in, bytes out. | How the target implementation is wired internally. |
+| Callable action details: bytes in, bytes out. | How the action implementation is wired internally. |
 
 ## Related pages
 
 | Need | Page |
 |---|---|
-| First package boundary | [Package set with one record](/runtime-kit/cookbook/package-set-with-one-record) |
+| First package file | [Package set with one record](/runtime-kit/cookbook/package-set-with-one-record) |
 | Package-owned bytes | [Package-owned file](/runtime-kit/cookbook/package-owned-file) |
 | Callable target | [Callable package slot](/runtime-kit/cookbook/callable-package-slot) |
 | App request API | [Runtime Kit API](/reference/runtime-kit-api) |

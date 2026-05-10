@@ -80,13 +80,13 @@ Slots prevent feature code from learning too much about other feature code. That
 | Mistake | Why it hurts | Better path |
 |---|---|---|
 | Importing the target implementation into the UI | The feature boundary collapses | Use `sendRequestToBitfieldTarget(...)` |
-| Giving every feature a custom connection path | The product becomes hard to change | Use named targets and package boundaries |
+| Giving every feature a custom connection path | The product becomes hard to change | Use named targets and package files |
 | Treating slots as storage records | A slot is a runnable door, not the stored data itself | Read [Database and runtime](/concepts/database-and-runtime) |
 | Hiding failure handling | Real target calls can fail | Read [Send a request](/runtime-kit/send-request) |
 
 ## Next
 
-- Send a target request: [Send a request](/runtime-kit/send-request)
+- Send an action request: [Send a request](/runtime-kit/send-request)
 - Declare a callable slot: [Callable package slot](/runtime-kit/cookbook/callable-package-slot)
 - Look up request behavior: [Runtime Kit API](/reference/runtime-kit-api)
 

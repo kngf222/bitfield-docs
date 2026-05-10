@@ -1,6 +1,6 @@
 # Build Without Tangled Code Docs
 
-This folder owns the Runtime Kit pages that teach the translation from traditional coupled application code into Bitfield package boundaries.
+This folder owns the Runtime Kit pages that teach the translation from traditional coupled application code into Bitfield package files.
 
 ## Files
 
@@ -12,7 +12,7 @@ This folder owns the Runtime Kit pages that teach the translation from tradition
 - `store-files-inside-a-package.mdx` explains package-owned bytes and consumer boundaries.
 - `let-many-packages-work-together.mdx` shows a multi-package cooperation chain.
 - `build-a-file-preview-flow.mdx` is a source-grounded case study for file, preview, help, keyboard, notification, and UI-private boundaries.
-- `rules-for-ai-agents.mdx` gives prompt and review rules for agents that default to traditional app architecture.
+- `rules-for-coding-tools.mdx` gives prompt and review rules for coding tools that default to traditional app architecture.
 
 ## Standard
 
@@ -20,10 +20,10 @@ Every page in this folder must show the traditional instinct and the Bitfield re
 
 React examples are allowed only as adapter examples. The architecture must stay platform-neutral.
 
-Case studies must not be padded overviews. A case study must follow a realistic product flow end to end: traditional implementation, Bitfield translation, public handles, data-flow map, package/file boundary, agent mistakes, and review checks.
+Case studies must not be padded overviews. A case study must follow a realistic product flow end to end: traditional implementation, Bitfield translation, public handles, data-flow map, package/file boundary, common wrong code, and review checks.
 
 ## Boundary
 
-These pages may publish public Runtime Kit imports, package boundary vocabulary, public input names, public target-request shapes, and public-safe cooperation examples.
+These pages may publish public Runtime Kit imports, package file vocabulary, public input names, public target-request shapes, and public-safe cooperation examples.
 
-These pages must not publish private local paths, private agent instructions, hidden build instructions, low-level storage mechanics, or private package implementation details.
+These pages must not publish private local paths, private tool instructions, hidden build instructions, low-level storage mechanics, or private package implementation details.

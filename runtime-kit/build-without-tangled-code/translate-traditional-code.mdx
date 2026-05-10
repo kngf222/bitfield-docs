@@ -1,6 +1,6 @@
 ---
 title: "Translate traditional code"
-description: "Turn stores, service imports, direct calls, and shell branching into Bitfield state, prepared reads, target requests, and package records."
+description: "Turn stores, service imports, direct calls, and shell branching into Bitfield state, named data reads, action requests, and package records."
 ---
 
 <div className="bf-article">
@@ -11,7 +11,7 @@ Most app code starts from the old shape first. This page shows the exact transla
 
 Product scene: you are adding a file tree, editor, preview button, command palette action, sidebar item, or dashboard panel. The code works inside one app today, but it does it by teaching one package the private shape of another package. That is the moment to stop and translate.
 
-Expected result: you can point at each line of traditional code and say which Bitfield path replaces it: shared product fact, prepared input, target request, private UI state, or package boundary.
+Expected result: you can point at each line of traditional code and say which Bitfield path replaces it: shared product fact, data name, action request, private UI state, or package file.
 
 Traditional code lets one package become the private source every other package must know. The file tree owns the selected file, but the editor, preview button, command palette, and dashboard all point into the file tree's private store.
 
@@ -72,25 +72,25 @@ Traditional app shape usually starts with the nearest import. Bitfield shape sta
 | The code is trying to... | Traditional mistake | Bitfield replacement |
 |---|---|---|
 | Let many packages know the same selected thing. | Put it in one feature store and import that store everywhere. | Put the selected thing in Bitfield state and read the named input. |
-| Use data another package prepared. | Import the producer package or parse its files. | Read the prepared input. |
-| Ask another package to run work. | Call the implementation function directly. | Send a target request. |
+| Use data another package prepared. | Import the producer package or parse its files. | Read the data name. |
+| Ask another package to run work. | Call the implementation function directly. | Send an action request. |
 | Keep hover, debounce, menu, or draft timing. | Put visual timing in global product state. | Keep it as private UI state. |
 | Let a shell show package-provided UI entries. | Hardcode every feature in the shell. | Read package records/descriptors and place what they say. |
-| Ship help text, templates, or other package material. | Fetch another package's file from app code. | Let the package own the bytes and expose prepared data. |
+| Ship help text, templates, or other package material. | Fetch another package's file from app code. | Let the package own the bytes and expose named data. |
 
-React is one adapter for these reads and requests. A future native shell, command-line shell, game shell, or embedded device shell should use the same public handles instead of learning another package's private code.
+React is one adapter for these reads and requests. A future native shell, command-line shell, game shell, or embedded device shell should use the same public names instead of learning another package's private code.
 
 ## What this prevents
 
 Traditional app-code instinct makes the shortest path look correct: import the store, call the service, parse the file, add the shell branch, or move visual timing into a global object. That works until the next package needs the same thing from a different place.
 
-Bitfield shape prevents that knot by making each package meet other packages through public handles:
+Bitfield shape prevents that knot by making each package meet other packages through public names:
 
 | Prevent this | Use this instead |
 |---|---|
-| Another package's private store becomes the shared source. | Bitfield state or a prepared input. |
-| Another package's implementation function becomes the API. | A target request. |
-| A package file path becomes the public contract. | Package-owned bytes admitted through the package boundary. |
+| Another package's private store becomes the shared source. | Bitfield state or a data name. |
+| Another package's implementation function becomes the API. | An action request. |
+| A package file path becomes the public names. | Package-owned bytes admitted through the package file. |
 | A shell becomes a product-specific registry. | Published records/descriptors. |
 | Visual timing becomes global product state. | Private UI state. |
 
@@ -141,14 +141,14 @@ export async function writeSelectedTextForNextAssistantRequest(value: {
 }
 ```
 
-The private debounce still belongs in the editor UI. The selected text that another package needs goes through a public target request.
+The private debounce still belongs in the editor UI. The selected text that another package needs goes through a public action request.
 
 Bitfield shape:
 
 ```text
 editor private state -> debounce timer
 shared product fact -> selected text for next assistant request
-work boundary -> target request
+work boundary -> action request
 assistant request area -> reads the prepared/shared value
 ```
 
@@ -234,7 +234,7 @@ export async function onPreviewClick(projectId: string) {
 
 That makes the button responsible for preview implementation details. It knows the private runner, private store, and return shape.
 
-Bitfield replacement: the button asks the public target to do the work. The status panel reads the prepared preview data.
+Bitfield replacement: the button asks the public action to do the work. The status panel reads the prepared preview data.
 
 ```ts
 import { sendRequestToBitfieldTarget } from '@bitfield/runtime-kit';
@@ -265,9 +265,9 @@ export function ProjectPreviewStatus() {
 Bitfield shape:
 
 ```text
-button -> target request
+button -> action request
 preview owner -> runs preview work
-status panel -> prepared input
+status panel -> data name
 button does not parse preview storage
 status panel does not call preview runner
 ```
@@ -293,7 +293,7 @@ export async function loadComplianceDashboard(projectId: string) {
 
 That leaks storage shape into the consumer. The dashboard has to know where project files live, how compliance rows are shaped, and how those rows become a screen.
 
-Bitfield replacement: the dashboard reads the prepared data that the owner exposes.
+Bitfield replacement: the dashboard reads the named data that the owner exposes.
 
 ```tsx
 import { useBitfieldData } from '@bitfield/runtime-kit/react';
@@ -317,7 +317,7 @@ Bitfield shape:
 producer package -> prepares project-compliance
 dashboard -> reads project-compliance
 dashboard -> renders loading, error, empty, success
-dashboard actions -> target requests when work is needed
+dashboard actions -> action requests when work is needed
 ```
 
 Review check: if the dashboard needs to know how another package stores rows, the boundary is wrong.
@@ -344,7 +344,7 @@ const help = useBitfieldData('getting-started-help');
 Bitfield shape:
 
 ```text
-package boundary -> declares package-owned bytes
+package file -> declares package-owned bytes
 Runtime Kit -> admits package material
 consumer -> reads prepared help data
 consumer -> never depends on the package file path
@@ -375,12 +375,12 @@ export async function onFileSelected(file: FileRecord) {
 Bitfield shape: each job goes through the boundary that matches it.
 
 ```text
-selected file -> shared Bitfield state / prepared input
+selected file -> shared Bitfield state / data name
 editor draft and cursor -> private UI state
-assistant context from selection -> target request or prepared input
-notification mode -> target request or shared product fact
-preview start -> target request
-preview status -> prepared input
+assistant context from selection -> action request or data name
+notification mode -> action request or shared product fact
+preview start -> action request
+preview status -> data name
 sidebar entry -> published package descriptor
 ```
 
@@ -421,11 +421,11 @@ The important difference is not that the code is longer or shorter. The importan
 
 | Question | Correct answer |
 |---|---|
-| Did a package import another package's store, service, component, private file, or implementation? | No. It used a prepared input, package descriptor, or target request. |
+| Did a package import another package's store, service, component, private file, or implementation? | No. It used a data name, package descriptor, or action request. |
 | Did a shell gain a branch for one product package? | No. It read records/descriptors and placed what it was given. |
 | Did the UI store hover, cursor, debounce, or open-menu state in Bitfield? | No. Visual-only state stayed private. |
-| Did the code call a runner directly because it was convenient? | No. It sent a target request. |
-| Did a consumer parse another package's package file? | No. The package owned bytes and exposed prepared data. |
+| Did the code call a runner directly because it was convenient? | No. It sent an action request. |
+| Did a consumer parse another package's package file? | No. The package owned bytes and exposed named data. |
 | Did React become the product architecture? | No. React is one adapter around reads, requests, and private UI state. |
 
 ## Translation prompt
@@ -442,12 +442,12 @@ Reject another-package private dependencies.
 
 For every state value, classify it:
 - shared product fact
-- prepared input
-- target request
+- data name
+- action request
 - private UI state
 - package-owned bytes
 
-Then write the Bitfield version using public reads, public target requests,
+Then write the Bitfield version using public reads, public action requests,
 package records/descriptors, and private UI state only.
 ```
 
@@ -455,7 +455,7 @@ package records/descriptors, and private UI state only.
 
 - See the shared-state version: [Share state between packages](/runtime-kit/build-without-tangled-code/share-state-between-packages)
 - See the work-request version: [Ask another package to do work](/runtime-kit/build-without-tangled-code/ask-another-package-to-do-work)
-- Review AI coding rules: [Rules for AI agents](/runtime-kit/build-without-tangled-code/rules-for-ai-agents)
+- Review AI coding rules: [Rules for coding tools](/runtime-kit/build-without-tangled-code/rules-for-coding-tools)
 - Check public calls: [Runtime Kit API](/reference/runtime-kit-api)
 
 </div>

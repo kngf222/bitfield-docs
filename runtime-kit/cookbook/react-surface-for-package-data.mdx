@@ -1,15 +1,15 @@
 ---
 title: "React surface for package data"
-description: "Read package-prepared data and send a target request from one React surface."
+description: "Read package-named data and send an action request from one React surface."
 ---
 
 <div className="bf-article">
 
 <p className="bf-lead">
-Build the app-facing side of a Runtime Kit feature: one React surface reads prepared data, renders every state, and asks a named target to do work from a button.
+Build the app-facing side of a Runtime Kit feature: one React surface reads named data, renders every state, and asks a named target to do work from a button.
 </p>
 
-Prepared data means Runtime Kit has already made a piece of Bitfield data available to this app surface. The component reads it. It does not create storage addresses or parse package files.
+Named data means Runtime Kit has already made a piece of Bitfield data available to this app surface. The component reads it. It does not create storage addresses or parse package files.
 
 ## When to use this
 
@@ -17,7 +17,7 @@ Use this recipe when a screen needs both data and an action.
 
 | Good fit | Not this recipe |
 |---|---|
-| A welcome panel that reads copy and asks for a refresh. | A package boundary with no UI yet. |
+| A welcome panel that reads copy and asks for a refresh. | A package file with no UI yet. |
 | A search panel that reads prepared results and calls a search target. | A pure reference page for the hook signature. |
 | A dashboard card that reads prepared metrics and triggers a target. | A component that imports package files directly. |
 
@@ -28,7 +28,7 @@ The point is the separation: the component owns UI state and user actions. Runti
 | Contract part | Value |
 |---|---|
 | React surface | `WelcomePanel` |
-| Prepared input | `welcome` |
+| Data name | `welcome` |
 | Read call | `useBitfieldData<WelcomeData>('welcome')` |
 | Target | `product.search` |
 | Request payload | `{ reason: 'refresh-welcome-panel' }` |
@@ -98,12 +98,12 @@ That line means:
 | Piece | Meaning |
 |---|---|
 | `WelcomeData` | The shape this component expects to render. |
-| `'welcome'` | Public prepared input name for this surface. |
+| `'welcome'` | Public data name for this surface. |
 | `welcome.loading` | Runtime Kit is still preparing the value. |
 | `welcome.error` | Runtime Kit cannot provide the value. |
 | `welcome.data` | The current prepared value, or `null`. |
 
-The selector is not a storage path. The component does not know which package record, file, or derived value produced the prepared input.
+The selector is not a storage path. The component does not know which package record, file, or derived value produced the data name.
 
 ## Request path
 
@@ -134,7 +134,7 @@ Use this checklist before copying the surface into a real app:
 | Check | Pass condition |
 |---|---|
 | Public imports | Only imports Runtime Kit from `@bitfield/runtime-kit` and `@bitfield/runtime-kit/react`. |
-| Prepared input | Reads `welcome` through `useBitfieldData(...)`. |
+| Data name | Reads `welcome` through `useBitfieldData(...)`. |
 | Loading state | Shows a visible loading message. |
 | Error state | Shows a visible read error message. |
 | Empty state | Shows a visible empty-state message instead of returning `null`. |
@@ -148,7 +148,7 @@ Expected result:
 The surface can render before data is ready.
 The surface can show failed reads.
 The surface can show missing data.
-The surface can render real prepared data.
+The surface can render real named data.
 The button can ask product.search for work without importing package implementation code.
 ```
 
@@ -171,17 +171,17 @@ That is the path to a tangled app. The UI disappears when data is missing, and t
 |---|---|---|
 | Blank panel | Empty state returns `null`. | Render a visible empty state. |
 | User sees no error | Component ignores `welcome.error` or request errors. | Render read and request failures separately. |
-| Button works only in local dev | Component imported a target implementation directly. | Call the public target name. |
-| Data shape crashes render | Component assumed fields that the prepared input does not provide. | Align `WelcomeData` with the public prepared input contract. |
-| Component code creates storage addresses | The hook was treated like a database query. | Move back to the prepared input contract. |
+| Button works only in local dev | Component imported a target implementation directly. | Call the public action name. |
+| Data shape crashes render | Component assumed fields that the data name does not provide. | Align `WelcomeData` with the public data name contract. |
+| Component code creates storage addresses | The hook was treated like a database query. | Move back to the data name contract. |
 
 ## Review checklist
 
 The finished surface should answer:
 
 ```text
-Prepared input:
-Target name:
+Data name:
+Action name:
 Request payload:
 Read states rendered:
 Request states rendered:
@@ -202,7 +202,7 @@ It does not know where the record lives, where package bytes are stored, which r
 
 ## What changes when the package changes
 
-The package can add more records, ship more bytes, or replace the runnable thing behind `product.search`. The component can stay the same as long as the public data shape and target name stay the same.
+The package can add more records, ship more bytes, or replace the runnable thing behind `product.search`. The component can stay the same as long as the public data shape and action name stay the same.
 
 ## Next
 

@@ -1,12 +1,12 @@
 ---
 title: "JavaScript Runtime Kit"
-description: "Understand the public Runtime Kit surface, the package boundary, and where React fits."
+description: "Understand the public Runtime Kit surface, the package file, and where React fits."
 ---
 
 <div className="bf-article">
 
 <p className="bf-lead">
-Runtime Kit is the public plug between your app and Bitfield. Your app reads prepared data, sends target requests, and stays out of the setup work that makes packages, storage, and runnable slots work.
+Runtime Kit is the public plug between your app and Bitfield. Your app reads named data, sends target requests, and stays out of the setup work that makes packages, storage, and runnable slots work.
 </p>
 
 ## What this is
@@ -32,15 +32,15 @@ import { useBitfieldData } from '@bitfield/runtime-kit/react';
 That small surface is not a small system. It is the stable app-facing edge of a larger Runtime Kit flow:
 
 ```text
-package boundary
+package file
   -> package material admitted by Runtime Kit
-  -> prepared data or callable target
+  -> named data or callable target
   -> app code reads or sends a request
 ```
 
 React is one surface in that flow. It is not the whole Runtime Kit.
 
-If you want the full concept chain first, read [Runtime Kit concept map](/runtime-kit/concept-map). If you want the full build path first, read [Package to screen](/runtime-kit/package-to-screen). It walks through the first complete Runtime Kit feature: package folder, boundary file, package admission, prepared read, target request, React surface, verification, and failure checks.
+If you want the full concept chain first, read [Runtime Kit concept map](/runtime-kit/concept-map). If you want the full build path first, read [Package to screen](/runtime-kit/package-to-screen). It walks through the first complete Runtime Kit feature: package folder, boundary file, package admission, named data read, target request, React surface, verification, and failure checks.
 
 ## Choose your path
 
@@ -48,12 +48,12 @@ Runtime Kit has several reader paths. Pick the one that matches your job.
 
 | If you need to... | Start here | Why |
 |---|---|---|
-| Understand how all Runtime Kit concepts fit together. | [Runtime Kit concept map](/runtime-kit/concept-map) | It connects package boundaries, prepared reads, callable targets, local state, and placeable surfaces. |
+| Understand how all Runtime Kit concepts fit together. | [Runtime Kit concept map](/runtime-kit/concept-map) | It connects package files, named data reads, callable targets, local state, and placeable surfaces. |
 | Build the first complete feature. | [Package to screen](/runtime-kit/package-to-screen) | It gives the whole chain in order. |
 | Understand the public model. | This page, then [Placeable surfaces](/runtime-kit/placeable-surfaces) | It explains package/app separation and generic UI placement. |
-| Look up exact API shapes. | [Runtime Kit API](/reference/runtime-kit-api) and [Package boundary](/reference/package-boundary) | Reference pages are for exact contracts. |
+| Look up exact API shapes. | [Runtime Kit API](/reference/runtime-kit-api) and [Package file](/reference/package-boundary) | Reference pages are for exact contracts. |
 | Debug a broken feature. | [Troubleshooting](/runtime-kit/troubleshooting) | It maps symptoms to the failed public link. |
-| Keep generated changes inside the public boundary. | [Build with AI agents](/runtime-kit/ai-build-rules) | Use this only when an AI coding tool is writing the feature. |
+| Keep generated changes inside the public files and names. | [Build with coding tools](/runtime-kit/ai-build-rules) | Use this only when an AI coding tool is writing the feature. |
 
 ## The first feature shape
 
@@ -61,8 +61,8 @@ Most Runtime Kit features start as the same four-part slice:
 
 | Part | Product question | Public Runtime Kit answer |
 |---|---|---|
-| Package boundary | What does this feature bring? | `things-to-store-and-run.json` declares records, stored bytes, or slots. |
-| Prepared read | What does the screen need to show? | `useBitfieldData(...)` reads a prepared input name. |
+| Package file | What does this feature bring? | `things-to-store-and-run.json` declares records, stored bytes, or slots. |
+| Named data read | What does the screen need to show? | `useBitfieldData(...)` reads a prepared input name. |
 | Target request | What work can the user ask for? | `sendRequestToBitfieldTarget(...)` calls a named target. |
 | Surface state | What does the user see while this happens? | The app renders loading, error, empty, success, and request result states. |
 
@@ -74,7 +74,7 @@ Think of Runtime Kit as the plug board for your product.
 
 Your package says what it brings: data to store, bytes it owns, or a callable thing. Bitfield admits that package into local state. Runtime Kit prepares the app-facing view. Your app then does one of two jobs: read data that is already prepared for it, or ask a named target to do work.
 
-The important part is what your app does not do. It does not open storage files. It does not choose data plumbing. It does not parse package boundaries. It does not know how the callable target is backed. That is the point. Your feature code stays calm while the system behind it can get faster, more flexible, and more replaceable.
+The important part is what your app does not do. It does not open storage files. It does not choose data plumbing. It does not parse package files. It does not know how the callable target is backed. That is the point. Your feature code stays calm while the system behind it can get faster, more flexible, and more replaceable.
 
 The fastest way to ruin the shape is to let the first feature cheat. If the first screen imports a package file directly, the second screen will copy that shortcut, the third screen will add a second shortcut, and by month six the product has a maze instead of an architecture.
 
@@ -86,7 +86,7 @@ Runtime Kit separates four public roles:
 |---|---|---|
 | Package author | Declares records, stored bytes, and callable slots. | `things-to-store-and-run.json` |
 | Runtime Kit | Admits package material and prepares app-facing reads or targets. | Runtime Kit setup behind the public surface |
-| App surface | Reads prepared data and sends target requests. | `useBitfieldData(...)`, `sendRequestToBitfieldTarget(...)` |
+| App surface | Reads named data and sends target requests. | `useBitfieldData(...)`, `sendRequestToBitfieldTarget(...)` |
 | Bitfield account/device | Controls whether this device can use the product. | Account portal and local activation state |
 
 The public app call chain looks like this:
@@ -94,7 +94,7 @@ The public app call chain looks like this:
 ```text
 React component
   -> useBitfieldData(...)
-  -> prepared data chosen by Runtime Kit
+  -> named data chosen by Runtime Kit
   -> { data, loading, error }
 
 button or user action
@@ -117,7 +117,7 @@ package folder
 
 App code should own names and product behavior:
 
-- Which prepared data a component wants.
+- Which named data a component wants.
 - Which target a button or action calls.
 - How to render loading, empty, error, and success states.
 - How to decode reply bytes when the target returns JSON, text, or another public format.
@@ -143,7 +143,7 @@ App code should not own Runtime Kit setup:
 
 ### `useBitfieldData(...)`
 
-Use this when a component needs prepared data.
+Use this when a component needs named data.
 
 ```tsx
 const welcome = useBitfieldData<{ headline: string; body: string }>('welcome');
@@ -172,7 +172,7 @@ const reply = await sendRequestToBitfieldTarget({
 });
 ```
 
-The reply is bytes. Decode it according to the target contract your package exposes.
+The reply is bytes. Decode it according to the action reply shape your package exposes.
 
 Read the focused guide: [Send a request](/runtime-kit/send-request).
 
@@ -182,7 +182,7 @@ React is the first documented app surface because a lot of products start there.
 
 | Runtime Kit area | Why it matters |
 |---|---|
-| Package boundary | Lets a package declare what it stores and runs. |
+| Package file | Lets a package declare what it stores and runs. |
 | Package sets | Lets one product or project hold a named collection of packages. |
 | Stored bytes | Lets a package bring owned files without reaching outside itself. |
 | Callable slots | Lets a package expose a named door your app can ask for work. |
@@ -192,9 +192,9 @@ React is the first documented app surface because a lot of products start there.
 The public invariant is the same outside React:
 
 ```text
-surface asks for prepared data
+surface asks for named data
 surface sends a named target request
-package owns the data and work behind that public boundary
+package owns the data and work behind that public files and names
 ```
 
 React gives you `useBitfieldData(...)` today. The Runtime Kit idea is bigger than one UI framework.
@@ -208,7 +208,7 @@ React gives you `useBitfieldData(...)` today. The Runtime Kit idea is bigger tha
 | Boundary file | The public file that says what the package brings. | Adding undeclared files and expecting app code to find them. |
 | Prepared input | A surface-facing name Runtime Kit can read for the app. | Treating the name as a storage path. |
 | Target | A public door app code can ask for work. | Importing the implementation behind the door. |
-| Reply bytes | The bytes returned by a target call. | Parsing bytes without a reply contract. |
+| Reply bytes | The bytes returned by a target call. | Parsing bytes without a reply shape. |
 | Placeable surface | A UI contract a shell can arrange without knowing product meaning. | Hardcoding product-specific layout policy into the shell. |
 
 ## Common mistakes
@@ -223,7 +223,7 @@ A target name like `product.search` is a door. Keep calling the door. Do not imp
 
 **Making React the architecture**
 
-React is a surface. Runtime Kit is the boundary. If you build a non-React surface later, the Runtime Kit idea stays the same: prepared reads and named target requests.
+React is a surface. Runtime Kit is the boundary. If you build a non-React surface later, the Runtime Kit idea stays the same: named data reads and named target requests.
 
 **Publishing secrets in package examples**
 
@@ -241,7 +241,7 @@ Package records and stored bytes are product material. Do not put private keys, 
 | Declare package data or runnable doors | `things-to-store-and-run.json` |
 | Understand package shapes | [Packages](/runtime-kit/packages) |
 | Look up exact API shape | [Runtime Kit API](/reference/runtime-kit-api) |
-| Keep AI-written changes inside the public boundary | [Build with AI agents](/runtime-kit/ai-build-rules) |
+| Keep AI-written changes inside the public files and names | [Build with coding tools](/runtime-kit/ai-build-rules) |
 | Find a broken link in the chain | [Troubleshooting](/runtime-kit/troubleshooting) |
 
 ## Now build the bigger version
@@ -251,7 +251,7 @@ Build one complete feature slice with the Runtime Kit shape.
 1. Declare one package record for data the UI reads.
 2. Declare one package-owned file for help, copy, rules, or config.
 3. Declare one slot target for work the user can trigger.
-4. Read the prepared data with `useBitfieldData(...)`.
+4. Read the named data with `useBitfieldData(...)`.
 5. Call the target with `sendRequestToBitfieldTarget(...)`.
 
 That is enough to build a real feature without scattering feature setup through the app.

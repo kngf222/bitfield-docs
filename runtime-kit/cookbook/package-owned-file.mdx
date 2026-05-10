@@ -1,6 +1,6 @@
 ---
 title: "Package-owned file"
-description: "Attach package-owned bytes to a package boundary."
+description: "Attach package-owned bytes to a package file."
 ---
 
 <div className="bf-article">
@@ -60,7 +60,7 @@ The source file is inside the package. That is what makes the path safe to admit
 }
 ```
 
-The public contract is small:
+The public name is small:
 
 | Field | Meaning |
 |---|---|
@@ -101,7 +101,7 @@ The bytes came from help/getting-started.txt inside the package.
 
 The package gives the bytes a public package name: `getting-started-help`. The package also points at the file inside the package folder. Bitfield can reject a file path that tries to escape the package.
 
-That keeps the package boundary clear. The package can bring bytes with it, but it cannot quietly read random files from the machine.
+That keeps the package file clear. The package can bring bytes with it, but it cannot quietly read random files from the machine.
 
 ## Common failures
 
@@ -119,7 +119,7 @@ After this works, you can grow the package without changing the shape:
 1. Add another `stored_bytes` entry for a second file.
 2. Add a `record` that points a screen at which help file to show.
 3. Add a `slot` target that can search or summarize the package-owned bytes.
-4. Add a React surface that reads prepared data and asks the target for help.
+4. Add a React surface that reads named data and asks the target for help.
 
 Keep the same rule: the package declares the bytes; app code uses public Runtime Kit surfaces.
 
@@ -127,6 +127,6 @@ Keep the same rule: the package declares the bytes; app code uses public Runtime
 
 Read [Callable package slot](/runtime-kit/cookbook/callable-package-slot) when the package needs a named target that can do work.
 
-Read [Package boundary](/reference/package-boundary) when you need exact field constraints.
+Read [Package file](/reference/package-boundary) when you need exact field constraints.
 
 </div>

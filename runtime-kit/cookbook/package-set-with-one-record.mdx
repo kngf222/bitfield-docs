@@ -1,6 +1,6 @@
 ---
 title: "Package set with one record"
-description: "Create the smallest complete package boundary: one package, one record, one clear address."
+description: "Create the smallest complete package file: one package, one record, one clear address."
 ---
 
 <div className="bf-article">
@@ -40,7 +40,7 @@ starter-package-set/
 Success check:
 
 ```text
-The package folder contains exactly one public boundary file:
+The package folder contains exactly one public files and names file:
 starter-package-set/product-copy/things-to-store-and-run.json
 ```
 
@@ -90,7 +90,7 @@ Use this checklist before building on top of the recipe:
 | Address | The address starts with `package::product-copy::`. |
 | Payload | The payload is product data, not a secret. |
 
-If any row fails, fix the recipe before adding a React component. React cannot repair a broken package boundary.
+If any row fails, fix the recipe before adding a React component. React cannot repair a broken package file.
 
 ## Change the record later
 
@@ -101,7 +101,7 @@ That gives you a safe edit path:
 ```text
 same address + new payload = update this package-owned record
 new address + new payload  = add a separate package-owned record
-new package name           = create a different package boundary
+new package name           = create a different package file
 ```
 
 Do not change all three at once while debugging. Change one thing, verify it, then move to the next.
@@ -122,9 +122,9 @@ After this works, add one capability at a time:
 1. Add a second `record` for another piece of product copy.
 2. Add a `stored_bytes` thing when the package owns a file.
 3. Add a `slot` when app code needs a named target to ask for work.
-4. Add a React surface that reads a prepared input created from the record.
+4. Add a React surface that reads a data name created from the record.
 
-The shape stays the same: package declares, Runtime Kit admits, app surfaces read prepared data or call named targets.
+The shape stays the same: package declares, Runtime Kit admits, app surfaces read named data or call named targets.
 
 <div className="bf-callout">
 Do not put private product secrets in public package examples. Package records are product data. Secrets belong behind your account and deployment controls.
@@ -134,7 +134,7 @@ Do not put private product secrets in public package examples. Package records a
 
 Read [Package-owned file](/runtime-kit/cookbook/package-owned-file) when the package needs bytes beside records.
 
-Read [Package boundary](/reference/package-boundary) for exact `record` field rules, payload choices, and invalid examples.
+Read [Package file](/reference/package-boundary) for exact `record` field rules, payload choices, and invalid examples.
 
 Read [Package to screen](/runtime-kit/package-to-screen) when you want to turn admitted package data into a React surface.
 

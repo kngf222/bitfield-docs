@@ -1,12 +1,12 @@
 ---
 title: "Store files inside a package"
-description: "Keep package-owned bytes behind the package boundary instead of letting consumers reach into loose app files."
+description: "Keep package-owned bytes behind the package file instead of letting consumers reach into loose app files."
 ---
 
 <div className="bf-article">
 
 <p className="bf-lead">
-When a package ships files or bytes, keep them inside the package boundary. Consumer packages should receive prepared data or target replies, not random file paths into another package.
+When a package ships files or bytes, keep them inside the package file. Consumer packages should receive named data or target replies, not random file paths into another package.
 </p>
 
 Product scene: a help package ships markdown, a theme package ships images, and a file-preview package ships a small parser. A consumer wants the rendered result. The consumer should not reach into the package folder and read whatever file happens to be there.
@@ -30,12 +30,12 @@ Now the consumer knows where the help package stores its files. Rename the folde
 ## Bitfield shape
 
 ```text
-help package boundary declares package-owned bytes
+help package file declares package-owned bytes
 Runtime Kit admits the bytes with the package
 consumer reads prepared help content or asks a help target
 ```
 
-The package decides what bytes it brings. The consumer uses the public handle exposed by the package boundary.
+The package decides what bytes it brings. The consumer uses the public name exposed by the package file.
 
 ## Boundary example
 
@@ -128,31 +128,31 @@ The caller asks for search results. The help package can change its index format
 
 | Rule | Meaning |
 |---|---|
-| A consumer may read a public prepared input. | It can use the handle the package exposes. |
-| A consumer may send a public target request. | It can ask the package to do work. |
+| A consumer may read a public data name. | It can use the handle the package exposes. |
+| A consumer may send a public action request. | It can ask the package to do work. |
 | A consumer may not import package files directly. | Folder structure is not public API. |
 | A consumer may not copy bytes into app code. | Package material should stay package material. |
-| A consumer may not assume file format unless the package exposes that format. | The public contract is the prepared input or target reply. |
+| A consumer may not assume file format unless the package exposes that format. | The public name is the data name or target reply. |
 
 ## What this prevents
 
 | Bad shape | Why it breaks | Better shape |
 |---|---|---|
-| Consumer imports another package's file. | Folder structure becomes public API by accident. | Consumer reads prepared data. |
+| Consumer imports another package's file. | Folder structure becomes public API by accident. | Consumer reads named data. |
 | Consumer builds a local filesystem path. | It only works on one machine/shell. | Package declares package-owned bytes. |
 | Package references files outside itself. | The package cannot move cleanly. | Keep package file references inside the package folder. |
 | App code copies package bytes into itself. | Data and code boundaries blur. | Keep bytes in package material and expose a public read/target. |
 
-React is one adapter that might render the bytes, but React does not define the package boundary. A web shell, native shell, terminal shell, or future adapter should receive prepared data from the same package-owned material.
+React is one adapter that might render the bytes, but React does not define the package file. A web shell, native shell, terminal shell, or future adapter should receive named data from the same package-owned material.
 
 ## Review checklist
 
 | Check | Good answer |
 |---|---|
-| Does consumer code import another package file? | No. It reads a prepared input or sends a target request. |
-| Does the package reference material outside itself? | No. Package material stays inside the package boundary. |
-| Does the consumer assume the file format? | Only when the public prepared input or reply contract says so. |
-| Can the package move without breaking consumers? | Yes. Consumers rely on public handles, not folders. |
+| Does consumer code import another package file? | No. It reads a data name or sends an action request. |
+| Does the package reference material outside itself? | No. Package material stays inside the package file. |
+| Does the consumer assume the file format? | Only when the public data name or reply shape says so. |
+| Can the package move without breaking consumers? | Yes. Consumers rely on public names, not folders. |
 
 ## Full before and after
 
@@ -182,7 +182,7 @@ const results = await sendRequestToBitfieldTarget({
 });
 ```
 
-The consumer gets content and search through public handles. The package can keep markdown, JSON, a generated index, or something else behind that boundary.
+The consumer gets content and search through public names. The package can keep markdown, JSON, a generated index, or something else behind that boundary.
 
 For React, Swift, Kotlin, terminal, or future adapters, the consumer rule stays the same: do not reach into the package folder.
 
@@ -202,12 +202,12 @@ The consumer asks for help content by public input name. It does not know which 
 
 ## Review check
 
-If consumer code imports `../some-package/content/file.md`, stop. Package files are package material. Consumers should read a prepared input or request a target.
+If consumer code imports `../some-package/content/file.md`, stop. Package files are package material. Consumers should read a data name or request a target.
 
 ## Next
 
 - Build package-owned bytes: [Package-owned file](/runtime-kit/cookbook/package-owned-file)
 - Learn package rules: [Packages](/runtime-kit/packages)
-- Look up boundary fields: [Package boundary](/reference/package-boundary)
+- Look up boundary fields: [Package file](/reference/package-boundary)
 
 </div>

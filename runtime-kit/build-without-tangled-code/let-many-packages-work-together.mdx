@@ -1,12 +1,12 @@
 ---
 title: "Let many packages work together"
-description: "Combine Bitfield state, prepared inputs, and target requests so many packages cooperate without sharing private objects."
+description: "Combine Bitfield state, data names, and action requests so many packages cooperate without sharing private objects."
 ---
 
 <div className="bf-article">
 
 <p className="bf-lead">
-When many packages need to cooperate, do not create one giant store that everyone imports. Let packages meet through Bitfield state, prepared inputs, and target requests.
+When many packages need to cooperate, do not create one giant store that everyone imports. Let packages meet through Bitfield state, data names, and action requests.
 </p>
 
 Product scene: a command center has a file tree, file editor, AI chat, project preview, notifications, keyboard shortcuts, and a sidebar. Each package has its own job. They still need to feel like one product.
@@ -36,12 +36,12 @@ This code is convenient because everything is reachable. It is dangerous for the
 ```text
 selected-file -> shared Bitfield state
 current-project -> shared Bitfield state
-project-preview-surface -> prepared input
-notification-mode.update -> target request
-chat.attach-context -> target request
+project-preview-surface -> data name
+notification-mode.update -> action request
+chat.attach-context -> action request
 ```
 
-Each package uses the public handle it needs. No package imports every other package.
+Each package uses the public name it needs. No package imports every other package.
 
 ## Cooperation map
 
@@ -101,14 +101,14 @@ Bitfield shape:
 ```text
 selected-file -> product fact read by editor and AI context
 current-project -> product fact read by preview and package filters
-project-preview-surface -> prepared input rendered by preview shell
-selected-agent.update -> target request from keyboard or command palette
-notification-mode.update -> target request from settings or shortcuts
-getting-started-help -> prepared input from package-owned help content
+project-preview-surface -> data name rendered by preview shell
+selected-agent.update -> action request from keyboard or command palette
+notification-mode.update -> action request from settings or shortcuts
+getting-started-help -> data name from package-owned help content
 dropdown open state -> private UI state inside the surface
 ```
 
-Now each package meets the others through a named public boundary. There is no hidden central product object.
+Now each package meets the others through a named public files and names. There is no hidden central product object.
 
 ## What this prevents
 
@@ -119,7 +119,7 @@ Now each package meets the others through a named public boundary. There is no h
 | Shell coordinates product meaning. | Layout becomes business logic. | Shell places; packages read/call. |
 | Code gets patched wherever it is easiest. | The code compiles but boundaries collapse. | Choose state, input, target, private UI state, or package bytes. |
 
-React is one adapter that can show this chain. The chain itself is Runtime Kit: shared product facts, prepared inputs, target requests, private UI state, and package boundaries.
+React is one adapter that can show this chain. The chain itself is Runtime Kit: shared product facts, data names, action requests, private UI state, and package files.
 
 ## Complete translation example
 
@@ -181,7 +181,7 @@ const activityInputs = [
 | Does adding the new package require editing existing package imports? | No. |
 | Does the shell branch on product meaning? | No. It places descriptors and surfaces. |
 | Does one package become the central product store? | No. Shared facts live in Bitfield. |
-| Can keyboard, command palette, and buttons request the same work? | Yes. They send the same target request. |
+| Can keyboard, command palette, and buttons request the same work? | Yes. They send the same action request. |
 | Can a non-React shell follow the same chain? | Yes. React is one adapter, not the architecture. |
 
 ## Why this scales past the first screen
@@ -190,7 +190,7 @@ The first screen can survive traditional coupling. The tenth screen usually cann
 
 Bitfield keeps the product language outside any one package:
 
-| Product language | Public handle |
+| Product language | Public name |
 |---|---|
 | "The file the user is working on" | `selected-file` |
 | "The project the workspace is showing" | `current-project` |
@@ -206,16 +206,16 @@ When more than two packages are involved, do not solve it by creating `appStore`
 
 ```text
 same fact needed by many packages -> Bitfield state
-prepared view from package material -> prepared input
-work to run -> target request
+prepared view from package material -> data name
+work to run -> action request
 visual-only detail -> private UI state
-bytes shipped with package -> package boundary
+bytes shipped with package -> package file
 ```
 
 ## Next
 
 - Start with the overview: [Build without tangled code](/runtime-kit/build-without-tangled-code)
 - Build a full example: [Placeable surface product loop](/runtime-kit/cookbook/placeable-surface-product-loop)
-- Review AI coding rules: [Rules for AI agents](/runtime-kit/build-without-tangled-code/rules-for-ai-agents)
+- Review AI coding rules: [Rules for coding tools](/runtime-kit/build-without-tangled-code/rules-for-coding-tools)
 
 </div>

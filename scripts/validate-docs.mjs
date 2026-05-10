@@ -37,7 +37,7 @@ const knownPageClasses = new Set([
   'runtime-kit-recipe-index',
   'runtime-kit-recipe',
   'runtime-kit-reference',
-  'runtime-kit-ai-agent',
+  'runtime-kit-coding-tool',
   'runtime-kit-operations',
   'runtime-kit-boundary-translation',
   'runtime-kit-boundary-case-study',
@@ -96,7 +96,7 @@ function validateDepthContract(page, body, sourcePage, output = failures) {
   if (page.pageClass === 'runtime-kit-recipe-index') {
     requireIncludes(page.route, body, [
       ['recipe flow visual', 'className="bf-flow"'],
-      ['recipe contract section', ['## Runtime Kit Cookbook contract for AI agents', '## Recipe review contract']],
+      ['recipe review section', ['## Runtime Kit Cookbook rules for coding tools', '## Runtime Kit Cookbook contract for AI coding tools', '## Recipe review contract', '## Recipe review checklist']],
       ['job route map', '## Choose by job'],
       ['future whole-product Cookbook boundary', 'future whole-product Bitfield Cookbook'],
     ], output);
@@ -118,9 +118,9 @@ function validateDepthContract(page, body, sourcePage, output = failures) {
   if (page.pageClass === 'runtime-kit-reference') {
     requireIncludes(page.route, body, [
       ['field or parameter table', '| Field |'],
-      ['valid example', ['Complete valid example', 'Complete valid package boundary', 'Valid slot:', 'Valid package-owned file:']],
+      ['valid example', ['Complete valid example', 'Complete valid package file', 'Complete valid package boundary', 'Valid slot:', 'Valid package-owned file:']],
       ['invalid example', ['Invalid example', 'Invalid record:', 'Invalid package-owned file:', 'Invalid slot:']],
-      ['public boundary section', ['## Boundary summary', '## Public versus non-public']],
+      ['public file/name section', ['## Boundary summary', '## Public versus non-public', '## What app code may rely on']],
       ['related links section', ['## Related pages', '## Related pages']],
     ], output);
     return;
@@ -136,7 +136,7 @@ function validateDepthContract(page, body, sourcePage, output = failures) {
     return;
   }
 
-  if (page.pageClass === 'runtime-kit-ai-agent') {
+  if (page.pageClass === 'runtime-kit-coding-tool') {
     requireIncludes(page.route, body, [
       ['prompt packs', '## Prompt packs'],
       ['bad-output corrections', '## Bad output and corrected output'],
@@ -164,18 +164,18 @@ function validateDepthContract(page, body, sourcePage, output = failures) {
       ['anti-pattern or prevention section', ['## What this prevents', '## Common mistake', '## Common failures', '## Bad output and corrected output']],
       ['adapter-neutral language', ['React is only the adapter', 'React is one adapter', 'any shell', 'future adapters']],
       ['scenario section', ['## Four ', '## Larger chain', '## The story traditional code usually writes', '## Classification protocol']],
-      ['review language', ['## Review checklist', 'checklist', '## Consumer boundary checklist', '## Multi-package review checklist']],
+      ['review language', ['## Review checklist', 'checklist', '## Consumer boundary checklist', '## Consumer checklist', '## Multi-package review checklist']],
       ['next links section', '## Next'],
       ['Runtime Kit or reference link', ['/runtime-kit/', '/reference/']],
     ], output);
     if (countMatches(body, /Traditional (shape|mistake|answer|addition|over-globalized|under-shared|app-code instinct)|Bad:/g) < 3) {
-      output.push(`${page.route}: boundary translation page needs at least three traditional/bad examples`);
+      output.push(`${page.route}: translation page needs at least three traditional/bad examples`);
     }
     if (countMatches(body, /Bitfield (replacement|answer|addition|shape)|Better answer|Correct:/g) < 3) {
-      output.push(`${page.route}: boundary translation page needs at least three Bitfield/correct replacements`);
+      output.push(`${page.route}: translation page needs at least three Bitfield/correct replacements`);
     }
     if (!sourcePage?.sourceIds?.includes('runtime-kit-public-package-cooperation')) {
-      output.push(`${page.route}: boundary translation page must source-map to runtime-kit-public-package-cooperation`);
+      output.push(`${page.route}: translation page must source-map to runtime-kit-public-package-cooperation`);
     }
     return;
   }
@@ -185,22 +185,22 @@ function validateDepthContract(page, body, sourcePage, output = failures) {
       ['source facts section', '## Source facts this case uses'],
       ['traditional implementation', '## Traditional implementation'],
       ['Bitfield translation', '## Bitfield translation'],
-      ['public handles table', '## Public handles'],
+      ['public names table', '## Public names'],
       ['data-flow map', '## Data-flow map'],
-      ['file boundary section', '## File-by-file public boundary'],
-      ['boundary mistakes section', ['## Agent mistakes to reject', '## Generated-code mistakes to reject', '## Boundary mistakes to reject', '## Boundary mistakes']],
+      ['file/name section', ['## File-by-file public boundary', '## File-by-file public names', '## File-by-file public files and names']],
+      ['wrong-code section', ['## Common wrong code to reject', '## Generated-code mistakes to reject', '## Boundary mistakes to reject', '## Boundary mistakes']],
       ['review checklist', '## Review checklist'],
       ['adapter-neutral language', ['React is one adapter', 'future SDK', 'native shell']],
       ['next links section', '## Next'],
     ], output);
     if (countMatches(body, /selected-file|current-project|project-preview-surface|getting-started-help|selected-agent\.update|notification-mode\.update/g) < 8) {
-      output.push(`${page.route}: case study needs repeated concrete public handles`);
+      output.push(`${page.route}: case study needs repeated concrete public names`);
     }
     if (countMatches(body, /import .*\\.\\.|store|service|private|implementation/g) < 5) {
       output.push(`${page.route}: case study needs concrete traditional coupling examples`);
     }
     if (!sourcePage?.sourceIds?.includes('runtime-kit-public-package-cooperation')) {
-      output.push(`${page.route}: boundary case study must source-map to runtime-kit-public-package-cooperation`);
+      output.push(`${page.route}: case study must source-map to runtime-kit-public-package-cooperation`);
     }
     return;
   }

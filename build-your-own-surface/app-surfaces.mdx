@@ -6,7 +6,7 @@ description: "How to design a screen that reads prepared Bitfield data and sends
 <div className="bf-article">
 
 <p className="bf-lead">
-An app surface is the part your user sees. It should read prepared data, render every state, and send named requests. It should not learn package storage details.
+An app surface is the part your user sees. It should read named data, render every state, and send named requests. It should not learn package storage details.
 </p>
 
 Product scene: a founder adds a `Customers` screen. The screen needs a list, a loading state, an empty state, and one action: archive a customer.
@@ -14,7 +14,7 @@ Product scene: a founder adds a `Customers` screen. The screen needs a list, a l
 <div className="bf-flow" aria-label="App surface contract">
   <div className="bf-flow-step">
     <span>Read</span>
-    <strong>Prepared input</strong>
+    <strong>Data name</strong>
     <p>The surface asks for a stable input name and renders loading, error, empty, and success states.</p>
   </div>
   <div className="bf-flow-arrow">→</div>
@@ -35,7 +35,7 @@ Product scene: a founder adds a `Customers` screen. The screen needs a list, a l
 
 | Piece | Surface owns | Surface does not own |
 |---|---|---|
-| Reads | Which prepared input it needs and how to render each state | Storage layout or package admission |
+| Reads | Which data name it needs and how to render each state | Storage layout or package admission |
 | Actions | Button intent, payload shape, pending/error/success UI | Target execution details |
 | Layout | Local component structure inside the surface | Global navigation and device/account placement |
 | Copy | User-facing words for the product moment | Private setup details |
@@ -82,15 +82,15 @@ const rawPackageFile = await fetch('/some-package-file.json');
 const rows = JSON.parse(await rawPackageFile.text());
 ```
 
-The surface should not parse package material. Package admission and prepared reads belong behind the public Runtime Kit contract.
+The surface should not parse package material. Package admission and named data reads belong behind the public Runtime Kit contract.
 
 ## Common failures
 
 | Symptom | Cause | Fix |
 |---|---|---|
 | The component crashes before data arrives | It renders only the success path | Add loading, error, empty, and success states |
-| The screen knows package file names | The surface is bypassing prepared reads | Read through `useBitfieldData(...)` |
-| Every button sends a vague command | The target contract is not product-shaped | Use a named target like `customers.archive` |
+| The screen knows package file names | The surface is bypassing named data reads | Read through `useBitfieldData(...)` |
+| Every button sends a vague command | The action reply shape is not product-shaped | Use a named target like `customers.archive` |
 | The UI cannot show success or failure | The request result is ignored | Render pending, success, and failure feedback |
 
 ## Verify
@@ -105,6 +105,6 @@ The surface should not parse package material. Package admission and prepared re
 
 ## Next
 
-Use [Package authoring](/build-your-own-surface/package-authoring) to create the package boundary that can feed this surface. Use [Runtime Kit API](/reference/runtime-kit-api) for the exact public function contracts.
+Use [Package authoring](/build-your-own-surface/package-authoring) to create the package file that can feed this surface. Use [Runtime Kit API](/reference/runtime-kit-api) for the exact public function contracts.
 
 </div>

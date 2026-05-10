@@ -56,7 +56,7 @@ Bitfield changes the shape. Every feature plugs into one place instead of depend
   </div>
   <div className="bf-card">
     <strong>Runtime Kit.</strong>
-    The app-facing package. Your app reads prepared data and sends named requests through it.
+    The app-facing package. Your app reads named data and sends named requests through it.
   </div>
   <div className="bf-card">
     <strong>Slot.</strong>
@@ -77,7 +77,7 @@ Bitfield changes the shape. Every feature plugs into one place instead of depend
 | Wrong shape | Why it breaks later | Bitfield shape |
 |---|---|---|
 | Every feature imports every other feature | Changes spread through the product | Features meet through public names and requests |
-| The UI owns storage details | Screens become hard to move | Runtime Kit gives the UI prepared data and targets |
+| The UI owns storage details | Screens become hard to move | Runtime Kit gives the UI named data and targets |
 | Device access is an afterthought | Trials, phones, laptops, and friends get confusing | Active devices are part of the account path |
 | Speed claims are read as universal magic | Readers compare unlike jobs | Proof pages name measured categories |
 

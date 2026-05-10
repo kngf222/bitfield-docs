@@ -61,7 +61,7 @@ await sendRequestToBitfieldTarget('customers.command', {
 });
 ```
 
-The second example makes the surface speak storage and command vocabulary. The target name should carry the action.
+The second example makes the surface speak storage and command vocabulary. The action name should carry the action.
 
 ## Reply rule
 
@@ -72,7 +72,7 @@ Return a result the surface can use.
 | `ok` | Lets the surface show success or failure |
 | `message` | Lets the surface show human-readable feedback |
 | product id fields | Lets the surface reconcile the specific item |
-| next read name | Optional pointer to the prepared read that should refresh |
+| next read name | Optional pointer to the named data read that should refresh |
 
 Expected result: the surface can send a named product request, show a useful outcome, and avoid turning payloads into hidden command strings.
 

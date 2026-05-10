@@ -1,21 +1,21 @@
 ---
-title: "Build with AI agents"
-description: "Give an AI agent the Runtime Kit public contract so it adds features without crossing private implementation boundaries."
+title: "Build with coding tools"
+description: "Give an AI coding tool the Runtime Kit public names so it adds features without importing private implementation code."
 ---
 
 <div className="bf-article">
 
 <p className="bf-lead">
-Runtime Kit gives AI agents a small public surface: read prepared data, send target requests, and edit package boundaries without importing private implementation code.
+Runtime Kit gives AI coding tools three public moves: read named data, send an action request, and edit `things-to-store-and-run.json` without importing private implementation code.
 </p>
 
 ## What this is
 
-This page is for founders and developers who ask an AI agent to build with Bitfield.
+This page is for founders and developers who ask an AI coding tool to build with Bitfield.
 
-The agent needs rails. Without rails, it will do the fastest-looking thing: import unpublished code, parse files in UI code, wire features directly together, or create a second data path. That can work for one screen and punish you later.
+The tool needs rails. Without rails, it will do the fastest-looking thing: import unpublished code, parse files in UI code, wire features directly together, or create a second data path. That can work for one screen and punish you later.
 
-Runtime Kit gives the agent a better instruction set:
+Runtime Kit gives the tool a better instruction set:
 
 ```text
 If you are writing app code:
@@ -25,12 +25,12 @@ If you are writing app code:
 If you are declaring package material:
   edit things-to-store-and-run.json
   keep files inside the package
-  expose stable input names and target names
+  expose stable data names and action names
 ```
 
-That is the whole point. The AI can move fast without turning your product into a knot.
+That is the whole point. The tool can move fast without turning your product into a knot.
 
-## The instruction to give your agent
+## The instruction to give your coding tool
 
 Paste this into your AI coding session before asking it to build a Bitfield feature:
 
@@ -41,50 +41,50 @@ App code may import:
 - sendRequestToBitfieldTarget from @bitfield/runtime-kit
 - useBitfieldData from @bitfield/runtime-kit/react
 
-App code must not import unpublished Runtime Kit code, parse package boundary files,
+App code must not import unpublished Runtime Kit code, parse things-to-store-and-run.json,
 construct storage addresses, choose low-level readers, or call the code behind
-a target directly.
+an action directly.
 
 Package work belongs in things-to-store-and-run.json.
-React work reads prepared data or sends target requests.
-If a feature needs new data, declare it in the package boundary first.
-If a feature needs work to run, declare a stable target name and call that target.
+React work reads named data or sends action requests.
+If a feature needs new data, add it to things-to-store-and-run.json first.
+If a feature needs work to run, declare a stable action name and call that action.
 ```
 
-That prompt is not magic. It is a boundary. It tells the agent which side of Runtime Kit it is working on.
+That prompt is not magic. It tells the coding tool which files and names it may use.
 
 ## The public work split
 
-Give the agent one of these jobs at a time:
+Give the coding tool one of these jobs at a time:
 
-| Job | What the agent should edit | What the agent should not edit |
+| Job | What the tool should edit | What the tool should not edit |
 |---|---|---|
 | Add package data. | `things-to-store-and-run.json` in the package. | React components. |
-| Add a screen. | React surface code that imports the public hook. | Package admission or storage setup. |
-| Add a user action. | A target call with payload and reply handling. | The private implementation behind the target. |
-| Add package-owned bytes. | Package-local files plus a boundary declaration. | Random local files outside the package. |
-| Fix a broken read. | Input name, component states, and package/surface contract. | Low-level reader machinery. |
+| Add a screen. | React screen code that imports the public hook. | Package admission or storage setup. |
+| Add a user action. | A call to an action name with payload and reply handling. | The private implementation behind the action. |
+| Add package-owned bytes. | Package-local files plus an entry in `things-to-store-and-run.json`. | Random local files outside the package. |
+| Fix a broken read. | Data name and component states. | Low-level reader machinery. |
 
-This split matters because AI agents are good at adding code quickly. Runtime Kit makes the fast path the safer path.
+This split matters because AI coding tools are good at adding code quickly. Runtime Kit makes the fast path the safer path.
 
 ## Good request examples
 
-Ask for one boundary at a time:
+Ask for one concrete change at a time:
 
 ```text
-Add a welcome panel that reads the prepared input named "welcome-copy"
+Add a welcome panel that reads the data name "welcome-copy"
 with useBitfieldData(...). Render loading, error, empty, and success states.
 Do not import unpublished Runtime Kit code.
 ```
 
 ```text
-Add a package boundary record for welcome copy. Keep the address stable,
+Add a record for welcome copy in things-to-store-and-run.json. Keep the address stable,
 use one payload action, and do not put secrets in the package.
 ```
 
 ```text
-Add a button that calls the target "welcome.suggest" with a JSON payload.
-Decode the reply bytes as JSON only because this target contract says it
+Add a button that calls the action "welcome.suggest" with a JSON payload.
+Decode the reply bytes as JSON only because this action's reply shape says it
 returns JSON.
 ```
 
@@ -92,39 +92,39 @@ These requests are specific enough that the AI can succeed without inventing a n
 
 ## Prompt packs
 
-Use these when you want the agent to build one specific Runtime Kit shape.
+Use these when you want the tool to build one specific Runtime Kit shape.
 
 ### First feature prompt
 
 ```text
 Build the first Runtime Kit feature for a launch screen.
 
-Create or update one package boundary:
+Create or update one package file:
 - package set: launch-starter
 - package: launch-product
-- boundary file: things-to-store-and-run.json
+- package file: things-to-store-and-run.json
 - record: package::launch-product::welcome-copy
-- target: launch.next-step
+- action: launch.next-step
 
-Create one React surface:
-- read prepared input "welcome-copy" with useBitfieldData(...)
+Create one React screen:
+- read data name "welcome-copy" with useBitfieldData(...)
 - render loading, error, empty, and success states
 - add one button that calls sendRequestToBitfieldTarget(...)
-- decode reply bytes only according to the target contract below
+- decode reply bytes only according to the reply shape below
 
-Public target contract:
-- target: launch.next-step
+Public action shape:
+- action: launch.next-step
 - request payload: { topic: string }
 - reply payload: { suggestion: string }
 
-Before editing, list the files you will touch and the public boundary each file owns.
-After editing, report package set, package, boundary file, prepared inputs, targets, payloads, replies, surfaces, and verification.
+Before editing, list the files you will touch and the product job each file owns.
+After editing, report package set, package, package file, data names, action names, payloads, replies, screens, and verification.
 ```
 
 ### React read prompt
 
 ```text
-Add a React surface that reads the prepared input "launch-checklist".
+Add a React screen that reads the data name "launch-checklist".
 
 Use only:
 - useBitfieldData from @bitfield/runtime-kit/react
@@ -143,7 +143,7 @@ Do not import package files.
 ### Target request prompt
 
 ```text
-Add a user action that calls the public target "help.search".
+Add a user action that calls "help.search".
 
 Use only:
 - sendRequestToBitfieldTarget from @bitfield/runtime-kit
@@ -155,33 +155,33 @@ Reply payload:
 - { results: { title: string; url: string }[] }
 
 Support cancellation if the query changes before the previous request finishes.
-Do not import the target implementation.
-Do not assume every target returns JSON unless this target contract says it does.
+Do not import the implementation behind "help.search".
+Do not assume every action returns JSON unless this reply shape says it does.
 ```
 
-### Package boundary prompt
+### Package file prompt
 
 ```text
-Create a package boundary for package "help-package".
+Create things-to-store-and-run.json for package "help-package".
 
-Boundary file:
+Package file:
 - things-to-store-and-run.json
 
 Things:
 - one stored_bytes file named "help/getting-started.txt"
-- one slot target named "help.search"
+- one slot action named "help.search"
 
 Rules:
 - keep every package file path inside the package folder
 - use exactly one payload action for each record
 - do not include secrets
-- keep target names stable and product-facing
+- keep action names stable and product-facing
 ```
 
 ### Placeable surface prompt
 
 ```text
-Add a placeable surface named "launch.help".
+Add a screen placement named "launch.help".
 
 Descriptor:
 - id: launch.help
@@ -195,9 +195,9 @@ Shell rule:
 - the shell renders descriptor labels, order, active id, region, and componentKey
 - the shell must not branch on "help" or import HelpSearch directly
 
-Surface body rule:
+Screen body rule:
 - the body may call help.search through sendRequestToBitfieldTarget(...)
-- the body must not import the target implementation
+- the body must not import the implementation behind help.search
 ```
 
 ### Troubleshooting prompt
@@ -208,13 +208,13 @@ Debug this Runtime Kit feature by walking the public chain.
 Return this table:
 - package set
 - package
-- boundary file exists?
-- prepared input names
-- target names
+- package file exists?
+- data names
+- action names
 - request payload shape
 - reply payload shape
-- surface states rendered
-- exact failed link: package boundary, prepared read, target request, reply decoding, local state, or activation
+- screen states rendered
+- exact failed link: package file, data read, action request, reply decoding, local state, or activation
 - fix
 - verification
 
@@ -229,11 +229,11 @@ These requests invite tangled code:
 | Bad request | Better request |
 |---|---|
 | "Just read the data from Bitfield." | "Use `useBitfieldData('welcome-copy')` and render all four states." |
-| "Wire the package into the page." | "Declare package data in the boundary, then read the prepared input from the page." |
-| "Call the search implementation." | "Call the public target `product.search` with this payload shape." |
-| "Make it work however you can." | "Stay inside the public Runtime Kit imports and explain any missing boundary." |
+| "Wire the package into the page." | "Declare package data in `things-to-store-and-run.json`, then read the data name from the page." |
+| "Call the search implementation." | "Call `product.search` with this payload shape." |
+| "Make it work however you can." | "Stay inside the public Runtime Kit imports and explain any missing package file, data name, or action name." |
 
-The better request names the public surface and the boundary the agent must respect.
+The better request names the screen, data name, action name, and files the coding tool may touch.
 
 ## Bad output and corrected output
 
@@ -242,8 +242,8 @@ The better request names the public surface and the boundary the agent must resp
 Bad output:
 
 ```tsx
-const boundary = await fetch('/packages/help-package/things-to-store-and-run.json');
-const data = await boundary.json();
+const packageFile = await fetch('/packages/help-package/things-to-store-and-run.json');
+const data = await packageFile.json();
 ```
 
 Corrected output:
@@ -252,7 +252,7 @@ Corrected output:
 const help = useBitfieldData<HelpCopy>('help-copy');
 ```
 
-Why: the component reads prepared data. It does not parse package source.
+Why: the component reads named data. It does not parse package source.
 
 ### Unpublished Runtime Kit import
 
@@ -308,7 +308,7 @@ type SearchReply = { results: { title: string; url: string }[] };
 const data = JSON.parse(new TextDecoder().decode(reply.payload)) as SearchReply;
 ```
 
-Why: JSON parsing is valid only when the target contract says the reply is JSON.
+Why: JSON parsing is valid only when the action's reply shape says the reply is JSON.
 
 ### Local-state hand edit
 
@@ -321,12 +321,12 @@ Open ~/.bitfield and edit the package record until the screen works.
 Corrected output:
 
 ```text
-Inspect local state for evidence, then repair the package boundary, account activation, or Runtime Kit feature path that produced the bad state.
+Inspect local state for evidence, then repair `things-to-store-and-run.json`, account activation, or the Runtime Kit feature path that produced the bad state.
 ```
 
 Why: local state is support evidence. It is not the feature authoring surface.
 
-## Review checklist for AI-written code
+## Review checklist for generated code
 
 Before you accept AI output, check these exact things:
 
@@ -335,64 +335,64 @@ Before you accept AI output, check these exact things:
 | Imports | App code imports only from `@bitfield/runtime-kit` or `@bitfield/runtime-kit/react`. |
 | Reads | Components use `useBitfieldData(...)` and handle loading, error, empty, and success. |
 | Requests | User actions call `sendRequestToBitfieldTarget(...)` with a non-empty target name. |
-| Replies | The code decodes reply bytes according to the target contract. |
+| Replies | The code decodes reply bytes according to the action's reply shape. |
 | Package data | Package material lives in `things-to-store-and-run.json` and package-local files. |
 | Secrets | No private keys, tokens, account files, or customer data are in package examples. |
-| Boundaries | UI code does not parse package boundaries or build storage paths. |
+| Package files | UI code does not parse package files or build storage paths. |
 
-If any row fails, reject the change and make the agent repair that boundary first.
+If any row fails, reject the change and make the coding tool repair that exact file, name, or action first.
 
 ## Full Runtime Kit review map
 
-Make the agent fill this out before you accept the work:
+Make the coding tool fill this out before you accept the work:
 
 | Required answer | Why it matters |
 |---|---|
 | Package set | Prevents guessing which product/project the package belongs to. |
 | Package | Names the package that owns the material. |
-| Boundary file | Confirms package material enters through `things-to-store-and-run.json`. |
+| Package file | Confirms package material enters through `things-to-store-and-run.json`. |
 | Records | Names the package-owned data records. |
 | Stored bytes | Names package-owned files and confirms paths stay inside the package. |
-| Prepared inputs | Names what app surfaces read with `useBitfieldData(...)`. |
-| Targets | Names what app actions call with `sendRequestToBitfieldTarget(...)`. |
+| Data names | Names what app screens read with `useBitfieldData(...)`. |
+| Action names | Names what app actions call with `sendRequestToBitfieldTarget(...)`. |
 | Request payloads | States the public shape sent to each target. |
 | Reply payloads | States how reply bytes are decoded. |
-| Surfaces | Names React components or placeable surface descriptors that use the contract. |
+| Screens | Names React components or screen-placement entries that use the data/action names. |
 | Render states | Confirms loading, error, empty, and success are handled. |
 | Verification | Gives the command, test, manual check, or docs validation used. |
 
-If any row is blank, the agent has not described the public boundary clearly enough.
+If any row is blank, the coding tool has not described the concrete public files and names clearly enough.
 
-## What the agent should explain back
+## What the coding tool should explain back
 
-Ask the agent to summarize the chain it used:
+Ask the coding tool to summarize the chain it used:
 
 ```text
 Tell me:
-1. Which package boundary changed.
-2. Which prepared input names the UI reads.
-3. Which target names the UI calls.
-4. Which payload and reply shapes are public contracts.
+1. Which things-to-store-and-run.json file changed.
+2. Which data names the UI reads.
+3. Which action names the UI calls.
+4. Which payload and reply shapes are public.
 5. Which unpublished Runtime Kit code you did not import.
 ```
 
-If the agent cannot answer those five points, the work is not ready.
+If the coding tool cannot answer those five points, the work is not ready.
 
 ## Common mistakes
 
-**Letting the agent invent a new public API**
+**Letting the coding tool invent a new public API**
 
-If the agent adds a new hook, provider, context, or subscription import, stop it. The current public surface is one request function and one React read hook.
+If the coding tool adds a new hook, provider, context, or subscription import, stop it. The current public imports are one request function and one React read hook.
 
-**Letting the agent move package setup into React**
+**Letting the coding tool move package setup into React**
 
-React renders prepared data. Package admission belongs behind Runtime Kit.
+React renders named data. Package admission belongs behind Runtime Kit.
 
-**Letting the agent make target names too implementation-specific**
+**Letting the coding tool make action names too implementation-specific**
 
-Use stable product names like `product.search` or `welcome.suggest`. Do not expose the private runner, file name, or implementation choice in the target name.
+Use stable product names like `product.search` or `welcome.suggest`. Do not expose the private runner, file name, or implementation choice in the action name.
 
-**Letting the agent ignore empty and error states**
+**Letting the coding tool ignore empty and error states**
 
 AI often writes the happy path only. Runtime Kit components should render loading, error, empty, and success states every time.
 
@@ -402,7 +402,7 @@ AI often writes the happy path only. Runtime Kit components should render loadin
 App read       -> useBitfieldData(...)
 App action     -> sendRequestToBitfieldTarget(...)
 Package data   -> things-to-store-and-run.json
-Public contract -> input names, target names, payloads, replies
+Public names    -> data names, action names, payloads, replies
 Review failure -> reject unpublished imports and storage wiring in app code
 ```
 
@@ -413,20 +413,20 @@ Use this full prompt for the next AI-built feature:
 ```text
 Build a Runtime Kit feature named launch-assistant.
 
-Create one package boundary with:
+Create one package file with:
 - one record named launch-checklist
 - one stored file named launch-help
-- one target named launch.next-step
+- one action named launch.next-step
 
-Create one React surface with:
+Create one React screen with:
 - useBitfieldData('launch-checklist')
 - a button that calls sendRequestToBitfieldTarget(...)
 - loading, error, empty, and success states
 
 Before writing code, list:
 - package name
-- prepared input names
-- target names
+- data names
+- action names
 - request payload shape
 - reply payload shape
 
@@ -434,6 +434,6 @@ Use only @bitfield/runtime-kit and @bitfield/runtime-kit/react.
 Do not import unpublished Runtime Kit code.
 ```
 
-That prompt makes the agent build the package and the screen together while keeping the public boundary intact.
+That prompt makes the coding tool build the package and the screen together while keeping the public files and names intact.
 
 </div>

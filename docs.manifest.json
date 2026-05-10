@@ -626,7 +626,7 @@
             "runtime-kit/build-without-tangled-code/store-files-inside-a-package",
             "runtime-kit/build-without-tangled-code/let-many-packages-work-together",
             "runtime-kit/build-without-tangled-code/build-a-file-preview-flow",
-            "runtime-kit/build-without-tangled-code/rules-for-ai-agents"
+            "runtime-kit/build-without-tangled-code/rules-for-coding-tools"
           ]
         },
         {
@@ -715,7 +715,7 @@
       "description": "Get a key, add Runtime Kit, read data, and send a request.",
       "diataxis": "tutorial",
       "pageClass": "start-onboarding",
-      "summary": "A first-result tutorial for account access, device activation, Runtime Kit imports, reading prepared data, sending a target request, and handling first failures."
+      "summary": "A first-result tutorial for account access, device activation, Runtime Kit imports, reading named data, sending an action request, and handling first failures."
     },
     {
       "route": "start/get-your-key",
@@ -784,22 +784,22 @@
     {
       "route": "runtime-kit/javascript",
       "title": "JavaScript Runtime Kit",
-      "description": "Understand the public Runtime Kit surface, package boundary, and where React fits.",
+      "description": "Understand the public Runtime Kit surface, package file, and where React fits.",
       "diataxis": "how-to",
-      "summary": "Maps the public Runtime Kit flow from package boundary to prepared reads and named target requests."
+      "summary": "Maps the public Runtime Kit flow from package file to named data reads and named action requests."
     },
     {
       "route": "runtime-kit/package-to-screen",
       "title": "Package to screen",
-      "description": "Build the full public Runtime Kit chain from one package boundary to one React surface.",
+      "description": "Build the full public Runtime Kit chain from one package file to one React surface.",
       "diataxis": "tutorial",
       "pageClass": "runtime-kit-tutorial",
-      "summary": "Walks from a package boundary through admitted material, prepared reads, target requests, and React rendering."
+      "summary": "Walks from a package file through admitted material, named data reads, action requests, and React rendering."
     },
     {
       "route": "runtime-kit/concept-map",
       "title": "Runtime Kit concept map",
-      "description": "How package boundaries, prepared reads, callable targets, local state, and placeable surfaces fit together.",
+      "description": "How package files, named data reads, callable targets, local state, and placeable surfaces fit together.",
       "diataxis": "concept",
       "pageClass": "runtime-kit-concept",
       "summary": "Explains the full Runtime Kit concept chain with product scenes, visual flow, anti-patterns, and links to tutorial, recipe, and reference pages."
@@ -810,20 +810,20 @@
       "description": "Understand the generic surface descriptor shape that lets a shell place product UI without knowing product meaning.",
       "diataxis": "concept",
       "pageClass": "runtime-kit-concept",
-      "summary": "Explains the placeable-surface composition primitive with visual maps: package material becomes prepared reads and targets, descriptors declare regions and allowed names, and a dumb shell/sidebar places surfaces without product-specific branches."
+      "summary": "Explains the placeable-surface composition primitive with visual maps: package material becomes named data reads and targets, descriptors declare regions and allowed names, and a dumb shell/sidebar places surfaces without product-specific branches."
     },
     {
       "route": "runtime-kit/build-without-tangled-code/index",
       "title": "Build without tangled code",
-      "description": "Translate normal coupled app code into Bitfield package state, prepared reads, target requests, and private UI state.",
+      "description": "Translate normal coupled app code into Bitfield package state, named data reads, action requests, and private UI state.",
       "diataxis": "how-to",
       "pageClass": "runtime-kit-boundary-translation",
-      "summary": "Shows how to translate traditional app coupling into Bitfield state, prepared inputs, target requests, private UI state, and package boundaries."
+      "summary": "Shows how to translate traditional app coupling into Bitfield state, data names, action requests, private UI state, and package files."
     },
     {
       "route": "runtime-kit/build-without-tangled-code/translate-traditional-code",
       "title": "Translate traditional code",
-      "description": "Turn stores, service imports, direct calls, and shell branching into Bitfield state, prepared reads, target requests, and package records.",
+      "description": "Turn stores, service imports, direct calls, and shell branching into Bitfield state, named data reads, action requests, and package records.",
       "diataxis": "how-to",
       "pageClass": "runtime-kit-boundary-translation",
       "summary": "Shows source-grounded translations from traditional stores, direct imports, service calls, shell branching, and package-file reads into Bitfield reads, requests, descriptors, and private UI state."
@@ -839,15 +839,15 @@
     {
       "route": "runtime-kit/build-without-tangled-code/read-data-another-package-prepared",
       "title": "Read data another package prepared",
-      "description": "Read a prepared input instead of importing another package or parsing its storage.",
+      "description": "Read a data name instead of importing another package or parsing its storage.",
       "diataxis": "how-to",
       "pageClass": "runtime-kit-boundary-translation",
-      "summary": "Shows how consumers read named prepared data while the preparing package keeps its files, records, and storage shape private."
+      "summary": "Shows how consumers read named named data while the preparing package keeps its files, records, and storage shape private."
     },
     {
       "route": "runtime-kit/build-without-tangled-code/ask-another-package-to-do-work",
       "title": "Ask another package to do work",
-      "description": "Send a target request instead of calling another package's implementation.",
+      "description": "Send an action request instead of calling another package's implementation.",
       "diataxis": "how-to",
       "pageClass": "runtime-kit-boundary-translation",
       "summary": "Shows how buttons, shortcuts, and package actions ask named targets to run work without importing implementation functions."
@@ -871,7 +871,7 @@
     {
       "route": "runtime-kit/build-without-tangled-code/let-many-packages-work-together",
       "title": "Let many packages work together",
-      "description": "Combine shared state, prepared reads, target requests, and private UI state across several packages.",
+      "description": "Combine shared state, named data reads, action requests, and private UI state across several packages.",
       "diataxis": "how-to",
       "pageClass": "runtime-kit-boundary-translation",
       "summary": "Walks a multi-package product chain where files, editors, AI context, notifications, and shells cooperate without centralizing product meaning."
@@ -879,18 +879,18 @@
     {
       "route": "runtime-kit/build-without-tangled-code/build-a-file-preview-flow",
       "title": "Build a file preview flow",
-      "description": "A source-grounded case study that translates one file, preview, help, notification, and agent flow from traditional architecture into Runtime Kit boundaries.",
+      "description": "A source-grounded case study that translates one file, preview, help, notification, and tool flow from traditional architecture into Runtime Kit public files and names.",
       "diataxis": "how-to",
       "pageClass": "runtime-kit-boundary-case-study",
       "summary": "Follows a realistic file, preview, help, keyboard, notification, and private UI flow from traditional coupled code into public Runtime Kit handles."
     },
     {
-      "route": "runtime-kit/build-without-tangled-code/rules-for-ai-agents",
-      "title": "Rules for AI agents",
-      "description": "Tell AI agents how to build Bitfield features without falling back to traditional coupled app architecture.",
+      "route": "runtime-kit/build-without-tangled-code/rules-for-coding-tools",
+      "title": "Rules for coding tools",
+      "description": "Tell AI coding tools how to build Bitfield features without falling back to traditional coupled app architecture.",
       "diataxis": "how-to",
       "pageClass": "runtime-kit-boundary-translation",
-      "summary": "Provides prompt rules, bad-output corrections, and review checks that keep generated code on public Runtime Kit boundaries."
+      "summary": "Provides prompt rules, bad-output corrections, and review checks that keep generated code on public Runtime Kit public files and names."
     },
     {
       "route": "runtime-kit/use-bitfield-data",
@@ -904,7 +904,7 @@
       "title": "Send a request",
       "description": "Send opaque payloads to Bitfield targets through the public request function.",
       "diataxis": "how-to",
-      "summary": "Shows JSON, text, byte payloads, reply decoding, cancellation, and target-boundary mistakes."
+      "summary": "Shows JSON, text, byte payloads, reply decoding, cancellation, and action-request mistakes."
     },
     {
       "route": "runtime-kit/packages",
@@ -922,16 +922,16 @@
     },
     {
       "route": "runtime-kit/ai-build-rules",
-      "title": "Build with AI agents",
-      "description": "Give an AI agent the Runtime Kit public contract so it adds features without crossing private boundaries.",
+      "title": "Build with coding tools",
+      "description": "Give an AI coding tool the Runtime Kit public names so it adds features without crossing private boundaries.",
       "diataxis": "how-to",
-      "pageClass": "runtime-kit-ai-agent",
-      "summary": "Gives AI-agent prompt packs, bad-output corrections, review maps, and public Runtime Kit boundaries for generated feature work."
+      "pageClass": "runtime-kit-coding-tool",
+      "summary": "Gives AI-coding-tool prompt packs, bad-output corrections, review maps, and public Runtime Kit public files and names for generated feature work."
     },
     {
       "route": "runtime-kit/troubleshooting",
       "title": "Troubleshooting",
-      "description": "Find which Runtime Kit boundary broke: package admission, prepared reads, target requests, replies, local state, or activation.",
+      "description": "Find which Runtime Kit boundary broke: package admission, named data reads, action requests, replies, local state, or activation.",
       "diataxis": "how-to",
       "pageClass": "runtime-kit-operations",
       "summary": "Maps Runtime Kit symptoms to the public chain link that failed and gives safe repair checks."
@@ -939,7 +939,7 @@
     {
       "route": "runtime-kit/cookbook/index",
       "title": "Runtime Kit Cookbook",
-      "description": "Complete public Runtime Kit recipes for package sets, package boundary files, prepared reads, target requests, and app-facing surfaces.",
+      "description": "Complete public Runtime Kit recipes for package sets, things-to-store-and-run.json files, named data reads, action requests, and app-facing surfaces.",
       "diataxis": "cookbook",
       "pageClass": "runtime-kit-recipe-index",
       "summary": "Indexes Runtime Kit cookbook entries for packages, package-owned bytes, callable slots, React surfaces, and placeable surface product loops."
@@ -947,15 +947,15 @@
     {
       "route": "runtime-kit/cookbook/package-set-with-one-record",
       "title": "Package set with one record",
-      "description": "Create the smallest complete package boundary: one package, one record, one clear address.",
+      "description": "Create the smallest complete package file: one package, one record, one clear address.",
       "diataxis": "cookbook",
       "pageClass": "runtime-kit-recipe",
-      "summary": "Shows the smallest package boundary with one durable package record."
+      "summary": "Shows the smallest package file with one durable package record."
     },
     {
       "route": "runtime-kit/cookbook/package-owned-file",
       "title": "Package-owned file",
-      "description": "Attach package-owned bytes to a package boundary.",
+      "description": "Attach package-owned bytes to a package file.",
       "diataxis": "cookbook",
       "pageClass": "runtime-kit-recipe",
       "summary": "Shows how a package declares package-owned bytes without reaching outside its folder."
@@ -971,7 +971,7 @@
     {
       "route": "runtime-kit/cookbook/react-surface-for-package-data",
       "title": "React surface for package data",
-      "description": "Read package-prepared data and send a target request from one React surface.",
+      "description": "Read package-named data and send an action request from one React surface.",
       "diataxis": "cookbook",
       "pageClass": "runtime-kit-recipe",
       "summary": "Shows the app-facing read and request shape without exposing package implementation details to React."
@@ -979,10 +979,10 @@
     {
       "route": "runtime-kit/cookbook/placeable-surface-product-loop",
       "title": "Placeable surface product loop",
-      "description": "Build a full product loop with package records, target requests, surface descriptors, a dumb shell, and surface bodies.",
+      "description": "Build a full product loop with package records, action requests, surface descriptors, a dumb shell, and surface bodies.",
       "diataxis": "cookbook",
       "pageClass": "runtime-kit-recipe",
-      "summary": "Shows the source-owned cookbook succession for placeable surfaces: package boundary, descriptors, generic shell, surface bodies, and review checklist."
+      "summary": "Shows the source-owned cookbook succession for placeable surfaces: package file, descriptors, generic shell, surface bodies, and review checklist."
     },
     {
       "route": "build-your-own-surface/index",
@@ -998,7 +998,7 @@
       "description": "How to design a screen that reads prepared Bitfield data and sends named requests.",
       "diataxis": "how-to",
       "pageClass": "build-curriculum",
-      "summary": "Shows how product screens read prepared data, render every state, and send named target requests."
+      "summary": "Shows how product screens read named data, render every state, and send named action requests."
     },
     {
       "route": "build-your-own-surface/package-authoring",
@@ -1138,11 +1138,11 @@
     },
     {
       "route": "reference/package-boundary",
-      "title": "Package boundary",
+      "title": "Package file",
       "description": "Reference for things-to-store-and-run.json.",
       "diataxis": "reference",
       "pageClass": "runtime-kit-reference",
-      "summary": "Lists package boundary fields, record/stored-bytes/slot thing types, payload choices, method rules, path safety, valid examples, invalid examples, and common failures."
+      "summary": "Lists package file fields, record/stored-bytes/slot thing types, payload choices, method rules, path safety, valid examples, invalid examples, and common failures."
     },
     {
       "route": "changelog/index",

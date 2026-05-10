@@ -6,7 +6,7 @@ description: "Understand the generic surface descriptor shape that lets a shell 
 <div className="bf-article">
 
 <p className="bf-lead">
-A placeable surface is a product UI contract. It says what can appear, where it can appear, and which prepared reads or targets the surface may use. The shell reads that contract and places the surface without learning the product story behind it.
+A placeable surface is a product UI contract. It says what can appear, where it can appear, and which named data reads or targets the surface may use. The shell reads that contract and places the surface without learning the product story behind it.
 </p>
 
 ## What this explains
@@ -27,8 +27,8 @@ The shell should only know this:
 |---|---|
 | Surface descriptor | A piece of UI that can be placed in a region. |
 | Region | A named area such as `main`, `rail`, or `panel`. |
-| Prepared input names | Data names the surface is allowed to read. |
-| Target names | Work names the surface is allowed to request. |
+| Data names | Data names the surface is allowed to read. |
+| Action names | Work names the surface is allowed to request. |
 | Component key | The renderable body for that surface. |
 
 That is the same class of idea as a command center: the arrangement model is generic, the sidebar is generic, and the product meaning lives behind descriptors.
@@ -41,13 +41,13 @@ The flow has four jobs. Each job stays separate.
   <div className="bf-flow-node">
     <span className="bf-flow-step">01</span>
     <strong>Package set</strong>
-    <p>Records, stored bytes, and named targets enter through package boundaries.</p>
+    <p>Records, stored bytes, and named targets enter through package files.</p>
   </div>
   <div className="bf-flow-arrow" aria-hidden="true">→</div>
   <div className="bf-flow-node">
     <span className="bf-flow-step">02</span>
     <strong>Runtime Kit boundary</strong>
-    <p>Package material becomes prepared reads and callable target names.</p>
+    <p>Package material becomes named data reads and callable action names.</p>
   </div>
   <div className="bf-flow-arrow" aria-hidden="true">→</div>
   <div className="bf-flow-node">
@@ -68,7 +68,7 @@ The flow has four jobs. Each job stays separate.
 <div className="bf-lane-map" aria-label="Ownership map for package material, surface descriptors, and the product shell">
   <div className="bf-lane-card">
     <span>Data owner</span>
-    <strong>Package boundary</strong>
+    <strong>Package file</strong>
     <p>Owns the records, package-owned bytes, and callable targets.</p>
   </div>
   <div className="bf-lane-card">
@@ -93,7 +93,7 @@ The flow has four jobs. Each job stays separate.
 ```text
 Package set
   -> packages
-  -> prepared inputs
+  -> data names
   -> targets
   -> surface descriptors
 
@@ -103,7 +103,7 @@ Product shell
   -> renders the active surface in a generic region
 
 Surface body
-  -> reads only the prepared inputs named by its descriptor
+  -> reads only the data names named by its descriptor
   -> calls only the targets named by its descriptor
 ```
 
@@ -157,7 +157,7 @@ If the shell needs to understand a business noun to render the layout, the descr
 
 ## Descriptor rules
 
-A descriptor should be boring data. It gives the shell placement facts and gives the surface body its allowed public handles.
+A descriptor should be boring data. It gives the shell placement facts and gives the surface body its allowed public names.
 
 ```ts
 {
@@ -179,23 +179,23 @@ A descriptor should be boring data. It gives the shell placement facts and gives
 | `order` | Sort order inside a region or nav list. | Making order depend on import order. |
 | `componentKey` | Which registered body renders. | Importing that body directly in the shell branch. |
 | `preparedInputs` | Public data names the body may read. | Letting the body guess storage addresses. |
-| `targets` | Public target names the body may call. | Letting the body import target code. |
+| `targets` | Public action names the body may call. | Letting the body import target code. |
 
 ## Failure modes
 
 | Symptom | Boundary crossed | Fix |
 |---|---|---|
 | Adding a surface requires editing shell logic. | Product meaning leaked into arrangement. | Add descriptor data and keep the shell generic. |
-| A surface reads a package address directly. | Prepared-read boundary was bypassed. | Give the surface a prepared input name and read it with `useBitfieldData(...)`. |
-| A button imports the work implementation. | Target boundary was bypassed. | Declare/call a target name with `sendRequestToBitfieldTarget(...)`. |
+| A surface reads a package address directly. | Prepared-read boundary was bypassed. | Give the surface a data name and read it with `useBitfieldData(...)`. |
+| A button imports the work implementation. | Target boundary was bypassed. | Declare/call an action name with `sendRequestToBitfieldTarget(...)`. |
 | The same surface works in one region but breaks in another. | The surface body depends on layout context instead of its descriptor contract. | Pass only descriptor-approved inputs/targets and make layout region generic. |
 | A new sidebar branch appears for every feature. | The primitive was not visible enough. | Use [Runtime Kit concept map](/runtime-kit/concept-map) and the Cookbook recipe before changing shell logic. |
 
 ## Build it
 
-The complete Runtime Kit Cookbook recipe lives in [Placeable surface product loop](/runtime-kit/cookbook/placeable-surface-product-loop). It walks through the package boundary, descriptors, shell, surface body, and review checklist as source-owned examples.
+The complete Runtime Kit Cookbook recipe lives in [Placeable surface product loop](/runtime-kit/cookbook/placeable-surface-product-loop). It walks through the package file, descriptors, shell, surface body, and review checklist as source-owned examples.
 
-Read [Runtime Kit concept map](/runtime-kit/concept-map) when you want to see how placeable surfaces fit with package boundaries, prepared reads, callable targets, and local state.
+Read [Runtime Kit concept map](/runtime-kit/concept-map) when you want to see how placeable surfaces fit with package files, named data reads, callable targets, and local state.
 
 Read [Package to screen](/runtime-kit/package-to-screen) when you want the first tutorial that builds one package-to-surface chain.
 

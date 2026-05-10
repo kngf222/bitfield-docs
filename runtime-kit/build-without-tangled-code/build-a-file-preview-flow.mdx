@@ -1,6 +1,6 @@
 ---
 title: "Build a file preview flow"
-description: "A source-grounded case study that translates one file, preview, help, notification, and selection flow from traditional architecture into Runtime Kit boundaries."
+description: "A source-grounded case study that translates one file, preview, help, notification, and selection flow from traditional architecture into Runtime Kit public files and names."
 ---
 
 <div className="bf-article">
@@ -20,12 +20,12 @@ This page is grounded in public-safe Runtime Kit shapes:
 | Source shape | Public-safe lesson |
 |---|---|
 | A file editor package reads `selected-file`. | The editor reads a named input instead of importing a file tree store. |
-| A web frame package reads a descriptor-selected source. | A preview surface reads prepared data instead of importing the preview producer. |
-| Keyboard and notification packages send Runtime Kit requests. | User intent becomes a target request instead of a direct implementation call. |
-| Runtime Kit exposes `sendRequestToBitfieldTarget(...)`. | Work crosses package boundaries through a public request function. |
-| Runtime Kit React exposes `useBitfieldData(...)`. | React is one adapter for reading prepared data; it is not the architecture. |
+| A web frame package reads a descriptor-selected source. | A preview surface reads named data instead of importing the preview producer. |
+| Keyboard and notification packages send Runtime Kit requests. | User intent becomes an action request instead of a direct implementation call. |
+| Runtime Kit exposes `sendRequestToBitfieldTarget(...)`. | Work crosses package files through a public request function. |
+| Runtime Kit React exposes `useBitfieldData(...)`. | React is one adapter for reading named data; it is not the architecture. |
 
-Do not copy package private folders or local source paths from an example. The public lesson is the handle shape: input, prepared view, target request, package-owned bytes, and private UI state.
+Do not copy package private folders or local source paths from an example. The public lesson is the handle shape: input, prepared view, action request, package-owned bytes, and private UI state.
 
 ## Traditional implementation
 
@@ -57,19 +57,19 @@ export async function openWorkspaceFlow(filePath: string, agentId: string) {
 }
 ```
 
-This code is not bad because it is long. It is bad because every package knows the shape of every other package. The editor knows the file tree. The preview caller knows the preview service. The help consumer knows the help folder. The keyboard path knows the agent store. Notification changes happen by direct implementation call.
+This code is not bad because it is long. It is bad because every package knows the shape of every other package. The editor knows the file tree. The preview caller knows the preview service. The help consumer knows the help folder. The keyboard path knows the tool store. Notification changes happen by direct implementation call.
 
 ## Bitfield translation
 
-The same product flow becomes public handles:
+The same product flow becomes public names:
 
 ```text
 selected-file -> product fact read by editor and AI context
 current-project -> product fact read by preview-related packages
-project-preview-surface -> prepared input read by the preview surface
-getting-started-help -> prepared input from package-owned help content
-selected-agent.update -> target request from keyboard or command palette
-notification-mode.update -> target request from settings or shortcuts
+project-preview-surface -> data name read by the preview surface
+getting-started-help -> data name from package-owned help content
+selected-agent.update -> action request from keyboard or command palette
+notification-mode.update -> action request from settings or shortcuts
 open menu / hover / draft text -> private UI state
 ```
 
@@ -97,16 +97,16 @@ await sendRequestToBitfieldTarget({
 
 The adapter can be React, a native shell, a terminal shell, or a future SDK. The boundary stays the same: read named data, request named work, keep visual-only state private.
 
-## Public handles
+## Public names
 
-| Product job | Public handle | Kind | Who may use it |
+| Product job | Public name | Kind | Who may use it |
 |---|---|---|---|
-| Know which file is selected. | `selected-file` | Shared product fact / prepared input | Editor, AI context, breadcrumbs, command palette. |
+| Know which file is selected. | `selected-file` | Shared product fact / data name | Editor, AI context, breadcrumbs, command palette. |
 | Know which project is active. | `current-project` | Shared product fact | Preview, package filters, build actions. |
-| Render the preview surface. | `project-preview-surface` | Prepared input | Web frame, preview panel, status surfaces. |
-| Show help content. | `getting-started-help` | Prepared input from package-owned bytes | Help panel, command palette, onboarding surface. |
-| Change selected agent. | `selected-agent.update` | Target request | Keyboard shortcut, command palette, sidebar action. |
-| Change notification mode. | `notification-mode.update` | Target request | Settings surface, command action, automation. |
+| Render the preview surface. | `project-preview-surface` | Data name | Web frame, preview panel, status surfaces. |
+| Show help content. | `getting-started-help` | Data name from package-owned bytes | Help panel, command palette, onboarding surface. |
+| Change selected agent. | `selected-agent.update` | Action request | Keyboard shortcut, command palette, sidebar action. |
+| Change notification mode. | `notification-mode.update` | Action request | Settings surface, command action, automation. |
 | Track hover/open/draft details. | Component state | Private UI state | Only the surface rendering that detail. |
 
 ## Data-flow map
@@ -127,7 +127,7 @@ The adapter can be React, a native shell, a terminal shell, or a future SDK. The
   <div className="bf-flow-node">
     <span className="bf-flow-step">03</span>
     <strong>Request work</strong>
-    <p>Keyboard and settings send named target requests.</p>
+    <p>Keyboard and settings send named action requests.</p>
   </div>
   <div className="bf-flow-arrow" aria-hidden="true">→</div>
   <div className="bf-flow-node">
@@ -137,14 +137,14 @@ The adapter can be React, a native shell, a terminal shell, or a future SDK. The
   </div>
 </div>
 
-## File-by-file public boundary
+## File-by-file public files and names
 
 | File or package area | It may do | It must not do |
 |---|---|---|
 | File editor surface | Read `selected-file` and render editor UI. | Import file tree store or decide how file selection is written. |
 | Preview surface | Read `project-preview-surface` and render the preview. | Import preview producer code or hardcode producer field names. |
 | Help package | Own help content and expose prepared help data or search target. | Make consumers import markdown or index files. |
-| Keyboard package | Convert shortcut intent into a target request. | Mutate selected-agent state directly through another package object. |
+| Keyboard package | Convert shortcut intent into an action request. | Mutate selected-agent state directly through another package object. |
 | Notification package | Expose a notification-mode target and public resulting state. | Require settings UI to import notification implementation. |
 | Shell or adapter | Place surfaces and call public Runtime Kit reads/requests. | Become the product brain with a giant switch statement. |
 
@@ -167,17 +167,17 @@ The finished flow should answer yes to all of these:
 | Check | Must be true |
 |---|---|
 | Shared product facts are named handles. | `selected-file` and `current-project` are not hidden inside one package object. |
-| Prepared data is read, not rebuilt. | Preview and help consumers read public inputs. |
-| Work crosses through target requests. | Selected-agent and notification changes use public targets. |
+| Named data is read, not rebuilt. | Preview and help consumers read public inputs. |
+| Work crosses through action requests. | Selected-agent and notification changes use public actions. |
 | Package-owned bytes stay package-owned. | Help content is not imported by consumers as a loose file. |
 | Private UI state stays private. | Hover, open menu, and draft state are not written as product facts. |
-| React is only an adapter. | The same public handles make sense for another shell. |
+| React is only an adapter. | The same public names make sense for another shell. |
 | No private package files are imported. | Consumer imports stay on public Runtime Kit surfaces or local package code. |
 
 ## Next
 
 - Learn the single state rule: [Share state between packages](/runtime-kit/build-without-tangled-code/share-state-between-packages)
-- Learn prepared reads: [Read data another package prepared](/runtime-kit/build-without-tangled-code/read-data-another-package-prepared)
-- Learn target requests: [Ask another package to do work](/runtime-kit/build-without-tangled-code/ask-another-package-to-do-work)
+- Learn named data reads: [Read data another package prepared](/runtime-kit/build-without-tangled-code/read-data-another-package-prepared)
+- Learn action requests: [Ask another package to do work](/runtime-kit/build-without-tangled-code/ask-another-package-to-do-work)
 
 </div>

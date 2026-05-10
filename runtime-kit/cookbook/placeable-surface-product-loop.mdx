@@ -1,12 +1,12 @@
 ---
 title: "Placeable surface product loop"
-description: "Build a full product loop with package records, target requests, surface descriptors, a dumb shell, and surface bodies."
+description: "Build a full product loop with package records, action requests, surface descriptors, a dumb shell, and surface bodies."
 ---
 
 <div className="bf-article">
 
 <p className="bf-lead">
-This Runtime Kit Cookbook entry builds the same shape explained in [Placeable surfaces](/runtime-kit/placeable-surfaces): package material becomes prepared reads and targets, descriptors declare what each surface may touch, and a dumb shell places the surfaces.
+This Runtime Kit Cookbook entry builds the same shape explained in [Placeable surfaces](/runtime-kit/placeable-surfaces): package material becomes named data reads and targets, descriptors declare what each surface may touch, and a dumb shell places the surfaces.
 </p>
 
 The snippets on this page come from `examples/product-cookbook/placeable-surface-product-loop/` and are checked by `cookbook-examples.json`.
@@ -17,19 +17,19 @@ Use this recipe when the product is bigger than one component.
 
 | Good fit | Not this recipe |
 |---|---|
-| A product shell with multiple surfaces: launch, help, support, settings, billing, or dashboards. | A single component reading one prepared input. |
+| A product shell with multiple surfaces: launch, help, support, settings, billing, or dashboards. | A single component reading one data name. |
 | A sidebar/tab/region system that should stay generic. | A one-off hardcoded marketing page. |
-| Product areas that need different prepared inputs and targets. | A pure package-boundary example with no UI shell. |
+| Product areas that need different data names and targets. | A pure package-boundary example with no UI shell. |
 | Each new surface keeps adding layout special cases. | A reference lookup for one function signature. |
 
 The point is not "make a dashboard." The point is to keep arrangement generic while product meaning lives in package data, targets, descriptors, and surface bodies.
 
 ## What you will build
 
-| Layer | File | Public contract |
+| Layer | File | Public names |
 |---|---|---|
-| Package boundary | `launch-product/things-to-store-and-run.json` | Records `welcome-copy`, `checklist`; targets `launch.next-step`, `help.search`. |
-| Surface descriptors | `app/surfaces.ts` | Surface ids, labels, regions, component keys, prepared inputs, targets. |
+| Package file | `launch-product/things-to-store-and-run.json` | Records `welcome-copy`, `checklist`; targets `launch.next-step`, `help.search`. |
+| Surface descriptors | `app/surfaces.ts` | Surface ids, labels, regions, component keys, data names, targets. |
 | Dumb shell | `app/ProductShell.tsx` | Renders labels, active surface, and region from descriptors. |
 | Main surface | `app/LaunchHomeSurface.tsx` | Reads `welcome-copy` and `launch-checklist`; calls `launch.next-step`. |
 | Help surface | `app/LaunchHelpSurface.tsx` | Calls `help.search` with cancellation. |
@@ -101,8 +101,8 @@ The package contract is:
 
 | Public name | Kind | Used by |
 |---|---|---|
-| `welcome-copy` | Record/prepared input source | `LaunchHomeSurface` |
-| `launch-checklist` | Record/prepared input source | `LaunchHomeSurface` |
+| `welcome-copy` | Record/data name source | `LaunchHomeSurface` |
+| `launch-checklist` | Record/data name source | `LaunchHomeSurface` |
 | `launch.next-step` | Callable target | `LaunchHomeSurface` |
 | `help.search` | Callable target | `LaunchHelpSurface` |
 
@@ -166,7 +166,7 @@ Descriptor contract:
 | `order` | Generic sort key. |
 | `componentKey` | Registry key for the render body. |
 | `preparedInputs` | Public read names this surface may use. |
-| `targets` | Public target names this surface may call. |
+| `targets` | Public action names this surface may call. |
 
 ## Step 3: dumb shell
 
@@ -296,7 +296,7 @@ Surface body contract:
 |---|---|---|---|
 | `launch.home` | `welcome-copy`, `launch-checklist` | `launch.next-step` | loading, error, empty, success |
 | `launch.help` | none in this fixture | `help.search` | request entry point and request failure in a real UI |
-| `launch.support` | none in this fixture | none | public contract placeholder or future body |
+| `launch.support` | none in this fixture | none | public names placeholder or future body |
 
 ## Step 5: second surface, same request primitive
 
@@ -337,7 +337,7 @@ Before you call the feature done, write this checklist beside it:
 Package set:
   launch-product
 
-Prepared inputs:
+Data names:
   welcome-copy
   launch-checklist
 
@@ -348,7 +348,7 @@ Targets:
 Placeable surfaces:
   launch.home -> main -> welcome-copy, launch-checklist -> launch.next-step
   launch.help -> panel -> help.search
-  launch.support -> panel -> public contract only
+  launch.support -> panel -> public names only
 
 Generic shell proof:
   The sidebar renders from surface labels.
@@ -356,7 +356,7 @@ Generic shell proof:
   The render body resolves from surface.componentKey.
   Adding a new surface does not edit shell code.
 
-Public request/reply contracts:
+Public request/reply shapes:
   launch.next-step -> { surfaceId: string; completed: string[] } -> { nextStep: string; reason: string }
   help.search -> { query: string } -> { results: Array<{ title: string; excerpt: string }> }
 ```
@@ -369,20 +369,20 @@ Check the product loop against this list before it ships. Use the same checklist
 |---|---|---|
 | Shell needs a new `if (surface.id === ...)` branch for every product area. | Product meaning leaked into arrangement. | Move product meaning into descriptors and registry entries. |
 | Surface calls a target not listed on its descriptor. | The surface contract and body drifted. | Add the target to the descriptor or remove the call. |
-| Surface reads a prepared input not listed on its descriptor. | The read contract and body drifted. | Add the input to the descriptor or change the surface body. |
+| Surface reads a data name not listed on its descriptor. | The read contract and body drifted. | Add the input to the descriptor or change the surface body. |
 | Adding Help requires editing Launch code. | Surface bodies are coupled. | Keep each surface body behind its own `componentKey`. |
 | Package setup is imported into the shell. | The shell was treated like product code. | Reject the output; shell only arranges descriptors. |
-| Reply parsing crashes. | Target reply contract changed or was never written. | Document request/reply shape and decode only that shape. |
+| Reply parsing crashes. | Target reply shape changed or was never written. | Document request/reply shape and decode only that shape. |
 
 ## Safe variations
 
 You can extend this recipe without changing the primitive:
 
-1. Add `launch.analytics` in the `rail` region with its own prepared input.
+1. Add `launch.analytics` in the `rail` region with its own data name.
 2. Move `launch.help` from `panel` to `main` by changing `region`.
 3. Add `settings.billing` with a new component key and target.
 4. Add a second shell that renders the same descriptors differently for mobile.
-5. Add a support surface that reads account/device status once that public contract exists.
+5. Add a support surface that reads account/device status once that public names exists.
 
 The shell stays generic in every variation. The product grows by adding descriptors, package material, and surface bodies.
 
@@ -397,9 +397,9 @@ Package targets:
 Surface descriptors:
 Shell generic proof:
 Surface bodies:
-Prepared input use:
-Target request use:
-Request/reply contracts:
+Data name use:
+Action request use:
+Request/reply shapes:
 Files changed:
 Validation run:
 ```
@@ -410,7 +410,7 @@ Reject the work if the shell names product concepts in branches, if a surface re
 
 Read [Placeable surfaces](/runtime-kit/placeable-surfaces) when you need the concept behind this recipe.
 
-Read [Package boundary](/reference/package-boundary) for exact package thing fields.
+Read [Package file](/reference/package-boundary) for exact package thing fields.
 
 Read [Runtime Kit API](/reference/runtime-kit-api) for the public read/request functions.
 

@@ -78,14 +78,14 @@ Expected result: a reader can see the feature boundary before reading the React 
 
 | Symptom | Cause | Fix |
 |---|---|---|
-| The surface needs to know file names | The package did not provide a prepared read contract | Add a prepared input and read it through Runtime Kit |
-| One package has unrelated product areas | The package boundary is too wide | Split by feature ownership |
+| The surface needs to know file names | The package did not provide a named data read contract | Add a data name and read it through Runtime Kit |
+| One package has unrelated product areas | The package file is too wide | Split by feature ownership |
 | The package contains UI placement policy | The shell/surface boundary is blurred | Move placement meaning to the surface descriptor or shell route |
-| A target name is vague | The caller cannot tell what action is safe | Rename it around product action, like `customers.archive` |
+| An action name is vague | The caller cannot tell what action is safe | Rename it around product action, like `customers.archive` |
 
 ## Verify
 
-The package boundary is ready when a teammate or reviewer can answer these questions from the boundary alone:
+The package file is ready when a teammate or reviewer can answer these questions from the boundary alone:
 
 - What product facts does this feature own?
 - Which bytes are package-owned material?
@@ -95,6 +95,6 @@ The package boundary is ready when a teammate or reviewer can answer these quest
 
 ## Next
 
-Use [Target design](/build-your-own-surface/target-design) for the action side and [Package boundary](/reference/package-boundary) for exact field rules.
+Use [Target design](/build-your-own-surface/target-design) for the action side and [Package file](/reference/package-boundary) for exact field rules.
 
 </div>

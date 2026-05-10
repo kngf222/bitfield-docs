@@ -83,7 +83,7 @@ React is only the adapter shown here. The same rule applies to any shell: read t
 
 | Check | Good answer |
 |---|---|
-| Does more than one package need the value? | It is a shared product fact or prepared input, not one package's private object. |
+| Does more than one package need the value? | It is a shared product fact or data name, not one package's private object. |
 | Does the code import another package store? | Replace it with a named read. |
 | Is the value only visual? | Keep it private instead of sharing it. |
 | Can a non-React shell read the same value? | Yes. The name is Runtime Kit-level, not React-only. |

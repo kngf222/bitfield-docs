@@ -6,7 +6,7 @@ description: "Declare what a Runtime Kit package stores, ships, and makes callab
 <div className="bf-article">
 
 <p className="bf-lead">
-A Runtime Kit package is a folder with one public boundary file. That file tells Bitfield what to store, which bytes the package owns, and which callable doors the package exposes.
+A Runtime Kit package is a folder with one public files and names file. That file tells Bitfield what to store, which bytes the package owns, and which callable doors the package exposes.
 </p>
 
 ## What this is
@@ -21,7 +21,7 @@ A package can bring three public kinds of things:
 | `stored_bytes` | Attach package-owned bytes, such as text, JSON, images, or other files. |
 | `slot` | Declare a named callable door app code can ask for work. |
 
-The package boundary says what exists. Runtime Kit decides how to admit it behind the public contract.
+The package file says what exists. Runtime Kit decides how to admit it behind the public names.
 
 ## The mental model
 
@@ -144,7 +144,7 @@ Use `slot` when a package exposes a named callable door.
 
 The public parts are the slot name, method list, call boundary, and package-owned artifact path. The machinery behind that slot is not app API.
 
-Your app calls the slot through the target name:
+Your app calls the slot through the action name:
 
 ```ts
 await sendRequestToBitfieldTarget({
@@ -187,11 +187,11 @@ Do not put private keys, tokens, or account secrets into package records or stor
 
 **Using package data as app code**
 
-The package boundary declares data and callable doors. App code should still use Runtime Kit read/request calls.
+The package file declares data and callable doors. App code should still use Runtime Kit read/request calls.
 
 **Making the slot name too specific**
 
-Use a stable target name like `product.search`. Do not bake an implementation name into the public target name.
+Use a stable action name like `product.search`. Do not bake an implementation name into the public action name.
 
 ## Quick reference
 
@@ -231,7 +231,7 @@ Slot:
 }
 ```
 
-For exact top-level fields, thing-type fields, valid examples, invalid examples, and path-safety rules, read [Package boundary](/reference/package-boundary). For complete Runtime Kit recipes, read [Runtime Kit Cookbook](/runtime-kit/cookbook/index).
+For exact top-level fields, thing-type fields, valid examples, invalid examples, and path-safety rules, read [Package file](/reference/package-boundary). For complete Runtime Kit recipes, read [Runtime Kit Cookbook](/runtime-kit/cookbook/index).
 
 ## Now build the bigger version
 
@@ -267,6 +267,6 @@ Build one package that owns a complete feature slice: data, a help file, and a c
 }
 ```
 
-That package gives the app three public handles: a prepared checklist input, package-owned help bytes, and the `launch.next-step` target. The app uses those handles instead of importing package setup code.
+That package gives the app three public names: a prepared checklist input, package-owned help bytes, and the `launch.next-step` target. The app uses those handles instead of importing package setup code.
 
 </div>

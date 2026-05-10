@@ -27,7 +27,7 @@ Product scene: a launch screen reads copy, shows a checklist, and has a button t
   <div className="bf-flow-step">
     <span>App</span>
     <strong>Use</strong>
-    <p>Runtime Kit gives app code prepared reads and named requests.</p>
+    <p>Runtime Kit gives app code named data reads and named requests.</p>
   </div>
 </div>
 
@@ -55,7 +55,7 @@ The customer-facing rule is simple: your app talks to Runtime Kit, Runtime Kit t
 
 | Boundary | Reader-facing rule |
 |---|---|
-| App code | Reads prepared data and sends named target requests. |
+| App code | Reads named data and sends named action requests. |
 | Runtime Kit | Owns the public app-facing calls. |
 | Package | Declares records, package-owned bytes, and callable targets. |
 | Bitfield | Coordinates durable data and runnable pieces underneath. |

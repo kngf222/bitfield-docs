@@ -6,10 +6,10 @@ description: "Get a key, add Runtime Kit, read data, and send a request."
 <div className="bf-article">
 
 <p className="bf-lead">
-This is the shortest first-result path: get key access, activate a device, add Runtime Kit, read prepared data, and send one target request.
+This is the shortest first-result path: get key access, activate a device, add Runtime Kit, read named data, and send one action request.
 </p>
 
-Product scene: you are building the first screen of a product. It needs one piece of prepared data and one button that asks Bitfield to do work.
+Product scene: you are building the first screen of a product. It needs one piece of named data and one button that asks Bitfield to do work.
 
 <div className="bf-flow" aria-label="Quickstart flow">
   <div className="bf-flow-step">
@@ -27,11 +27,11 @@ Product scene: you are building the first screen of a product. It needs one piec
   <div className="bf-flow-step">
     <span>3</span>
     <strong>Read and request</strong>
-    <p>Render prepared data and call a named target.</p>
+    <p>Render named data and call a named target.</p>
   </div>
 </div>
 
-Expected result: your app can render one prepared value and send one target request without importing private package setup.
+Expected result: your app can render one prepared value and send one action request without importing private package setup.
 
 ## Prerequisites
 
@@ -40,7 +40,7 @@ Expected result: your app can render one prepared value and send one target requ
 | Bitfield account access | The account portal owns key access and active-device management. |
 | One activated device | Runtime Kit runs against an account/device path, not a random anonymous install. |
 | A JavaScript app surface | The current public examples use the JavaScript Runtime Kit and React hook. |
-| A prepared input name and target name | App code reads named prepared data and sends requests to named targets. |
+| A data name and action name | App code reads named named data and sends requests to named targets. |
 
 If you do not have key access yet, do [Get your key](/start/get-your-key) first.
 
@@ -61,7 +61,7 @@ import { sendRequestToBitfieldTarget } from '@bitfield/runtime-kit';
 import { useBitfieldData } from '@bitfield/runtime-kit/react';
 ```
 
-## 3. Read prepared data in React
+## 3. Read named data in React
 
 `useBitfieldData(...)` reads materialized data that Runtime Kit has already made available to your app.
 
@@ -78,7 +78,7 @@ export function InboxCount() {
 }
 ```
 
-Visible result: the screen shows an inbox count when the prepared data is available. The component owns loading, error, and success rendering. It does not decide how Bitfield stores or prepares the data.
+Visible result: the screen shows an inbox count when the named data is available. The component owns loading, error, and success rendering. It does not decide how Bitfield stores or prepares the data.
 
 ## 4. Send a request
 
@@ -115,10 +115,10 @@ You did not build the whole product. You built the public app-facing shape:
 | Symptom | Likely cause | Fix |
 |---|---|---|
 | You do not know where to get the key | Account path was skipped | Open [Get your key](/start/get-your-key) |
-| The component stays loading | Device/account path or prepared input is not ready | Check account activation, then read [Runtime Kit troubleshooting](/runtime-kit/troubleshooting) |
-| The read returns no data | The prepared input name does not exist yet | Follow [Package to screen](/runtime-kit/package-to-screen) |
-| The target request fails | The target name or payload contract is wrong | Read [Send a request](/runtime-kit/send-request) |
-| Generated code imports a deep Runtime Kit file | It crossed the public boundary | Use only the imports shown on this page |
+| The component stays loading | Device/account path or data name is not ready | Check account activation, then read [Runtime Kit troubleshooting](/runtime-kit/troubleshooting) |
+| The read returns no data | The data name does not exist yet | Follow [Package to screen](/runtime-kit/package-to-screen) |
+| The action request fails | The action name or payload contract is wrong | Read [Send a request](/runtime-kit/send-request) |
+| Generated code imports a deep Runtime Kit file | It crossed the public files and names | Use only the imports shown on this page |
 
 ## Next
 

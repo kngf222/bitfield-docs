@@ -19,9 +19,9 @@ import { sendRequestToBitfieldTarget } from '@bitfield/runtime-kit';
 
 ## The mental model
 
-Your app should not care how the work is performed. It should care about the public target name and the payload it sends.
+Your app should not care how the work is performed. It should care about the public action name and the payload it sends.
 
-If a user clicks a search button, your app can call `product.search`. The package behind that target can change later. Your button can stay the same as long as the target contract stays the same.
+If a user clicks a search button, your app can call `product.search`. The package behind that target can change later. Your button can stay the same as long as the action reply shape stays the same.
 
 That is the value: app code calls the door, not the implementation behind the door.
 
@@ -33,13 +33,13 @@ app action
   -> Runtime Kit encodes payload as bytes
   -> named target receives the request
   -> target replies with bytes
-  -> app decodes bytes according to the public target contract
+  -> app decodes bytes according to the public action reply shape
 ```
 
 <div className="bf-flow" aria-label="Read versus request split">
   <div className="bf-flow-node">
     <span className="bf-flow-step">read</span>
-    <strong>Prepared data</strong>
+    <strong>Named data</strong>
     <p>`useBitfieldData(...)` reads values already prepared for the surface.</p>
   </div>
   <div className="bf-flow-arrow" aria-hidden="true">|</div>
@@ -52,7 +52,7 @@ app action
   <div className="bf-flow-node">
     <span className="bf-flow-step">reply</span>
     <strong>Reply bytes</strong>
-    <p>The app decodes only what the target contract promises.</p>
+    <p>The app decodes only what the action reply shape promises.</p>
   </div>
 </div>
 
@@ -83,7 +83,7 @@ const text = new TextDecoder().decode(reply.payload);
 const result = JSON.parse(text);
 ```
 
-Use JSON-like payloads when your target contract is ordinary app data.
+Use JSON-like payloads when your action reply shape is ordinary app data.
 
 ## Send text
 
@@ -200,7 +200,7 @@ An error means the public request did not complete. It does not mean the compone
 
 **Parsing every reply the same way**
 
-The reply is bytes. Decode according to the target contract. Do not assume every target returns JSON unless that target says it does.
+The reply is bytes. Decode according to the action reply shape. Do not assume every target returns JSON unless that target says it does.
 
 **Calling private implementation code directly**
 
@@ -234,7 +234,7 @@ const json = JSON.parse(new TextDecoder().decode(reply.payload));
 
 ## Now build the bigger version
 
-Write the target contract before the button.
+Write the action reply shape before the button.
 
 ```ts
 type SearchRequest = {

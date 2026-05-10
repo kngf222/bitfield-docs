@@ -1,12 +1,12 @@
 ---
 title: "Runtime Kit concept map"
-description: "How package boundaries, prepared reads, callable targets, local state, and placeable surfaces fit together."
+description: "How package files, named data reads, callable targets, local state, and placeable surfaces fit together."
 ---
 
 <div className="bf-article">
 
 <p className="bf-lead">
-Runtime Kit keeps product code from tangling by turning package material into two app-facing moves: read prepared data and call named targets.
+Runtime Kit keeps product code from tangling by turning package material into two app-facing moves: read named data and call named targets.
 </p>
 
 Picture a founder shipping a launch screen. The screen needs headline copy, a checklist, a help panel, and a button that asks for the next step. Without Runtime Kit, the screen starts importing data files, helper functions, search code, and setup code. With Runtime Kit, those jobs stay separated.
@@ -16,7 +16,7 @@ Picture a founder shipping a launch screen. The screen needs headline copy, a ch
 <div className="bf-flow" aria-label="Runtime Kit concept map from package source to app surface">
   <div className="bf-flow-node">
     <span className="bf-flow-step">01</span>
-    <strong>Package boundary</strong>
+    <strong>Package file</strong>
     <p>The package declares records, package-owned bytes, and callable targets.</p>
   </div>
   <div className="bf-flow-arrow" aria-hidden="true">→</div>
@@ -28,8 +28,8 @@ Picture a founder shipping a launch screen. The screen needs headline copy, a ch
   <div className="bf-flow-arrow" aria-hidden="true">→</div>
   <div className="bf-flow-node">
     <span className="bf-flow-step">03</span>
-    <strong>Public handles</strong>
-    <p>The app sees prepared input names and target names, not package setup.</p>
+    <strong>Public names</strong>
+    <p>The app sees data names and action names, not package setup.</p>
   </div>
   <div className="bf-flow-arrow" aria-hidden="true">→</div>
   <div className="bf-flow-node">
@@ -41,19 +41,19 @@ Picture a founder shipping a launch screen. The screen needs headline copy, a ch
 
 The technical contract is small:
 
-| Concept | Plain meaning | Public contract |
+| Concept | Plain meaning | Public names |
 |---|---|---|
-| Package boundary | The package says what it brings. | `things-to-store-and-run.json` with `record`, `stored_bytes`, or `slot` things. |
-| Prepared read | The screen asks for data that Runtime Kit already prepared. | `useBitfieldData(inputName)` returns `{ data, loading, error }`. |
+| Package file | The package says what it brings. | `things-to-store-and-run.json` with `record`, `stored_bytes`, or `slot` things. |
+| Named data read | The screen asks for data that Runtime Kit already prepared. | `useBitfieldData(inputName)` returns `{ data, loading, error }`. |
 | Callable target | The user asks a named door to do work. | `sendRequestToBitfieldTarget({ target, payload }, signal?)` returns reply bytes. |
 | Local state | The device has active Bitfield material. | Customer-visible areas under `~/.bitfield`, not hand-edited app data. |
-| Placeable surface | A shell places UI by descriptor, not by product branches. | Surface descriptor names region, component key, prepared inputs, and targets. |
+| Placeable surface | A shell places UI by descriptor, not by product branches. | Surface descriptor names region, component key, data names, and targets. |
 
-## Package boundary
+## Package file
 
 Product scene: you want your welcome copy to ship with a package, not as a hardcoded React string.
 
-A package boundary is the file that says what the package owns. It can declare package-owned records, package-owned bytes, and callable targets.
+A package file is the file that says what the package owns. It can declare package-owned records, package-owned bytes, and callable targets.
 
 ```json
 {
@@ -76,7 +76,7 @@ Anti-pattern:
 const copy = await fetch('/packages/launch-product/things-to-store-and-run.json');
 ```
 
-That breaks the shape because the app is parsing package source instead of reading prepared data. The package boundary is for Runtime Kit admission. It is not a UI data API.
+That breaks the shape because the app is parsing package source instead of reading named data. The package file is for Runtime Kit admission. It is not a UI data API.
 
 Next links:
 
@@ -84,13 +84,13 @@ Next links:
 |---|---|
 | Tutorial | [Package to screen](/runtime-kit/package-to-screen) |
 | Recipe | [Package set with one record](/runtime-kit/cookbook/package-set-with-one-record) |
-| Reference | [Package boundary](/reference/package-boundary) |
+| Reference | [Package file](/reference/package-boundary) |
 
-## Prepared reads
+## Named data reads
 
 Product scene: the launch screen wants `welcome-copy`, but it should not care which package record, file, or derived value produced it.
 
-A prepared read is a named app-facing value. The component asks for the name and renders the public states.
+A named data read is a named app-facing value. The component asks for the name and renders the public states.
 
 ```tsx
 const welcome = useBitfieldData<WelcomeCopy>('welcome-copy');
@@ -106,7 +106,7 @@ Anti-pattern:
 const welcome = readAddress('package::launch-product::welcome-copy');
 ```
 
-That breaks the shape because the component guessed a storage address. The app should read the prepared input name.
+That breaks the shape because the component guessed a storage address. The app should read the data name.
 
 Next links:
 
@@ -172,13 +172,13 @@ Next links:
 |---|---|
 | Guide | [Local state](/runtime-kit/local-state) |
 | Troubleshooting | [Troubleshooting](/runtime-kit/troubleshooting) |
-| Reference | [Package boundary](/reference/package-boundary) |
+| Reference | [Package file](/reference/package-boundary) |
 
 ## Placeable surfaces
 
 Product scene: the product grows from one launch screen to launch, help, support, and settings. The shell should not grow a branch for every business area.
 
-A placeable surface descriptor says where a surface can appear and which prepared inputs or targets it may use.
+A placeable surface descriptor says where a surface can appear and which data names or targets it may use.
 
 ```ts
 {
@@ -211,7 +211,7 @@ Next links:
 ## One sentence version
 
 ```text
-Package declares -> Runtime Kit admits -> app reads prepared inputs or calls targets -> shell places surfaces by descriptor.
+Package declares -> Runtime Kit admits -> app reads data names or calls targets -> shell places surfaces by descriptor.
 ```
 
 If a feature does not fit that sentence, stop and find which boundary it crossed.

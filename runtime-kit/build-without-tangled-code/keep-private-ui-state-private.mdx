@@ -9,7 +9,7 @@ description: "Keep visual-only state local, and move only cross-package coordina
 Not every state value belongs in Bitfield. Put state in Bitfield when it coordinates packages. Keep hover, menu, drag, focus, and draft UI details private.
 </p>
 
-Product scene: a sidebar has hover state, an editor has unsaved text, a file tree has a selected file, and an AI panel needs the selected file for context. These are not the same kind of state.
+Product scene: a sidebar has hover state, an editor has unsaved text, a file tree has a selected file, and an assistant panel needs the selected file for context. These are not the same kind of state.
 
 Expected result: Bitfield carries product facts that multiple packages need. Components still keep visual-only details close to where they happen.
 
@@ -104,7 +104,7 @@ Traditional under-shared answer:
 const [selectedFile, setSelectedFile] = useState<string | null>(null);
 ```
 
-Better answer when editor, AI panel, breadcrumbs, and command palette need it:
+Better answer when editor, assistant panel, breadcrumbs, and command palette need it:
 
 ```ts
 const selectedFile = readInput('selected-file');
@@ -132,8 +132,8 @@ Only promote it when the draft becomes product data, such as a saved message, no
 
 | Ask this | If yes | If no |
 |---|---|---|
-| Does another package need this value? | Consider Bitfield state or prepared input. | Keep it private. |
-| Does changing it run real product work? | Send a target request. | Keep it private or write product state through the right boundary. |
+| Does another package need this value? | Consider Bitfield state or data name. | Keep it private. |
+| Does changing it run real product work? | Send an action request. | Keep it private or write product state through the right boundary. |
 | Is it only animation, hover, focus, drag, scroll, or draft typing? | Keep it private. | Continue classifying. |
 | Would losing it on refresh break product meaning? | It may be product state. | It is probably UI state. |
 | Would two packages disagree if they each kept a copy? | Put one public fact in Bitfield. | Keep package-local state. |
@@ -154,13 +154,13 @@ React is one adapter example. Swift view state, Kotlin state, terminal prompt st
 | Check | Good answer |
 |---|---|
 | Is the value hover, focus, scroll, drag, or draft typing? | Keep it private. |
-| Does another package need it to make product decisions? | Promote it to a shared fact or prepared input. |
-| Does changing it run work? | Use a target request. |
+| Does another package need it to make product decisions? | Promote it to a shared fact or data name. |
+| Does changing it run work? | Use an action request. |
 | Is React context being used as product coordination? | Replace it with Runtime Kit reads and requests. |
 
 ## Full before and after
 
-Traditional feature request: "When the user clicks a file row, highlight it, open it in the editor, and show the AI panel context."
+Traditional feature request: "When the user clicks a file row, highlight it, open it in the editor, and show the assistant panel context."
 
 Bad implementation:
 
@@ -182,7 +182,7 @@ const [hoveredRow, setHoveredRow] = useState<string | null>(null);
 const selectedFile = useBitfieldData<string>('selected-file');
 ```
 
-Then the click path updates the public selected-file fact through the package's public boundary. The editor and AI panel read that fact. The hover remains private.
+Then the click path updates the public selected-file fact through the package's public files and names. The editor and assistant panel read that fact. The hover remains private.
 
 The rule is not "local state bad" or "Bitfield state good." The rule is: put each value where its readers are.
 
@@ -198,13 +198,13 @@ Does another package need to read it?
   make it Bitfield state
 
 Does changing it require work to run?
-  send a target request
+  send an action request
 ```
 
 ## Next
 
 - Learn shared state: [Share state between packages](/runtime-kit/build-without-tangled-code/share-state-between-packages)
-- Learn target requests: [Ask another package to do work](/runtime-kit/build-without-tangled-code/ask-another-package-to-do-work)
+- Learn action requests: [Ask another package to do work](/runtime-kit/build-without-tangled-code/ask-another-package-to-do-work)
 - Understand local customer-visible state: [Local state](/runtime-kit/local-state)
 
 </div>

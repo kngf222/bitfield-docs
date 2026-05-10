@@ -7,7 +7,7 @@ These pages are public customer documentation. They describe the public product,
 ## Pages
 
 - [Bitfield Docs](index): The public entry point and path chooser for understanding Bitfield, trying it, building a first screen, checking proof, or managing account access.
-- [Quickstart](start/quickstart): A first-result tutorial for account access, device activation, Runtime Kit imports, reading prepared data, sending a target request, and handling first failures.
+- [Quickstart](start/quickstart): A first-result tutorial for account access, device activation, Runtime Kit imports, reading named data, sending an action request, and handling first failures.
 - [Get your key](start/get-your-key): Explains the account portal path for account creation, trial or plan access, email confirmation, key access, first device activation, recovery, and next steps.
 - [Manifesto](manifesto): Jibran Akhtar's founder manifesto for Bitfield: future software, growing ideas, curiosity, and why Bitfield exists.
 - [What is Bitfield?](concepts/what-is-bitfield): Explains Bitfield without assuming the reader already knows database or runtime vocabulary.
@@ -16,34 +16,34 @@ These pages are public customer documentation. They describe the public product,
 - [Content-addressed storage](concepts/content-addressed-storage): Defines content addresses and states what the public docs do not expose.
 - [Slots](concepts/slots): Explains slots as named runnable doors that features can call without importing each other.
 - [Active devices](concepts/active-devices): Defines active devices for pricing, keys, and account management.
-- [JavaScript Runtime Kit](runtime-kit/javascript): Maps the public Runtime Kit flow from package boundary to prepared reads and named target requests.
-- [Package to screen](runtime-kit/package-to-screen): Walks from a package boundary through admitted material, prepared reads, target requests, and React rendering.
+- [JavaScript Runtime Kit](runtime-kit/javascript): Maps the public Runtime Kit flow from package file to named data reads and named action requests.
+- [Package to screen](runtime-kit/package-to-screen): Walks from a package file through admitted material, named data reads, action requests, and React rendering.
 - [Runtime Kit concept map](runtime-kit/concept-map): Explains the full Runtime Kit concept chain with product scenes, visual flow, anti-patterns, and links to tutorial, recipe, and reference pages.
-- [Placeable surfaces](runtime-kit/placeable-surfaces): Explains the placeable-surface composition primitive with visual maps: package material becomes prepared reads and targets, descriptors declare regions and allowed names, and a dumb shell/sidebar places surfaces without product-specific branches.
-- [Build without tangled code](runtime-kit/build-without-tangled-code/index): Shows how to translate traditional app coupling into Bitfield state, prepared inputs, target requests, private UI state, and package boundaries.
+- [Placeable surfaces](runtime-kit/placeable-surfaces): Explains the placeable-surface composition primitive with visual maps: package material becomes named data reads and targets, descriptors declare regions and allowed names, and a dumb shell/sidebar places surfaces without product-specific branches.
+- [Build without tangled code](runtime-kit/build-without-tangled-code/index): Shows how to translate traditional app coupling into Bitfield state, data names, action requests, private UI state, and package files.
 - [Translate traditional code](runtime-kit/build-without-tangled-code/translate-traditional-code): Shows source-grounded translations from traditional stores, direct imports, service calls, shell branching, and package-file reads into Bitfield reads, requests, descriptors, and private UI state.
 - [Share state between packages](runtime-kit/build-without-tangled-code/share-state-between-packages): Explains when a value becomes shared product state and shows the selected-file shape without package-to-package store imports.
-- [Read data another package prepared](runtime-kit/build-without-tangled-code/read-data-another-package-prepared): Shows how consumers read named prepared data while the preparing package keeps its files, records, and storage shape private.
+- [Read data another package prepared](runtime-kit/build-without-tangled-code/read-data-another-package-prepared): Shows how consumers read named named data while the preparing package keeps its files, records, and storage shape private.
 - [Ask another package to do work](runtime-kit/build-without-tangled-code/ask-another-package-to-do-work): Shows how buttons, shortcuts, and package actions ask named targets to run work without importing implementation functions.
 - [Keep private UI state private](runtime-kit/build-without-tangled-code/keep-private-ui-state-private): Separates hover state, open menus, draft text, and drag details from shared product facts that multiple packages need.
 - [Store files inside a package](runtime-kit/build-without-tangled-code/store-files-inside-a-package): Shows the package-owned file boundary and the consumer-side mistake of reading another package's files directly.
 - [Let many packages work together](runtime-kit/build-without-tangled-code/let-many-packages-work-together): Walks a multi-package product chain where files, editors, AI context, notifications, and shells cooperate without centralizing product meaning.
 - [Build a file preview flow](runtime-kit/build-without-tangled-code/build-a-file-preview-flow): Follows a realistic file, preview, help, keyboard, notification, and private UI flow from traditional coupled code into public Runtime Kit handles.
-- [Rules for AI agents](runtime-kit/build-without-tangled-code/rules-for-ai-agents): Provides prompt rules, bad-output corrections, and review checks that keep generated code on public Runtime Kit boundaries.
+- [Rules for coding tools](runtime-kit/build-without-tangled-code/rules-for-coding-tools): Provides prompt rules, bad-output corrections, and review checks that keep generated code on public Runtime Kit public files and names.
 - [Read data in React](runtime-kit/use-bitfield-data): Shows selectors, render states, request pairing, and what React components should not own.
-- [Send a request](runtime-kit/send-request): Shows JSON, text, byte payloads, reply decoding, cancellation, and target-boundary mistakes.
+- [Send a request](runtime-kit/send-request): Shows JSON, text, byte payloads, reply decoding, cancellation, and action-request mistakes.
 - [Packages](runtime-kit/packages): Explains package sets, records, stored bytes, callable slots, validation rules, and safe package examples.
 - [Local state](runtime-kit/local-state): Explains stored data, Runtime Kit package state, activation material, and what users should not hand-edit.
-- [Build with AI agents](runtime-kit/ai-build-rules): Gives AI-agent prompt packs, bad-output corrections, review maps, and public Runtime Kit boundaries for generated feature work.
+- [Build with coding tools](runtime-kit/ai-build-rules): Gives AI-coding-tool prompt packs, bad-output corrections, review maps, and public Runtime Kit public files and names for generated feature work.
 - [Troubleshooting](runtime-kit/troubleshooting): Maps Runtime Kit symptoms to the public chain link that failed and gives safe repair checks.
 - [Runtime Kit Cookbook](runtime-kit/cookbook/index): Indexes Runtime Kit cookbook entries for packages, package-owned bytes, callable slots, React surfaces, and placeable surface product loops.
-- [Package set with one record](runtime-kit/cookbook/package-set-with-one-record): Shows the smallest package boundary with one durable package record.
+- [Package set with one record](runtime-kit/cookbook/package-set-with-one-record): Shows the smallest package file with one durable package record.
 - [Package-owned file](runtime-kit/cookbook/package-owned-file): Shows how a package declares package-owned bytes without reaching outside its folder.
 - [Callable package slot](runtime-kit/cookbook/callable-package-slot): Shows how a package declares a callable slot and how app code sends a request to it.
 - [React surface for package data](runtime-kit/cookbook/react-surface-for-package-data): Shows the app-facing read and request shape without exposing package implementation details to React.
-- [Placeable surface product loop](runtime-kit/cookbook/placeable-surface-product-loop): Shows the source-owned cookbook succession for placeable surfaces: package boundary, descriptors, generic shell, surface bodies, and review checklist.
+- [Placeable surface product loop](runtime-kit/cookbook/placeable-surface-product-loop): Shows the source-owned cookbook succession for placeable surfaces: package file, descriptors, generic shell, surface bodies, and review checklist.
 - [Build with Bitfield](build-your-own-surface/index): Maps the full Bitfield build loop from product moment to package, surface, target, shell, device, and account access.
-- [App surfaces](build-your-own-surface/app-surfaces): Shows how product screens read prepared data, render every state, and send named target requests.
+- [App surfaces](build-your-own-surface/app-surfaces): Shows how product screens read named data, render every state, and send named action requests.
 - [Package authoring](build-your-own-surface/package-authoring): Explains how to draw a feature boundary with records, package-owned files, callable slots, expected results, and failures.
 - [Target design](build-your-own-surface/target-design): Gives naming, payload, reply, and failure rules for callable targets that surfaces can request safely.
 - [Product shells](build-your-own-surface/product-shells): Defines the shell boundary for navigation, layout, account/device state, and surface placement.
@@ -61,7 +61,7 @@ These pages are public customer documentation. They describe the public product,
 - [Proof objections](proof/objection-faq): Answers skeptical questions about cold reads, network latency, batch ceilings, content addressing, and public disclosure boundaries.
 - [Runtime Kit API](reference/runtime-kit-api): Reference for sendRequestToBitfieldTarget, useBitfieldData, payload conversion, cancellation, selectors, return states, valid examples, invalid examples, and public boundaries.
 - [Claim ledger](reference/claim-ledger): Documents the public claim-ledger fields that keep speed claims honest.
-- [Package boundary](reference/package-boundary): Lists package boundary fields, record/stored-bytes/slot thing types, payload choices, method rules, path safety, valid examples, invalid examples, and common failures.
+- [Package file](reference/package-boundary): Lists package file fields, record/stored-bytes/slot thing types, payload choices, method rules, path safety, valid examples, invalid examples, and common failures.
 - [Changelog](changelog/index): The public changelog for customer-visible docs, Runtime Kit, Build, Account, Proof, Start, and Docs changes, with links to changed pages.
 
 ## Public reading rules

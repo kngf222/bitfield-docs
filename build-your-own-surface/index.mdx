@@ -21,7 +21,7 @@ The Build tab is the map for that moment. Runtime Kit teaches the public primiti
   <div className="bf-flow-step">
     <span>2</span>
     <strong>Surface</strong>
-    <p>Render prepared reads and send requests through named public targets.</p>
+    <p>Render named data reads and send requests through named public actions.</p>
   </div>
   <div className="bf-flow-arrow">→</div>
   <div className="bf-flow-step">
@@ -64,14 +64,14 @@ You are making a small customer dashboard.
 4. The shell places the surface in a dashboard region.
 5. The account key activates the devices allowed to use it.
 
-Expected result: the same shape scales from a tiny private tool to a product with many features because each feature can keep its package boundary, surface, and target contract clear.
+Expected result: the same shape scales from a tiny private tool to a product with many features because each feature can keep its package file, surface, and action reply shape clear.
 
 ## Common build mistakes
 
 | Mistake | Why it hurts | Fix |
 |---|---|---|
 | Put product action logic in the shell | Every screen starts depending on one growing layout file | Move the action behind a package target and let the shell place surfaces |
-| Read raw package material in app code | The app learns storage shape instead of product meaning | Use prepared reads through the public Runtime Kit surface |
+| Read raw package material in app code | The app learns storage shape instead of product meaning | Use named data reads through the public Runtime Kit surface |
 | Make one target do every action | Payloads become a secret command language | Give each product action a named target and a small payload |
 | Treat account activation as an afterthought | The build works locally but fails when real devices arrive | Decide the active-device path before launch |
 

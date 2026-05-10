@@ -1,6 +1,6 @@
 ---
 title: "Runtime Kit Cookbook"
-description: "Complete public Runtime Kit recipes for package boundaries, prepared reads, target requests, and placeable surfaces."
+description: "Complete public Runtime Kit recipes for package files, named data reads, action requests, and placeable surfaces."
 ---
 
 <div className="bf-article">
@@ -9,7 +9,7 @@ description: "Complete public Runtime Kit recipes for package boundaries, prepar
 Runtime Kit Cookbook entries are recipes, not loose snippets. Each recipe starts with the Runtime Kit product moment, shows the package files or app surface you own, gives the public Runtime Kit boundary, and ends with a check you can use to prove it worked.
 </p>
 
-Use these when you want to copy a Runtime Kit shape and adapt the names. The examples stay on the public side of the wall: package files, package-owned content, callable slots, prepared reads, target requests, and placeable surface descriptors.
+Use these when you want to copy a Runtime Kit shape and adapt the names. The examples stay on the public side of the wall: package files, package-owned content, callable slots, named data reads, action requests, and placeable surface descriptors.
 
 This is not the whole-product Bitfield Cookbook. That future cookbook can own product-level recipes across account, proof, deployment, and operations. This section is only the Runtime Kit Cookbook.
 
@@ -24,7 +24,7 @@ Every recipe should answer the same questions:
 | When should I use this? | Prevents copying the wrong pattern. |
 | What will I build? | Gives the reader a product scene before the code. |
 | Which files do I own? | Keeps package files, app surfaces, and shell code separate. |
-| What is the Runtime Kit contract? | Names prepared inputs, targets, payloads, replies, and boundaries. |
+| What is the Runtime Kit contract? | Names data names, targets, payloads, replies, and boundaries. |
 | How do I check it worked? | Gives every builder a pass/fail point. |
 | What breaks most often? | Turns debugging into a known path instead of guessing. |
 | How do I extend it? | Shows the next move without changing the primitive. |
@@ -46,8 +46,8 @@ If a recipe does not answer those questions yet, it is not finished.
   <div className="bf-flow-arrow" aria-hidden="true">→</div>
   <div className="bf-flow-node">
     <span className="bf-flow-step">contract</span>
-    <strong>Public contract</strong>
-    <p>Name prepared inputs, targets, payloads, replies, and boundaries.</p>
+    <strong>Public names</strong>
+    <p>Name data names, targets, payloads, replies, and boundaries.</p>
   </div>
   <div className="bf-flow-arrow" aria-hidden="true">→</div>
   <div className="bf-flow-node">
@@ -74,7 +74,7 @@ If a recipe does not answer those questions yet, it is not finished.
   </div>
   <div className="bf-card">
     <strong>React surface for package data</strong>
-    Read prepared data, render every state, and send a target request from one surface.
+    Read named data, render every state, and send an action request from one surface.
   </div>
   <div className="bf-card">
     <strong>Placeable surface product loop</strong>
@@ -95,12 +95,12 @@ If a recipe does not answer those questions yet, it is not finished.
 
 | Your job | Recipe | What it proves |
 |---|---|---|
-| Build the full first feature. | [Package to screen](/runtime-kit/package-to-screen) | Package boundary, prepared read, target request, React surface, and debugging chain. |
+| Build the full first feature. | [Package to screen](/runtime-kit/package-to-screen) | Package file, named data read, action request, React surface, and debugging chain. |
 | Declare one durable package record. | [Package set with one record](/runtime-kit/cookbook/package-set-with-one-record) | Stable package-owned data address and payload update path. |
 | Ship package-owned bytes. | [Package-owned file](/runtime-kit/cookbook/package-owned-file) | Package-local file ownership and path safety. |
-| Add a callable target. | [Callable package slot](/runtime-kit/cookbook/callable-package-slot) | Target name, method list, artifact path, and app request boundary. |
+| Add a callable target. | [Callable package slot](/runtime-kit/cookbook/callable-package-slot) | Action name, method list, artifact path, and app request boundary. |
 | Render package data in React. | [React surface for package data](/runtime-kit/cookbook/react-surface-for-package-data) | Read states, request states, public imports, and review checks. |
-| Compose a product shell. | [Placeable surface product loop](/runtime-kit/cookbook/placeable-surface-product-loop) | Descriptors, dumb shell, surface bodies, prepared inputs, and targets. |
+| Compose a product shell. | [Placeable surface product loop](/runtime-kit/cookbook/placeable-surface-product-loop) | Descriptors, dumb shell, surface bodies, data names, and targets. |
 
 ## Recipe review contract
 
@@ -108,7 +108,7 @@ When a recipe is used to build a feature, include this instruction:
 
 ```text
 Use the public Runtime Kit recipe. Do not import private Runtime Kit paths.
-Name the package set, package, prepared inputs, targets, request payloads, reply payloads, and files changed.
+Name the package set, package, data names, targets, request payloads, reply payloads, and files changed.
 Render loading, error, empty, and success states for React reads.
 Call targets with sendRequestToBitfieldTarget(...), not by importing implementation code.
 ```
@@ -118,9 +118,9 @@ Then require this explanation back:
 ```text
 I changed these files:
 I used these public imports:
-The prepared inputs are:
+The data names are:
 The targets are:
-The request/reply contracts are:
+The request/reply shapes are:
 The verification step is:
 ```
 

@@ -1,6 +1,6 @@
 ---
 title: "Build without tangled code"
-description: "Translate normal coupled app code into Bitfield package state, prepared reads, target requests, and private UI state."
+description: "Translate normal coupled app code into Bitfield package state, named data reads, action requests, and private UI state."
 ---
 
 <div className="bf-article">
@@ -25,13 +25,13 @@ Expected result: after reading this section, you can see a normal app-code insti
   <div className="bf-flow-node">
     <span className="bf-flow-step">02</span>
     <strong>Name the shared job</strong>
-    <p>Is this shared state, prepared data, work to request, private UI state, or package-owned bytes?</p>
+    <p>Is this shared state, named data, work to request, private UI state, or package-owned bytes?</p>
   </div>
   <div className="bf-flow-arrow" aria-hidden="true">→</div>
   <div className="bf-flow-node">
     <span className="bf-flow-step">03</span>
     <strong>Use the Bitfield path</strong>
-    <p>Bitfield state, prepared input, target request, local UI state, or package boundary.</p>
+    <p>Bitfield state, data name, action request, local UI state, or package file.</p>
   </div>
 </div>
 
@@ -40,11 +40,11 @@ Expected result: after reading this section, you can see a normal app-code insti
 | If the code wants to... | Do this | Do not do this |
 |---|---|---|
 | Share state across packages. | Put the shared product fact in Bitfield and read it as an input. | Share a mutable object from one package. |
-| Read data another package prepared. | Read a prepared input. | Import the producer package or parse its files. |
+| Read data another package prepared. | Read a data name. | Import the producer package or parse its files. |
 | Ask another package to do work. | Send a request to a named target. | Call the implementation function directly. |
 | Track hover, open menus, draft text, or drag position. | Keep it private in the component/package. | Store it in Bitfield just because state exists. |
-| Ship files with a package. | Keep bytes inside the package boundary. | Reach into random app folders from consumer code. |
-| Coordinate many packages. | Combine Bitfield facts, prepared inputs, and target requests. | Make one package become the hidden central store for everyone. |
+| Ship files with a package. | Keep bytes inside the package file. | Reach into random app folders from consumer code. |
+| Coordinate many packages. | Combine Bitfield facts, data names, and action requests. | Make one package become the hidden central store for everyone. |
 
 ## Why this section exists
 
@@ -56,10 +56,10 @@ Bitfield uses a different shape. The pattern is not "make a better global store.
 
 ```text
 shared product fact -> Bitfield state
-prepared data -> named input
-work to run -> named target request
+named data -> named input
+work to run -> named action request
 visual-only detail -> private local UI state
-package material -> package boundary
+package material -> package file
 ```
 
 React, Swift, Kotlin, Rust, Python, terminal shells, web shells, and future adapters all wrap the same idea. React is one example, not the architecture.
@@ -121,20 +121,20 @@ await sendRequestToBitfieldTarget({
 });
 ```
 
-The difference is not syntax. The difference is who learns whose private shape. In the traditional code, every package learns every other package. In the Bitfield code, packages meet at named public facts, prepared inputs, and targets.
+The difference is not syntax. The difference is who learns whose private shape. In the traditional code, every package learns every other package. In the Bitfield code, packages meet at named public facts, data names, and targets.
 
 ## Bigger translation matrix
 
 | Product situation | Traditional answer | Bitfield translation |
 |---|---|---|
 | Editor and AI panel both need active file. | Put selected file in `fileTreeStore` and import it. | Write/read the `selected-file` product fact. |
-| Preview panel needs a URL prepared by another package. | Import `getPreviewUrl()` from the preview package. | Read a prepared input such as `project-preview-surface`. |
-| Keyboard shortcut changes selected agent. | Import `selectedAgentService.set(...)`. | Send a target request such as `selected-agent.update`. |
-| Notification mode changes from settings and command palette. | Both call the same implementation file. | Both send the public target request for notification mode. |
+| Preview panel needs a URL prepared by another package. | Import `getPreviewUrl()` from the preview package. | Read a data name such as `project-preview-surface`. |
+| Keyboard shortcut changes selected agent. | Import `selectedAgentService.set(...)`. | Send an action request such as `selected-agent.update`. |
+| Notification mode changes from settings and command palette. | Both call the same implementation file. | Both send the public action request for notification mode. |
 | Dropdown opens while a user hovers. | Write `globalUiStore.dropdownOpen`. | Keep it private UI state. |
 | Help page ships with a package. | Import `../help/content/start.md` from consumer code. | Package owns the bytes; consumer reads the prepared content. |
 | Shell decides where product surfaces go. | `if package === 'preview' render PreviewPanel`. | Shell reads descriptors and places what it is given. |
-| A feature gets added quickly. | Create a new store/service because that is the familiar app pattern. | Classify state, prepared data, work, UI-only state, and package material before code. |
+| A feature gets added quickly. | Create a new store/service because that is the familiar app pattern. | Classify state, named data, work, UI-only state, and package material before code. |
 
 ## Review checklist
 
@@ -142,10 +142,10 @@ Reject the answer when any of these are true:
 
 | Check | Reject when you see | Accept when you see |
 |---|---|---|
-| Package boundary | A package imports another package's store, service, or file. | It uses a public input or target. |
+| Package file | A package imports another package's store, service, or file. | It uses a public input or target. |
 | Shared state | A value used by many packages lives inside one package object. | It is a named Bitfield product fact. |
-| Prepared data | Consumer code parses producer package files. | Consumer reads data the package prepared. |
-| Work request | A button calls another package implementation. | It sends a named target request. |
+| Named data | Consumer code parses producer package files. | Consumer reads data the package prepared. |
+| Work request | A button calls another package implementation. | It sends a named action request. |
 | UI-only state | Hover, focus, draft text, or open menu state is written as product state. | It stays local to the UI that uses it. |
 | Adapter boundary | React context becomes the architecture. | React is one adapter over Runtime Kit reads and requests. |
 
@@ -155,12 +155,12 @@ Reject the answer when any of these are true:
 |---|---|
 | The code has stores, service imports, direct calls, or shell branches. | [Translate traditional code](/runtime-kit/build-without-tangled-code/translate-traditional-code) |
 | Two packages need the same state. | [Share state between packages](/runtime-kit/build-without-tangled-code/share-state-between-packages) |
-| A package prepared data and another package needs to read it. | [Read data another package prepared](/runtime-kit/build-without-tangled-code/read-data-another-package-prepared) |
+| A package named data and another package needs to read it. | [Read data another package prepared](/runtime-kit/build-without-tangled-code/read-data-another-package-prepared) |
 | A package needs another package to run work. | [Ask another package to do work](/runtime-kit/build-without-tangled-code/ask-another-package-to-do-work) |
 | You are unsure whether state belongs in Bitfield. | [Keep private UI state private](/runtime-kit/build-without-tangled-code/keep-private-ui-state-private) |
 | A package ships files or bytes. | [Store files inside a package](/runtime-kit/build-without-tangled-code/store-files-inside-a-package) |
 | Several packages need to cooperate. | [Let many packages work together](/runtime-kit/build-without-tangled-code/let-many-packages-work-together) |
-| An AI coding tool keeps writing traditional architecture. | [Rules for AI agents](/runtime-kit/build-without-tangled-code/rules-for-ai-agents) |
+| An AI coding tool keeps writing traditional architecture. | [Rules for coding tools](/runtime-kit/build-without-tangled-code/rules-for-coding-tools) |
 
 ## Next
 
