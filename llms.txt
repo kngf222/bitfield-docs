@@ -27,6 +27,7 @@ These pages are public customer documentation. They describe the public product,
 - [Keep private UI state private](runtime-kit/build-without-tangled-code/keep-private-ui-state-private): Separates hover state, open menus, draft text, and drag details from shared product facts that multiple packages need.
 - [Store files inside a package](runtime-kit/build-without-tangled-code/store-files-inside-a-package): Shows the package-owned file boundary and the consumer-side mistake of reading another package's files directly.
 - [Let many packages work together](runtime-kit/build-without-tangled-code/let-many-packages-work-together): Walks a multi-package product chain where files, editors, AI context, notifications, and shells cooperate without centralizing product meaning.
+- [Build a file preview flow](runtime-kit/build-without-tangled-code/build-a-file-preview-flow): Follows a realistic file, preview, help, keyboard, notification, and private UI flow from traditional coupled code into public Runtime Kit handles.
 - [Rules for AI agents](runtime-kit/build-without-tangled-code/rules-for-ai-agents): Provides prompt rules, bad-output corrections, and review checks that keep generated code on public Runtime Kit boundaries.
 - [Read data in React](runtime-kit/use-bitfield-data): Shows selectors, render states, request pairing, and what React components should not own.
 - [Send a request](runtime-kit/send-request): Shows JSON, text, byte payloads, reply decoding, cancellation, and target-boundary mistakes.

@@ -40,6 +40,7 @@ const knownPageClasses = new Set([
   'runtime-kit-ai-agent',
   'runtime-kit-operations',
   'runtime-kit-boundary-translation',
+  'runtime-kit-boundary-case-study',
   'build-curriculum',
   'activation-lifecycle',
   'proof-stack',
@@ -175,6 +176,31 @@ function validateDepthContract(page, body, sourcePage, output = failures) {
     }
     if (!sourcePage?.sourceIds?.includes('runtime-kit-public-package-cooperation')) {
       output.push(`${page.route}: boundary translation page must source-map to runtime-kit-public-package-cooperation`);
+    }
+    return;
+  }
+
+  if (page.pageClass === 'runtime-kit-boundary-case-study') {
+    requireIncludes(page.route, body, [
+      ['source facts section', '## Source facts this case uses'],
+      ['traditional implementation', '## Traditional implementation'],
+      ['Bitfield translation', '## Bitfield translation'],
+      ['public handles table', '## Public handles'],
+      ['data-flow map', '## Data-flow map'],
+      ['file boundary section', '## File-by-file public boundary'],
+      ['agent mistakes section', '## Agent mistakes to reject'],
+      ['review checklist', '## Review checklist'],
+      ['adapter-neutral language', ['React is one adapter', 'future SDK', 'native shell']],
+      ['next links section', '## Next'],
+    ], output);
+    if (countMatches(body, /selected-file|current-project|project-preview-surface|getting-started-help|selected-agent\.update|notification-mode\.update/g) < 8) {
+      output.push(`${page.route}: case study needs repeated concrete public handles`);
+    }
+    if (countMatches(body, /import .*\\.\\.|store|service|private|implementation/g) < 5) {
+      output.push(`${page.route}: case study needs concrete traditional coupling examples`);
+    }
+    if (!sourcePage?.sourceIds?.includes('runtime-kit-public-package-cooperation')) {
+      output.push(`${page.route}: boundary case study must source-map to runtime-kit-public-package-cooperation`);
     }
     return;
   }

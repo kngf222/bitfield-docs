@@ -23,6 +23,8 @@ Cookbook-adjacent pages must avoid loose snippets. A recipe needs a scene, exact
 
 Boundary-translation pages must show the traditional instinct and the Bitfield replacement side by side. They should be adapter-neutral first, then show React only as one public Runtime Kit adapter when useful.
 
+Case-study pages must follow one realistic product flow end to end. They should include traditional code first, Runtime Kit translation, public handles, data-flow map, package/file boundary, agent mistakes, and review checks.
+
 ## Boundary
 
 These pages may explain public imports, package boundary files, package sets, local state folder meanings, prepared inputs, target names, payloads, reply bytes, and public mistakes.

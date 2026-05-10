@@ -11,6 +11,7 @@ This folder owns the Runtime Kit pages that teach the translation from tradition
 - `keep-private-ui-state-private.mdx` separates private UI state from product coordination state.
 - `store-files-inside-a-package.mdx` explains package-owned bytes and consumer boundaries.
 - `let-many-packages-work-together.mdx` shows a multi-package cooperation chain.
+- `build-a-file-preview-flow.mdx` is a source-grounded case study for file, preview, help, keyboard, notification, and UI-private boundaries.
 - `rules-for-ai-agents.mdx` gives prompt and review rules for agents that default to traditional app architecture.
 
 ## Standard
@@ -18,6 +19,8 @@ This folder owns the Runtime Kit pages that teach the translation from tradition
 Every page in this folder must show the traditional instinct and the Bitfield replacement. The reader should be able to translate a direct import, shared store, package-file read, direct implementation call, or over-globalized UI state into the public Runtime Kit shape.
 
 React examples are allowed only as adapter examples. The architecture must stay platform-neutral.
+
+Case studies must not be padded overviews. A case study must follow a realistic product flow end to end: traditional implementation, Bitfield translation, public handles, data-flow map, package/file boundary, agent mistakes, and review checks.
 
 ## Boundary
 

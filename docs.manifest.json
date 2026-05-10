@@ -617,6 +617,7 @@
             "runtime-kit/build-without-tangled-code/keep-private-ui-state-private",
             "runtime-kit/build-without-tangled-code/store-files-inside-a-package",
             "runtime-kit/build-without-tangled-code/let-many-packages-work-together",
+            "runtime-kit/build-without-tangled-code/build-a-file-preview-flow",
             "runtime-kit/build-without-tangled-code/rules-for-ai-agents"
           ]
         },
@@ -858,6 +859,14 @@
       "diataxis": "how-to",
       "pageClass": "runtime-kit-boundary-translation",
       "summary": "Walks a multi-package product chain where files, editors, AI context, notifications, and shells cooperate without centralizing product meaning."
+    },
+    {
+      "route": "runtime-kit/build-without-tangled-code/build-a-file-preview-flow",
+      "title": "Build a file preview flow",
+      "description": "A source-grounded case study that translates one file, preview, help, notification, and agent flow from traditional architecture into Runtime Kit boundaries.",
+      "diataxis": "how-to",
+      "pageClass": "runtime-kit-boundary-case-study",
+      "summary": "Follows a realistic file, preview, help, keyboard, notification, and private UI flow from traditional coupled code into public Runtime Kit handles."
     },
     {
       "route": "runtime-kit/build-without-tangled-code/rules-for-ai-agents",

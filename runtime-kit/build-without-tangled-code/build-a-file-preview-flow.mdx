@@ -1,0 +1,183 @@
+---
+title: "Build a file preview flow"
+description: "A source-grounded case study that translates one file, preview, help, notification, and agent flow from traditional architecture into Runtime Kit boundaries."
+---
+
+<div className="bf-article">
+
+<p className="bf-lead">
+This case study follows one realistic product flow end to end: a user selects a file, the editor reads it, the preview surface shows the current project, help content is available, keyboard shortcuts change the selected agent, and notifications update mode.
+</p>
+
+Product scene: you are building a command center with a file tree, file editor, web preview, help panel, keyboard shortcuts, AI context, and notifications. The product needs to feel connected, but the packages must not import each other.
+
+Expected result: a human or AI agent can see the exact traditional code shape that causes tangles, then translate it into public Runtime Kit handles without reaching into package files, private stores, or implementation functions.
+
+## Source facts this case uses
+
+This page is grounded in public-safe Runtime Kit shapes:
+
+| Source shape | Public-safe lesson |
+|---|---|
+| A file editor package reads `selected-file`. | The editor reads a named input instead of importing a file tree store. |
+| A web frame package reads a descriptor-selected source. | A preview surface reads prepared data instead of importing the preview producer. |
+| Keyboard and notification packages send Runtime Kit requests. | User intent becomes a target request instead of a direct implementation call. |
+| Runtime Kit exposes `sendRequestToBitfieldTarget(...)`. | Work crosses package boundaries through a public request function. |
+| Runtime Kit React exposes `useBitfieldData(...)`. | React is one adapter for reading prepared data; it is not the architecture. |
+
+Do not copy package private folders or local source paths from an example. The public lesson is the handle shape: input, prepared view, target request, package-owned bytes, and private UI state.
+
+## Traditional implementation
+
+This is the kind of code an AI agent will often write because it looks natural in ordinary app training data:
+
+```ts
+import { fileTreeStore } from '../file-tree/store';
+import { editorStore } from '../file-editor/store';
+import { previewService } from '../project-preview/service';
+import helpMarkdown from '../help/content/getting-started.md?raw';
+import { selectedAgentStore } from '../agents/store';
+import { setNotificationMode } from '../notifications/mode';
+
+export async function openWorkspaceFlow(filePath: string, agentId: string) {
+  fileTreeStore.selectedFile = filePath;
+
+  editorStore.open(fileTreeStore.selectedFile);
+  const preview = await previewService.getPreview(fileTreeStore.currentProject);
+
+  selectedAgentStore.set(agentId);
+  await setNotificationMode('quiet');
+
+  return {
+    file: fileTreeStore.selectedFile,
+    previewUrl: preview.url,
+    help: helpMarkdown,
+    selectedAgent: selectedAgentStore.current,
+  };
+}
+```
+
+This code is not bad because it is long. It is bad because every package knows the shape of every other package. The editor knows the file tree. The preview caller knows the preview service. The help consumer knows the help folder. The keyboard path knows the agent store. Notification changes happen by direct implementation call.
+
+## Bitfield translation
+
+The same product flow becomes public handles:
+
+```text
+selected-file -> product fact read by editor and AI context
+current-project -> product fact read by preview-related packages
+project-preview-surface -> prepared input read by the preview surface
+getting-started-help -> prepared input from package-owned help content
+selected-agent.update -> target request from keyboard or command palette
+notification-mode.update -> target request from settings or shortcuts
+open menu / hover / draft text -> private UI state
+```
+
+React adapter example:
+
+```tsx
+const selectedFile = useBitfieldData<string>('selected-file');
+const preview = useBitfieldData<PreviewSurface>('project-preview-surface');
+const help = useBitfieldData<HelpContent>('getting-started-help');
+```
+
+Request example:
+
+```ts
+await sendRequestToBitfieldTarget({
+  target: 'selected-agent.update',
+  payload: { agentId },
+});
+
+await sendRequestToBitfieldTarget({
+  target: 'notification-mode.update',
+  payload: { mode: 'quiet' },
+});
+```
+
+The adapter can be React, a native shell, a terminal shell, or a future SDK. The boundary stays the same: read named data, request named work, keep visual-only state private.
+
+## Public handles
+
+| Product job | Public handle | Kind | Who may use it |
+|---|---|---|---|
+| Know which file is selected. | `selected-file` | Shared product fact / prepared input | Editor, AI context, breadcrumbs, command palette. |
+| Know which project is active. | `current-project` | Shared product fact | Preview, package filters, build actions. |
+| Render the preview surface. | `project-preview-surface` | Prepared input | Web frame, preview panel, status surfaces. |
+| Show help content. | `getting-started-help` | Prepared input from package-owned bytes | Help panel, command palette, onboarding surface. |
+| Change selected agent. | `selected-agent.update` | Target request | Keyboard shortcut, command palette, sidebar action. |
+| Change notification mode. | `notification-mode.update` | Target request | Settings surface, command action, automation. |
+| Track hover/open/draft details. | Component state | Private UI state | Only the surface rendering that detail. |
+
+## Data-flow map
+
+<div className="bf-flow" aria-label="File preview flow Runtime Kit case study">
+  <div className="bf-flow-node">
+    <span className="bf-flow-step">01</span>
+    <strong>Select file</strong>
+    <p>The selected file becomes a public product fact.</p>
+  </div>
+  <div className="bf-flow-arrow" aria-hidden="true">→</div>
+  <div className="bf-flow-node">
+    <span className="bf-flow-step">02</span>
+    <strong>Read data</strong>
+    <p>Editor, AI context, and preview read named inputs.</p>
+  </div>
+  <div className="bf-flow-arrow" aria-hidden="true">→</div>
+  <div className="bf-flow-node">
+    <span className="bf-flow-step">03</span>
+    <strong>Request work</strong>
+    <p>Keyboard and settings send named target requests.</p>
+  </div>
+  <div className="bf-flow-arrow" aria-hidden="true">→</div>
+  <div className="bf-flow-node">
+    <span className="bf-flow-step">04</span>
+    <strong>Keep UI private</strong>
+    <p>Hover, open menu, and draft text stay inside the surface.</p>
+  </div>
+</div>
+
+## File-by-file public boundary
+
+| File or package area | It may do | It must not do |
+|---|---|---|
+| File editor surface | Read `selected-file` and render editor UI. | Import file tree store or decide how file selection is written. |
+| Preview surface | Read `project-preview-surface` and render the preview. | Import preview producer code or hardcode producer field names. |
+| Help package | Own help content and expose prepared help data or search target. | Make consumers import markdown or index files. |
+| Keyboard package | Convert shortcut intent into a target request. | Mutate selected-agent state directly through another package object. |
+| Notification package | Expose a notification-mode target and public resulting state. | Require settings UI to import notification implementation. |
+| Shell or adapter | Place surfaces and call public Runtime Kit reads/requests. | Become the product brain with a giant switch statement. |
+
+## Agent mistakes to reject
+
+| Agent output | Why it is wrong | Correct shape |
+|---|---|---|
+| `import { fileTreeStore } from '../file-tree/store'` | The editor now knows file tree private shape. | Read `selected-file`. |
+| `import help from '../help/content/start.md'` | Consumer depends on package folder layout. | Read `getting-started-help`. |
+| `previewService.getPreview(projectId)` | Caller imports preview implementation. | Read `project-preview-surface` or request a preview refresh target. |
+| `selectedAgentStore.set(agentId)` | Caller mutates another package's state. | Send `selected-agent.update`. |
+| `setNotificationMode('quiet')` from notification source | Settings UI imports notification implementation. | Send `notification-mode.update`. |
+| `ProductContext` stores selected file, preview, help, and notification mode | React becomes the architecture. | React reads Runtime Kit inputs and sends Runtime Kit requests. |
+| `globalUiStore.hoveredRow = row` | Visual-only state becomes product state. | Keep hover state private in the surface. |
+
+## Review checklist
+
+Before accepting generated code for this flow, answer yes to all of these:
+
+| Check | Must be true |
+|---|---|
+| Shared product facts are named handles. | `selected-file` and `current-project` are not hidden inside one package object. |
+| Prepared data is read, not rebuilt. | Preview and help consumers read public inputs. |
+| Work crosses through target requests. | Selected-agent and notification changes use public targets. |
+| Package-owned bytes stay package-owned. | Help content is not imported by consumers as a loose file. |
+| Private UI state stays private. | Hover, open menu, and draft state are not written as product facts. |
+| React is only an adapter. | The same public handles make sense for another shell. |
+| No private package files are imported. | Consumer imports stay on public Runtime Kit surfaces or local package code. |
+
+## Next
+
+- Learn the single state rule: [Share state between packages](/runtime-kit/build-without-tangled-code/share-state-between-packages)
+- Learn prepared reads: [Read data another package prepared](/runtime-kit/build-without-tangled-code/read-data-another-package-prepared)
+- Learn target requests: [Ask another package to do work](/runtime-kit/build-without-tangled-code/ask-another-package-to-do-work)
+
+</div>
