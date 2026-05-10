@@ -13,40 +13,56 @@ Product scene: an AI agent is adding a file tree, editor, preview button, comman
 
 Expected result: the agent can point at each line of traditional code and say which Bitfield path replaces it: shared product fact, prepared input, target request, private UI state, or package boundary.
 
+Traditional code teaches one package another package's private shape. These look like different shortcuts, but they create the same problem: the package boundary leaked.
+
 ```mermaid
 %%{init: {'flowchart': {'nodeSpacing': 36, 'rankSpacing': 48, 'curve': 'linear'}}}%%
 flowchart LR
-  BadStore["agentRequestStore import"]
-  BadShell["JournalNavItem import"]
-  BadPreview["startPreviewServer call"]
-  BadRows["private rows read"]
+  BadStore["Editor imports agentRequestStore"]
+  BadShell["Sidebar imports JournalNavItem"]
+  BadPreview["Preview button calls startPreviewServer"]
+  BadRows["Dashboard reads private rows"]
+  Leak["One package now knows another package"]
 
-  Stop["package boundary leak"]
-
-  GoodText["update-selected-text action"]
-  GoodRecords["published-records read"]
-  GoodPreview["start-project-preview action"]
-  GoodCompliance["project-compliance read"]
-
-  BadStore --> Stop
-  BadShell --> Stop
-  BadPreview --> Stop
-  BadRows --> Stop
-
-  Stop --> GoodText
-  Stop --> GoodRecords
-  Stop --> GoodPreview
-  Stop --> GoodCompliance
+  BadStore --> Leak
+  BadShell --> Leak
+  BadPreview --> Leak
+  BadRows --> Leak
 
   classDef traditional fill:transparent,stroke:currentColor,color:currentColor;
   classDef reject fill:transparent,stroke:currentColor,color:currentColor;
+
+  class BadStore,BadShell,BadPreview,BadRows traditional;
+  class Leak reject;
+```
+
+Bitfield code does not cross into the other package. It uses the public path that matches the job: an action, a published read, or a prepared value.
+
+```mermaid
+%%{init: {'flowchart': {'nodeSpacing': 36, 'rankSpacing': 48, 'curve': 'linear'}}}%%
+flowchart LR
+  NeedText["Editor needs selected text shared"]
+  NeedSidebar["Sidebar needs package entries"]
+  NeedPreview["Button needs preview work started"]
+  NeedDashboard["Dashboard needs compliance status"]
+
+  TextAction["Send update-selected-text action"]
+  RecordsRead["Read published-records"]
+  PreviewAction["Send start-project-preview action"]
+  ComplianceRead["Read project-compliance"]
+
+  NeedText --> TextAction
+  NeedSidebar --> RecordsRead
+  NeedPreview --> PreviewAction
+  NeedDashboard --> ComplianceRead
+
+  classDef need fill:transparent,stroke:currentColor,color:currentColor;
   classDef request fill:transparent,stroke:currentColor,color:currentColor;
   classDef read fill:transparent,stroke:currentColor,color:currentColor;
 
-  class BadStore,BadShell,BadPreview,BadRows traditional;
-  class Stop reject;
-  class GoodText,GoodPreview request;
-  class GoodRecords,GoodCompliance read;
+  class NeedText,NeedSidebar,NeedPreview,NeedDashboard need;
+  class TextAction,PreviewAction request;
+  class RecordsRead,ComplianceRead read;
 ```
 
 ## Start with the job
