@@ -239,47 +239,47 @@ The better request names the screen, data name, action name, and files an AI age
 
 ### Direct package parsing
 
-### Bad output
+#### Wrong shape
 
 ```tsx
 const packageFile = await fetch('/packages/help-package/things-to-store-and-run.json');
 const data = await packageFile.json();
 ```
 
-### Corrected output
+#### Public read
 
 ```tsx
 const help = useBitfieldData<HelpCopy>('help-copy');
 ```
 
-This works because the component reads named data. It does not parse package source.
+The component reads named data. It does not parse package source.
 
 ### Unpublished Runtime Kit import
 
-### Bad output
+#### Wrong shape
 
 ```ts
 import { createBitfieldReadScope } from '@bitfield/runtime-kit/internal';
 ```
 
-### Corrected output
+#### Public import
 
 ```ts
 import { useBitfieldData } from '@bitfield/runtime-kit/react';
 ```
 
-This works because app code uses the public hook. Setup machinery stays behind Runtime Kit.
+App code uses the public hook. Setup machinery stays behind Runtime Kit.
 
 ### Missing UI states
 
-### Bad output
+#### Wrong shape
 
 ```tsx
 const welcome = useBitfieldData<WelcomeCopy>('welcome-copy');
 return <h2>{welcome.data.headline}</h2>;
 ```
 
-### Corrected output
+#### Full render path
 
 ```tsx
 const welcome = useBitfieldData<WelcomeCopy>('welcome-copy');
@@ -291,40 +291,40 @@ if (!welcome.data) return <p>No welcome copy yet.</p>;
 return <h2>{welcome.data.headline}</h2>;
 ```
 
-This works because Runtime Kit reads have loading, error, empty, and success states.
+Runtime Kit reads have loading, error, empty, and success states.
 
 ### Uncontracted reply parsing
 
-### Bad output
+#### Wrong shape
 
 ```ts
 const data = JSON.parse(new TextDecoder().decode(reply.payload));
 ```
 
-### Corrected output
+#### Declared reply shape
 
 ```ts
 type SearchReply = { results: { title: string; url: string }[] };
 const data = JSON.parse(new TextDecoder().decode(reply.payload)) as SearchReply;
 ```
 
-This works because JSON parsing is valid only when the action's reply shape says the reply is JSON.
+JSON parsing is valid only when the action's reply shape says the reply is JSON.
 
 ### Local-state hand edit
 
-### Bad output
+#### Wrong shape
 
 ```text
 Open ~/.bitfield and edit the package record until the screen works.
 ```
 
-### Corrected output
+#### Repair the source
 
 ```text
 Inspect local state for evidence, then repair `things-to-store-and-run.json`, account activation, or the Runtime Kit feature path that produced the bad state.
 ```
 
-This works because local state is support evidence. It is not the feature authoring surface.
+Local state is support evidence. It is not the feature authoring surface.
 
 ## Review checklist for generated code
 

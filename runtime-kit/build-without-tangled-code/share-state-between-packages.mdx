@@ -11,7 +11,7 @@ When two packages need the same state, do not make one package read another pack
 
 A file tree chooses a file, then the editor, breadcrumbs, command palette, and AI context panel all need to know which file is active. That state is no longer a private file-tree detail. It is product coordination state.
 
-By the end, every package sees the same selected file without importing the file tree, sharing memory with it, or duplicating its private store.
+Every package should see the same selected file without importing the file tree, sharing memory with it, or duplicating its private store.
 
 ## Traditional app shape
 
@@ -129,13 +129,13 @@ The AI panel does not know whether the value came from a tree, command palette, 
 
 ### Selected file
 
-### Traditional mistake
+### Private file-tree read
 
 ```ts
 import { selectedFile } from '../file-tree/state';
 ```
 
-### Bitfield replacement
+### Read the public selected file
 
 ```ts
 const selectedFile = readInput('selected-file');
@@ -145,13 +145,13 @@ Use this when multiple packages react to the same selected file.
 
 ### Current project
 
-### Traditional mistake
+### Private workspace read
 
 ```ts
 import { currentProject } from '../workspace/project-store';
 ```
 
-### Bitfield replacement
+### Read the public project
 
 ```ts
 const project = readInput('current-project');
@@ -161,13 +161,13 @@ Use this when panels, package filters, build actions, and account surfaces all n
 
 ### Selected agent
 
-### Traditional mistake
+### Private agent setter
 
 ```ts
 selectedAgentStore.set(agentId);
 ```
 
-### Bitfield replacement
+### Request the selected-agent change
 
 ```ts
 await sendRequestToBitfieldTarget({
@@ -180,7 +180,7 @@ Then readers use the selected-agent product fact instead of importing the setter
 
 ### Notification mode
 
-### Traditional mistake
+### Private notification object
 
 ```ts
 import { notificationSettings } from '../notifications/settings';
@@ -188,7 +188,7 @@ import { notificationSettings } from '../notifications/settings';
 notificationSettings.mode = 'quiet';
 ```
 
-### Bitfield replacement
+### Request the mode change
 
 ```ts
 await sendRequestToBitfieldTarget({

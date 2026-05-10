@@ -11,7 +11,7 @@ AI agents will default to traditional app architecture unless the docs teach the
 
 You ask an AI agent to add a feature. It creates a store, imports another package, parses a JSON file, or calls an implementation directly. The code may compile, but it trains the app back into the old architecture.
 
-By the end, the agent chooses the Bitfield path before writing code.
+The useful output is code that chooses the Bitfield path before the first edit, not code that compiles after recreating the old app shape.
 
 ## The prompt to paste
 
@@ -53,7 +53,7 @@ Before accepting the edit, compare it against the concrete translation page: [Tr
 
 ## Bad output and corrected output
 
-### Traditional app shape
+### The shape most agents reach for
 
 The agent reaches for a shared store, direct import, package file read, or framework coordinator because that is what most public examples show.
 
@@ -65,7 +65,7 @@ import { fileTreeStore } from '../file-tree/store';
 const selected = fileTreeStore.selectedFile;
 ```
 
-### Correct
+### Read the public value
 
 ```ts
 const selected = readInput('selected-file');
@@ -85,7 +85,7 @@ import { refreshPreviewStatus } from '../project-preview/refresh';
 await refreshPreviewStatus(projectId);
 ```
 
-### Correct
+### Request the work
 
 ```ts
 await sendRequestToBitfieldTarget({
@@ -100,7 +100,7 @@ await sendRequestToBitfieldTarget({
 const boundary = await fetch('/packages/help-package/things-to-store-and-run.json');
 ```
 
-### Correct
+### Read package output
 
 ```ts
 const help = readInput('getting-started-help');
@@ -112,7 +112,7 @@ const help = readInput('getting-started-help');
 await writeBitfieldState('hovered-sidebar-row', rowId);
 ```
 
-### Correct
+### Keep visual state local
 
 ```ts
 const [hoveredRow, setHoveredRow] = useState<string | null>(null);
@@ -129,7 +129,7 @@ export const ProductContext = createContext({
 });
 ```
 
-### Correct
+### Use Runtime Kit names
 
 ```tsx
 const selectedFile = useBitfieldData<string>('selected-file');
@@ -150,7 +150,7 @@ React can hold visual-only state. It should not become the product coordination 
 const preview = await refreshPreviewAndReturnGlobalStore(projectStore.current.id);
 ```
 
-### Correct
+### Split reading from running work
 
 ```ts
 await sendRequestToBitfieldTarget({

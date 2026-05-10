@@ -31,7 +31,7 @@ A screen has a button: "Find the next step." The screen should not import the se
   </div>
 </div>
 
-By the end, a feature can call a named piece of work without taking a dependency on that piece's private code.
+A feature should be able to call named work without taking a dependency on the private code that performs it.
 
 That "something" might answer a question, transform data, render a view, call another system, or do work in the background. The important part is the shape. The app calls the slot by name. The slot owns how it does the work.
 

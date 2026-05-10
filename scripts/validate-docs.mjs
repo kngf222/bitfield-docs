@@ -128,7 +128,7 @@ function validateDepthContract(page, body, sourcePage, output = failures) {
   if (page.pageClass === 'runtime-kit-tutorial') {
     requireIncludes(page.route, body, [
       ['visual flow', 'className="bf-flow"'],
-      ['expected result', ['By the end,', '### What should happen']],
+      ['outcome language', ['should ', 'can ', 'without importing', '### What should happen']],
       ['anti-pattern section', '## What not to do'],
       ['next links section', '## Where to go next'],
     ], output);
@@ -157,21 +157,21 @@ function validateDepthContract(page, body, sourcePage, output = failures) {
 
   if (page.pageClass === 'runtime-kit-boundary-translation') {
     requireIncludes(page.route, body, [
-      ['traditional shape', ['Traditional app shape', 'Traditional:', 'Traditional mistake', 'traditional app-code instinct']],
-      ['Bitfield shape', ['Bitfield shape', 'Bitfield:', 'Bitfield path']],
+      ['old app coupling example', ['import {', 'private', 'store', 'Direct', 'tangled', 'wrong']],
+      ['public Bitfield path', ['readInput(', 'useBitfieldData', 'sendRequestToBitfieldTarget', 'action request', 'data name']],
       ['code or structured example', ['```', '|']],
-      ['anti-pattern or prevention section', ['## What this prevents', '## Common mistake', '## Common failures', '## Bad output and corrected output']],
+      ['anti-pattern or prevention section', ['## What this prevents', '## Common mistake', '## Common failures', '## Bad output and corrected output', '## Bad output and corrected output']],
       ['adapter-neutral language', ['React is only the adapter', 'React is one adapter', 'any shell', 'future adapters']],
       ['scenario section', ['## Four ', '## Larger chain', '## The story traditional code usually writes', '## Classification protocol']],
       ['review language', ['## Review checklist', 'checklist', '## Consumer boundary checklist', '## Consumer checklist', '## Multi-package review checklist']],
       ['next links section', '## Next'],
       ['Runtime Kit or reference link', ['/runtime-kit/', '/reference/']],
     ], output);
-    if (countMatches(body, /Traditional (shape|mistake|answer|addition|over-globalized|under-shared|app-code instinct)|Bad:/g) < 3) {
-      output.push(`${page.route}: translation page needs at least three traditional/bad examples`);
+    if (countMatches(body, /import \{|private|store|global|direct|hidden|wrong|tangled/gi) < 3) {
+      output.push(`${page.route}: translation page needs at least three old-shape coupling examples`);
     }
-    if (countMatches(body, /Bitfield (replacement|answer|addition|shape)|Better answer|Correct/g) < 3) {
-      output.push(`${page.route}: translation page needs at least three Bitfield/correct replacements`);
+    if (countMatches(body, /readInput\(|useBitfieldData|sendRequestToBitfieldTarget|action request|data name|public read|public request/gi) < 3) {
+      output.push(`${page.route}: translation page needs at least three public Bitfield paths`);
     }
     if (!sourcePage?.sourceIds?.includes('runtime-kit-public-package-cooperation')) {
       output.push(`${page.route}: translation page must source-map to runtime-kit-public-package-cooperation`);
@@ -207,7 +207,7 @@ function validateDepthContract(page, body, sourcePage, output = failures) {
   if (page.pageClass === 'build-curriculum') {
     requireIncludes(page.route, body, [
       ['build visual flow', 'className="bf-flow"'],
-      ['expected result', ['By the end,', '### What should happen']],
+      ['outcome language', ['should ', 'can ', 'without knowing', '### What should happen']],
       ['common failures or mistakes', ['## Common failures', '## Common build mistakes', '## What this prevents']],
       ['next-step section', '## Next'],
       ['Runtime Kit or reference link', ['/runtime-kit/', '/reference/']],
@@ -218,7 +218,7 @@ function validateDepthContract(page, body, sourcePage, output = failures) {
   if (page.pageClass === 'activation-lifecycle') {
     requireIncludes(page.route, body, [
       ['activation visual flow', 'className="bf-flow"'],
-      ['expected result', ['By the end,', '### What should happen']],
+      ['outcome language', ['should ', 'customer', 'account', '### What should happen']],
       ['common failures section', '## Common failures'],
       ['next-step section', '## Next'],
       ['account or legal route', ['account.bitfield.so', 'https://bitfield.so/terms', 'mailto:support@bitfield.so']],
@@ -229,7 +229,7 @@ function validateDepthContract(page, body, sourcePage, output = failures) {
   if (page.pageClass === 'proof-stack') {
     requireIncludes(page.route, body, [
       ['proof visual flow', 'className="bf-flow"'],
-      ['expected result', ['By the end,', '### What should happen']],
+      ['outcome language', ['should ', 'reader', 'claim', '### What should happen']],
       ['claim category language', ['category', 'Category', 'measured job']],
       ['non-claim or boundary language', ['non-claim', 'non-claims', 'not claim', 'not claiming', 'excluded work', 'Boundary']],
       ['common failures section', '## Common failures'],
@@ -242,7 +242,7 @@ function validateDepthContract(page, body, sourcePage, output = failures) {
   if (page.pageClass === 'start-onboarding') {
     requireIncludes(page.route, body, [
       ['start visual flow', 'className="bf-flow"'],
-      ['expected result', ['By the end,', '### What should happen']],
+      ['outcome language', ['should ', 'can ', 'path', '### What should happen']],
       ['step-by-step section', ['## 1.', '## Choose your path']],
       ['failure or wrong-turn section', ['## Common failures', '## Common first wrong turns']],
       ['next-step section', '## Next'],
@@ -255,7 +255,7 @@ function validateDepthContract(page, body, sourcePage, output = failures) {
   if (page.pageClass === 'concept-curriculum') {
     requireIncludes(page.route, body, [
       ['concept visual flow', 'className="bf-flow"'],
-      ['expected result', ['By the end,', '### What should happen']],
+      ['outcome language', ['should ', 'can ', 'The point', '### What should happen']],
       ['mistakes or confusion section', ['## Common mistakes', '## Common confusion', '## What this prevents']],
       ['next-step section', '## Next'],
       ['Runtime Kit, proof, activation, or reference link', ['/runtime-kit/', '/proof/', '/activation/', '/reference/', '/start/']],
@@ -266,7 +266,7 @@ function validateDepthContract(page, body, sourcePage, output = failures) {
   if (page.pageClass === 'public-changelog') {
     requireIncludes(page.route, body, [
       ['changelog visual flow', 'className="bf-flow"'],
-      ['expected result', ['By the end,', '### What should happen']],
+      ['outcome language', ['should ', 'Each row', '### What should happen']],
       ['how-to-read section', '## How to read this changelog'],
       ['latest changes table', '## Latest customer-visible changes'],
       ['public categories', ['Runtime Kit', 'Build', 'Account', 'Proof', 'Docs', 'Start']],

@@ -11,7 +11,7 @@ When many packages need to cooperate, do not create one giant store that everyon
 
 A command center has a file tree, file editor, AI chat, project preview, notifications, keyboard shortcuts, and a sidebar. Each package has its own job. They still need to feel like one product.
 
-By the end, packages cooperate through public Bitfield handles without becoming one tangled codebase.
+The goal is cooperation without fusion: packages share public Bitfield handles instead of turning into one tangled codebase.
 
 ## Traditional app shape
 
@@ -96,7 +96,7 @@ appStore.help.index = helpPackage.searchIndex;
 
 That looks convenient until every package has to know the central store shape and the central store has to know every package.
 
-### Bitfield shape
+### Shared names, separate packages
 
 ```text
 selected-file -> product fact read by editor and AI context
@@ -158,13 +158,13 @@ const notificationMode = readInput('notification-mode');
 
 The new package reads the public facts it needs. Existing packages do not change.
 
-### Traditional mistake
+### Central-store shortcut
 
 ```ts
 recentActivityStore.copyFrom(appStore);
 ```
 
-### Bitfield replacement
+### Read public facts instead
 
 ```ts
 const activityInputs = [

@@ -11,7 +11,7 @@ When a package ships files or bytes, keep them inside the package file. Consumer
 
 A help package ships markdown, a theme package ships images, and a file-preview package ships a small parser. A consumer wants the rendered result. The consumer should not reach into the package folder and read whatever file happens to be there.
 
-By the end, package bytes move with the package, and consumers use public reads or requests instead of private file paths.
+Package bytes should move with the package. Consumers should use public reads or requests, not private file paths that happen to work today.
 
 ## Traditional app shape
 
@@ -59,13 +59,13 @@ The important part is not the exact content. The important part is the boundary:
 
 ### Help markdown
 
-### Traditional mistake
+### Private help path
 
 ```ts
 const help = await fetch('/packages/help/content/getting-started.md').then((r) => r.text());
 ```
 
-### Bitfield replacement
+### Prepared help read
 
 ```ts
 const help = readInput('getting-started-help');
@@ -75,13 +75,13 @@ The help package owns the file. The consumer reads prepared help content.
 
 ### Preview HTML
 
-### Traditional mistake
+### Private preview bundle
 
 ```ts
 import previewHtml from '../project-preview/dist/index.html?raw';
 ```
 
-### Bitfield replacement
+### Prepared preview surface
 
 ```ts
 const previewSurface = readInput('project-preview-surface');
@@ -91,13 +91,13 @@ The preview package decides how the surface is prepared. The shell receives a pu
 
 ### Review template
 
-### Traditional mistake
+### Private template import
 
 ```ts
 import template from '../review-package/templates/review.md';
 ```
 
-### Bitfield replacement
+### Prepared template read
 
 ```ts
 const reviewTemplate = readInput('review-template');
@@ -107,13 +107,13 @@ The package can ship the template as package material. The caller should not rea
 
 ### Search index
 
-### Traditional mistake
+### Private search index
 
 ```ts
 import index from '../help/search-index.json';
 ```
 
-### Bitfield replacement
+### Search through the package target
 
 ```ts
 await sendRequestToBitfieldTarget({
@@ -173,7 +173,7 @@ export function HelpPanel() {
 
 This consumer now depends on two package files and one package layout. If the help package changes how it stores content or search data, the consumer breaks.
 
-### Bitfield replacement
+### Public package version
 
 ```ts
 const help = readInput('getting-started-help');

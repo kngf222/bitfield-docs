@@ -11,7 +11,7 @@ Most software gets tangled because one part of the app starts reaching into anot
 
 You are building a product with files, panels, settings, search, AI context, background jobs, and multiple package areas. The first version works. Then feature twenty needs to know what feature seven selected. Feature thirty needs to run the same work from a different place. The traditional fix is another store, another service import, another prop path, or another global. That is the knot this section is here to prevent.
 
-By the end, after reading this section, you can see a normal app-code instinct and translate it into the Bitfield shape without guessing, importing private code, or making React the architecture.
+This section teaches the translation move: see the normal app-code instinct, then turn it into the Bitfield shape without guessing, importing private code, or making React the architecture.
 
 ## The translation
 
@@ -50,7 +50,7 @@ By the end, after reading this section, you can see a normal app-code instinct a
 
 Most app examples teach the traditional shape: stores, services, imports, reducers, contexts, and direct calls.
 
-### Traditional app shape
+### The old app shape
 
 One feature reaches into another feature's state or implementation because that is the shortest path in ordinary app code.
 
@@ -80,7 +80,7 @@ React, Swift, Kotlin, Rust, Python, terminal shells, web shells, and future adap
 
 The product request says: "When I select a file, show it in the editor, let the AI panel use it, and let the command palette open actions for it."
 
-### Traditional app-code instinct
+### The tangled version
 
 ```ts
 import { fileTreeStore } from '../file-tree/store';
@@ -98,7 +98,7 @@ export function onFileSelected(filePath: string) {
 
 That code feels fast because everything is reachable. It is also the start of the knot. The editor now knows file tree shape. The AI context knows editor timing. The command palette knows where selection came from. Every future package has to learn the old package graph before it can do a simple job.
 
-### Bitfield shape
+### The Bitfield split
 
 ```text
 selected-file becomes a Bitfield product fact

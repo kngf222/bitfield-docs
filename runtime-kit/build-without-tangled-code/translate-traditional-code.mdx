@@ -11,7 +11,7 @@ Most app code starts from the old shape first. This page shows the exact transla
 
 You are adding a file tree, editor, preview button, command palette action, sidebar item, or dashboard panel. The code works inside one app today, but it does it by teaching one package the private shape of another package. That is the moment to stop and translate.
 
-By the end, you can point at each line of traditional code and say which Bitfield path replaces it: shared product fact, data name, action request, private UI state, or package file.
+After this page, you should be able to point at each line of traditional code and name the Bitfield path that replaces it: shared product fact, data name, action request, private UI state, or package file.
 
 Traditional code lets one package become the private source every other package must know. The file tree owns the selected file, but the editor, preview button, command palette, and dashboard all point into the file tree's private store.
 
@@ -96,11 +96,11 @@ Bitfield shape prevents that knot by making each package meet other packages thr
 
 ## Example 1: selected text for the next assistant request
 
-### Product job
+### The feature being added
 
 A note editor lets the user highlight text. Another assistant request area should use that highlighted text. The editor also needs a small debounce so it does not publish every tiny mouse movement.
 
-### Traditional mistake
+### What goes wrong
 
 The editor imports the assistant panel store and mutates it directly.
 
@@ -118,7 +118,7 @@ export function onSelectionChanged(selection: EditorSelection) {
 
 That couples the editor to the assistant panel. The editor now knows where the assistant panel keeps state, what the state object is called, and how the panel expects it to be shaped.
 
-### Bitfield replacement
+### The Bitfield version
 
 Keep the debounce timer private to the editor, then send the public request that updates the shared product fact.
 
@@ -149,7 +149,7 @@ export async function writeSelectedTextForNextAssistantRequest(value: {
 
 The private debounce still belongs in the editor UI. The selected text that another package needs goes through a public action request.
 
-### Bitfield shape
+### What each part owns
 
 ```text
 editor private state -> debounce timer
@@ -158,17 +158,17 @@ work boundary -> action request
 assistant request area -> reads the prepared/shared value
 ```
 
-### Review check
+### Check the result
 
 No editor code imports the assistant-request package store.
 
 ## Example 2: sidebar entries without shell branches
 
-### Product job
+### The feature being added
 
 The sidebar needs to show product entries from many packages. Today it may show journal items, previews, dashboards, or support links. Tomorrow it may show package entries nobody has built yet.
 
-### Traditional mistake
+### What goes wrong
 
 The sidebar imports every feature and grows one branch per product area.
 
@@ -190,7 +190,7 @@ export function AppSidebar({ currentArea }: { currentArea: string }) {
 
 That makes the shell product-specific. Every new package now edits the shell, and the shell becomes the hidden central registry.
 
-### Bitfield replacement
+### The Bitfield version
 
 The sidebar reads published package records, finds the descriptors it knows how to place, and renders from those records.
 
@@ -218,7 +218,7 @@ export function AppSidebar() {
 
 The shell knows how to place entries. It does not know the product story behind each package.
 
-### Bitfield shape
+### What each part owns
 
 ```text
 package publishes descriptor records
@@ -228,17 +228,17 @@ sidebar renders label + target
 package remains owner of its product meaning
 ```
 
-### Review check
+### Check the result
 
 Adding a package entry should not require importing that package's React component into the sidebar.
 
 ## Example 3: preview work without importing the preview runner
 
-### Product job
+### The feature being added
 
 A button starts or refreshes a project preview. A status panel then reads the preview state.
 
-### Traditional mistake
+### What goes wrong
 
 The button imports the preview implementation and calls it.
 
@@ -254,7 +254,7 @@ export async function onPreviewClick(projectId: string) {
 
 That makes the button responsible for preview implementation details. It knows the private runner, private store, and return shape.
 
-### Bitfield replacement
+### The Bitfield version
 
 The button asks the public action to do the work. The status panel reads the prepared preview data.
 
@@ -284,7 +284,7 @@ export function ProjectPreviewStatus() {
 }
 ```
 
-### Bitfield shape
+### What each part owns
 
 ```text
 button -> action request
@@ -294,17 +294,17 @@ button does not parse preview storage
 status panel does not call preview runner
 ```
 
-### Review check
+### Check the result
 
 Read paths and work paths stay separate. Requesting work is not the same as reading prepared state.
 
 ## Example 4: dashboard data without raw storage reads
 
-### Product job
+### The feature being added
 
 A compliance or health dashboard shows a prepared view of project facts. The dashboard should render the view and offer actions. It should not become a database client for another package's private storage shape.
 
-### Traditional mistake
+### What goes wrong
 
 The dashboard imports low-level readers and assembles the other package's model itself.
 
@@ -321,7 +321,7 @@ export async function loadComplianceDashboard(projectId: string) {
 
 That leaks storage shape into the consumer. The dashboard has to know where project files live, how compliance rows are shaped, and how those rows become a screen.
 
-### Bitfield replacement
+### The Bitfield version
 
 The dashboard reads the named data that the owner exposes.
 
@@ -341,7 +341,7 @@ export function ComplianceDashboard() {
 
 The dashboard still owns its render states. It does not own the producer package's storage shape.
 
-### Bitfield shape
+### What each part owns
 
 ```text
 producer package -> prepares project-compliance
@@ -350,17 +350,17 @@ dashboard -> renders loading, error, empty, success
 dashboard actions -> action requests when work is needed
 ```
 
-### Review check
+### Check the result
 
 If the dashboard needs to know how another package stores rows, the boundary is wrong.
 
 ## Example 5: package-owned help content
 
-### Product job
+### The feature being added
 
 A package ships help text or starter content that another area can display.
 
-### Traditional mistake
+### What goes wrong
 
 Consumer code reaches into the package's file path.
 
@@ -371,7 +371,7 @@ const markdown = await fetch('/packages/getting-started/help/start-here.md')
 
 That turns a file path into a public API. Moving the package file breaks the consumer.
 
-### Bitfield replacement
+### The Bitfield version
 
 The package owns the bytes. The consumer reads prepared content or a package-owned record.
 
@@ -379,7 +379,7 @@ The package owns the bytes. The consumer reads prepared content or a package-own
 const help = useBitfieldData('getting-started-help');
 ```
 
-### Bitfield shape
+### What each part owns
 
 ```text
 package file -> declares package-owned bytes
@@ -388,13 +388,13 @@ consumer -> reads prepared help data
 consumer -> never depends on the package file path
 ```
 
-### Review check
+### Check the result
 
 A package file path is not a public product contract.
 
 ## Larger chain
 
-### Traditional app-code instinct
+### The tangled version
 
 One handler coordinates everything.
 
@@ -414,7 +414,7 @@ export async function onFileSelected(file: FileRecord) {
 }
 ```
 
-### Bitfield shape
+### The Bitfield split
 
 Each job goes through the boundary that matches it.
 
@@ -428,7 +428,7 @@ preview status -> data name
 sidebar entry -> published package descriptor
 ```
 
-### Bitfield replacement
+### The public calls
 
 ```ts
 await sendRequestToBitfieldTarget({
