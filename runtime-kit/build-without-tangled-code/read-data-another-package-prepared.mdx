@@ -9,7 +9,7 @@ description: "Read data names instead of importing producer packages, parsing th
 When one package prepares data and another package needs it, the consumer should read a data name. It should not import the producer package, parse its files, or guess the storage address.
 </p>
 
-A project-preview package prepares a list of preview URLs and statuses. A web-frame package wants to render the active URL. The web-frame should not know how project-preview stores those records. It should read the view it was given.
+A project-preview package prepares a list of preview URLs and statuses. A web-frame package wants to render the active URL. The web-frame should not import project-preview storage code. It should read the view it was given.
 
 The producer can change how records are prepared. The consumer should keep reading the same public input shape.
 
@@ -24,7 +24,7 @@ export function WebFrame() {
 }
 ```
 
-This ties the web frame to the project-preview package. The consumer now knows the producer's module path, function name, record shape, and selection logic.
+This ties the web frame to the project-preview package. The consumer now depends on the producer's module path, function name, record shape, and selection logic.
 
 ## Bitfield shape
 
@@ -87,7 +87,7 @@ source-by-label:
   field map says which public field is the URL
 ```
 
-This lets the consumer read a projected view. It does not make the consumer learn the producer's private data layout.
+This lets the consumer read a projected view. It does not make the consumer depend on the producer's private data layout.
 
 ## Four prepared-read situations
 
@@ -107,7 +107,7 @@ const url = await getPreviewUrl(projectId);
 const preview = readInput('project-preview-surface');
 ```
 
-The preview package prepares the public view. The consumer renders the view without learning how the preview package builds it.
+The preview package prepares the public view. The consumer renders the view without importing the preview package's builder code.
 
 ### Selected file content
 
@@ -194,7 +194,7 @@ export async function buildPanel() {
 }
 ```
 
-This code makes one consumer learn three private things: file tree state shape, preview implementation, and help package folder layout.
+This code makes one consumer depend on three private details: file tree state shape, preview implementation, and help package folder layout.
 
 ### Public read version
 

@@ -204,7 +204,7 @@ Check:
 | Is the payload shape what the target expects? | Runtime Kit sends bytes; the target owns meaning. |
 | Should this request be cancellable? | Search, typeahead, and long work should use `AbortController`. |
 
-Do not import the code behind the target to "make the button work." That bypasses Runtime Kit.
+Do not import the target implementation to "make the button work." That bypasses Runtime Kit.
 
 Request failures split into four common cases:
 

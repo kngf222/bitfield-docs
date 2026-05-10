@@ -35,7 +35,7 @@ The guardrail is simple: do not silently convert one benchmark category into ano
 
 ## The categories
 
-Warm local read = the needed data is already local, the operating system already has the needed file pages ready, and Bitfield knows where to read.
+Warm local read = the needed data is already local, the operating system already has the needed file pages ready, and Bitfield has the read address.
 
 Cold local read = the data is local, but the machine still has setup or fetch work to do before the bytes are ready.
 

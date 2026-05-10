@@ -21,13 +21,13 @@ A package can bring three public kinds of things:
 | `stored_bytes` | Attach package-owned bytes, such as text, JSON, images, or other files. |
 | `slot` | Declare a named package target app code can ask for work. |
 
-The package file says what exists. Runtime Kit decides how to admit it behind the public names.
+The package file says what exists. Runtime Kit decides how those declarations become public names.
 
 ## The mental model
 
 Put a boundary file in the package. The boundary file says, "Here is what this package wants Bitfield to know about." Runtime Kit checks that file before package material becomes active.
 
-That check is important. The package should not quietly read files outside itself. It should not invent unsupported thing types. It should not force app code to learn private setup. A package declares the public shape; Bitfield owns the admission path.
+That check is important. The package should not quietly read files outside itself. It should not invent unsupported thing types. It should not force app code to import private setup. A package declares the public shape; Bitfield owns the admission path.
 
 ## Folder shape
 
@@ -76,7 +76,7 @@ Use `record` when the package needs one named piece of durable data.
   "address": "package::product-copy::welcome",
   "payload": {
     "headline": "Welcome back.",
-    "body": "Your product can keep moving without every feature talking directly to every other feature."
+    "body": "Your product can keep moving without every feature importing every other feature."
   }
 }
 ```
@@ -106,7 +106,7 @@ Use `stored_bytes` when a package brings a file.
 }
 ```
 
-`source_path` must point inside the package folder. That rule keeps packages from reaching into random files on the machine.
+`source_path` must point inside the package folder. That rule keeps packages from reading random files on the machine.
 
 Stored bytes are good for:
 
@@ -142,7 +142,7 @@ Use `slot` when a package exposes a named target app code can call.
 }
 ```
 
-The public parts are the slot name, method list, call boundary, and package-owned artifact path. The machinery behind that slot is not app API.
+The public parts are the slot name, method list, call boundary, and package-owned artifact path. The slot implementation is not app API.
 
 Your app calls the slot through the action name:
 

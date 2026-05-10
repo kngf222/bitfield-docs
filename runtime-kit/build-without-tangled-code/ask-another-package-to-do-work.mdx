@@ -11,7 +11,7 @@ When a package needs another package to run work, call a named Bitfield target. 
 
 A keyboard package changes the selected agent. A notifications package changes the notification mode. A search box asks a search target for results. In traditional code, these become direct service calls. In Bitfield, they are action requests.
 
-A correct caller knows the action name and payload shape. It does not know the implementation file behind the work.
+A correct caller uses the action name and payload shape. It does not import the implementation file for the work.
 
 ## Traditional app shape
 
@@ -23,7 +23,7 @@ export async function onShortcut(agentId: string) {
 }
 ```
 
-That shortcut now depends on the selected-agent package implementation. If the implementation moves, changes runtime, or becomes a slot, the caller changes too.
+That direct call now depends on the selected-agent package implementation. If the implementation moves, changes runtime, or becomes a slot, the caller changes too.
 
 ## Bitfield shape
 
@@ -38,7 +38,7 @@ export async function onShortcut(agentId: string) {
 }
 ```
 
-The action name is the public target. The implementation behind it can change without making the caller import new code.
+The action name is the public target. The implementation can change without making the caller import new code.
 
 ## Code translation
 
@@ -95,7 +95,7 @@ await sendRequestToBitfieldTarget({
 });
 ```
 
-The caller knows the job name and payload. It does not know the implementation file.
+The caller uses the job name and payload. It does not import the implementation file.
 
 ### Change selected agent
 
@@ -173,7 +173,7 @@ The caller sends the question. The package that owns the searchable material dec
 
 ## Reply and error boundary
 
-The caller may know the reply shape. It must not know the implementation path.
+The caller may use the reply shape. It must not import the implementation path.
 
 ```ts
 const reply = await sendRequestToBitfieldTarget({
@@ -219,7 +219,7 @@ React is one adapter that can send an action request. The same target should mak
 
 ## Review check
 
-If caller code imports a function from another package to "do work," stop. The public shape is an action request. The caller may know the action name, payload, reply shape, and error states. It must not know the implementation file.
+If caller code imports a function from another package to "do work," stop. The public API is an action request. The caller may use the action name, payload, reply shape, and error states. It must not import the implementation file.
 
 ## Next
 

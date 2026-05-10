@@ -1,6 +1,6 @@
 ---
 title: "Store files inside a package"
-description: "Keep package-owned bytes behind the package file instead of letting consumers reach into loose app files."
+description: "Keep package-owned bytes declared by the package file instead of letting consumers read loose app files."
 ---
 
 <div className="bf-article">
@@ -9,7 +9,7 @@ description: "Keep package-owned bytes behind the package file instead of lettin
 When a package ships files or bytes, keep them inside the package file. Consumer packages should receive named data or target replies, not random file paths into another package.
 </p>
 
-A help package ships markdown, a theme package ships images, and a file-preview package ships a small parser. A consumer wants the rendered result. The consumer should not reach into the package folder and read whatever file happens to be there.
+A help package ships markdown, a theme package ships images, and a file-preview package ships a small parser. A consumer wants the rendered result. The consumer should not read arbitrary files from the package folder.
 
 Package bytes should move with the package. Consumers should use public reads or requests, not private file paths that happen to work today.
 
@@ -25,7 +25,7 @@ or:
 import helpText from '../help/content/getting-started.md?raw';
 ```
 
-Now the consumer knows where the help package stores its files. Rename the folder and consumers break.
+Now the consumer depends on the help package's private file path. Rename the folder and consumers break.
 
 ## Bitfield shape
 
@@ -103,7 +103,7 @@ import template from '../review-package/templates/review.md';
 const reviewTemplate = readInput('review-template');
 ```
 
-The package can ship the template as package material. The caller should not reach into its folder.
+The package can ship the template as package material. The caller should not read the package folder directly.
 
 ### Search index
 
@@ -186,7 +186,7 @@ const results = await sendRequestToBitfieldTarget({
 
 The consumer gets content and search through public names. The package can keep markdown, JSON, a generated index, or something else behind that boundary.
 
-For React, Swift, Kotlin, terminal, or future adapters, the consumer rule stays the same: do not reach into the package folder.
+For React, Swift, Kotlin, terminal, or future adapters, the consumer rule stays the same: do not read package files directly.
 
 ## Good consumer code
 
@@ -200,7 +200,7 @@ const help = readInput('getting-started-help');
 const help = useBitfieldData<{ title: string; body: string }>('getting-started-help');
 ```
 
-The consumer asks for help content by public input name. It does not know which package file produced it.
+The consumer asks for help content by public input name. It does not import or parse the package file that produced it.
 
 ## Review check
 

@@ -27,7 +27,7 @@ A screen has a button: "Find the next step." The screen should not import the se
   <div className="bf-flow-step">
     <span>Reply</span>
     <strong>Return result</strong>
-    <p>The app receives a reply without learning private setup.</p>
+    <p>The app receives a reply without importing private setup.</p>
   </div>
 </div>
 
@@ -37,7 +37,7 @@ The slot might answer a question, transform data, render a view, call another sy
 
 ## Why slots exist
 
-Without slots, features start talking directly to each other. That feels simple at first. Then the product grows, and one feature needs to know how another feature stores data, names inputs, handles failures, and changes over time.
+Without slots, features start importing each other's implementation files. That feels simple at first. Then the product grows, and one feature directly depends on another feature's storage layout, input names, failure handling, and release timing.
 
 Slots keep that from turning into every feature depending on every other feature. A feature sends a request to a slot. The slot replies. The feature does not import the slot's private code or copy its private rules.
 
@@ -73,7 +73,7 @@ The app sends a target and payload. Bitfield gets that request to the right runn
 
 ## What this prevents
 
-Slots prevent feature code from learning too much about other feature code. That matters because private details change. Public slot names should stay steady.
+Slots prevent feature code from importing another feature's private code. That matters because private details change. Public slot names should stay steady.
 
 ## Common mistakes
 

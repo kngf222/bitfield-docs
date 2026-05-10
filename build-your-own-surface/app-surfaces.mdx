@@ -6,7 +6,7 @@ description: "How to design a screen that reads prepared Bitfield data and sends
 <div className="bf-article">
 
 <p className="bf-lead">
-An app surface is the part your user sees. It should read named data, render every state, and send named requests. It should not learn package storage details.
+An app surface is the part your user sees. It should read named data, render every state, and send named requests. It should not import package storage details.
 </p>
 
 A founder adds a `Customers` screen. The screen needs a list, a loading state, an empty state, and one action: archive a customer.
@@ -72,7 +72,7 @@ export function CustomersSurface() {
 }
 ```
 
-The screen should render a real product list, survive loading and error states, and send one named product action without knowing how Bitfield stores or runs the feature.
+The screen should render a real product list, survive loading and error states, and send one named product action without importing Bitfield storage or runtime setup.
 
 ## What not to do
 
@@ -82,14 +82,14 @@ const rawPackageFile = await fetch('/some-package-file.json');
 const rows = JSON.parse(await rawPackageFile.text());
 ```
 
-The surface should not parse package material. Package admission and named data reads belong behind the public Runtime Kit contract.
+The surface should not parse package material. Package admission and named data reads belong in Runtime Kit, not app components.
 
 ## Common failures
 
 | Symptom | Cause | Fix |
 |---|---|---|
 | The component crashes before data arrives | It renders only the success path | Add loading, error, empty, and success states |
-| The screen knows package file names | The surface is bypassing named data reads | Read through `useBitfieldData(...)` |
+| The screen imports or parses package file names | The surface is bypassing named data reads | Read through `useBitfieldData(...)` |
 | Every button sends a vague command | The action reply shape is not product-shaped | Use a named target like `customers.archive` |
 | The UI cannot show success or failure | The request result is ignored | Render pending, success, and failure feedback |
 

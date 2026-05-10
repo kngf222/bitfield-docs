@@ -64,7 +64,7 @@ The customer-facing rule is simple: your app talks to Runtime Kit, Runtime Kit t
 
 | Mistake | Why it hurts | Better path |
 |---|---|---|
-| App code imports package setup | The UI learns private feature wiring | Use Runtime Kit reads and requests |
+| App code imports package setup | The UI depends on private feature wiring | Use Runtime Kit reads and requests |
 | Runtime is treated like a job queue only | The data side disappears | Keep storage and runnable pieces in the same model |
 | Database is treated like remote SQL only | Local durable paths and warm-read categories get misunderstood | Read [Storage shape](/concepts/storage-shape) |
 | Slots are treated like React components | The callable boundary gets blurred | Read [Slots](/concepts/slots) |

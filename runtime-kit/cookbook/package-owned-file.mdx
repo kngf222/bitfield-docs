@@ -9,7 +9,7 @@ description: "Attach package-owned bytes to a package file."
 Use `stored_bytes` when a package needs to bring file bytes with it: help text, JSON rules, images, prompts, lookup tables, or any other package-owned material.
 </p>
 
-This recipe builds a package called `help-package` that carries one text file. The app does not reach into random disk paths. The package declares the file, Runtime Kit checks the path, and the admitted package owns the bytes behind a stable name.
+This recipe builds a package called `help-package` that carries one text file. The app does not read random disk paths. The package declares the file, Runtime Kit checks the path, and the admitted package owns the bytes under a stable name.
 
 ## When to use this
 
@@ -73,7 +73,7 @@ The public name is small:
 ```text
 Start with one screen.
 Keep the app-facing Runtime Kit calls narrow.
-Let packages grow behind them.
+Let packages grow through package files.
 ```
 
 ## Verify the recipe

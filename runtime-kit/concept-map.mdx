@@ -118,7 +118,7 @@ That breaks the shape because the component guessed a storage address. The app s
 
 ## Callable targets
 
-The user clicks "Suggest next step." The app should call `launch.next-step`, not import the code behind it.
+The user clicks "Suggest next step." The app should call `launch.next-step`, not import the target implementation.
 
 A callable target is a stable public name for work. Runtime Kit sends bytes to that target and gives the app reply bytes.
 
@@ -198,7 +198,7 @@ if (screen === 'help') return <HelpSearch />;
 if (screen === 'support') return <SupportPanel />;
 ```
 
-That breaks the shape because the shell learns package-specific UI rules. The shell should render descriptor labels, regions, and active surface ids.
+That breaks the shape because the shell imports package-specific UI rules. The shell should render descriptor labels, regions, and active surface ids.
 
 ### Next links
 

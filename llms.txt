@@ -48,7 +48,7 @@ These pages are public customer documentation. They describe the public product,
 - [Target design](build-your-own-surface/target-design): Gives naming, payload, reply, and failure rules for callable targets that surfaces can request safely.
 - [Product shells](build-your-own-surface/product-shells): Defines the shell boundary for navigation, layout, account/device state, and surface placement.
 - [Device and deployment shape](build-your-own-surface/device-deployment): Connects product packages and surfaces to account keys, activated devices, local state, and rollout decisions.
-- [Build your own surface](build-your-own-surface/sdk-boundary): Defines the public SDK boundary pattern: simple app functions outside, Bitfield setup behind the plug.
+- [Build your own surface](build-your-own-surface/sdk-boundary): Defines the public SDK boundary pattern: simple app functions outside, Bitfield setup outside app code.
 - [Account and key flow](activation/account-and-key-flow): Explains the account portal path for creating an account, choosing access, paying securely, getting key access, and activating a device.
 - [Trials and billing](activation/trials-and-billing): Explains trial billing and active-device ranges without turning pricing into hidden math.
 - [Active devices](activation/active-devices): Defines active devices, local activation state, account-owned authorization, replacement, revocation, and customer-safe boundaries.

@@ -19,7 +19,7 @@ Start with the product moment:
 A screen wants data.
 A user clicks a button.
 A package owns the data and the work.
-Runtime Kit keeps the screen from learning package setup.
+Runtime Kit keeps the screen from importing package setup.
 ```
 
 The public JavaScript surface is intentionally small:
@@ -74,9 +74,9 @@ Think of Runtime Kit as the plug board for your product.
 
 Your package says what it brings: data to store, bytes it owns, or callable slots. Bitfield admits that package into local state. Runtime Kit prepares the app-facing view. Your app then does one of two jobs: read data that is already prepared for it, or ask a named target to do work.
 
-The important part is what your app does not do. It does not open storage files. It does not choose data plumbing. It does not parse package files. It does not know how the callable target is backed. That is the point. Your feature code stays calm while the system behind it can get faster, more flexible, and more replaceable.
+The important part is what your app does not do. It does not open storage files. It does not choose data plumbing. It does not parse package files. It does not import or call the callable target implementation. That is the point. Your feature code stays calm while Runtime Kit can get faster, more flexible, and more replaceable.
 
-The fastest way to ruin the shape is to let the first feature cheat. If the first screen imports a package file directly, the second screen will copy that shortcut, the third screen will add a second shortcut, and by month six the product has a maze instead of an architecture.
+The fastest way to ruin the architecture is to let the first feature bypass the public API. If the first screen imports a package file directly, the second screen will copy that direct import, the third screen will add another direct import, and by month six the product has a maze instead of an architecture.
 
 ## How it works technically
 
@@ -85,7 +85,7 @@ Runtime Kit separates four public roles:
 | Role | What it owns | Public file or call |
 |---|---|---|
 | Package author | Declares records, stored bytes, and callable slots. | `things-to-store-and-run.json` |
-| Runtime Kit | Admits package material and prepares app-facing reads or targets. | Runtime Kit setup behind the public surface |
+| Runtime Kit | Admits package material and prepares app-facing reads or targets. | Runtime Kit setup outside the public app surface |
 | App surface | Reads named data and sends target requests. | `useBitfieldData(...)`, `sendRequestToBitfieldTarget(...)` |
 | Bitfield account/device | Controls whether this device can use the product. | Account portal and local activation state |
 
@@ -135,7 +135,7 @@ App code should not own Runtime Kit setup:
 | Before Runtime Kit | With Runtime Kit |
 |---|---|
 | Features import each other because it is the fastest way to ship today. | Features talk through package data and named targets. |
-| A React component learns storage and package details. | A React component reads `{ data, loading, error }`. |
+| A React component imports storage and package details. | A React component reads `{ data, loading, error }`. |
 | Replacing a feature means tracing imports across the app. | Replacing a package keeps the public data shape or target name stable. |
 | Fast feature work tangles new features into old ones. | The public surface is smaller and the boundaries are clearer. |
 
@@ -187,14 +187,14 @@ React is the first documented app surface because a lot of products start there.
 | Stored bytes | Lets a package bring owned files without reaching outside itself. |
 | Callable slots | Lets a package expose a named target your app can ask for work. |
 | Local state | Keeps customer-visible Bitfield state on the device. |
-| App surfaces | Lets React, and later other SDKs, read and request without learning private setup. |
+| App surfaces | Lets React, and later other SDKs, read and request without importing private setup. |
 
 The public invariant is the same outside React:
 
 ```text
 surface asks for named data
 surface sends a named target request
-package owns the data and work behind those public names
+package owns the data and implementation for those public names
 ```
 
 React gives you `useBitfieldData(...)` today. The Runtime Kit idea is bigger than one UI framework.

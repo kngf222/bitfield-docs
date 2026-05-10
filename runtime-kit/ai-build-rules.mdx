@@ -13,7 +13,7 @@ Runtime Kit gives AI agents three public moves: read named data, send an action 
 
 This page is for founders and developers who ask an AI agent to build with Bitfield.
 
-An AI agent needs rails. Without rails, it will choose the fastest-looking shortcut: import unpublished code, parse files in UI code, wire features directly together, or create a second data path. That can work for one screen and punish you later.
+An AI agent needs rails. Without rails, it will choose the fastest-looking direct dependency: import unpublished code, parse files in UI code, wire features directly together, or create a second data path. That can work for one screen and punish you later.
 
 Runtime Kit gives the agent a better instruction set:
 
@@ -42,7 +42,7 @@ App code may import:
 - useBitfieldData from @bitfield/runtime-kit/react
 
 App code must not import unpublished Runtime Kit code, parse things-to-store-and-run.json,
-construct storage addresses, choose low-level readers, or call the code behind
+construct storage addresses, choose low-level readers, or call the implementation for
 an action directly.
 
 Package work belongs in things-to-store-and-run.json.
@@ -61,7 +61,7 @@ Give an AI agent one of these jobs at a time:
 |---|---|---|
 | Add package data. | `things-to-store-and-run.json` in the package. | React components. |
 | Add a screen. | React screen code that imports the public hook. | Package admission or storage setup. |
-| Add a user action. | A call to an action name with payload and reply handling. | The private implementation behind the action. |
+| Add a user action. | A call to an action name with payload and reply handling. | The private implementation for the action. |
 | Add package-owned bytes. | Package-local files plus an entry in `things-to-store-and-run.json`. | Random local files outside the package. |
 | Fix a broken read. | Data name and component states. | Low-level reader machinery. |
 
@@ -155,7 +155,7 @@ Reply payload:
 - { results: { title: string; url: string }[] }
 
 Support cancellation if the query changes before the previous request finishes.
-Do not import the implementation behind "help.search".
+Do not import the implementation for "help.search".
 Do not assume every action returns JSON unless this reply shape says it does.
 ```
 
@@ -197,7 +197,7 @@ Shell rule:
 
 Screen body rule:
 - the body may call help.search through sendRequestToBitfieldTarget(...)
-- the body must not import the implementation behind help.search
+- the body must not import the implementation for help.search
 ```
 
 ### Troubleshooting prompt
@@ -268,7 +268,7 @@ import { createBitfieldReadScope } from '@bitfield/runtime-kit/internal';
 import { useBitfieldData } from '@bitfield/runtime-kit/react';
 ```
 
-App code uses the public hook. Setup machinery stays behind Runtime Kit.
+App code uses the public hook. Setup machinery stays outside app code.
 
 ### Missing UI states
 
@@ -386,7 +386,7 @@ If an AI agent adds a new hook, provider, context, or subscription import, stop 
 
 **Letting an AI agent move package setup into React**
 
-React renders named data. Package admission belongs behind Runtime Kit.
+React renders named data. Package admission belongs in Runtime Kit, not app components.
 
 **Letting an AI agent make action names too implementation-specific**
 

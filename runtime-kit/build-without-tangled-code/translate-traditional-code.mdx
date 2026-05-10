@@ -6,14 +6,14 @@ description: "Turn stores, service imports, direct calls, and shell branching in
 <div className="bf-article">
 
 <p className="bf-lead">
-Most app code starts from the old shape first. This page shows the exact translation: when code reaches for a store, service import, direct function call, package file, or shell branch, replace it with the Runtime Kit boundary that matches the job.
+Most app code starts from the direct-dependency version first. This page shows the exact translation: when code imports a store, imports a service, calls an implementation function, parses a package file, or adds a shell branch, replace it with the Runtime Kit boundary that matches the job.
 </p>
 
-You are adding a file tree, editor, preview button, command palette action, sidebar item, or dashboard panel. The code works inside one app today, but it does it by teaching one package the private shape of another package. That is the moment to stop and translate.
+You are adding a file tree, editor, preview button, command palette action, sidebar item, or dashboard panel. The code works inside one app today, but it does it by making one package depend on another package's private store, files, or implementation. That is the moment to stop and translate.
 
 After this page, you should be able to point at each line of traditional code and name the Bitfield path that replaces it: shared product fact, data name, action request, private UI state, or package file.
 
-Traditional code lets one package become the private source every other package must know. The file tree owns the selected file, but the editor, preview button, command palette, and dashboard all point into the file tree's private store.
+Traditional code lets one package become the private source every other package imports. The file tree owns the selected file, but the editor, preview button, command palette, and dashboard all import or read the file tree's private store.
 
 ```mermaid
 %%{init: {'flowchart': {'nodeSpacing': 36, 'rankSpacing': 48, 'curve': 'linear'}}}%%
@@ -67,18 +67,18 @@ flowchart LR
 
 ## Start with the job
 
-Traditional app shape usually starts with the nearest import. Bitfield shape starts with the job the code is doing.
+Traditional app code usually starts with the nearest import. Bitfield code starts with the job the code is doing.
 
 | The code is trying to... | Traditional mistake | Bitfield replacement |
 |---|---|---|
-| Let many packages know the same selected file. | Put it in one feature store and import that store everywhere. | Put the selected file in Bitfield state and read the named input. |
+| Let many packages use the same selected file. | Put it in one feature store and import that store everywhere. | Put the selected file in Bitfield state and read the named input. |
 | Use data another package prepared. | Import the producer package or parse its files. | Read the data name. |
 | Ask another package to run work. | Call the implementation function directly. | Send an action request. |
 | Keep hover, debounce, menu, or draft timing. | Put visual timing in global product state. | Keep it as private UI state. |
 | Let a shell show package-provided UI entries. | Hardcode every feature in the shell. | Read package records/descriptors and place what they say. |
 | Ship help text, templates, or other package material. | Fetch another package's file from app code. | Let the package own the bytes and expose named data. |
 
-React is one adapter for these reads and requests. A future native shell, command-line shell, game shell, or embedded device shell should use the same public names instead of learning another package's private code.
+React is one adapter for these reads and requests. A future native shell, command-line shell, game shell, or embedded device shell should use the same public names instead of importing another package's private code.
 
 ## What this prevents
 
@@ -116,7 +116,7 @@ export function onSelectionChanged(selection: EditorSelection) {
 }
 ```
 
-That couples the editor to the assistant panel. The editor now knows where the assistant panel keeps state, what the state object is called, and how the panel expects it to be shaped.
+That couples the editor to the assistant panel. The editor now directly depends on the assistant panel's state module, state field name, and object structure.
 
 ### The Bitfield version
 
@@ -192,7 +192,7 @@ That makes the shell product-specific. Every new package now edits the shell, an
 
 ### The Bitfield version
 
-The sidebar reads published package records, finds the descriptors it knows how to place, and renders from those records.
+The sidebar reads published package records, finds descriptors with supported placement fields, and renders from those records.
 
 ```tsx
 import { useBitfieldData } from '@bitfield/runtime-kit/react';
@@ -216,7 +216,7 @@ export function AppSidebar() {
 }
 ```
 
-The shell knows how to place entries. It does not know each package's private screens, stores, actions, or file layout.
+The shell places entries from descriptor fields. It does not import each package's private screens, stores, actions, or file layout.
 
 ### What each part owns
 
@@ -252,7 +252,7 @@ export async function onPreviewClick(projectId: string) {
 }
 ```
 
-That makes the button responsible for preview implementation details. It knows the private runner, private store, and return shape.
+That makes the button responsible for preview implementation details. It imports the private runner, private store, and return shape.
 
 ### The Bitfield version
 
@@ -319,7 +319,7 @@ export async function loadComplianceDashboard(projectId: string) {
 }
 ```
 
-That leaks storage shape into the consumer. The dashboard has to know where project files live, how compliance rows are shaped, and how those rows become a screen.
+That leaks storage shape into the consumer. The dashboard depends on where project files live, how compliance rows are shaped, and how those rows become a screen.
 
 ### The Bitfield version
 
@@ -352,7 +352,7 @@ dashboard actions -> action requests when work is needed
 
 ### Check the result
 
-If the dashboard needs to know how another package stores rows, the boundary is wrong.
+If the dashboard depends on how another package stores rows, the boundary is wrong.
 
 ## Example 5: package-owned help content
 
@@ -362,7 +362,7 @@ A package ships help text or starter content that another area can display.
 
 ### What goes wrong
 
-Consumer code reaches into the package's file path.
+Consumer code reads the package's private file path.
 
 ```ts
 const markdown = await fetch('/packages/getting-started/help/start-here.md')

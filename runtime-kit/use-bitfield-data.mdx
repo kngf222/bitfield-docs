@@ -21,13 +21,13 @@ Use `useBitfieldData(...)` when a React component needs data that Runtime Kit ha
 }
 ```
 
-That shape is the point. Your component can render data, loading, and error states without learning how Bitfield prepared the data.
+That shape is the point. Your component can render data, loading, and error states without importing the code that prepared the data.
 
 ## The mental model
 
 The component asks for data by using the hook. Runtime Kit decides what data name that component is allowed to read. The component receives the latest app-facing value.
 
-This is not a normal fetch call. The component is not asking a server for a record by URL. It is reading a prepared app value. Runtime Kit may prepare that value from local data, package records, package-owned bytes, derived values, or another public package surface. The component does not need to know that path.
+This is not a normal fetch call. The component is not asking a server for a record by URL. It is reading a prepared app value. Runtime Kit may prepare that value from local data, package records, package-owned bytes, derived values, or another public package surface. The component should not import that preparation path.
 
 ## How it works technically
 
@@ -38,7 +38,7 @@ package material becomes app-facing data
   -> React receives { data, loading, error }
 ```
 
-The public hook call is stable even when the preparation path changes behind it.
+The public hook call is stable even when Runtime Kit changes how it prepares the value.
 
 For the exact selector forms, return-state contract, and invalid examples, read [Runtime Kit API](/reference/runtime-kit-api).
 
@@ -121,7 +121,7 @@ if (!store.data) return <section>No data yet</section>;
 return <section>{store.data.title}</section>;
 ```
 
-That sounds simple because it should be simple. The hard work belongs behind Runtime Kit.
+That sounds simple because it should be simple. Runtime Kit owns the preparation work.
 
 ## Pair it with a request
 
@@ -160,7 +160,7 @@ The request asks a target to do work. The hook reads prepared results.
 |---|---|
 | Component imports storage helpers. | Component imports one hook. |
 | Component chooses low-level data wiring. | Runtime Kit handles preparation behind the surface. |
-| Component knows package implementation details. | Component knows public input names and data shape. |
+| Component imports package implementation details. | Component uses public input names and data shape. |
 | The component has many low-level APIs to misuse. | The component gets one read shape and fewer ways to tangle the app. |
 
 ## Common mistakes
@@ -239,6 +239,6 @@ export function LaunchPanel() {
 }
 ```
 
-The component is doing real work, but it still only knows data names, an action name, and public payload shapes.
+The component is doing real work, but it still only uses data names, an action name, and public payload shapes.
 
 </div>

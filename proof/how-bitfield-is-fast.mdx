@@ -35,7 +35,7 @@ The number belongs to a specific measured job, not every possible database opera
 
 ## The short version
 
-Bitfield is fast because the storage shape removes work from the read path. Durable data means the data survives a crash or restart. Warm local read means the needed local file pages are already available and Bitfield knows where to read.
+Bitfield is fast because the storage shape removes work from the read path. Durable data means the data survives a crash or restart. Warm local read means the needed local file pages are already available and Bitfield has the read address.
 
 ## Durable does not mean every read waits for disk
 

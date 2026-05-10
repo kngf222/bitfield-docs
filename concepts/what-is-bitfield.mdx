@@ -31,7 +31,7 @@ You have an idea, then the idea changes. You add a phone screen, a laptop dashbo
   </div>
 </div>
 
-Bitfield should behave like one product surface, not a pile of separate choices you have to glue together before you know what you are building.
+Bitfield should behave like one product surface, not a pile of separate systems you have to manually wire together before you know what you are building.
 
 A database stores your data and finds it when you ask. A runtime loads programs and gives them what they need to run. Bitfield does both in one product surface you put inside your app.
 
@@ -41,7 +41,7 @@ The usual way of building makes you pick a database, a framework, deployment, sy
 
 That works until the product changes. Then every new feature starts depending on old features. One edit turns into ten.
 
-Bitfield changes the shape. Every feature plugs into one place instead of depending directly on each other.
+Bitfield changes the dependency pattern. Every feature uses Bitfield's public names instead of directly importing every other feature.
 
 ## The term ladder
 
@@ -76,7 +76,7 @@ Bitfield changes the shape. Every feature plugs into one place instead of depend
 
 | Wrong shape | Why it breaks later | Bitfield shape |
 |---|---|---|
-| Every feature imports every other feature | Changes spread through the product | Features meet through public names and requests |
+| Every feature imports every other feature | Changes spread through the product | Features use public names and requests |
 | The UI owns storage details | Screens become hard to move | Runtime Kit gives the UI named data and targets |
 | Device access is an afterthought | Trials, phones, laptops, and friends get confusing | Active devices are part of the account path |
 | Speed claims are read as universal magic | Readers compare unlike jobs | Proof pages name measured categories |

@@ -6,12 +6,12 @@ description: "How to design another app-facing SDK without exposing Bitfield set
 <div className="bf-article">
 
 <p className="bf-lead">
-A good SDK gives app code a small surface and keeps Bitfield setup work behind the plug. The public surface should stay narrow because the setup work is already packaged away.
+A good SDK gives app code a small surface and keeps Bitfield setup work outside app code. The public surface should stay narrow because the setup work is already packaged away.
 </p>
 
-The JavaScript Runtime Kit is the example. App code gets one read hook and one request function. Bitfield still handles boot, connection, package loading, storage readers, subscriptions, and validation behind that surface.
+The JavaScript Runtime Kit is the example. App code gets one read hook and one request function. Bitfield still handles boot, connection, package loading, storage readers, subscriptions, and validation outside that surface.
 
-A team wants the same package-backed feature to work from React today and a different app surface later. The SDK should preserve the same read/request shape instead of making every app learn setup steps.
+A team wants the same package-backed feature to work from React today and a different app surface later. The SDK should preserve the same read/request shape instead of making every app call setup steps.
 
 <div className="bf-flow" aria-label="SDK boundary flow">
   <div className="bf-flow-step">
@@ -29,7 +29,7 @@ A team wants the same package-backed feature to work from React today and a diff
   <div className="bf-flow-step">
     <span>Bitfield</span>
     <strong>Runs package contracts</strong>
-    <p>Packages, data names, targets, local state, and active-device access stay behind the plug.</p>
+    <p>Packages, data names, targets, local state, and active-device access stay outside app code.</p>
   </div>
 </div>
 
@@ -65,7 +65,7 @@ That is enough for most app code. If you need a Swift, Kotlin, Python, or server
 
 The setup surface can do real work. It may connect to Bitfield, load packages, prepare read scopes, subscribe to updates, decode payloads, validate package files, or recover from resets.
 
-That does not mean the app surface should expose those details. App developers should not have to learn the setup work just to render data.
+That does not mean the app surface should expose those details. App developers should not have to call setup code just to render data.
 
 ## The boundary test
 
@@ -75,13 +75,13 @@ Ask this before adding a public SDK function:
 Would an app developer call this because their product needs it, or because Bitfield setup needed a place to live?
 </div>
 
-If it is setup work, keep it behind the plug.
+If it is setup work, keep it outside the public app surface.
 
 ## Common failures
 
 | Symptom | Cause | Fix |
 |---|---|---|
-| App code has to call three setup functions before reading data | The setup seam leaked into the app surface | Collapse setup behind the SDK entry point |
+| App code has to call three setup functions before reading data | The setup seam leaked into the app surface | Move setup into the SDK entry point |
 | SDK exposes raw package material | The SDK is making app code understand package admission | Expose named data reads and named requests instead |
 | Another language SDK has different product concepts | The SDK copied implementation details instead of the public shape | Keep every SDK around read, request, state, and error |
 | Error handling is different on every screen | The SDK does not have a stable error contract | Return consistent loading, error, empty, and success states |

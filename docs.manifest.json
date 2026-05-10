@@ -863,7 +863,7 @@
     {
       "route": "runtime-kit/build-without-tangled-code/store-files-inside-a-package",
       "title": "Store files inside a package",
-      "description": "Ship package-owned bytes without making consumers reach into package files.",
+      "description": "Ship package-owned bytes without making consumers read package files directly.",
       "diataxis": "how-to",
       "pageClass": "runtime-kit-boundary-translation",
       "summary": "Shows the package-owned file boundary and the consumer-side mistake of reading another package's files directly."
@@ -1038,7 +1038,7 @@
       "description": "How to design another app-facing SDK without exposing Bitfield setup details.",
       "diataxis": "how-to",
       "pageClass": "build-curriculum",
-      "summary": "Defines the public SDK boundary pattern: simple app functions outside, Bitfield setup behind the plug."
+      "summary": "Defines the public SDK boundary pattern: simple app functions outside, Bitfield setup outside app code."
     },
     {
       "route": "activation/account-and-key-flow",

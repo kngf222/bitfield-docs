@@ -189,7 +189,7 @@ An error means the public request did not complete. It does not mean the compone
 |---|---|
 | Button imports the feature implementation directly. | Button calls a named target. |
 | Replacing the feature requires rewiring app imports. | Replacing the package keeps the target name stable. |
-| App code knows implementation details. | App code knows payload and reply shape. |
+| App code imports implementation details. | App code uses only the payload and reply contract. |
 | A caller has to understand private execution code. | A caller sends a request to a public target name. |
 
 ## Common mistakes

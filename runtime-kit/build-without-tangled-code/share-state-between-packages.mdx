@@ -9,7 +9,7 @@ description: "Use Bitfield state for shared product facts instead of sharing ano
 When two packages need the same state, do not make one package read another package's private object. Put the shared product fact in Bitfield and let each package read the view it needs.
 </p>
 
-A file tree chooses a file, then the editor, breadcrumbs, command palette, and AI context panel all need to know which file is active. That state is no longer a private file-tree detail. It is product coordination state.
+A file tree chooses a file, then the editor, breadcrumbs, command palette, and AI context panel all need the active file. That state is no longer a private file-tree detail. It is product coordination state.
 
 Every package should see the same selected file without importing the file tree, sharing memory with it, or duplicating its private store.
 
@@ -29,7 +29,7 @@ export function openEditor() {
 }
 ```
 
-This works until it does not. The editor now knows the file tree exists. If the file tree changes its store shape, moves packages, or becomes a different UI, the editor breaks.
+This works until it does not. The editor now imports the file tree store. If the file tree changes its store shape, moves packages, or becomes a different UI, the editor breaks.
 
 ## Bitfield shape
 
@@ -101,7 +101,7 @@ React is only the adapter shown here. The same rule applies to any shell: read t
 
 The mental model is simple: a product fact is not owned by the first UI that touched it. The file tree might be the place where a user selected a file, but "the selected file" is not the file tree's private object once the editor, AI panel, breadcrumbs, and command palette all need it.
 
-Traditional code turns the first UI into the source every other package must know:
+Traditional code turns the first UI into the source every other package imports:
 
 ```ts
 import { fileTreeStore } from '../file-tree/store';
@@ -123,7 +123,7 @@ const selectedFile = readInput('selected-file');
 const selectedFile = useBitfieldData<string>('selected-file');
 ```
 
-The AI panel does not know whether the value came from a tree, command palette, recent-files list, command-line launch, or another device later. It knows the product fact it needs.
+The AI panel does not import the tree, command palette, recent-files list, command-line launch, or another device path. It reads the product fact it needs.
 
 ## Four shared-state situations
 

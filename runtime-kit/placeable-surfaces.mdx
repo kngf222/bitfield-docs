@@ -1,12 +1,12 @@
 ---
 title: "Placeable surfaces"
-description: "Understand the generic surface descriptor shape that lets a shell place product UI without learning each package's private UI code."
+description: "Understand the generic surface descriptor shape that lets a shell place product UI without importing each package's private UI code."
 ---
 
 <div className="bf-article">
 
 <p className="bf-lead">
-A placeable surface is a product UI descriptor. It says what can appear, where it can appear, and which named data reads or targets the surface may use. The shell reads that descriptor and places the surface without learning the feature's private screens, stores, actions, or file layout.
+A placeable surface is a product UI descriptor. It says what can appear, where it can appear, and which named data reads or targets the surface may use. The shell reads that descriptor and places the surface without importing the feature's private screens, stores, actions, or file layout.
 </p>
 
 ## What this explains
@@ -19,9 +19,9 @@ Use this page when you need to understand why the architecture stays clean. Use 
 
 ## The separation
 
-The shell should not know what a launch dashboard is. It should not know what support means. It should not know which package owns help search.
+The shell should not import launch dashboard code. It should not import support behavior. It should not import the package that owns help search.
 
-The shell should only know this:
+The shell should only use this descriptor data:
 
 | Generic part | What it means |
 |---|---|

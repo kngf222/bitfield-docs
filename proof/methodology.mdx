@@ -39,7 +39,7 @@ The wrong way to read a benchmark is to take one number from one category and co
 
 | Category | What it means | What to compare it to |
 |---|---|---|
-| Warm local read | The data is local, the needed pages are warm, and Bitfield knows where to read. | Other warm local reads with a similar access shape. |
+| Warm local read | The data is local, the needed pages are warm, and Bitfield has the read address. | Other warm local reads with a similar access shape. |
 | Cold local read | The data is local, but setup or fetch work is included. | Other cold local reads on similar hardware. |
 | Content address lookup | Bitfield resolves a content identity before reading. | Other local lookup paths, not exact-position reads. |
 | Durable batch write | Many writes are grouped, then the cost is divided across written items. | Other batch writes with the same durability boundary. |

@@ -108,7 +108,7 @@ If the file is missing, Runtime Kit has no package list to check.
       "address": "package::welcome-package::welcome-copy",
       "payload": {
         "headline": "Keep shipping.",
-        "body": "Your app can add the next feature without tying this screen to every package behind it."
+        "body": "Your app can add the next feature without making this screen import every package."
       }
     },
     {
@@ -204,7 +204,7 @@ export function WelcomePanel() {
 The screen eventually renders:
 
 Keep shipping.
-Your app can add the next feature without tying this screen to every package behind it.
+Your app can add the next feature without making this screen import every package.
 ```
 
 If the screen stays empty, check the data name and render states. See [Named data read failures](/runtime-kit/troubleshooting#named-data-read-failures).
@@ -304,7 +304,7 @@ export function WelcomePanel() {
 }
 ```
 
-The component owns UI state. It does not own package admission, storage layout, or the code behind `welcome.suggest`.
+The component owns UI state. It does not own package admission, storage layout, or the implementation for `welcome.suggest`.
 
 ## Step 7: Verify the feature
 
@@ -346,7 +346,7 @@ The public chain can grow without changing its shape.
 | A non-React screen later. | The read/request split still applies. |
 | Another product with a package named `welcome-package`. | Package sets keep project material separated. |
 
-Runtime Kit is valuable because the feature can get bigger without forcing every screen to learn every layer below it.
+Runtime Kit is valuable because the feature can get bigger without forcing every screen to import or configure every lower layer.
 
 ## Debug the chain
 
@@ -422,7 +422,7 @@ Package one owns the copy:
   "address": "package::welcome-package::welcome-copy",
   "payload": {
     "headline": "Keep shipping.",
-    "body": "Your app can add the next feature without tying this screen to every package behind it."
+    "body": "Your app can add the next feature without making this screen import every package."
   }
 }
 ```

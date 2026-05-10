@@ -21,7 +21,7 @@ Use this recipe when a screen needs both data and an action.
 | A search panel that reads prepared results and calls a search target. | A pure reference page for the hook signature. |
 | A dashboard card that reads prepared metrics and triggers a target. | A component that imports package files directly. |
 
-The point is the separation: the component owns UI state and user actions. Runtime Kit owns the public read/request line. The package owns the material behind that line.
+The point is the separation: the component owns UI state and user actions. Runtime Kit owns the public read/request line. The package owns the material served through that line.
 
 ## What you will build
 
@@ -103,7 +103,7 @@ That line means:
 | `welcome.error` | Runtime Kit cannot provide the value. |
 | `welcome.data` | The current prepared value, or `null`. |
 
-The selector is not a storage path. The component does not know which package record, file, or derived value produced the data name.
+The selector is not a storage path. The component does not import the package record, file, or derived value that produced the data name.
 
 ## Request path
 
@@ -163,7 +163,7 @@ if (!welcome.data) return null;
 // import { runSearchDirectly } from '../packages/search-package/slot';
 ```
 
-That is the path to a tangled app. The UI disappears when data is missing, and the button is one import away from bypassing Runtime Kit.
+That is how tangled apps start. The UI disappears when data is missing, and the button is one direct import away from bypassing Runtime Kit.
 
 ## Common failures
 
@@ -198,7 +198,7 @@ The component has two jobs:
 - Read the prepared `welcome` data.
 - Ask `product.search` to do work.
 
-It does not know where the record lives, where package bytes are stored, which runner backs the target, or how the active package set is mounted.
+It does not import the record location, package byte path, target runner, or active package-set mount code.
 
 ## What changes when the package changes
 

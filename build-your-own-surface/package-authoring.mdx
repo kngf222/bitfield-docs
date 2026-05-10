@@ -78,7 +78,7 @@ The package should reveal the feature boundary before anyone reads the React com
 
 | Symptom | Cause | Fix |
 |---|---|---|
-| The surface needs to know file names | The package did not provide a named data read contract | Add a data name and read it through Runtime Kit |
+| The surface imports or parses file names | The package did not provide a named data read contract | Add a data name and read it through Runtime Kit |
 | One package has unrelated product areas | The package file is too wide | Split by feature ownership |
 | The package contains UI placement policy | The shell/surface boundary is blurred | Move placement meaning to the surface descriptor or shell route |
 | An action name is vague | The caller cannot tell what action is safe | Rename it around product action, like `customers.archive` |

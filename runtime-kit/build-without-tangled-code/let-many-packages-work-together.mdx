@@ -94,7 +94,7 @@ appStore.notifications.mode = settingsStore.notificationMode;
 appStore.help.index = helpPackage.searchIndex;
 ```
 
-That looks convenient until every package has to know the central store shape and the central store has to know every package.
+That looks convenient until every package depends on the central store shape and the central store imports every package.
 
 ### Shared names, separate packages
 
@@ -114,7 +114,7 @@ Now each package meets the others through public facts, data names, and action n
 
 | Bad shape | Why it breaks | Better shape |
 |---|---|---|
-| One giant app store. | Every feature depends on every other feature's shape. | Shared product facts in Bitfield. |
+| One giant app store. | Every feature depends on every other feature's private state shape. | Shared product facts in Bitfield. |
 | One central service imports all packages. | Adding a package means editing the central service. | Packages expose inputs and targets. |
 | Shell coordinates package-specific UI rules. | Layout becomes business logic. | Shell places; packages read/call. |
 | Code gets patched wherever it is easiest. | The code compiles but boundaries collapse. | Choose state, input, target, private UI state, or package bytes. |
@@ -186,7 +186,7 @@ const activityInputs = [
 
 ## Why this scales past the first screen
 
-The first screen can survive traditional coupling. The tenth screen usually cannot. The problem is not that stores, services, or contexts are evil. The problem is that they make a feature's private shape become the way the rest of the product thinks.
+The first screen can survive traditional coupling. The tenth screen usually cannot. The problem is not that stores, services, or contexts are evil. The problem is that they make every feature depend on another feature's private state shape.
 
 Bitfield keeps the product language outside any one package:
 

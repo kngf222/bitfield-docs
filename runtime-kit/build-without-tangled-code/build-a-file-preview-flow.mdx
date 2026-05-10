@@ -11,7 +11,7 @@ This case study follows one realistic product flow end to end: a user selects a 
 
 You are building a command center with a file tree, file editor, web preview, help panel, keyboard shortcuts, AI context, and notifications. The product needs to feel connected, but the packages must not import each other.
 
-This case study shows the exact traditional code shape that causes tangles, then translates it into public Runtime Kit handles without reaching into package files, private stores, or implementation functions.
+This case study shows the exact traditional code pattern that causes tangles, then translates it into public Runtime Kit handles without importing package files, private stores, or implementation functions.
 
 ## Source facts this case uses
 
@@ -57,7 +57,7 @@ export async function openWorkspaceFlow(filePath: string, agentId: string) {
 }
 ```
 
-This code is not bad because it is long. It is bad because every package knows the shape of every other package. The editor knows the file tree. The preview caller knows the preview service. The help consumer knows the help folder. The keyboard path knows the selected-agent store. Notification changes happen by direct implementation call.
+This code is not bad because it is long. It is bad because every package directly depends on every other package. The editor imports the file tree store. The preview caller imports the preview service. The help consumer imports the help folder. The keyboard path imports the selected-agent store. Notification changes happen by direct implementation call.
 
 ## Bitfield translation
 
@@ -152,7 +152,7 @@ The adapter can be React, a native shell, a terminal shell, or a future SDK. The
 
 | Boundary-crossing code | Why it is wrong | Correct shape |
 |---|---|---|
-| `import { fileTreeStore } from '../file-tree/store'` | The editor now knows file tree private shape. | Read `selected-file`. |
+| `import { fileTreeStore } from '../file-tree/store'` | The editor imports file-tree private state. | Read `selected-file`. |
 | `import help from '../help/content/start.md'` | Consumer depends on package folder layout. | Read `getting-started-help`. |
 | `previewService.getPreview(projectId)` | Caller imports preview implementation. | Read `project-preview-surface` or request a preview refresh target. |
 | `selectedAgentStore.set(agentId)` | Caller mutates another package's state. | Send `selected-agent.update`. |
