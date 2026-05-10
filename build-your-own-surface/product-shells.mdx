@@ -9,7 +9,7 @@ description: "How shells place surfaces without owning product body logic."
 A shell is the product frame: navigation, layout, active device state, and where surfaces appear. It should place surfaces, not become every feature.
 </p>
 
-Product scene: your app has a sidebar, a main panel, and a details panel. The shell decides those regions exist. Package surfaces decide what product body appears inside them.
+Your app has a sidebar, a main panel, and a details panel. The shell decides those regions exist. Package surfaces decide what product body appears inside them.
 
 <div className="bf-flow" aria-label="Product shell flow">
   <div className="bf-flow-step">
@@ -54,7 +54,7 @@ The shell should be able to place a surface from a descriptor without learning t
 }
 ```
 
-Expected result: the shell can put the surface in the right place and the surface still owns the customer-specific UI.
+By the end, the shell can put the surface in the right place and the surface still owns the customer-specific UI.
 
 ## What this prevents
 

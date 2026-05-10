@@ -9,7 +9,7 @@ description: "Get a key, add Runtime Kit, read data, and send a request."
 This is the shortest first-result path: get key access, activate a device, add Runtime Kit, read named data, and send one action request.
 </p>
 
-Product scene: you are building the first screen of a product. It needs one piece of named data and one button that asks Bitfield to do work.
+You are building the first screen of a product. It needs one piece of named data and one button that asks Bitfield to do work.
 
 <div className="bf-flow" aria-label="Quickstart flow">
   <div className="bf-flow-step">
@@ -31,7 +31,7 @@ Product scene: you are building the first screen of a product. It needs one piec
   </div>
 </div>
 
-Expected result: your app can render one prepared value and send one action request without importing private package setup.
+By the end, your app can render one prepared value and send one action request without importing private package setup.
 
 ## Prerequisites
 
@@ -78,7 +78,7 @@ export function InboxCount() {
 }
 ```
 
-Visible result: the screen shows an inbox count when the named data is available. The component owns loading, error, and success rendering. It does not decide how Bitfield stores or prepares the data.
+The screen shows an inbox count when the named data is available. The component owns loading, error, and success rendering. It does not decide how Bitfield stores or prepares the data.
 
 ## 4. Send a request
 
@@ -93,7 +93,7 @@ const reply = await sendRequestToBitfieldTarget({
 });
 ```
 
-Visible result: the app asks the named target to do work and waits for a reply. The button does not import the target implementation.
+The app asks the named target to do work and waits for a reply. The button does not import the target implementation.
 
 <div className="bf-callout">
 The app surface stays boring on purpose. The product can gain new storage paths, packages, devices, or slots without making every React component learn a new API.

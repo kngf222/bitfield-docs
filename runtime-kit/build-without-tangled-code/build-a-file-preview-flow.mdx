@@ -9,9 +9,9 @@ description: "A source-grounded case study that translates one file, preview, he
 This case study follows one realistic product flow end to end: a user selects a file, the editor reads it, the preview surface shows the current project, help content is available, keyboard shortcuts change the selected agent, and notifications update mode.
 </p>
 
-Product scene: you are building a command center with a file tree, file editor, web preview, help panel, keyboard shortcuts, AI context, and notifications. The product needs to feel connected, but the packages must not import each other.
+You are building a command center with a file tree, file editor, web preview, help panel, keyboard shortcuts, AI context, and notifications. The product needs to feel connected, but the packages must not import each other.
 
-Expected result: you can see the exact traditional code shape that causes tangles, then translate it into public Runtime Kit handles without reaching into package files, private stores, or implementation functions.
+By the end, you can see the exact traditional code shape that causes tangles, then translate it into public Runtime Kit handles without reaching into package files, private stores, or implementation functions.
 
 ## Source facts this case uses
 
@@ -73,7 +73,7 @@ notification-mode.update -> action request from settings or shortcuts
 open menu / hover / draft text -> private UI state
 ```
 
-React adapter example:
+### React adapter example
 
 ```tsx
 const selectedFile = useBitfieldData<string>('selected-file');
@@ -81,7 +81,7 @@ const preview = useBitfieldData<PreviewSurface>('project-preview-surface');
 const help = useBitfieldData<HelpContent>('getting-started-help');
 ```
 
-Request example:
+### Request example
 
 ```ts
 await sendRequestToBitfieldTarget({

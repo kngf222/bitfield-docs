@@ -11,7 +11,7 @@ A good SDK gives app code a tiny surface and keeps Bitfield setup work behind th
 
 The JavaScript Runtime Kit is the example. App code gets one read hook and one request function. Bitfield still handles boot, connection, package loading, storage readers, subscriptions, and validation behind that surface.
 
-Product scene: a team wants the same package-backed feature to work from React today and a different app surface later. The SDK should preserve the same read/request shape instead of making every app learn setup steps.
+A team wants the same package-backed feature to work from React today and a different app surface later. The SDK should preserve the same read/request shape instead of making every app learn setup steps.
 
 <div className="bf-flow" aria-label="SDK boundary flow">
   <div className="bf-flow-step">
@@ -88,7 +88,7 @@ If it is setup work, keep it behind the plug.
 
 ## Verify
 
-Expected result: the SDK boundary is right when app code can render a surface with one read call and one request call, while setup work remains invisible to the product component.
+By the end, the SDK boundary is right when app code can render a surface with one read call and one request call, while setup work remains invisible to the product component.
 
 ## Next
 

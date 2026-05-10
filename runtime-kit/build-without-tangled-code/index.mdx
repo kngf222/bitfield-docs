@@ -9,9 +9,9 @@ description: "Translate normal coupled app code into Bitfield package state, nam
 Most software gets tangled because one part of the app starts reaching into another part's private state. Runtime Kit gives you a different shape: put shared product facts in Bitfield, read prepared views, and ask named targets to do work.
 </p>
 
-Product scene: you are building a product with files, panels, settings, search, AI context, background jobs, and multiple package areas. The first version works. Then feature twenty needs to know what feature seven selected. Feature thirty needs to run the same work from a different place. The traditional fix is another store, another service import, another prop path, or another global. That is the knot this section is here to prevent.
+You are building a product with files, panels, settings, search, AI context, background jobs, and multiple package areas. The first version works. Then feature twenty needs to know what feature seven selected. Feature thirty needs to run the same work from a different place. The traditional fix is another store, another service import, another prop path, or another global. That is the knot this section is here to prevent.
 
-Expected result: after reading this section, you can see a normal app-code instinct and translate it into the Bitfield shape without guessing, importing private code, or making React the architecture.
+By the end, after reading this section, you can see a normal app-code instinct and translate it into the Bitfield shape without guessing, importing private code, or making React the architecture.
 
 ## The translation
 
@@ -50,7 +50,9 @@ Expected result: after reading this section, you can see a normal app-code insti
 
 Most app examples teach the traditional shape: stores, services, imports, reducers, contexts, and direct calls.
 
-Traditional app shape: one feature reaches into another feature's state or implementation because that is the shortest path in ordinary app code.
+### Traditional app shape
+
+One feature reaches into another feature's state or implementation because that is the shortest path in ordinary app code.
 
 Bitfield uses a different shape. The pattern is not "make a better global store." The pattern is:
 
@@ -78,7 +80,7 @@ React, Swift, Kotlin, Rust, Python, terminal shells, web shells, and future adap
 
 The product request says: "When I select a file, show it in the editor, let the AI panel use it, and let the command palette open actions for it."
 
-Traditional app-code instinct:
+### Traditional app-code instinct
 
 ```ts
 import { fileTreeStore } from '../file-tree/store';
@@ -96,7 +98,7 @@ export function onFileSelected(filePath: string) {
 
 That code feels fast because everything is reachable. It is also the start of the knot. The editor now knows file tree shape. The AI context knows editor timing. The command palette knows where selection came from. Every future package has to learn the old package graph before it can do a simple job.
 
-Bitfield shape:
+### Bitfield shape
 
 ```text
 selected-file becomes a Bitfield product fact
@@ -106,13 +108,13 @@ command palette reads selected-file or asks a target to run work
 each package keeps its own private UI details private
 ```
 
-React adapter example:
+### React adapter example
 
 ```tsx
 const selectedFile = useBitfieldData<string>('selected-file');
 ```
 
-Request example:
+### Request example
 
 ```ts
 await sendRequestToBitfieldTarget({

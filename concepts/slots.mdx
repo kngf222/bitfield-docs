@@ -9,7 +9,7 @@ description: "What a Bitfield slot is and why slots keep features from tangling 
 A slot is a named door to something your product can ask Bitfield to run.
 </p>
 
-Product scene: a screen has a button: "Find the next step." The screen should not import the search code, the ranking code, the package setup, or the storage details. It should send a named request and handle the reply.
+A screen has a button: "Find the next step." The screen should not import the search code, the ranking code, the package setup, or the storage details. It should send a named request and handle the reply.
 
 <div className="bf-flow" aria-label="Slot request flow">
   <div className="bf-flow-step">
@@ -31,7 +31,7 @@ Product scene: a screen has a button: "Find the next step." The screen should no
   </div>
 </div>
 
-Expected result: a feature can call a named piece of work without taking a dependency on that piece's private code.
+By the end, a feature can call a named piece of work without taking a dependency on that piece's private code.
 
 That "something" might answer a question, transform data, render a view, call another system, or do work in the background. The important part is the shape. The app calls the slot by name. The slot owns how it does the work.
 

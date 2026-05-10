@@ -9,9 +9,9 @@ description: "Keep package-owned bytes behind the package file instead of lettin
 When a package ships files or bytes, keep them inside the package file. Consumer packages should receive named data or target replies, not random file paths into another package.
 </p>
 
-Product scene: a help package ships markdown, a theme package ships images, and a file-preview package ships a small parser. A consumer wants the rendered result. The consumer should not reach into the package folder and read whatever file happens to be there.
+A help package ships markdown, a theme package ships images, and a file-preview package ships a small parser. A consumer wants the rendered result. The consumer should not reach into the package folder and read whatever file happens to be there.
 
-Expected result: package bytes move with the package, and consumers use public reads or requests instead of private file paths.
+By the end, package bytes move with the package, and consumers use public reads or requests instead of private file paths.
 
 ## Traditional app shape
 
@@ -59,13 +59,13 @@ The important part is not the exact content. The important part is the boundary:
 
 ### Help markdown
 
-Traditional mistake:
+### Traditional mistake
 
 ```ts
 const help = await fetch('/packages/help/content/getting-started.md').then((r) => r.text());
 ```
 
-Bitfield replacement:
+### Bitfield replacement
 
 ```ts
 const help = readInput('getting-started-help');
@@ -75,13 +75,13 @@ The help package owns the file. The consumer reads prepared help content.
 
 ### Preview HTML
 
-Traditional mistake:
+### Traditional mistake
 
 ```ts
 import previewHtml from '../project-preview/dist/index.html?raw';
 ```
 
-Bitfield replacement:
+### Bitfield replacement
 
 ```ts
 const previewSurface = readInput('project-preview-surface');
@@ -91,13 +91,13 @@ The preview package decides how the surface is prepared. The shell receives a pu
 
 ### Review template
 
-Traditional mistake:
+### Traditional mistake
 
 ```ts
 import template from '../review-package/templates/review.md';
 ```
 
-Bitfield replacement:
+### Bitfield replacement
 
 ```ts
 const reviewTemplate = readInput('review-template');
@@ -107,13 +107,13 @@ The package can ship the template as package material. The caller should not rea
 
 ### Search index
 
-Traditional mistake:
+### Traditional mistake
 
 ```ts
 import index from '../help/search-index.json';
 ```
 
-Bitfield replacement:
+### Bitfield replacement
 
 ```ts
 await sendRequestToBitfieldTarget({
@@ -156,9 +156,11 @@ React is one adapter that might render the bytes, but React does not define the 
 
 ## Full before and after
 
-Traditional feature request: "Add a help panel that shows package help and lets the user search it."
+### Traditional feature request
 
-Bad implementation:
+"Add a help panel that shows package help and lets the user search it."
+
+### Bad implementation
 
 ```ts
 import help from '../help/content/getting-started.md?raw';
@@ -171,7 +173,7 @@ export function HelpPanel() {
 
 This consumer now depends on two package files and one package layout. If the help package changes how it stores content or search data, the consumer breaks.
 
-Bitfield replacement:
+### Bitfield replacement
 
 ```ts
 const help = readInput('getting-started-help');
@@ -192,7 +194,7 @@ For React, Swift, Kotlin, terminal, or future adapters, the consumer rule stays 
 const help = readInput('getting-started-help');
 ```
 
-React adapter example:
+### React adapter example
 
 ```tsx
 const help = useBitfieldData<{ title: string; body: string }>('getting-started-help');

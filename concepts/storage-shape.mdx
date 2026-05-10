@@ -9,7 +9,7 @@ description: "How Bitfield keeps local durable data fast without publishing priv
 Bitfield stores data so the current answer can be read directly when the bytes are already local and warm.
 </p>
 
-Product scene: a screen asks for the current value. If the answer is already local and the needed pages are warm, the fastest path is not a general database conversation. It is reading known local bytes for that measured job.
+A screen asks for the current value. If the answer is already local and the needed pages are warm, the fastest path is not a general database conversation. It is reading known local bytes for that measured job.
 
 <div className="bf-flow" aria-label="Storage shape flow">
   <div className="bf-flow-step">
@@ -31,7 +31,7 @@ Product scene: a screen asks for the current value. If the answer is already loc
   </div>
 </div>
 
-Expected result: you can explain why `warm local read` is a narrow, honest category instead of a universal claim about every operation.
+By the end, you can explain why `warm local read` is a narrow, honest category instead of a universal claim about every operation.
 
 ## What this means
 

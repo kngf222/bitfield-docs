@@ -9,9 +9,9 @@ description: "Tell AI agents how to build Bitfield features without falling back
 AI agents will default to traditional app architecture unless the docs teach the Bitfield translation directly. Give the agent a concrete job, the public names it may use, and the private files it must not import or parse.
 </p>
 
-Product scene: you ask an AI agent to add a feature. It creates a store, imports another package, parses a JSON file, or calls an implementation directly. The code may compile, but it trains the app back into the old architecture.
+You ask an AI agent to add a feature. It creates a store, imports another package, parses a JSON file, or calls an implementation directly. The code may compile, but it trains the app back into the old architecture.
 
-Expected result: the agent chooses the Bitfield path before writing code.
+By the end, the agent chooses the Bitfield path before writing code.
 
 ## The prompt to paste
 
@@ -53,7 +53,9 @@ Before accepting the edit, compare it against the concrete translation page: [Tr
 
 ## Bad output and corrected output
 
-Traditional app shape: the agent reaches for a shared store, direct import, package file read, or framework coordinator because that is what most public examples show.
+### Traditional app shape
+
+The agent reaches for a shared store, direct import, package file read, or framework coordinator because that is what most public examples show.
 
 ### Bad: shared object import
 
@@ -63,13 +65,13 @@ import { fileTreeStore } from '../file-tree/store';
 const selected = fileTreeStore.selectedFile;
 ```
 
-Correct:
+### Correct
 
 ```ts
 const selected = readInput('selected-file');
 ```
 
-React adapter example:
+### React adapter example
 
 ```tsx
 const selected = useBitfieldData<string>('selected-file');
@@ -83,7 +85,7 @@ import { refreshPreviewStatus } from '../project-preview/refresh';
 await refreshPreviewStatus(projectId);
 ```
 
-Correct:
+### Correct
 
 ```ts
 await sendRequestToBitfieldTarget({
@@ -98,7 +100,7 @@ await sendRequestToBitfieldTarget({
 const boundary = await fetch('/packages/help-package/things-to-store-and-run.json');
 ```
 
-Correct:
+### Correct
 
 ```ts
 const help = readInput('getting-started-help');
@@ -110,7 +112,7 @@ const help = readInput('getting-started-help');
 await writeBitfieldState('hovered-sidebar-row', rowId);
 ```
 
-Correct:
+### Correct
 
 ```ts
 const [hoveredRow, setHoveredRow] = useState<string | null>(null);
@@ -127,7 +129,7 @@ export const ProductContext = createContext({
 });
 ```
 
-Correct:
+### Correct
 
 ```tsx
 const selectedFile = useBitfieldData<string>('selected-file');
@@ -148,7 +150,7 @@ React can hold visual-only state. It should not become the product coordination 
 const preview = await refreshPreviewAndReturnGlobalStore(projectStore.current.id);
 ```
 
-Correct:
+### Correct
 
 ```ts
 await sendRequestToBitfieldTarget({

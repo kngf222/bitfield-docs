@@ -9,9 +9,9 @@ description: "Keep visual-only state local, and move only cross-package coordina
 Not every state value belongs in Bitfield. Put state in Bitfield when it coordinates packages. Keep hover, menu, drag, focus, and draft UI details private.
 </p>
 
-Product scene: a sidebar has hover state, an editor has unsaved text, a file tree has a selected file, and an assistant panel needs the selected file for context. These are not the same kind of state.
+A sidebar has hover state, an editor has unsaved text, a file tree has a selected file, and an assistant panel needs the selected file for context. These are not the same kind of state.
 
-Expected result: Bitfield carries product facts that multiple packages need. Components still keep visual-only details close to where they happen.
+By the end, Bitfield carries product facts that multiple packages need. Components still keep visual-only details close to where they happen.
 
 ## The rule
 
@@ -66,13 +66,13 @@ selected-agent
 
 ### Hovered row
 
-Traditional over-globalized answer:
+### Traditional over-globalized answer
 
 ```ts
 await writeBitfieldState('hovered-row', rowId);
 ```
 
-Better answer:
+### Better answer
 
 ```tsx
 const [hoveredRow, setHoveredRow] = useState<string | null>(null);
@@ -82,13 +82,13 @@ The hover is not a product fact. It is only a visual detail for the current surf
 
 ### Open command menu
 
-Traditional over-globalized answer:
+### Traditional over-globalized answer
 
 ```ts
 globalUiStore.commandMenuOpen = true;
 ```
 
-Better answer:
+### Better answer
 
 ```ts
 setCommandMenuOpen(true);
@@ -98,7 +98,7 @@ Keep it private unless another package has a real product reason to observe it.
 
 ### Selected file
 
-Traditional under-shared answer:
+### Traditional under-shared answer
 
 ```tsx
 const [selectedFile, setSelectedFile] = useState<string | null>(null);
@@ -114,13 +114,13 @@ That value coordinates packages, so it should not be trapped inside one componen
 
 ### Draft text
 
-Traditional over-shared answer:
+### Traditional over-shared answer
 
 ```ts
 await writeBitfieldState('draft-message-text', text);
 ```
 
-Better answer:
+### Better answer
 
 ```tsx
 const [draftText, setDraftText] = useState('');
@@ -160,9 +160,11 @@ React is one adapter example. Swift view state, Kotlin state, terminal prompt st
 
 ## Full before and after
 
-Traditional feature request: "When the user clicks a file row, highlight it, open it in the editor, and show the assistant panel context."
+### Traditional feature request
 
-Bad implementation:
+"When the user clicks a file row, highlight it, open it in the editor, and show the assistant panel context."
+
+### Bad implementation
 
 ```tsx
 const [hoveredRow, setHoveredRow] = useGlobalStore('hoveredRow');
@@ -175,7 +177,7 @@ function onClick(filePath: string) {
 
 This gets both decisions backwards. Hover is visual-only but became global. Selected file coordinates packages but stayed trapped in one component.
 
-Bitfield replacement:
+### Bitfield replacement
 
 ```tsx
 const [hoveredRow, setHoveredRow] = useState<string | null>(null);

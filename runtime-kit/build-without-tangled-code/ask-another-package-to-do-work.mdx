@@ -9,9 +9,9 @@ description: "Send a request to a named target instead of importing and calling 
 When a package needs another package to run work, call a named Bitfield target. Do not import the implementation function directly.
 </p>
 
-Product scene: a keyboard package changes the selected agent. A notifications package changes the notification mode. A search box asks a search target for results. In traditional code, these become direct service calls. In Bitfield, they are action requests.
+A keyboard package changes the selected agent. A notifications package changes the notification mode. A search box asks a search target for results. In traditional code, these become direct service calls. In Bitfield, they are action requests.
 
-Expected result: the caller knows the action name and payload shape, not the implementation file behind the work.
+By the end, the caller knows the action name and payload shape, not the implementation file behind the work.
 
 ## Traditional app shape
 
@@ -78,7 +78,7 @@ Each request names the job and sends the smallest public payload needed for that
 
 ### Refresh a preview
 
-Traditional mistake:
+### Traditional mistake
 
 ```ts
 import { refreshPreview } from '../project-preview/refresh';
@@ -86,7 +86,7 @@ import { refreshPreview } from '../project-preview/refresh';
 await refreshPreview(projectId);
 ```
 
-Bitfield replacement:
+### Bitfield replacement
 
 ```ts
 await sendRequestToBitfieldTarget({
@@ -99,7 +99,7 @@ The caller knows the job name and payload. It does not know the implementation f
 
 ### Change selected agent
 
-Traditional mistake:
+### Traditional mistake
 
 ```ts
 import { selectedAgentStore } from '../agents/store';
@@ -107,7 +107,7 @@ import { selectedAgentStore } from '../agents/store';
 selectedAgentStore.set(agentId);
 ```
 
-Bitfield replacement:
+### Bitfield replacement
 
 ```ts
 await sendRequestToBitfieldTarget({
@@ -120,7 +120,7 @@ The same request can come from a keyboard shortcut, command palette, sidebar, or
 
 ### Update notification mode
 
-Traditional mistake:
+### Traditional mistake
 
 ```ts
 import { setNotificationMode } from '../notifications/mode';
@@ -128,7 +128,7 @@ import { setNotificationMode } from '../notifications/mode';
 await setNotificationMode('quiet');
 ```
 
-Bitfield replacement:
+### Bitfield replacement
 
 ```ts
 await sendRequestToBitfieldTarget({
@@ -141,7 +141,7 @@ Settings and command surfaces can call the same public action without sharing no
 
 ### Search help content
 
-Traditional mistake:
+### Traditional mistake
 
 ```ts
 import { searchHelpIndex } from '../help/search-index';
@@ -149,7 +149,7 @@ import { searchHelpIndex } from '../help/search-index';
 const results = searchHelpIndex(query);
 ```
 
-Bitfield replacement:
+### Bitfield replacement
 
 ```ts
 const results = await sendRequestToBitfieldTarget({

@@ -9,9 +9,9 @@ description: "Read data names instead of importing producer packages, parsing th
 When one package prepares data and another package needs it, the consumer should read a data name. It should not import the producer package, parse its files, or guess the storage address.
 </p>
 
-Product scene: a project-preview package prepares a list of preview URLs and statuses. A web-frame package wants to render the active URL. The web-frame should not know how project-preview stores those records. It should read the view it was given.
+A project-preview package prepares a list of preview URLs and statuses. A web-frame package wants to render the active URL. The web-frame should not know how project-preview stores those records. It should read the view it was given.
 
-Expected result: the producing package can change how it prepares records while the consuming package keeps reading the same public input shape.
+By the end, the producing package can change how it prepares records while the consuming package keeps reading the same public input shape.
 
 ## Traditional app shape
 
@@ -39,7 +39,7 @@ The consumer can read `source-by-label`, `source-by-address`, `selected-file`, `
 
 ## Code translation
 
-Traditional:
+### Traditional path
 
 ```ts
 import { previewStore } from '../project-preview/store';
@@ -47,13 +47,13 @@ import { previewStore } from '../project-preview/store';
 const active = previewStore.getActivePreview();
 ```
 
-Bitfield:
+### Bitfield path
 
 ```ts
 const active = readInput('project-preview-surface');
 ```
 
-React adapter example:
+### React adapter example
 
 ```tsx
 import { useBitfieldData } from '@bitfield/runtime-kit/react';
@@ -93,7 +93,7 @@ This lets the consumer read a projected view. It does not make the consumer lear
 
 ### Preview surface
 
-Traditional mistake:
+### Traditional mistake
 
 ```ts
 import { getPreviewUrl } from '../project-preview/build-preview';
@@ -101,7 +101,7 @@ import { getPreviewUrl } from '../project-preview/build-preview';
 const url = await getPreviewUrl(projectId);
 ```
 
-Bitfield replacement:
+### Bitfield replacement
 
 ```ts
 const preview = readInput('project-preview-surface');
@@ -111,7 +111,7 @@ The preview package prepares the public view. The consumer renders the view with
 
 ### Selected file content
 
-Traditional mistake:
+### Traditional mistake
 
 ```ts
 import { readSelectedFileText } from '../file-editor/files';
@@ -119,7 +119,7 @@ import { readSelectedFileText } from '../file-editor/files';
 const text = await readSelectedFileText();
 ```
 
-Bitfield replacement:
+### Bitfield replacement
 
 ```ts
 const selectedFile = readInput('selected-file');
@@ -130,13 +130,13 @@ The selected file fact and the prepared content are separate public reads. The c
 
 ### Help content
 
-Traditional mistake:
+### Traditional mistake
 
 ```ts
 const markdown = await fetch('/packages/help/content/getting-started.md').then((r) => r.text());
 ```
 
-Bitfield replacement:
+### Bitfield replacement
 
 ```ts
 const help = readInput('getting-started-help');
@@ -146,7 +146,7 @@ The package can change how it ships or prepares the help content while the consu
 
 ### Worktree records
 
-Traditional mistake:
+### Traditional mistake
 
 ```ts
 import { records } from '../git-worktree/private-record-cache';
@@ -154,7 +154,7 @@ import { records } from '../git-worktree/private-record-cache';
 const current = records.filter((record) => record.projectId === projectId);
 ```
 
-Bitfield replacement:
+### Bitfield replacement
 
 ```ts
 const worktrees = readInput('git-worktree-records');
@@ -174,9 +174,11 @@ The consumer asks for the public prepared records it needs. It does not import t
 
 ## Full before and after
 
-Traditional feature request: "Show the preview URL beside the current file and include help text if the user opens the command palette."
+### Traditional feature request
 
-Bad implementation:
+"Show the preview URL beside the current file and include help text if the user opens the command palette."
+
+### Bad implementation
 
 ```ts
 import { fileTreeStore } from '../file-tree/store';
@@ -194,7 +196,7 @@ export async function buildPanel() {
 
 This code makes one consumer learn three private things: file tree state shape, preview implementation, and help package folder layout.
 
-Bitfield replacement:
+### Bitfield replacement
 
 ```ts
 const selectedFile = readInput('selected-file');

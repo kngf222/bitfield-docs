@@ -9,7 +9,7 @@ description: "How to design a screen that reads prepared Bitfield data and sends
 An app surface is the part your user sees. It should read named data, render every state, and send named requests. It should not learn package storage details.
 </p>
 
-Product scene: a founder adds a `Customers` screen. The screen needs a list, a loading state, an empty state, and one action: archive a customer.
+A founder adds a `Customers` screen. The screen needs a list, a loading state, an empty state, and one action: archive a customer.
 
 <div className="bf-flow" aria-label="App surface contract">
   <div className="bf-flow-step">
@@ -72,7 +72,7 @@ export function CustomersSurface() {
 }
 ```
 
-Expected result: the screen can render a real product list, survive loading and error states, and send one named product action without knowing how Bitfield stores or runs the feature.
+By the end, the screen can render a real product list, survive loading and error states, and send one named product action without knowing how Bitfield stores or runs the feature.
 
 ## What not to do
 

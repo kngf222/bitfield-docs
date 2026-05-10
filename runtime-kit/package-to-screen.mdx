@@ -198,7 +198,7 @@ export function WelcomePanel() {
 }
 ```
 
-Expected result:
+### What should happen
 
 ```text
 The screen eventually renders:
@@ -237,7 +237,7 @@ The request shape is:
 | Reply | `{ suggestion: string }` encoded as JSON bytes |
 | Error owner | The request caller handles failed request or failed decode. |
 
-Expected result:
+### What should happen
 
 ```text
 Calling welcome.suggest with { topic: "launch" } returns reply bytes.
