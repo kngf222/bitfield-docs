@@ -13,56 +13,56 @@ Product scene: an AI agent is adding a file tree, editor, preview button, comman
 
 Expected result: the agent can point at each line of traditional code and say which Bitfield path replaces it: shared product fact, prepared input, target request, private UI state, or package boundary.
 
-Traditional code teaches one package another package's private shape. These look like different shortcuts, but they create the same problem: the package boundary leaked.
+Traditional code lets one package become the private source every other package must know. The file tree owns the selected file, but the editor, preview button, command palette, and dashboard all point into the file tree's private store.
 
 ```mermaid
 %%{init: {'flowchart': {'nodeSpacing': 36, 'rankSpacing': 48, 'curve': 'linear'}}}%%
 flowchart LR
-  BadStore["Editor imports agentRequestStore"]
-  BadShell["Sidebar imports JournalNavItem"]
-  BadPreview["Preview button calls startPreviewServer"]
-  BadRows["Dashboard reads private rows"]
-  Leak["One package now knows another package"]
+  Producer["File tree package creates selected-file"]
+  PrivateStore["fileTreeStore.selectedFile"]
+  Editor["Editor imports fileTreeStore"]
+  Preview["Preview button imports fileTreeStore"]
+  Command["Command palette imports fileTreeStore"]
+  Dashboard["Dashboard imports fileTreeStore"]
 
-  BadStore --> Leak
-  BadShell --> Leak
-  BadPreview --> Leak
-  BadRows --> Leak
+  Producer --> PrivateStore
+  Editor --> PrivateStore
+  Preview --> PrivateStore
+  Command --> PrivateStore
+  Dashboard --> PrivateStore
 
   classDef traditional fill:transparent,stroke:currentColor,color:currentColor;
   classDef reject fill:transparent,stroke:currentColor,color:currentColor;
 
-  class BadStore,BadShell,BadPreview,BadRows traditional;
-  class Leak reject;
+  class Producer,Editor,Preview,Command,Dashboard traditional;
+  class PrivateStore reject;
 ```
 
-Bitfield code does not cross into the other package. It uses the public path that matches the job: an action, a published read, or a prepared value.
+Bitfield code keeps the same producer and the same consumers, but none of the consumers depend on the file tree package. The file tree publishes the selected file into Bitfield, then every other package reads the public Bitfield value.
 
 ```mermaid
 %%{init: {'flowchart': {'nodeSpacing': 36, 'rankSpacing': 48, 'curve': 'linear'}}}%%
 flowchart LR
-  NeedText["Editor needs selected text shared"]
-  NeedSidebar["Sidebar needs package entries"]
-  NeedPreview["Button needs preview work started"]
-  NeedDashboard["Dashboard needs compliance status"]
+  Producer["File tree package creates selected-file"]
+  Bitfield["Bitfield value selected-file"]
+  Editor["Editor reads selected-file"]
+  Preview["Preview button reads selected-file"]
+  Command["Command palette reads selected-file"]
+  Dashboard["Dashboard reads selected-file"]
 
-  TextAction["Send update-selected-text action"]
-  RecordsRead["Read published-records"]
-  PreviewAction["Send start-project-preview action"]
-  ComplianceRead["Read project-compliance"]
-
-  NeedText --> TextAction
-  NeedSidebar --> RecordsRead
-  NeedPreview --> PreviewAction
-  NeedDashboard --> ComplianceRead
+  Producer --> Bitfield
+  Bitfield --> Editor
+  Bitfield --> Preview
+  Bitfield --> Command
+  Bitfield --> Dashboard
 
   classDef need fill:transparent,stroke:currentColor,color:currentColor;
   classDef request fill:transparent,stroke:currentColor,color:currentColor;
   classDef read fill:transparent,stroke:currentColor,color:currentColor;
 
-  class NeedText,NeedSidebar,NeedPreview,NeedDashboard need;
-  class TextAction,PreviewAction request;
-  class RecordsRead,ComplianceRead read;
+  class Producer need;
+  class Bitfield request;
+  class Editor,Preview,Command,Dashboard read;
 ```
 
 ## Start with the job
