@@ -45,7 +45,7 @@ The technical contract is small:
 |---|---|---|
 | Package file | The package says what it brings. | `things-to-store-and-run.json` with `record`, `stored_bytes`, or `slot` things. |
 | Named data read | The screen asks for data that Runtime Kit already prepared. | `useBitfieldData(inputName)` returns `{ data, loading, error }`. |
-| Callable target | The user asks a named door to do work. | `sendRequestToBitfieldTarget({ target, payload }, signal?)` returns reply bytes. |
+| Callable target | The user asks a named target to do work. | `sendRequestToBitfieldTarget({ target, payload }, signal?)` returns reply bytes. |
 | Local state | The device has active Bitfield material. | Customer-visible areas under `~/.bitfield`, not hand-edited app data. |
 | Placeable surface | A shell places UI by descriptor, not by product branches. | Surface descriptor names region, component key, data names, and targets. |
 
@@ -135,7 +135,7 @@ const reply = await sendRequestToBitfieldTarget({
 import { nextStep } from '../slots/next-step';
 ```
 
-That breaks the shape because the button bypasses the target boundary. The target implementation can change only if the app keeps calling the public door.
+That breaks the shape because the button bypasses the target boundary. The target implementation can change only if the app keeps calling the public target name.
 
 ### Next links
 
@@ -198,7 +198,7 @@ if (screen === 'help') return <HelpSearch />;
 if (screen === 'support') return <SupportPanel />;
 ```
 
-That breaks the shape because the shell learns product meaning. The shell should render descriptor labels, regions, and active surface ids.
+That breaks the shape because the shell learns package-specific UI rules. The shell should render descriptor labels, regions, and active surface ids.
 
 ### Next links
 

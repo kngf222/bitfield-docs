@@ -162,7 +162,7 @@ function validateDepthContract(page, body, sourcePage, output = failures) {
       ['code or structured example', ['```', '|']],
       ['anti-pattern or prevention section', ['## What this prevents', '## Common mistake', '## Common failures', '## Bad output and corrected output', '## Bad output and corrected output']],
       ['adapter-neutral language', ['React is only the adapter', 'React is one adapter', 'any shell', 'future adapters']],
-      ['scenario section', ['## Four ', '## Larger chain', '## The story traditional code usually writes', '## Classification protocol']],
+      ['scenario section', ['## Four ', '## Larger chain', '## The coupled version', '## Classification protocol']],
       ['review language', ['## Review checklist', 'checklist', '## Consumer boundary checklist', '## Consumer checklist', '## Multi-package review checklist']],
       ['next links section', '## Next'],
       ['Runtime Kit or reference link', ['/runtime-kit/', '/reference/']],

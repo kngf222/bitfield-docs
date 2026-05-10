@@ -9,7 +9,7 @@ description: "Translate normal coupled app code into Bitfield package state, nam
 Most software gets tangled because one part of the app starts reaching into another part's private state. Runtime Kit gives you a different shape: put shared product facts in Bitfield, read prepared views, and ask named targets to do work.
 </p>
 
-You are building a product with files, panels, settings, search, AI context, background jobs, and multiple package areas. The first version works. Then feature twenty needs to know what feature seven selected. Feature thirty needs to run the same work from a different place. The traditional fix is another store, another service import, another prop path, or another global. That is the knot this section is here to prevent.
+You are building a product with files, panels, settings, search, AI context, background jobs, and multiple package areas. The first version works. Then feature twenty needs to know what feature seven selected. Feature thirty needs to run the same work from a different place. The traditional fix is another store, another service import, another prop path, or another global. That is how every feature starts depending on every other feature. This section shows the replacement.
 
 This section teaches the translation move: see the normal app-code instinct, then turn it into the Bitfield shape without guessing, importing private code, or making React the architecture.
 
@@ -44,7 +44,7 @@ This section teaches the translation move: see the normal app-code instinct, the
 | Ask another package to do work. | Send a request to a named target. | Call the implementation function directly. |
 | Track hover, open menus, draft text, or drag position. | Keep it private in the component/package. | Store it in Bitfield just because state exists. |
 | Ship files with a package. | Keep bytes inside the package file. | Reach into random app folders from consumer code. |
-| Coordinate many packages. | Combine Bitfield facts, data names, and action requests. | Make one package become the hidden central store for everyone. |
+| Coordinate many packages. | Combine Bitfield facts, data names, and action requests. | Make one package become the private shared store for everyone. |
 
 ## Why this section exists
 
@@ -76,7 +76,7 @@ React, Swift, Kotlin, Rust, Python, terminal shells, web shells, and future adap
 | A shell branches on every product area. | The shell becomes product-specific. | The shell reads descriptors and places what it is given. |
 | A new app store appears for every problem. | The app grows competing sources of truth. | Choose Bitfield state, local state, input, or target. |
 
-## The story traditional code usually writes
+## The coupled version
 
 The product request says: "When I select a file, show it in the editor, let the AI panel use it, and let the command palette open actions for it."
 
@@ -96,7 +96,7 @@ export function onFileSelected(filePath: string) {
 }
 ```
 
-That code feels fast because everything is reachable. It is also the start of the knot. The editor now knows file tree shape. The AI context knows editor timing. The command palette knows where selection came from. Every future package has to learn the old package graph before it can do a simple job.
+That code feels fast because everything is reachable. It is also the start of the coupling problem. The editor now knows file tree shape. The AI context knows editor timing. The command palette knows where selection came from. Every future package has to learn the old package graph before it can do a simple job.
 
 ### The Bitfield split
 

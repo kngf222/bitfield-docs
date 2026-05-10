@@ -807,7 +807,7 @@
     {
       "route": "runtime-kit/placeable-surfaces",
       "title": "Placeable surfaces",
-      "description": "Understand the generic surface descriptor shape that lets a shell place product UI without knowing product meaning.",
+      "description": "Understand the generic surface descriptor shape that lets a shell place product UI without learning each package's private UI code.",
       "diataxis": "concept",
       "pageClass": "runtime-kit-concept",
       "summary": "Explains the placeable-surface composition primitive with visual maps: package material becomes named data reads and targets, descriptors declare regions and allowed names, and a dumb shell/sidebar places surfaces without product-specific branches."
@@ -874,7 +874,7 @@
       "description": "Combine shared state, named data reads, action requests, and private UI state across several packages.",
       "diataxis": "how-to",
       "pageClass": "runtime-kit-boundary-translation",
-      "summary": "Walks a multi-package product chain where files, editors, AI context, notifications, and shells cooperate without centralizing product meaning."
+      "summary": "Walks a multi-package product chain where files, editors, AI context, notifications, and shells cooperate without making the shell coordinate package-specific UI rules."
     },
     {
       "route": "runtime-kit/build-without-tangled-code/build-a-file-preview-flow",
@@ -963,7 +963,7 @@
     {
       "route": "runtime-kit/cookbook/callable-package-slot",
       "title": "Callable package slot",
-      "description": "Declare a package-owned runnable door that app code can ask for work.",
+      "description": "Declare a package-owned callable target that app code can ask for work.",
       "diataxis": "cookbook",
       "pageClass": "runtime-kit-recipe",
       "summary": "Shows how a package declares a callable slot and how app code sends a request to it."

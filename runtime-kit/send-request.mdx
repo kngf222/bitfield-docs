@@ -11,7 +11,7 @@ Use `sendRequestToBitfieldTarget(...)` when app code needs to ask a named Bitfie
 
 ## What this is
 
-A target is a public callable door. Your app sends a payload to the door. Runtime Kit gets the payload to the thing behind the door. Your app receives reply bytes.
+A target is a public callable name. Your app sends a payload to that name. Runtime Kit routes the payload to the package code registered for that target. Your app receives reply bytes.
 
 ```ts
 import { sendRequestToBitfieldTarget } from '@bitfield/runtime-kit';
@@ -23,7 +23,7 @@ Your app should not care how the work is performed. It should care about the pub
 
 If a user clicks a search button, your app can call `product.search`. The package behind that target can change later. Your button can stay the same as long as the action reply shape stays the same.
 
-That is the value: app code calls the door, not the implementation behind the door.
+That is the value: app code calls the public target name, not the private implementation.
 
 ## How it works technically
 
@@ -190,7 +190,7 @@ An error means the public request did not complete. It does not mean the compone
 | Button imports the feature implementation directly. | Button calls a named target. |
 | Replacing the feature requires rewiring app imports. | Replacing the package keeps the target name stable. |
 | App code knows implementation details. | App code knows payload and reply shape. |
-| A caller has to understand private execution code. | A caller sends a request to a public door. |
+| A caller has to understand private execution code. | A caller sends a request to a public target name. |
 
 ## Common mistakes
 
@@ -204,7 +204,7 @@ The reply is bytes. Decode according to the action reply shape. Do not assume ev
 
 **Calling private implementation code directly**
 
-If a component imports the thing behind the target, the target boundary has been bypassed.
+If a component imports the target implementation, the request boundary has been bypassed.
 
 **Forgetting cancellation**
 

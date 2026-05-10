@@ -52,7 +52,7 @@ The Build tab is the map for that moment. Runtime Kit teaches the public primiti
 
 This section does not replace the [Runtime Kit](/runtime-kit/javascript) manual. Runtime Kit is the contract layer. Build is the product composition layer.
 
-This section also does not ask the shell to become smart. The shell should know placement, navigation, account state, and device state. The package surface should own product body meaning. The callable target should own the requested action.
+This section also does not ask the shell to become smart. The shell should know placement, navigation, account state, and device state. The package surface should own the feature UI and data it renders. The callable target should own the requested action.
 
 ## Example product path
 
@@ -71,7 +71,7 @@ The same shape should scale from a tiny private tool to a product with many feat
 | Mistake | Why it hurts | Fix |
 |---|---|---|
 | Put product action logic in the shell | Every screen starts depending on one growing layout file | Move the action behind a package target and let the shell place surfaces |
-| Read raw package material in app code | The app learns storage shape instead of product meaning | Use named data reads through the public Runtime Kit surface |
+| Read raw package material in app code | The app learns storage layout instead of a public data name | Use named data reads through the public Runtime Kit surface |
 | Make one target do every action | Payloads become a secret command language | Give each product action a named target and a small payload |
 | Treat account activation as an afterthought | The build works locally but fails when real devices arrive | Decide the active-device path before launch |
 

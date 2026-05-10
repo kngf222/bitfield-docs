@@ -120,7 +120,7 @@ That line means:
 
 | Piece | Meaning |
 |---|---|
-| `target` | Public callable door declared by package material. |
+| `target` | Public callable name declared by package material. |
 | `payload` | App-owned request data Runtime Kit converts to bytes. |
 | `try/catch` | UI handles request failure visibly. |
 | `requestMessage` | UI confirms the action happened. |
@@ -202,7 +202,7 @@ It does not know where the record lives, where package bytes are stored, which r
 
 ## What changes when the package changes
 
-The package can add more records, ship more bytes, or replace the runnable thing behind `product.search`. The component can stay the same as long as the public data shape and action name stay the same.
+The package can add more records, ship more bytes, or replace the implementation for `product.search`. The component can stay the same as long as the public data shape and action name stay the same.
 
 ## Next
 

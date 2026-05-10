@@ -135,7 +135,7 @@ Only promote it when the draft becomes product data, such as a saved message, no
 | Does another package need this value? | Consider Bitfield state or data name. | Keep it private. |
 | Does changing it run real product work? | Send an action request. | Keep it private or write product state through the right boundary. |
 | Is it only animation, hover, focus, drag, scroll, or draft typing? | Keep it private. | Continue classifying. |
-| Would losing it on refresh break product meaning? | It may be product state. | It is probably UI state. |
+| Would losing it on refresh lose customer-visible data or progress? | It may be product state. | It is probably UI state. |
 | Would two packages disagree if they each kept a copy? | Put one public fact in Bitfield. | Keep package-local state. |
 
 ## What this prevents

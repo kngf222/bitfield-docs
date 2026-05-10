@@ -4,7 +4,7 @@ This folder owns public proof pages for Bitfield speed claims.
 
 ## Pages
 
-- `how-bitfield-is-fast.mdx` explains the public mechanism story.
+- `how-bitfield-is-fast.mdx` explains the public mechanism.
 - `warm-and-cold-paths.mdx` separates warm, cold, local, and network categories.
 - `benchmark-ledger.mdx` lists public benchmark rows and their allowed meaning.
 - `methodology.mdx` explains how benchmark categories must be read.

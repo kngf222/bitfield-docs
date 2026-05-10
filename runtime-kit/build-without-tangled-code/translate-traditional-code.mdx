@@ -71,7 +71,7 @@ Traditional app shape usually starts with the nearest import. Bitfield shape sta
 
 | The code is trying to... | Traditional mistake | Bitfield replacement |
 |---|---|---|
-| Let many packages know the same selected thing. | Put it in one feature store and import that store everywhere. | Put the selected thing in Bitfield state and read the named input. |
+| Let many packages know the same selected file. | Put it in one feature store and import that store everywhere. | Put the selected file in Bitfield state and read the named input. |
 | Use data another package prepared. | Import the producer package or parse its files. | Read the data name. |
 | Ask another package to run work. | Call the implementation function directly. | Send an action request. |
 | Keep hover, debounce, menu, or draft timing. | Put visual timing in global product state. | Keep it as private UI state. |
@@ -82,9 +82,9 @@ React is one adapter for these reads and requests. A future native shell, comman
 
 ## What this prevents
 
-Traditional app-code instinct makes the shortest path look correct: import the store, call the service, parse the file, add the shell branch, or move visual timing into a global object. That works until the next package needs the same thing from a different place.
+Traditional app-code instinct makes the shortest path look correct: import the store, call the service, parse the file, add the shell branch, or move visual timing into a global object. That works until the next package needs the same value from a different place.
 
-Bitfield shape prevents that knot by making each package meet other packages through public names:
+Bitfield shape prevents every package from depending on every other package by making packages meet through public names:
 
 | Prevent this | Use this instead |
 |---|---|
@@ -188,7 +188,7 @@ export function AppSidebar({ currentArea }: { currentArea: string }) {
 }
 ```
 
-That makes the shell product-specific. Every new package now edits the shell, and the shell becomes the hidden central registry.
+That makes the shell product-specific. Every new package now edits the shell, and the shell becomes the private shared registry.
 
 ### The Bitfield version
 
@@ -216,7 +216,7 @@ export function AppSidebar() {
 }
 ```
 
-The shell knows how to place entries. It does not know the product story behind each package.
+The shell knows how to place entries. It does not know each package's private screens, stores, actions, or file layout.
 
 ### What each part owns
 
@@ -225,7 +225,7 @@ package publishes descriptor records
 sidebar reads published-records
 sidebar filters records it can place
 sidebar renders label + target
-package remains owner of its product meaning
+package remains owner of its private UI rules
 ```
 
 ### Check the result

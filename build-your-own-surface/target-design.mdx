@@ -43,7 +43,7 @@ Use a name that tells the caller what business action is being requested.
 
 ## Payload rule
 
-The payload should be boring. It should carry identity and user intent, not a second command language.
+The payload should be narrow and explicit. It should carry identity and user intent, not a second command language.
 
 ```ts
 await sendRequestToBitfieldTarget('customers.archive', {
@@ -80,7 +80,7 @@ A well-shaped surface sends a named product request, shows a useful outcome, and
 
 | Symptom | Cause | Fix |
 |---|---|---|
-| Every button calls the same target | The target is hiding many actions behind one generic door | Split targets by product action |
+| Every button calls the same target | The target is hiding many actions behind one generic action name | Split targets by product action |
 | Payloads keep growing | The target boundary is too vague | Name the target more narrowly |
 | The surface cannot show result | Reply shape is not renderable | Return `ok`, message, and product ids |
 | The target knows screen placement | Action and layout are tangled | Keep placement in shell/surface descriptor |

@@ -216,7 +216,7 @@ Readers should observe the public mode value. Callers should not mutate notifica
 |---|---|---|
 | Package A imports Package B's store. | Package A now depends on Package B's private code. | Package A reads a named Bitfield input. |
 | Each package keeps its own copy. | Copies drift and disagree. | Packages read the same Bitfield fact. |
-| The shell passes the value through every layer. | The shell becomes the coordinator for product meaning. | Packages read the shared fact directly. |
+| The shell passes the value through every layer. | The shell becomes the coordinator for shared product state. | Packages read the shared fact directly. |
 | A package stores every click in Bitfield. | Temporary UI noise becomes product state. | Only coordination state goes into Bitfield. |
 
 ## Common mistake

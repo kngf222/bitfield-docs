@@ -9,7 +9,7 @@ description: "Combine Bitfield state, data names, and action requests so many pa
 When many packages need to cooperate, do not create one giant store that everyone imports. Let packages meet through Bitfield state, data names, and action requests.
 </p>
 
-A command center has a file tree, file editor, AI chat, project preview, notifications, keyboard shortcuts, and a sidebar. Each package has its own job. They still need to feel like one product.
+A command center has a file tree, file editor, AI chat, project preview, notifications, keyboard shortcuts, and a sidebar. Each package has its own job. The user still needs one coherent product.
 
 The goal is cooperation without fusion: packages share public Bitfield handles instead of turning into one tangled codebase.
 
@@ -108,7 +108,7 @@ getting-started-help -> data name from package-owned help content
 dropdown open state -> private UI state inside the surface
 ```
 
-Now each package meets the others through a named public files and names. There is no hidden central product object.
+Now each package meets the others through public facts, data names, and action names. There is no private central product object.
 
 ## What this prevents
 
@@ -116,7 +116,7 @@ Now each package meets the others through a named public files and names. There 
 |---|---|---|
 | One giant app store. | Every feature depends on every other feature's shape. | Shared product facts in Bitfield. |
 | One central service imports all packages. | Adding a package means editing the central service. | Packages expose inputs and targets. |
-| Shell coordinates product meaning. | Layout becomes business logic. | Shell places; packages read/call. |
+| Shell coordinates package-specific UI rules. | Layout becomes business logic. | Shell places; packages read/call. |
 | Code gets patched wherever it is easiest. | The code compiles but boundaries collapse. | Choose state, input, target, private UI state, or package bytes. |
 
 React is one adapter that can show this chain. The chain itself is Runtime Kit: shared product facts, data names, action requests, private UI state, and package files.
@@ -179,7 +179,7 @@ const activityInputs = [
 | Check | Good answer |
 |---|---|
 | Does adding the new package require editing existing package imports? | No. |
-| Does the shell branch on product meaning? | No. It places descriptors and surfaces. |
+| Does the shell branch on package-specific UI rules? | No. It places descriptors and surfaces. |
 | Does one package become the central product store? | No. Shared facts live in Bitfield. |
 | Can keyboard, command palette, and buttons request the same work? | Yes. They send the same action request. |
 | Can a non-React shell follow the same chain? | Yes. React is one adapter, not the architecture. |

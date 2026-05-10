@@ -1,12 +1,12 @@
 ---
 title: "Callable package slot"
-description: "Declare a package-owned runnable door that app code can ask for work."
+description: "Declare package-owned callable code that app code can ask for work."
 ---
 
 <div className="bf-article">
 
 <p className="bf-lead">
-Use a `slot` when a package needs a named runnable door. App code calls the public action and stays out of how the thing behind that door is built, stored, mounted, or replaced.
+Use a `slot` when a package needs named callable code. App code calls the public action and stays out of how that target is built, stored, mounted, or replaced.
 </p>
 
 This recipe builds `product.search`, a package-owned target for a search box. The app sends a query. Runtime Kit sends bytes to the target. The target returns reply bytes. The app decodes those bytes according to the public reply shape.
@@ -21,7 +21,7 @@ Use a slot when the user action needs work, not just data display.
 | A package-owned target that can change behind the same name. | A direct React helper imported into one component. |
 | Work that should be called by a stable public action name. | A secret account operation that belongs in account infrastructure. |
 
-A slot is a callable door. The package file says the door name and the methods it accepts. The implementation behind that door stays behind the plug.
+A slot is package-owned callable code. The package file says the target name and the methods it accepts. The implementation stays inside the package.
 
 ## What you will build
 
@@ -84,7 +84,7 @@ The boundary declares two public ideas:
 | `name: "product.search"` | The target app code calls. |
 | `methods` | The named operations the slot exposes. |
 | `boundary.call_shape` | The public byte-in/byte-out call contract. |
-| `artifact.source_path` | Package-local bytes for the callable thing. |
+| `artifact.source_path` | Package-local bytes for the callable target. |
 
 ## App call
 
@@ -152,10 +152,10 @@ After this works, you can add:
 3. A record that gives the surface initial search copy.
 4. A second method when the same target needs another public operation.
 
-Do not add a second direct app-to-implementation path. Keep the action name as the public door.
+Do not add a second direct app-to-implementation path. Keep the action name as the public target.
 
 <div className="bf-callout">
-The boundary is public. The implementation details are not. A docs example can show the door name and call shape without publishing how the thing behind it is built.
+The public target name and call shape are safe to document. The private implementation, storage layout, and runtime setup stay out of public docs.
 </div>
 
 ## Next

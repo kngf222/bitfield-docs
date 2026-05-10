@@ -70,7 +70,7 @@ If the boundary file is missing, there is no package contract to admit.
 |---|---|
 | `package` | The package name Runtime Kit is admitting. |
 | `things` | The public list of things the package brings. |
-| `type: "record"` | This thing is durable package-owned data. |
+| `type: "record"` | This entry stores durable package-owned data. |
 | `address` | The stable name for this record inside the package. |
 | `payload` | The JSON value the package owns at that address. |
 
@@ -86,7 +86,7 @@ Use this checklist before building on top of the recipe:
 | Boundary filename | The file is named `things-to-store-and-run.json`. |
 | Boundary JSON | The file parses as JSON. |
 | Package field | `package` equals `product-copy`. |
-| Thing type | The only thing uses `type: "record"`. |
+| Thing type | The only entry uses `type: "record"`. |
 | Address | The address starts with `package::product-copy::`. |
 | Payload | The payload is product data, not a secret. |
 
@@ -104,7 +104,7 @@ new address + new payload  = add a separate package-owned record
 new package name           = create a different package file
 ```
 
-Do not change all three at once while debugging. Change one thing, verify it, then move to the next.
+Do not change all three at once while debugging. Change one field, verify it, then move to the next.
 
 ## Common failures
 
@@ -120,7 +120,7 @@ Do not change all three at once while debugging. Change one thing, verify it, th
 After this works, add one capability at a time:
 
 1. Add a second `record` for another piece of product copy.
-2. Add a `stored_bytes` thing when the package owns a file.
+2. Add a `stored_bytes` entry when the package owns a file.
 3. Add a `slot` when app code needs a named target to ask for work.
 4. Add a React surface that reads a data name created from the record.
 

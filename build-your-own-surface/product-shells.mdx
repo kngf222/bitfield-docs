@@ -43,7 +43,7 @@ Your app has a sidebar, a main panel, and a details panel. The shell decides tho
 
 ## Placeable surface rule
 
-The shell should be able to place a surface from a descriptor without learning the feature story.
+The shell should be able to place a surface from a descriptor without learning the feature's private screens, stores, actions, or file layout.
 
 ```json
 {
@@ -60,7 +60,7 @@ The shell decides where a surface goes. The surface still owns the customer-spec
 
 | Bad shape | What happens by month six |
 |---|---|
-| Shell imports every feature component and action helper | Navigation becomes the product's largest dependency knot |
+| Shell imports every feature component and action helper | Navigation becomes the product's largest dependency graph |
 | Surface placement is hardcoded inside feature logic | Reusing the same feature in another shell becomes painful |
 | Account/device state is copied into every surface | Every screen handles activation differently |
 

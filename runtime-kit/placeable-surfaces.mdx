@@ -1,12 +1,12 @@
 ---
 title: "Placeable surfaces"
-description: "Understand the generic surface descriptor shape that lets a shell place product UI without knowing product meaning."
+description: "Understand the generic surface descriptor shape that lets a shell place product UI without learning each package's private UI code."
 ---
 
 <div className="bf-article">
 
 <p className="bf-lead">
-A placeable surface is a product UI contract. It says what can appear, where it can appear, and which named data reads or targets the surface may use. The shell reads that contract and places the surface without learning the product story behind it.
+A placeable surface is a product UI descriptor. It says what can appear, where it can appear, and which named data reads or targets the surface may use. The shell reads that descriptor and places the surface without learning the feature's private screens, stores, actions, or file layout.
 </p>
 
 ## What this explains
@@ -23,7 +23,7 @@ The shell should not know what a launch dashboard is. It should not know what su
 
 The shell should only know this:
 
-| Generic thing | What it means |
+| Generic part | What it means |
 |---|---|
 | Surface descriptor | A piece of UI that can be placed in a region. |
 | Region | A named area such as `main`, `rail`, or `panel`. |
@@ -31,7 +31,7 @@ The shell should only know this:
 | Action names | Work names the surface is allowed to request. |
 | Component key | The renderable body for that surface. |
 
-That is the same class of idea as a command center: the arrangement model is generic, the sidebar is generic, and the product meaning lives behind descriptors.
+That is the same class of idea as a command center: the arrangement model is generic, the sidebar is generic, and package-specific UI rules live in descriptors and surface bodies.
 
 ## Visual map
 
@@ -84,7 +84,7 @@ The flow has four jobs. Each job stays separate.
   <div className="bf-lane-card">
     <span>Arrangement owner</span>
     <strong>Shell and sidebar</strong>
-    <p>Places surfaces. It does not understand the business meaning.</p>
+    <p>Places surfaces. It does not import package-specific UI code.</p>
   </div>
 </div>
 
@@ -139,11 +139,11 @@ The product becomes larger without making the shell import package setup code or
 | One new product area means editing the shell. | One new product area means adding a descriptor and body. |
 | Each new surface adds another special case. | Each new surface repeats the same descriptor contract. |
 
-The primitive is boring on purpose. The shell can stay dumb while the product becomes more capable.
+The descriptor is small on purpose. The shell can stay generic while the product becomes more capable.
 
 ## Dumb shell rules
 
-The shell owns arrangement. It does not own product meaning.
+The shell owns arrangement. It does not own package-specific UI rules.
 
 | Shell may do | Shell must not do |
 |---|---|
@@ -157,7 +157,7 @@ If the shell needs to understand a business noun to render the layout, the descr
 
 ## Descriptor rules
 
-A descriptor should be boring data. It gives the shell placement facts and gives the surface body its allowed public names.
+A descriptor should be plain data. It gives the shell placement facts and gives the surface body its allowed public names.
 
 ```ts
 {
@@ -174,7 +174,7 @@ A descriptor should be boring data. It gives the shell placement facts and gives
 | Field | Meaning | Mistake to avoid |
 |---|---|---|
 | `id` | Stable surface identity. | Reusing one id for different surfaces. |
-| `label` | Human label for generic navigation. | Making the shell translate product meaning. |
+| `label` | Human label for generic navigation. | Making the shell translate package-specific UI rules. |
 | `region` | Where the shell may place it. | Hardcoding layout branches by surface id. |
 | `order` | Sort order inside a region or nav list. | Making order depend on import order. |
 | `componentKey` | Which registered body renders. | Importing that body directly in the shell branch. |
@@ -185,7 +185,7 @@ A descriptor should be boring data. It gives the shell placement facts and gives
 
 | Symptom | Boundary crossed | Fix |
 |---|---|---|
-| Adding a surface requires editing shell logic. | Product meaning leaked into arrangement. | Add descriptor data and keep the shell generic. |
+| Adding a surface requires editing shell logic. | Package-specific UI rules leaked into arrangement. | Add descriptor data and keep the shell generic. |
 | A surface reads a package address directly. | Prepared-read boundary was bypassed. | Give the surface a data name and read it with `useBitfieldData(...)`. |
 | A button imports the work implementation. | Target boundary was bypassed. | Declare/call an action name with `sendRequestToBitfieldTarget(...)`. |
 | The same surface works in one region but breaks in another. | The surface body depends on layout context instead of its descriptor contract. | Pass only descriptor-approved inputs/targets and make layout region generic. |

@@ -31,7 +31,7 @@ You have an idea, then the idea changes. You add a phone screen, a laptop dashbo
   </div>
 </div>
 
-Bitfield should feel like one product surface, not a pile of separate choices you have to glue together before you know what you are building.
+Bitfield should behave like one product surface, not a pile of separate choices you have to glue together before you know what you are building.
 
 A database stores your data and finds it when you ask. A runtime loads programs and gives them what they need to run. Bitfield does both in one product surface you put inside your app.
 
@@ -60,7 +60,7 @@ Bitfield changes the shape. Every feature plugs into one place instead of depend
   </div>
   <div className="bf-card">
     <strong>Slot.</strong>
-    A named runnable door. Your app calls the door, not the private room behind it.
+    A named package target your app can ask to do work. Your app calls the public slot name, not the private implementation.
   </div>
   <div className="bf-card">
     <strong>Package.</strong>
@@ -83,7 +83,7 @@ Bitfield changes the shape. Every feature plugs into one place instead of depend
 
 ## The point
 
-You get structure without giving up speed. You can start small and keep adding pieces without turning the product into a knot.
+You get structure without giving up speed. You can start small and keep adding pieces without making every feature depend on every other feature.
 
 ## Next
 

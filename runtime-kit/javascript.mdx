@@ -72,7 +72,7 @@ That slice can power a welcome panel, a search box, a settings screen, a local g
 
 Think of Runtime Kit as the plug board for your product.
 
-Your package says what it brings: data to store, bytes it owns, or a callable thing. Bitfield admits that package into local state. Runtime Kit prepares the app-facing view. Your app then does one of two jobs: read data that is already prepared for it, or ask a named target to do work.
+Your package says what it brings: data to store, bytes it owns, or callable slots. Bitfield admits that package into local state. Runtime Kit prepares the app-facing view. Your app then does one of two jobs: read data that is already prepared for it, or ask a named target to do work.
 
 The important part is what your app does not do. It does not open storage files. It does not choose data plumbing. It does not parse package files. It does not know how the callable target is backed. That is the point. Your feature code stays calm while the system behind it can get faster, more flexible, and more replaceable.
 
@@ -185,7 +185,7 @@ React is the first documented app surface because a lot of products start there.
 | Package file | Lets a package declare what it stores and runs. |
 | Package sets | Lets one product or project hold a named collection of packages. |
 | Stored bytes | Lets a package bring owned files without reaching outside itself. |
-| Callable slots | Lets a package expose a named door your app can ask for work. |
+| Callable slots | Lets a package expose a named target your app can ask for work. |
 | Local state | Keeps customer-visible Bitfield state on the device. |
 | App surfaces | Lets React, and later other SDKs, read and request without learning private setup. |
 
@@ -194,7 +194,7 @@ The public invariant is the same outside React:
 ```text
 surface asks for named data
 surface sends a named target request
-package owns the data and work behind that public files and names
+package owns the data and work behind those public names
 ```
 
 React gives you `useBitfieldData(...)` today. The Runtime Kit idea is bigger than one UI framework.
@@ -204,12 +204,12 @@ React gives you `useBitfieldData(...)` today. The Runtime Kit idea is bigger tha
 | Term | Plain meaning | Common mistake |
 |---|---|---|
 | Package set | A named collection of packages for a product or project. | Treating one package folder like the whole product. |
-| Package | A unit that brings declared data, bytes, or callable doors. | Letting app code import package implementation files. |
+| Package | A unit that brings declared data, bytes, or callable slots. | Letting app code import package implementation files. |
 | Boundary file | The public file that says what the package brings. | Adding undeclared files and expecting app code to find them. |
 | Prepared input | A surface-facing name Runtime Kit can read for the app. | Treating the name as a storage path. |
-| Target | A public door app code can ask for work. | Importing the implementation behind the door. |
+| Target | A public callable name app code can ask for work. | Importing the private implementation. |
 | Reply bytes | The bytes returned by a target call. | Parsing bytes without a reply shape. |
-| Placeable surface | A UI contract a shell can arrange without knowing product meaning. | Hardcoding product-specific layout policy into the shell. |
+| Placeable surface | A UI descriptor a shell can arrange without importing package-specific UI code. | Hardcoding product-specific layout policy into the shell. |
 
 ## Common mistakes
 
@@ -219,7 +219,7 @@ React gives you `useBitfieldData(...)` today. The Runtime Kit idea is bigger tha
 
 **Turning target names into imports**
 
-A target name like `product.search` is a door. Keep calling the door. Do not import the private code behind it from your component.
+A target name like `product.search` is the public call. Keep calling that target. Do not import the private implementation from your component.
 
 **Making React the architecture**
 
@@ -238,7 +238,7 @@ Package records and stored bytes are product material. Do not put private keys, 
 | Copy a full package-to-shell example | [Placeable surface product loop](/runtime-kit/cookbook/placeable-surface-product-loop) |
 | Show prepared app data | `useBitfieldData(...)` |
 | Ask a package target to work | `sendRequestToBitfieldTarget(...)` |
-| Declare package data or runnable doors | `things-to-store-and-run.json` |
+| Declare package data or callable slots | `things-to-store-and-run.json` |
 | Understand package shapes | [Packages](/runtime-kit/packages) |
 | Look up exact API shape | [Runtime Kit API](/reference/runtime-kit-api) |
 | Keep AI-written changes inside the public files and names | [Build with AI agents](/runtime-kit/ai-build-rules) |

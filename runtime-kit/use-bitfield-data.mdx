@@ -11,7 +11,7 @@ Use `useBitfieldData(...)` when a React component needs data that Runtime Kit ha
 
 ## What this is
 
-`useBitfieldData(...)` is the public React read hook. It gives a component one boring shape:
+`useBitfieldData(...)` is the public React read hook. It gives a component one consistent return shape:
 
 ```ts
 {
@@ -108,7 +108,7 @@ const result = useBitfieldData<SearchResult>({
 });
 ```
 
-Use params for the thing the user is changing on this screen. Do not use params to smuggle private storage or setup into a component.
+Use params for the user selection on this screen. Do not use params to smuggle private storage or setup into a component.
 
 ## Render every state
 

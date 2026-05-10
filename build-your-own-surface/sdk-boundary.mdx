@@ -6,7 +6,7 @@ description: "How to design another app-facing SDK without exposing Bitfield set
 <div className="bf-article">
 
 <p className="bf-lead">
-A good SDK gives app code a tiny surface and keeps Bitfield setup work behind the plug. The public surface should feel boring because the hard work is already packaged away.
+A good SDK gives app code a small surface and keeps Bitfield setup work behind the plug. The public surface should stay narrow because the setup work is already packaged away.
 </p>
 
 The JavaScript Runtime Kit is the example. App code gets one read hook and one request function. Bitfield still handles boot, connection, package loading, storage readers, subscriptions, and validation behind that surface.
@@ -35,7 +35,7 @@ A team wants the same package-backed feature to work from React today and a diff
 
 ## The rule
 
-Expose the thing the app actually wants to do. Do not expose the setup steps Bitfield had to take to make that possible.
+Expose the read or request the app actually needs. Do not expose the setup steps Bitfield had to take to make that possible.
 
 <div className="bf-grid">
   <div className="bf-card">

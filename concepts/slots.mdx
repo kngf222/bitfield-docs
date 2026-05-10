@@ -6,7 +6,7 @@ description: "What a Bitfield slot is and why slots keep features from tangling 
 <div className="bf-article">
 
 <p className="bf-lead">
-A slot is a named door to something your product can ask Bitfield to run.
+A slot is a named package target your product can ask Bitfield to run.
 </p>
 
 A screen has a button: "Find the next step." The screen should not import the search code, the ranking code, the package setup, or the storage details. It should send a named request and handle the reply.
@@ -21,7 +21,7 @@ A screen has a button: "Find the next step." The screen should not import the se
   <div className="bf-flow-step">
     <span>Slot</span>
     <strong>Own work</strong>
-    <p>The runnable door owns how the work happens.</p>
+    <p>The slot implementation owns how the work happens.</p>
   </div>
   <div className="bf-flow-arrow">→</div>
   <div className="bf-flow-step">
@@ -33,24 +33,24 @@ A screen has a button: "Find the next step." The screen should not import the se
 
 A feature should be able to call named work without taking a dependency on the private code that performs it.
 
-That "something" might answer a question, transform data, render a view, call another system, or do work in the background. The important part is the shape. The app calls the slot by name. The slot owns how it does the work.
+The slot might answer a question, transform data, render a view, call another system, or do work in the background. The important part is the public call. The app calls the slot by name. The slot owns how it does the work.
 
 ## Why slots exist
 
 Without slots, features start talking directly to each other. That feels simple at first. Then the product grows, and one feature needs to know how another feature stores data, names inputs, handles failures, and changes over time.
 
-Slots keep that from becoming a knot. A feature sends a request to a slot. The slot replies. The feature does not import the slot's private code or copy its private rules.
+Slots keep that from turning into every feature depending on every other feature. A feature sends a request to a slot. The slot replies. The feature does not import the slot's private code or copy its private rules.
 
 ## The model
 
 <div className="bf-grid">
   <div className="bf-card">
     <strong>A slot has a name.</strong>
-    The name is the public door. App code can ask for that door without knowing the room behind it.
+    The name is the public target. App code can call that target without knowing the private implementation.
   </div>
   <div className="bf-card">
     <strong>A slot has methods.</strong>
-    Methods are the public actions the door accepts, like a query or a command.
+    Methods are the public actions the slot accepts, like a query or a command.
   </div>
   <div className="bf-card">
     <strong>A slot has its own setup.</strong>
@@ -73,7 +73,7 @@ The app sends a target and payload. Bitfield gets that request to the right runn
 
 ## What this prevents
 
-Slots prevent feature code from learning too much about other feature code. That matters because private details change. Public doors should stay steady.
+Slots prevent feature code from learning too much about other feature code. That matters because private details change. Public slot names should stay steady.
 
 ## Common mistakes
 
@@ -81,7 +81,7 @@ Slots prevent feature code from learning too much about other feature code. That
 |---|---|---|
 | Importing the target implementation into the UI | The feature boundary collapses | Use `sendRequestToBitfieldTarget(...)` |
 | Giving every feature a custom connection path | The product becomes hard to change | Use named targets and package files |
-| Treating slots as storage records | A slot is a runnable door, not the stored data itself | Read [Database and runtime](/concepts/database-and-runtime) |
+| Treating slots as storage records | A slot is a callable package target, not the stored data itself | Read [Database and runtime](/concepts/database-and-runtime) |
 | Hiding failure handling | Real target calls can fail | Read [Send a request](/runtime-kit/send-request) |
 
 ## Next

@@ -6,7 +6,7 @@ description: "Declare what a Runtime Kit package stores, ships, and makes callab
 <div className="bf-article">
 
 <p className="bf-lead">
-A Runtime Kit package is a folder with one public files and names file. That file tells Bitfield what to store, which bytes the package owns, and which callable doors the package exposes.
+A Runtime Kit package is a folder with one public files-and-names file. That file tells Bitfield what to store, which bytes the package owns, and which callable slots the package exposes.
 </p>
 
 ## What this is
@@ -19,7 +19,7 @@ A package can bring three public kinds of things:
 |---|---|
 | `record` | Store or remove one named piece of package data. |
 | `stored_bytes` | Attach package-owned bytes, such as text, JSON, images, or other files. |
-| `slot` | Declare a named callable door app code can ask for work. |
+| `slot` | Declare a named package target app code can ask for work. |
 
 The package file says what exists. Runtime Kit decides how to admit it behind the public names.
 
@@ -66,7 +66,7 @@ A package set is a named collection of packages for one product or project.
 
 Package sets matter because two projects can use the same package names without colliding. For example, two products can both have a package named `search-package` if they live in different package sets.
 
-## Record thing
+## Record entry
 
 Use `record` when the package needs one named piece of durable data.
 
@@ -94,7 +94,7 @@ A record chooses exactly one action:
 
 Do not combine those actions in one record.
 
-## Stored bytes thing
+## Stored bytes entry
 
 Use `stored_bytes` when a package brings a file.
 
@@ -115,9 +115,9 @@ Stored bytes are good for:
 - Images or other package-owned assets.
 - Data files a callable slot needs.
 
-## Slot thing
+## Slot entry
 
-Use `slot` when a package exposes a named callable door.
+Use `slot` when a package exposes a named target app code can call.
 
 ```json
 {
@@ -162,7 +162,7 @@ Runtime Kit should reject package material before it becomes active when:
 | Missing `things-to-store-and-run.json` | Runtime Kit needs one boundary file. |
 | Unknown thing type | Unsupported package law cannot become active. |
 | Record has no payload action | Runtime Kit cannot tell what the record should do. |
-| Record has multiple payload actions | One record should do one thing. |
+| Record has multiple payload actions | One record should perform one data operation. |
 | File path escapes the package | Packages must not read arbitrary local files. |
 | Slot is missing a boundary | App code needs a public call shape. |
 
@@ -187,7 +187,7 @@ Do not put private keys, tokens, or account secrets into package records or stor
 
 **Using package data as app code**
 
-The package file declares data and callable doors. App code should still use Runtime Kit read/request calls.
+The package file declares data and callable slots. App code should still use Runtime Kit read/request calls.
 
 **Making the slot name too specific**
 
