@@ -14,23 +14,19 @@ Product scene: an AI agent is adding a file tree, editor, preview button, comman
 Expected result: the agent can point at each line of traditional code and say which Bitfield path replaces it: shared product fact, prepared input, target request, private UI state, or package boundary.
 
 ```mermaid
-%%{init: {'flowchart': {'defaultRenderer': 'elk', 'nodeSpacing': 40, 'rankSpacing': 56, 'curve': 'linear'}}}%%
+%%{init: {'flowchart': {'nodeSpacing': 36, 'rankSpacing': 48, 'curve': 'linear'}}}%%
 flowchart LR
-  subgraph Bad["Traditional code"]
-    BadStore["Editor imports<br/>agentRequestStore"]
-    BadShell["Sidebar imports<br/>JournalNavItem"]
-    BadPreview["Preview imports<br/>startPreviewServer"]
-    BadRows["Dashboard reads<br/>private rows"]
-  end
+  BadStore["agentRequestStore import"]
+  BadShell["JournalNavItem import"]
+  BadPreview["startPreviewServer call"]
+  BadRows["private rows read"]
 
-  Stop["Wrong:<br/>one package learns<br/>another package"]
+  Stop["package boundary leak"]
 
-  subgraph Good["Bitfield path"]
-    GoodText["Send action:<br/>update-selected-text"]
-    GoodRecords["Read<br/>published-records"]
-    GoodPreview["Send action:<br/>start-project-preview"]
-    GoodCompliance["Read<br/>project-compliance"]
-  end
+  GoodText["update-selected-text action"]
+  GoodRecords["published-records read"]
+  GoodPreview["start-project-preview action"]
+  GoodCompliance["project-compliance read"]
 
   BadStore --> Stop
   BadShell --> Stop
