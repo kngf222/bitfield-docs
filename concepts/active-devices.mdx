@@ -1,66 +1,72 @@
 ---
 title: "Active devices"
-description: "What counts as an active device and how revoking or replacing a device works."
+description: "What counts as an active device: a triggered Bitfield runtime identity, not a dormant install or visitor."
 ---
 
 <div className="bf-article">
 
 <p className="bf-lead">
-An active device is a device, environment, or runtime identity that has used a Bitfield key and has not been revoked or replaced in the account portal.
+An active device is the customer-friendly name for a Bitfield runtime identity that was triggered in the billing window.
 </p>
 
-You try Bitfield on a laptop. Then you add a phone. Then a friend wants to test. Active devices are the account-visible way to keep that access understandable.
+That runtime identity can be a laptop, phone, server, worker, kiosk, CI runner, browser environment, or local box. The shape can be local or cloud. The important thing is the trigger: Bitfield actually had to use its runtime access path for that identity.
 
-<div className="bf-flow" aria-label="Active device flow">
+<div className="bf-flow" aria-label="Active device trigger flow">
   <div className="bf-flow-step">
-    <span>Key</span>
-    <strong>Account access</strong>
-    <p>Your account controls which devices can run with your key.</p>
+    <span>Plan</span>
+    <strong>Included range</strong>
+    <p>The account has a plan with a runtime/device range.</p>
   </div>
   <div className="bf-flow-arrow">→</div>
   <div className="bf-flow-step">
-    <span>Device</span>
-    <strong>Activation</strong>
-    <p>A device or runtime identity becomes active when authorized.</p>
+    <span>Trigger</span>
+    <strong>Runtime access</strong>
+    <p>A runtime identity actually triggers Bitfield.</p>
   </div>
   <div className="bf-flow-arrow">→</div>
   <div className="bf-flow-step">
     <span>Portal</span>
-    <strong>Replace or revoke</strong>
-    <p>The account portal frees a spot when you stop using one.</p>
+    <strong>Manage access</strong>
+    <p>The account portal handles activation, replacement, and revocation.</p>
   </div>
 </div>
 
-After that, a laptop, phone, server, or runtime identity should be easy to classify: it either uses one of the account's active-device spots or it does not.
+After that, a laptop, phone, server, or runtime identity should be easy to classify: it either triggered Bitfield during the window or it did not.
 
 ## What counts
 
-A laptop can count. A phone can count. A tablet can count. A server can count. A Raspberry Pi can count. A runtime environment can count when it uses your key to run Bitfield.
+A laptop can count. A phone can count. A tablet can count. A server can count. A Raspberry Pi can count. A runtime environment can count.
 
-The working rule: if you turn Bitfield on there with your key, and you have not revoked or replaced it, it is active.
+The working rule: if Bitfield runtime access was triggered there during the billing window, that runtime identity can count.
+
+## What does not count
+
+A static page does not become a new active device for every person who reads it. A dormant install does not count just because files exist. A package folder does not count just because it is present. One runtime doing a lot of work is not a lot of units.
 
 ## How moving a spot works
 
-If you stop using one device, revoke it in the account portal. That frees the spot so a replacement device can use your key.
+If you stop using one runtime identity, revoke it in the account portal. That frees the spot so a replacement device, server, or runtime identity can use your key.
 
 ## Why pricing uses this word
 
-Bitfield pricing is based on active devices because the product is not priced per app, per project, per seat, token, install, revenue share, or feature. The unit is the device or runtime identity currently allowed to run with your key.
+Bitfield pricing is based on triggered active runtime/device units because the product is not priced per app, per project, per seat, token, install, revenue share, page view, click, or runtime second.
 
 ## Common confusion
 
 | Confusion | Correct model |
 |---|---|
-| "Is an active device the same as a user?" | No. It is the device or runtime identity currently authorized to run with your key. |
-| "Does a project count?" | The public pricing word is active device, not project. |
-| "Can I move a spot?" | Yes. Revoke or replace the old device in the account portal when that path is available. |
-| "Does a server count?" | It can when it runs Bitfield with your key. |
+| "Is an active device the same as a user?" | No. It is a triggered runtime identity. |
+| "Does a project count?" | No. A project is not the billing unit. |
+| "Does every website visitor count?" | No. Visitors and page views are not triggers. |
+| "Does an old install count forever?" | No. Dormant files are not the trigger. |
+| "Does a server count?" | It can when it triggers Bitfield runtime access. |
 | "Where do I manage this?" | Use [account.bitfield.so](https://account.bitfield.so). |
 
 ## Next
 
-- Get access and activate your first device: [Get your key](/start/get-your-key)
+- Get access and activate your first runtime identity: [Get your key](/start/get-your-key)
+- See concrete billing examples: [What you pay for](/activation/what-you-pay-for)
 - Read the account lifecycle: [Account and key flow](/activation/account-and-key-flow)
-- Build across devices: [Device and deployment shape](/build-your-own-surface/device-deployment)
+- Build across devices and servers: [Device and deployment shape](/build-your-own-surface/device-deployment)
 
 </div>

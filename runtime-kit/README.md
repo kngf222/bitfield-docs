@@ -12,6 +12,7 @@ This folder owns the public Runtime Kit documentation pages rendered by Mintlify
 - `send-request.mdx` documents target requests and reply bytes.
 - `packages.mdx` documents package file concepts and thing types.
 - `local-state.mdx` documents customer-visible local state.
+- `cost-aware-building.mdx` explains when to use Runtime Kit, when to use static/ordinary hosted output, and how billing follows triggered Bitfield runtime access instead of public traffic.
 - `ai-build-rules.mdx` gives AI-agent-safe Runtime Kit build rules.
 - `troubleshooting.mdx` maps symptoms to the public Runtime Kit link that failed, with first-five-minute triage, verification checks, and support-safe escalation.
 

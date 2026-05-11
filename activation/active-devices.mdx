@@ -1,47 +1,55 @@
 ---
 title: "Active devices"
-description: "What active devices mean, how activation works, and how replacement or revocation should feel."
+description: "What the active-device pricing word means now: a triggered Bitfield runtime identity in the billing window."
 ---
 
 <div className="bf-article">
 
 <p className="bf-lead">
-An active device is a machine currently allowed by your Bitfield account to run Bitfield. Pricing follows active devices because the product runs on devices, not seats.
+Active device is the public pricing word for a device, server, or runtime identity that actually triggered Bitfield during the billing window.
 </p>
 
-You start with a laptop and phone, then add a test machine, then invite another person to try the product. Each allowed machine counts as an active device while it is authorized.
+It does not mean "installed once forever." It does not mean "authorized in theory." It does not mean "how many seconds the runtime ran." It means the runtime path was triggered for that identity in the billing window.
 
-<div className="bf-flow" aria-label="Active device lifecycle">
+<div className="bf-flow" aria-label="Active device trigger flow">
   <div className="bf-flow-step">
-    <span>Grant</span>
-    <strong>Authorize device</strong>
-    <p>The account portal approves a device grant for this machine.</p>
+    <span>Plan</span>
+    <strong>Included range</strong>
+    <p>Your plan includes a range of runtime/device units.</p>
   </div>
   <div className="bf-flow-arrow">→</div>
   <div className="bf-flow-step">
-    <span>Run</span>
-    <strong>Use Bitfield locally</strong>
-    <p>The device can run Bitfield with the account's permission.</p>
+    <span>Trigger</span>
+    <strong>Runtime asks to run</strong>
+    <p>A device, server, or runtime identity triggers Bitfield access.</p>
   </div>
   <div className="bf-flow-arrow">→</div>
   <div className="bf-flow-step">
     <span>Manage</span>
     <strong>Replace or revoke</strong>
-    <p>The account portal is where device access changes.</p>
+    <p>The account portal manages runtime identities you no longer want active.</p>
   </div>
 </div>
 
-Replacing a laptop or removing an old machine should feel like managing account access, not buying the product again.
-
 ## What counts
 
-| Device | Counts when |
+| Runtime identity | Counts when |
 |---|---|
-| Laptop or desktop | It is authorized to run Bitfield |
-| Phone or tablet | It is authorized to run Bitfield |
-| Server or local box | It is authorized to run Bitfield |
-| Test machine | It is authorized to run Bitfield |
-| Old device | It should stop counting after you revoke or replace it |
+| Laptop or desktop | Bitfield is triggered there during the billing window. |
+| Phone or tablet | Bitfield is triggered there during the billing window. |
+| Server, cloud runtime, or local box | Bitfield is triggered there during the billing window. |
+| Test machine or CI runner | Bitfield is triggered there during the billing window. |
+| Customer device | That customer environment triggers Bitfield runtime access. |
+
+## What does not count by itself
+
+| Thing | Why |
+|---|---|
+| Old installed files | Dormant files are not a trigger. |
+| Public website visitor | Viewing output is not runtime access. |
+| Static exported page | Visitors reading static files do not trigger Bitfield. |
+| Same runtime doing lots of work | Usage amount is not the unit. |
+| Package folder | A package is product material, not a runtime trigger. |
 
 ## Local activation state
 
@@ -50,7 +58,7 @@ Runtime Kit package state and engine storage live under `~/.bitfield/`, and acti
 | Local idea | Customer rule |
 |---|---|
 | Device key material | Created by the activation flow, not invented manually |
-| Signed permission | Comes from account-owned authorization |
+| Signed permission | Comes from account-owned activation |
 | Old blocked permissions | Remembered so revoked access does not silently return |
 | Runtime Kit package state | Separate from activation; do not mix the two |
 
@@ -58,23 +66,24 @@ Runtime Kit package state and engine storage live under `~/.bitfield/`, and acti
 
 | Symptom | Likely cause | Fix |
 |---|---|---|
-| New computer cannot run Bitfield | Device was not authorized yet | Use the account portal activation flow |
-| Old computer still appears active | Device was not revoked or replaced | Manage active devices in the account portal |
-| User copies one device's local activation folder to another | Local permission was treated like a portable key | Authorize the second device properly |
+| New computer cannot trigger Bitfield | Device path was not activated yet | Use the account portal activation flow |
+| Old computer still appears active | Runtime identity was not revoked or replaced | Manage active devices in the account portal |
+| User copies one device's local activation folder to another | Local permission was treated like a portable key | Activate the second runtime identity properly |
 | Package tooling tries to own activation | Runtime Kit and activation boundaries got mixed | Keep activation in the account/key lane |
+| Billing is explained as runtime seconds | Trigger count and runtime amount were mixed up | Say one triggered identity per window, not per second |
 
 ## Verify
 
 The active-device model is clear when the user can tell the difference between:
 
-- account access
-- a device grant
+- the plan subscription
+- a triggered runtime/device unit
 - local activation state
 - Runtime Kit package state
-- engine storage
+- public static traffic
 
 ## Next
 
-Manage devices from `account.bitfield.so`. For product rollout, read [Device and deployment shape](/build-your-own-surface/device-deployment), then [Plan changes and cancellation](/activation/plan-changes-and-cancellation).
+Manage runtime identities from `account.bitfield.so`. For concrete billing examples, read [What you pay for](/activation/what-you-pay-for). For product rollout, read [Device and deployment shape](/build-your-own-surface/device-deployment), then [Plan changes and cancellation](/activation/plan-changes-and-cancellation).
 
 </div>

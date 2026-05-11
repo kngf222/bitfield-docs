@@ -105,6 +105,7 @@
               "runtime-kit/send-request",
               "runtime-kit/packages",
               "runtime-kit/local-state",
+              "runtime-kit/cost-aware-building",
               "runtime-kit/ai-build-rules",
               "runtime-kit/troubleshooting"
             ]
@@ -171,6 +172,7 @@
             "group": "Activation",
             "pages": [
               "activation/account-and-key-flow",
+              "activation/what-you-pay-for",
               "activation/trials-and-billing",
               "activation/active-devices",
               "activation/plan-changes-and-cancellation"

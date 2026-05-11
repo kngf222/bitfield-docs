@@ -11,5 +11,5 @@ This folder owns public Build-tab pages. The Build tab explains how to compose r
 | `package-authoring.mdx` | How to shape a package file around records, package-owned files, and callable slots |
 | `target-design.mdx` | How to design callable targets that stay small, named, and product-shaped |
 | `product-shells.mdx` | How to keep navigation, layout, and placement in the shell while package surfaces own product body behavior |
-| `device-deployment.mdx` | How to think about local devices, active devices, account keys, and product rollout |
+| `device-deployment.mdx` | How to think about local devices, runtime identities, account keys, and product rollout |
 | `sdk-boundary.mdx` | How to design app-facing SDKs without exposing setup machinery |

@@ -6,7 +6,7 @@ description: "How keys, checkout, account access, and the first device activatio
 <div className="bf-article">
 
 <p className="bf-lead">
-Your key is how a device starts running Bitfield for your account. The account portal owns the customer path: account, checkout, email, key access, active devices, recovery, and plan management.
+Your key is how a device or runtime identity can trigger Bitfield for your account. The account portal owns the customer path: account, checkout, email, key access, runtime identities, recovery, and plan management.
 </p>
 
 You want to try Bitfield on the device in front of you. You need account access first, then device activation, then Runtime Kit can run against that account path.
@@ -21,7 +21,7 @@ You want to try Bitfield on the device in front of you. You need account access 
   <div className="bf-flow-step">
     <span>2</span>
     <strong>Choose access</strong>
-    <p>Start a trial or plan with the active-device count you need.</p>
+    <p>Start a trial or plan with the runtime/device range you need.</p>
   </div>
   <div className="bf-flow-arrow">→</div>
   <div className="bf-flow-step">
@@ -31,7 +31,7 @@ You want to try Bitfield on the device in front of you. You need account access 
   </div>
 </div>
 
-The account portal should show your account, plan or trial state, available active-device count, and the current way to activate this device.
+The account portal should show your account, plan or trial state, available runtime/device range, and the current way to activate this runtime identity.
 
 ## 1. Open the account portal
 
@@ -41,22 +41,22 @@ Use an email you control. Account recovery, checkout receipts, key access, and d
 
 ## 2. Choose the trial or plan
 
-1. Choose the plan or trial that fits the active-device count you need.
+1. Choose the plan or trial that fits the runtime/device range you need.
 2. Confirm the checkout terms and billing authorization.
 3. Confirm your email when it arrives.
 4. Open the account portal and activate the first device.
 
-The active-device count is not the number of users in your imagination. It is the number of devices allowed to be active for your account or plan at the same time.
+The runtime/device count is not the number of users in your imagination. It is the number of runtime identities that trigger Bitfield in the billing window.
 
 ## 3. Activate the first device
 
 Use the account portal's current activation path for the device you are using.
 
-If you are testing alone, this is usually your laptop first. If you are testing with a phone and laptop, each active device can matter. If you give a slot to a friend or teammate, treat it like real account access.
+If you are testing alone, this is usually your laptop first. If you are testing with a phone and laptop, each triggered runtime identity can matter. If you give access to a friend or teammate, treat it like real account access.
 
 ## 4. Keep the account path recoverable
 
-The account portal is the customer control room. It is where you see your plan, billing cadence, keys, active-device count, replacement history, and cancellation options when they are available.
+The account portal is the customer control room. It is where you see your plan, billing cadence, keys, runtime/device range, replacement history, and cancellation options when they are available.
 
 Keep access to the email you used at checkout. License-key and account-recovery messages go there. If a device is lost or replaced, use the portal to revoke that device and free the spot for another one.
 
@@ -67,7 +67,7 @@ Keep access to the email you used at checkout. License-key and account-recovery 
 | You cannot find the key path | Email or checkout step is incomplete | Confirm email, then reopen the account portal |
 | A new device will not activate | Active-device count is full | Revoke or replace an old device in the portal |
 | You used the wrong email | Account ownership is tied to checkout/recovery email | Use the email you can keep and recover |
-| You are unsure what counts as a device | Active device means a device authorized to run Bitfield for the account | Read [Active devices](/concepts/active-devices) |
+| You are unsure what counts as a device | Active device means a triggered runtime identity in the billing window | Read [Active devices](/concepts/active-devices) |
 | Billing or cancellation is unclear | Plan management belongs in the account lifecycle | Read [Trials and billing](/activation/trials-and-billing) and [Plan changes and cancellation](/activation/plan-changes-and-cancellation) |
 
 ## Next

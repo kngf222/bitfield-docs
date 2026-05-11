@@ -19,7 +19,9 @@ This page explains the public folder meanings. It does not document proprietary 
 
 Bitfield is built around local truth. That means your device has local state it can use without making every read depend on a remote service.
 
-Runtime Kit keeps that state in one predictable place. Some folders hold durable product data. Some folders hold package material. Some folders hold files that prove this device is allowed to use Bitfield. You usually do not edit any of them by hand. Runtime Kit and the account portal should do that work.
+Runtime Kit keeps that state in one predictable place. Some folders hold durable product data. Some folders hold package material. Some folders hold files used by the activation path when this runtime identity triggers Bitfield. You usually do not edit any of them by hand. Runtime Kit and the account portal should do that work.
+
+Local state also explains billing language. A runtime identity counts when Bitfield is actually triggered there in the billing window. A visitor reading static web output is not editing this state and is not triggering Bitfield runtime access.
 
 ## Top-level shape
 
@@ -115,6 +117,8 @@ Do not paste local state contents into public docs, issues, chats, or social pos
 ```
 
 If something is broken, start with the account portal for activation/account issues and Runtime Kit package flows for package issues.
+
+For public-page and billing guidance, read [Use Runtime Kit where it should run](/runtime-kit/cost-aware-building).
 
 ## Now build the bigger version
 

@@ -62,7 +62,7 @@ You are making a small customer dashboard.
 2. The surface reads a prepared customer list.
 3. The surface sends `customer.archive` when the user archives one customer.
 4. The shell places the surface in a dashboard region.
-5. The account key activates the devices allowed to use it.
+5. The account key activates the runtime identities that can trigger Bitfield.
 
 The same shape should scale from a tiny private tool to a product with many features because each feature keeps its package file, surface, and action reply shape clear.
 
@@ -73,7 +73,7 @@ The same shape should scale from a tiny private tool to a product with many feat
 | Put product action logic in the shell | Every screen starts depending on one growing layout file | Move the action behind a package target and let the shell place surfaces |
 | Read raw package material in app code | The app depends on storage layout instead of a public data name | Use named data reads through the public Runtime Kit surface |
 | Make one target do every action | Payloads become a secret command language | Give each product action a named target and a small payload |
-| Treat account activation as an afterthought | The build works locally but fails when real devices arrive | Decide the active-device path before launch |
+| Treat account activation as an afterthought | The build works locally but fails when real devices arrive | Decide the runtime/device trigger path before launch |
 
 ## Next
 

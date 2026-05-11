@@ -183,6 +183,10 @@
       "sourceIds": ["runtime-kit-package-boundary"]
     },
     {
+      "route": "runtime-kit/cost-aware-building",
+      "sourceIds": ["runtime-kit-js-public-contract", "runtime-kit-package-boundary", "bitfield-account-portal-public-lifecycle"]
+    },
+    {
       "route": "runtime-kit/ai-build-rules",
       "sourceIds": ["runtime-kit-js-public-contract", "runtime-kit-package-boundary"]
     },
@@ -245,6 +249,10 @@
     {
       "route": "activation/account-and-key-flow",
       "sourceIds": ["bitfield-public-landing-copy", "bitfield-public-legal-pages", "bitfield-account-portal-public-lifecycle"]
+    },
+    {
+      "route": "activation/what-you-pay-for",
+      "sourceIds": ["bitfield-public-landing-copy", "bitfield-public-legal-pages", "bitfield-account-portal-public-lifecycle", "runtime-kit-package-boundary"]
     },
     {
       "route": "activation/trials-and-billing",

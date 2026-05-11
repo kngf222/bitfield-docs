@@ -51,6 +51,7 @@ Runtime Kit has several reader paths. Pick the one that matches your job.
 | Understand how all Runtime Kit concepts fit together. | [Runtime Kit concept map](/runtime-kit/concept-map) | It connects package files, named data reads, callable targets, local state, and placeable surfaces. |
 | Build the first complete feature. | [Package to screen](/runtime-kit/package-to-screen) | It gives the whole chain in order. |
 | Understand the public model. | This page, then [Placeable surfaces](/runtime-kit/placeable-surfaces) | It explains package/app separation and generic UI placement. |
+| Avoid accidental runtime triggers on public pages. | [Use Runtime Kit where it should run](/runtime-kit/cost-aware-building) | It explains when to keep a page static and when to trigger Runtime Kit. |
 | Look up exact API shapes. | [Runtime Kit API](/reference/runtime-kit-api) and [Package file](/reference/package-boundary) | Reference pages are for exact contracts. |
 | Debug a broken feature. | [Troubleshooting](/runtime-kit/troubleshooting) | It maps symptoms to the failed public link. |
 | Keep generated changes inside the public files and names. | [Build with AI agents](/runtime-kit/ai-build-rules) | Use this only when an AI agent is writing the feature. |
@@ -229,6 +230,10 @@ React is a surface. Runtime Kit is the boundary. If you build a non-React surfac
 
 Package records and stored bytes are product material. Do not put private keys, tokens, or account secrets into public package examples.
 
+**Triggering Runtime Kit for static public pages**
+
+Do not add Runtime Kit just to render static copy, images, links, or a brochure page. Use [Use Runtime Kit where it should run](/runtime-kit/cost-aware-building) before wiring public pages that do not need live Bitfield data or target requests.
+
 ## Quick reference
 
 | Need | Use |
@@ -240,6 +245,7 @@ Package records and stored bytes are product material. Do not put private keys, 
 | Ask a package target to work | `sendRequestToBitfieldTarget(...)` |
 | Declare package data or callable slots | `things-to-store-and-run.json` |
 | Understand package shapes | [Packages](/runtime-kit/packages) |
+| Avoid accidental runtime triggers on public pages | [Use Runtime Kit where it should run](/runtime-kit/cost-aware-building) |
 | Look up exact API shape | [Runtime Kit API](/reference/runtime-kit-api) |
 | Keep AI-written changes inside the public files and names | [Build with AI agents](/runtime-kit/ai-build-rules) |
 | Find a broken link in the chain | [Troubleshooting](/runtime-kit/troubleshooting) |

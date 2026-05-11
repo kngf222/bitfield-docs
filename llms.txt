@@ -34,6 +34,7 @@ These pages are public customer documentation. They describe the public product,
 - [Send a request](runtime-kit/send-request): Shows JSON, text, byte payloads, reply decoding, cancellation, and action-request mistakes.
 - [Packages](runtime-kit/packages): Explains package sets, records, stored bytes, callable slots, validation rules, and safe package examples.
 - [Local state](runtime-kit/local-state): Explains stored data, Runtime Kit package state, activation material, and what users should not hand-edit.
+- [Use Runtime Kit where it should run](runtime-kit/cost-aware-building): Explains when to trigger Runtime Kit, when to keep public pages static, and how billing follows triggered runtime access instead of public traffic.
 - [Build with AI agents](runtime-kit/ai-build-rules): Gives AI-agent prompt packs, bad-output corrections, review maps, and public Runtime Kit files and names for generated feature work.
 - [Troubleshooting](runtime-kit/troubleshooting): Maps Runtime Kit symptoms to the public chain link that failed and gives safe repair checks.
 - [Runtime Kit Cookbook](runtime-kit/cookbook/index): Indexes Runtime Kit cookbook entries for packages, package-owned bytes, callable slots, React surfaces, and placeable surface product loops.
@@ -47,11 +48,12 @@ These pages are public customer documentation. They describe the public product,
 - [Package authoring](build-your-own-surface/package-authoring): Explains how to draw a feature boundary with records, package-owned files, callable slots, expected results, and failures.
 - [Target design](build-your-own-surface/target-design): Gives naming, payload, reply, and failure rules for callable targets that surfaces can request safely.
 - [Product shells](build-your-own-surface/product-shells): Defines the shell boundary for navigation, layout, account/device state, and surface placement.
-- [Device and deployment shape](build-your-own-surface/device-deployment): Connects product packages and surfaces to account keys, activated devices, local state, and rollout decisions.
+- [Device and deployment shape](build-your-own-surface/device-deployment): Connects product packages and surfaces to account keys, triggered runtime identities, local state, and rollout decisions.
 - [Build your own surface](build-your-own-surface/sdk-boundary): Defines the public SDK boundary pattern: simple app functions outside, Bitfield setup outside app code.
 - [Account and key flow](activation/account-and-key-flow): Explains the account portal path for creating an account, choosing access, paying securely, getting key access, and activating a device.
-- [Trials and billing](activation/trials-and-billing): Explains trial billing and active-device ranges without turning pricing into hidden math.
-- [Active devices](activation/active-devices): Defines active devices, local activation state, account-owned authorization, replacement, revocation, and customer-safe boundaries.
+- [Trials and billing](activation/trials-and-billing): Explains trial billing, plan cadence, and triggered runtime/device ranges without turning pricing into hidden math.
+- [What you pay for](activation/what-you-pay-for): Explains plan subscription, triggered runtime/device units, dormant installs, static pages, hosted products, and visitor confusion.
+- [Active devices](activation/active-devices): Defines active devices as triggered runtime identities, plus local activation state, replacement, revocation, and customer-safe boundaries.
 - [Plan changes and cancellation](activation/plan-changes-and-cancellation): Explains plan management, cancellation, invoice/refund routing, account deletion, recovery, and support links.
 - [How Bitfield is this fast](proof/how-bitfield-is-fast): Explains warm local reads, memory mapping, content addresses, and non-claims.
 - [Warm and cold paths](proof/warm-and-cold-paths): Defines warm local read, cold local read, content address lookup, durable batch write, runtime call, and network command.

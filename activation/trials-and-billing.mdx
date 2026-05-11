@@ -1,52 +1,54 @@
 ---
 title: "Trials and billing"
-description: "How the free trial, monthly and yearly cadence, active-device ranges, and legal links fit together."
+description: "How the free trial, plan cadence, triggered runtime/device ranges, and legal links fit together."
 ---
 
 <div className="bf-article">
 
 <p className="bf-lead">
-Bitfield pricing is based on active devices, not seats, installs, projects, apps, tokens, or revenue share.
+Bitfield billing is plan-first, then trigger-counted. The plan is the subscription. The included units are runtime/device triggers inside the billing window.
 </p>
 
-You start with a 3-day Personal trial, activate up to 5 devices, and decide whether this is the foundation you want before the paid cadence begins.
+You start with a 3-day Personal trial, try Bitfield with the included runtime/device range, and decide whether this is the foundation you want before the paid cadence begins.
+
+The important correction: this is not passive install billing. A dormant install does not count by itself. A triggered Bitfield runtime identity does.
 
 <div className="bf-flow" aria-label="Trial and billing flow">
   <div className="bf-flow-step">
     <span>Trial</span>
-    <strong>Start with 5 devices</strong>
-    <p>Use the Personal active-device range during the trial window.</p>
+    <strong>Start with included triggers</strong>
+    <p>Use the Personal runtime/device range during the trial window.</p>
   </div>
   <div className="bf-flow-arrow">→</div>
   <div className="bf-flow-step">
     <span>Cadence</span>
     <strong>Choose monthly or yearly</strong>
-    <p>The checkout total should change when the cadence changes.</p>
+    <p>The plan subscription begins after the trial unless you cancel first.</p>
   </div>
   <div className="bf-flow-arrow">→</div>
   <div className="bf-flow-step">
     <span>Scale</span>
-    <strong>Move by device range</strong>
-    <p>Grow from Personal to Builder and then larger active-device ranges.</p>
+    <strong>Move by trigger range</strong>
+    <p>Grow from Personal to Builder and then larger runtime/device ranges.</p>
   </div>
 </div>
 
-The customer needs four answers fast: what costs $0 today, when billing starts, which devices are included, and where plan management happens.
+The customer needs four answers fast: what costs $0 today, when the plan starts billing, what consumes the included runtime/device range, and where plan management happens.
 
 ## Choices at checkout
 
-| Choice | Active devices | What it means |
+| Choice | Included runtime/device units | What it means |
 |---|---:|---|
 | Try Personal free | 1-5 | Start Personal with 3 days free, then billing begins unless you cancel first. |
 | Personal | 1-5 | Pay now for the Personal range. |
 | Builder | 6-100 | Pay now for the Builder range. |
-| 101+ | 101 or more | Use the curve for larger active-device counts. |
+| 101+ | 101 or more | Use the curve for larger triggered runtime/device counts. |
 
 Monthly and yearly cadence are separate choices. The checkout total should change when the cadence changes.
 
 ## What "free trial" means
 
-The free trial is for Personal. It gives you the same active-device range as Personal for the trial window. If you keep it after the trial, billing starts on the displayed start date and cadence.
+The free trial is for Personal. It gives you the same runtime/device range as Personal for the trial window. If you keep it after the trial, billing starts on the displayed start date and cadence.
 
 The checkout should say the important part clearly:
 
@@ -54,17 +56,26 @@ The checkout should say the important part clearly:
 $0 today, then the Personal price starts after the 3-day trial unless you cancel first.
 </div>
 
-## What active devices means here
+## What consumes the included range
 
-An active device is a device that is currently allowed by your Bitfield key to run Bitfield for your account or product. Laptop, desktop, phone, tablet, server, local box, test machine, or the catch-all: any machine you let run it.
+The public phrase is active device. The precise meaning is a triggered Bitfield runtime identity in the billing window.
 
-Replacing a machine should not feel like buying the product again. The account portal is where device replacement and revocation belong.
+That runtime identity can be a laptop, phone, server, cloud runtime, local box, kiosk, test machine, or another environment that actually triggers Bitfield runtime access.
+
+It is not:
+
+- a dormant install
+- a repo with package files
+- a website visitor reading static output
+- a page view
+- a click
+- a runtime second
 
 ## Larger counts use ranges
 
 The curve is cumulative. That means each range uses its own rate, then the ranges add up.
 
-For example, when a count goes above 100, the first 100 are still the base Builder range. Extra devices are priced by the next range, and later ranges only apply to the devices inside those later ranges.
+For example, when a count goes above 100, the first 100 are still the base Builder range. Extra triggered runtime/device units are priced by the next range, and later ranges only apply to the units inside those later ranges.
 
 ## Legal pages
 
@@ -80,13 +91,15 @@ Those pages govern the actual legal terms. This docs page explains the product l
 
 | Symptom | Cause | Fix |
 |---|---|---|
-| Customer thinks pricing is per person | Active devices were not explained | Say devices, not seats |
+| Customer thinks pricing is per person | Active device was read as seat | Say triggered runtime/device unit |
+| Customer thinks an old install is charged forever | Triggering and installing were mixed up | Say dormant installs do not count by themselves |
+| Customer thinks every visitor is charged | Traffic got mixed up with runtime triggers | Explain that visitors and page views are not triggers |
+| Customer accidentally uses Runtime Kit for a static page | Public content and live runtime were not separated | Use static output when the page does not need Bitfield runtime behavior |
 | Customer misses the post-trial billing date | Trial language is hidden | Show `$0 today` and the paid start clearly |
-| Customer thinks replacing a device means buying again | Replacement/revocation is not explained | Link to active-device management |
-| Larger-device pricing feels like a black box | Ranges are not explained as cumulative | Explain that each range applies only to devices inside that range |
+| Larger-device pricing feels like a black box | Ranges are not explained as cumulative | Explain that each range applies only to units inside that range |
 
 ## Next
 
-Read [Account and key flow](/activation/account-and-key-flow) for the full account journey and [Active devices](/activation/active-devices) for replacement and revocation.
+Read [What you pay for](/activation/what-you-pay-for) for concrete billing examples, [Account and key flow](/activation/account-and-key-flow) for the full account journey, and [Active devices](/activation/active-devices) for the public term.
 
 </div>
