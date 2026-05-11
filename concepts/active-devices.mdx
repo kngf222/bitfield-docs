@@ -11,6 +11,8 @@ An active device is the customer-friendly name for a Bitfield runtime identity w
 
 That runtime identity can be a laptop, phone, server, worker, kiosk, CI runner, browser environment, or local box. The shape can be local or cloud. The important thing is simple: Bitfield was asked to run for that identity.
 
+Active device is the current public pricing label over signed Bitfield observations. It is not a separate local-only counter, and it is not a page-view counter.
+
 Technically, that means request bytes entered Bitfield, Bitfield decoded an envelope, and the address resolved to a slot, native handler, or live state.
 
 For local Bitfield, the identity is activation-based. Bitfield creates or reads `this-device.key`, derives a device public key hash, and uses an activation ID for that runtime. By default, that activation ID is the device public key hash.

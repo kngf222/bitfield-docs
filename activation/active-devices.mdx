@@ -11,6 +11,8 @@ Active device is the public pricing word for a device, server, or runtime identi
 
 It does not mean "installed once forever." It does not mean "authorized in theory." It does not mean "how many seconds the runtime ran." It means Bitfield was actually asked to run for that identity in the billing window.
 
+Active device is a pricing label over signed Bitfield observations. It is not a second billing system beside Runtime Kit, and it is not a special rule for local installs only.
+
 The technical line is simple: request bytes entered Bitfield, Bitfield decoded an envelope, and the address resolved to a slot, native handler, or live state. That identity can count. Static files being served do not cross that line.
 
 For local Bitfield, the identity starts from local device key material. Bitfield creates or reads `this-device.key`, derives a device public key hash, and uses an activation ID for that runtime. By default, the activation ID is the device public key hash.
