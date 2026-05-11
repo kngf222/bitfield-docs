@@ -925,10 +925,10 @@
     {
       "route": "runtime-kit/cost-aware-building",
       "title": "Use Runtime Kit where it should run",
-      "description": "How to use Runtime Kit without accidentally triggering Bitfield runtime usage on public pages.",
+      "description": "How to use Runtime Kit without accidentally sending Bitfield request bytes from public pages.",
       "diataxis": "how-to",
       "pageClass": "runtime-kit-operations",
-      "summary": "Explains when to trigger Runtime Kit, when to keep public pages static, and how billing follows triggered runtime access instead of public traffic."
+      "summary": "Explains when Runtime Kit sends Bitfield envelope bytes, when to keep public pages static, and how billing follows runtime requests instead of public traffic."
     },
     {
       "route": "runtime-kit/ai-build-rules",
@@ -1037,10 +1037,10 @@
     {
       "route": "build-your-own-surface/device-deployment",
       "title": "Device and deployment shape",
-      "description": "How to think about account keys, triggered runtime identities, local state, and product rollout.",
+      "description": "How to think about account keys, runtime identities, local state, and product rollout.",
       "diataxis": "how-to",
       "pageClass": "build-curriculum",
-      "summary": "Connects product packages and surfaces to account keys, triggered runtime identities, local state, and rollout decisions."
+      "summary": "Connects product packages and surfaces to account keys, runtime identities, local state, and rollout decisions."
     },
     {
       "route": "build-your-own-surface/sdk-boundary",
@@ -1061,26 +1061,26 @@
     {
       "route": "activation/trials-and-billing",
       "title": "Trials and billing",
-      "description": "How the free trial, plan cadence, triggered runtime/device ranges, and legal links fit together.",
+      "description": "How the free trial, plan cadence, runtime/device ranges, and legal links fit together.",
       "diataxis": "reference",
       "pageClass": "activation-lifecycle",
-      "summary": "Explains trial billing, plan cadence, and triggered runtime/device ranges without turning pricing into hidden math."
+      "summary": "Explains trial billing, plan cadence, and runtime/device ranges without turning pricing into hidden math."
     },
     {
       "route": "activation/what-you-pay-for",
       "title": "What you pay for",
-      "description": "The charging model: plan access plus triggered Bitfield runtime usage.",
+      "description": "The charging model: plan access plus Bitfield runtime requests.",
       "diataxis": "concept",
       "pageClass": "activation-lifecycle",
-      "summary": "Explains plan subscription, triggered runtime/device units, dormant installs, static pages, hosted products, and visitor confusion."
+      "summary": "Explains plan subscription, Bitfield envelope bytes, dormant installs, static pages, hosted products, and visitor confusion."
     },
     {
       "route": "activation/active-devices",
       "title": "Active devices",
-      "description": "What the active-device pricing word means now: a triggered Bitfield runtime identity in the billing window.",
+      "description": "What the active-device pricing word means: an identity that sent Bitfield runtime request bytes in the billing window.",
       "diataxis": "concept",
       "pageClass": "activation-lifecycle",
-      "summary": "Defines active devices as triggered runtime identities, plus local activation state, replacement, revocation, and customer-safe boundaries."
+      "summary": "Defines active devices as runtime identities that sent Bitfield request bytes, plus local activation state, replacement, revocation, and customer-safe boundaries."
     },
     {
       "route": "activation/plan-changes-and-cancellation",

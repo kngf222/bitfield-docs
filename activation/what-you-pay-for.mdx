@@ -1,19 +1,19 @@
 ---
 title: "What you pay for"
-description: "The charging model: plan access plus triggered Bitfield runtime usage."
+description: "The charging model: plan access plus Bitfield runtime requests."
 ---
 
 <div className="bf-article">
 
 <p className="bf-lead">
-Bitfield billing has two pieces: your plan subscription, and the runtime/device units that get counted when Bitfield is actually triggered.
+Bitfield billing has two pieces: your plan subscription, and the runtime/device units that get counted when Bitfield is actually asked to run.
 </p>
 
-That word matters: **triggered**. A dormant install is not the same thing as a triggered runtime. A visitor looking at static output is not the same thing as a triggered runtime. A million clicks on the same already-triggered runtime are not a million runtime/device units.
+That word matters: **asked to run**. Files sitting on a machine are not the same thing as Bitfield running. A visitor reading static files from a web host is not the same thing as Bitfield running for that visitor. A million clicks on the same already-counted runtime are not a million runtime/device units.
 
-The public pricing word you will see is active device. It means a device, server, or runtime identity that triggered the Bitfield runtime grant path during the billing window.
+The public pricing word you will see is active device. It means a device, server, or runtime identity where Bitfield was asked to run during the billing window.
 
-<div className="bf-flow" aria-label="Billing trigger flow">
+<div className="bf-flow" aria-label="Billing request flow">
   <div className="bf-flow-step">
     <span>Plan</span>
     <strong>Subscription access</strong>
@@ -21,15 +21,15 @@ The public pricing word you will see is active device. It means a device, server
   </div>
   <div className="bf-flow-arrow">→</div>
   <div className="bf-flow-step">
-    <span>Trigger</span>
-    <strong>Runtime identity uses Bitfield</strong>
-    <p>A device, server, or runtime environment triggers the runtime path.</p>
+    <span>Request</span>
+    <strong>Bitfield is asked to run</strong>
+    <p>A device, server, or runtime environment calls into Bitfield.</p>
   </div>
   <div className="bf-flow-arrow">→</div>
   <div className="bf-flow-step">
     <span>Count</span>
-    <strong>Billing reads signed facts</strong>
-    <p>The count comes from the trigger facts, not from visitors or page labels.</p>
+    <strong>That identity can count</strong>
+    <p>The count comes from those calls, not from visitors or page labels.</p>
   </div>
 </div>
 
@@ -38,51 +38,84 @@ The public pricing word you will see is active device. It means a device, server
 | Situation | What happens |
 |---|---|
 | You keep a paid plan after the trial. | The plan subscription bills on its cadence. |
-| Bitfield is installed somewhere but never opened or triggered in the billing window. | That dormant install does not create a runtime/device unit by itself. |
-| Bitfield is triggered once on your laptop this month. | That laptop uses 1 runtime/device unit for the window. |
+| Bitfield is installed somewhere but never opened or asked to run in the billing window. | That dormant install does not create a runtime/device unit by itself. |
+| Bitfield is asked to run once on your laptop this month. | That laptop uses 1 runtime/device unit for the window. |
 | The same laptop uses Bitfield 1,000,000 times this month. | Still the same runtime/device unit, not 1,000,000 units. |
-| Bitfield is triggered on laptop, phone, and one server this month. | 3 runtime/device units. |
-| 100,000 people view a static public page. | Those visitors are not runtime/device units. |
+| Bitfield is asked to run on laptop, phone, and one server this month. | 3 runtime/device units. |
+| 100,000 people view a static public page. | They are only receiving already-published files. Bitfield is not being asked to run for each visitor. |
 | A package folder sits in a repo and nobody runs it. | Nothing new is counted. |
 
-So the charging model is not "installed forever." It is not "runtime seconds." It is not "visitors." It is triggered Bitfield runtime usage, counted by runtime identity during the billing window.
+So the charging model is not "installed forever." It is not "runtime seconds." It is not "visitors." It is Bitfield being asked to run, counted by runtime identity during the billing window.
 
-## What "triggered" means
+## What "asked to run" means in code
 
-A trigger is the moment Bitfield has to use the protected runtime path for a real runtime identity. In customer language: the device, server, or runtime environment asks Bitfield for the runtime permission it needs to run.
+Asked to run means request bytes entered Bitfield for a real device, server, or runtime environment.
 
-When that succeeds, Bitfield records the signed fact that billing is allowed to count. Billing reads those facts. It does not guess from route names, page labels, marketing pages, package names, or how many people looked at a page.
+When that succeeds, Bitfield remembers that identity for the billing window. The count does not come from route names, page labels, marketing pages, package names, or how many people looked at a page.
+
+## The exact boundary
+
+This is the line:
+
+```text
+request bytes enter Bitfield
+  -> Bitfield decodes an envelope
+  -> the envelope address resolves to a slot, native handler, or live state
+  -> Bitfield returns bytes
+```
+
+That is Bitfield running.
+
+Static web hosting is different:
+
+```text
+visitor requests page
+  -> web host returns HTML/CSS/JS/images it already has
+  -> no request bytes enter Bitfield
+```
+
+That is not Bitfield running for the visitor.
+
+Plain names:
+
+| Word | Meaning here |
+|---|---|
+| Envelope | The request Bitfield receives. It has an address and payload bytes. |
+| Slot | A Bitfield runtime target that can answer the envelope. |
+| Native handler | Built-in Bitfield code that can answer the envelope. |
+| Live state | Current Bitfield state read by address. |
+| Static files | HTML, CSS, JS, and images already published to a web host. |
 
 ## Do not mix up these two things
 
 | Thing | Plain meaning |
 |---|---|
 | Plan subscription | The base plan you chose after the trial. |
-| Runtime/device unit | A triggered Bitfield runtime identity inside the billing window. |
+| Runtime/device unit | One device, server, or runtime identity where Bitfield was asked to run inside the billing window. |
 
-If you keep a paid plan, the plan subscription still exists. The trigger rule explains what consumes the included runtime/device units and what does not.
+If you keep a paid plan, the plan subscription still exists. The request-byte rule explains what consumes the included runtime/device units and what does not.
 
 ## What counts
 
 | Thing | Counts when |
 |---|---|
-| Laptop or desktop | Bitfield is triggered there during the billing window. |
-| Phone or tablet | Bitfield is triggered there during the billing window. |
-| Server or worker | Bitfield is triggered there during the billing window. |
-| Local box, kiosk, or test machine | Bitfield is triggered there during the billing window. |
-| Customer device | The customer's environment triggers Bitfield runtime access. |
+| Laptop or desktop | Bitfield is asked to run there during the billing window. |
+| Phone or tablet | Bitfield is asked to run there during the billing window. |
+| Server or worker | Bitfield is asked to run there during the billing window. |
+| Local box, kiosk, or test machine | Bitfield is asked to run there during the billing window. |
+| Customer device | That customer's environment asks Bitfield to run. |
 
-The plain test is: did this runtime identity actually trigger Bitfield during this billing window?
+The plain test is: did this runtime identity actually ask Bitfield to run during this billing window?
 
 ## What does not count by itself
 
 | Thing | Why |
 |---|---|
-| Dormant install | Files sitting there are not a trigger. |
+| Dormant install | Files sitting there are not Bitfield running. |
 | Package folder | Product material is not runtime usage. |
 | Project | A project is not the billing unit. |
-| Static page view | Reading static output does not trigger Bitfield runtime. |
-| Website visitor | A visitor is not a runtime identity unless their environment actually runs Bitfield. |
+| Static page view | The visitor receives already-published files. Bitfield is not asked to run for that visitor. |
+| Website visitor | A visitor is not a runtime identity unless their environment actually asks Bitfield to run. |
 | Click count | Pricing is not per click. |
 | Runtime duration | Pricing is not per second or per minute. |
 | Revenue | Pricing is not a revenue share. |
@@ -91,25 +124,25 @@ The plain test is: did this runtime identity actually trigger Bitfield during th
 
 ### Installed but not used
 
-You installed Bitfield on a laptop months ago. This month you never open it, start it, or trigger the runtime path.
+You installed Bitfield on a laptop months ago. This month you never open it, start it, or ask Bitfield to run.
 
 Result: your active plan still follows its subscription cadence, but that dormant laptop does not create a new runtime/device unit by itself.
 
 ### Same machine, heavy use
 
-You trigger Bitfield on your laptop once, then use the product all month.
+You ask Bitfield to run on your laptop once, then use the product all month.
 
-Result: that laptop is one triggered runtime/device unit for the billing window. It is not per action, per click, or per second.
+Result: that laptop is one runtime/device unit for the billing window. It is not per action, per click, or per second.
 
 ### Local app on customer machines
 
-You ship a Bitfield-powered local app to 100 customer machines, and each one triggers Bitfield in the billing window.
+You ship a Bitfield-powered local app to 100 customer machines, and each one asks Bitfield to run in the billing window.
 
-Result: those 100 triggered runtime identities are the count.
+Result: those 100 runtime identities are the count.
 
 ### Hosted product
 
-You run a hosted product from one server, and that server triggers Bitfield runtime access.
+You run a hosted product from one server, and that server asks Bitfield to run.
 
 Result: the server runtime identity is what gets counted. Visitors do not become separate runtime/device units just by viewing output from that server.
 
@@ -117,13 +150,24 @@ Result: the server runtime identity is what gets counted. Visitors do not become
 
 You publish a landing page as ordinary static or hosted output.
 
-Result: visitors are not counted. The page can get traffic without creating runtime/device units for every person who reads it.
+Result: visitors are not counted. They are receiving files the web host already has. Bitfield is not being asked to run for each visitor.
+
+## More examples
+
+| Scenario | Did request bytes enter Bitfield? | Billing meaning |
+|---|---|---|
+| Jane visits a static landing page. | No. The web host only returns already-published files. | Jane does not create a runtime/device unit. |
+| You used Bitfield during the build to produce the static page. | Yes, for the build machine or build server. No, for later visitors. | The build identity can count. Visitors do not count just by reading the output. |
+| A hosted app server calls Bitfield while serving product screens. | Yes, on the server. | The server runtime identity can count. Visitors do not become separate units unless their own browser also calls Bitfield. |
+| Jane's browser directly calls Runtime Kit and sends Bitfield request bytes. | Yes, in Jane's browser/runtime environment. | Jane's browser/runtime identity can count for the window. |
+| A downloaded desktop app calls Bitfield locally. | Yes, on that customer device. | That customer device can count for the window. |
+| A package folder exists but nothing sends request bytes to Bitfield. | No. | Nothing new is counted. |
 
 ## How to avoid surprise bills
 
 1. Use Bitfield where you need Bitfield runtime behavior.
 2. Keep static marketing pages static when they only need copy, images, links, and forms.
-3. Do not trigger Runtime Kit just to display public text or images.
+3. Do not ask Bitfield to run just to display public text or images.
 4. Revoke old devices, servers, and test machines that should not be used anymore.
 5. Do not put a Bitfield key into public browser code.
 6. Check the account portal before rolling out to a fleet, team, or customer set.
@@ -132,9 +176,9 @@ Result: visitors are not counted. The page can get traffic without creating runt
 
 | Symptom | Cause | Fix |
 |---|---|---|
-| Someone thinks a dormant install is charged forever | Install and trigger got mixed together | Say files sitting there are not a trigger |
-| Someone thinks every visitor is charged | Static traffic and runtime access got mixed together | Keep static pages static when they do not need Runtime Kit |
-| Someone thinks heavy use becomes per-click billing | Trigger count and usage amount got mixed together | Say the same runtime identity is not counted once per click |
+| Someone thinks a dormant install is charged forever | Install and runtime request got mixed together | Say files sitting there send no Bitfield request bytes |
+| Someone thinks every visitor is charged | Static traffic and Bitfield running got mixed together | Say static visitors only receive already-published files |
+| Someone thinks heavy use becomes per-click billing | Runtime request count and usage amount got mixed together | Say the same runtime identity is not counted once per click |
 | Someone puts a key in public browser code | Public page and runtime identity were not separated | Keep keys in the activation/runtime path, not public page code |
 
 Manage account access and runtime identities from [account.bitfield.so](https://account.bitfield.so).

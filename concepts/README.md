@@ -24,4 +24,4 @@ Every concept page should include:
 | `storage-shape.mdx` | How durable local truth, current views, and content identity connect to speed categories. |
 | `content-addressed-storage.mdx` | Why naming bytes by their content matters. |
 | `slots.mdx` | Why named runnable doors prevent feature tangles. |
-| `active-devices.mdx` | How triggered runtime/device access is counted and managed. |
+| `active-devices.mdx` | How runtime/device request access is counted and managed. |

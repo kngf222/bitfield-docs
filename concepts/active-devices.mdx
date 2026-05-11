@@ -1,17 +1,19 @@
 ---
 title: "Active devices"
-description: "What counts as an active device: a triggered Bitfield runtime identity, not a dormant install or visitor."
+description: "What counts as an active device: an identity that sent Bitfield runtime request bytes, not a dormant install or visitor."
 ---
 
 <div className="bf-article">
 
 <p className="bf-lead">
-An active device is the customer-friendly name for a Bitfield runtime identity that was triggered in the billing window.
+An active device is the customer-friendly name for a Bitfield runtime identity where Bitfield was asked to run in the billing window.
 </p>
 
-That runtime identity can be a laptop, phone, server, worker, kiosk, CI runner, browser environment, or local box. The shape can be local or cloud. The important thing is the trigger: Bitfield actually had to use its runtime access path for that identity.
+That runtime identity can be a laptop, phone, server, worker, kiosk, CI runner, browser environment, or local box. The shape can be local or cloud. The important thing is simple: Bitfield was asked to run for that identity.
 
-<div className="bf-flow" aria-label="Active device trigger flow">
+Technically, that means request bytes entered Bitfield, Bitfield decoded an envelope, and the address resolved to a slot, native handler, or live state.
+
+<div className="bf-flow" aria-label="Active device request flow">
   <div className="bf-flow-step">
     <span>Plan</span>
     <strong>Included range</strong>
@@ -19,9 +21,9 @@ That runtime identity can be a laptop, phone, server, worker, kiosk, CI runner, 
   </div>
   <div className="bf-flow-arrow">→</div>
   <div className="bf-flow-step">
-    <span>Trigger</span>
-    <strong>Runtime access</strong>
-    <p>A runtime identity actually triggers Bitfield.</p>
+    <span>Request</span>
+    <strong>Bitfield runs</strong>
+    <p>A runtime identity actually asks Bitfield to run.</p>
   </div>
   <div className="bf-flow-arrow">→</div>
   <div className="bf-flow-step">
@@ -31,17 +33,17 @@ That runtime identity can be a laptop, phone, server, worker, kiosk, CI runner, 
   </div>
 </div>
 
-After that, a laptop, phone, server, or runtime identity should be easy to classify: it either triggered Bitfield during the window or it did not.
+After that, a laptop, phone, server, or runtime identity should be easy to classify: it either asked Bitfield to run during the window or it did not.
 
 ## What counts
 
 A laptop can count. A phone can count. A tablet can count. A server can count. A Raspberry Pi can count. A runtime environment can count.
 
-The working rule: if Bitfield runtime access was triggered there during the billing window, that runtime identity can count.
+The working rule: if Bitfield was asked to run there during the billing window, that runtime identity can count.
 
 ## What does not count
 
-A static page does not become a new active device for every person who reads it. A dormant install does not count just because files exist. A package folder does not count just because it is present. One runtime doing a lot of work is not a lot of units.
+A static page does not become a new active device for every person who reads it because those visitors are only receiving already-published files. No Bitfield envelope bytes means no slot, no native handler, and no live-state read for that visitor. A dormant install does not count just because files exist. A package folder does not count just because it is present. One runtime doing a lot of work is not a lot of units.
 
 ## How moving a spot works
 
@@ -49,17 +51,17 @@ If you stop using one runtime identity, revoke it in the account portal. That fr
 
 ## Why pricing uses this word
 
-Bitfield pricing is based on triggered active runtime/device units because the product is not priced per app, per project, per seat, token, install, revenue share, page view, click, or runtime second.
+Bitfield pricing is based on active runtime/device units because the product is not priced per app, per project, per seat, token, install, revenue share, page view, click, or runtime second.
 
 ## Common confusion
 
 | Confusion | Correct model |
 |---|---|
-| "Is an active device the same as a user?" | No. It is a triggered runtime identity. |
+| "Is an active device the same as a user?" | No. It is an identity where Bitfield was asked to run. |
 | "Does a project count?" | No. A project is not the billing unit. |
-| "Does every website visitor count?" | No. Visitors and page views are not triggers. |
-| "Does an old install count forever?" | No. Dormant files are not the trigger. |
-| "Does a server count?" | It can when it triggers Bitfield runtime access. |
+| "Does every website visitor count?" | No. Visitors reading already-published files are not asking Bitfield to run. |
+| "Does an old install count forever?" | No. Dormant files send no Bitfield request bytes. |
+| "Does a server count?" | It can when it asks Bitfield to run. |
 | "Where do I manage this?" | Use [account.bitfield.so](https://account.bitfield.so). |
 
 ## Next

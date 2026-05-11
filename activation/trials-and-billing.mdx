@@ -1,22 +1,22 @@
 ---
 title: "Trials and billing"
-description: "How the free trial, plan cadence, triggered runtime/device ranges, and legal links fit together."
+description: "How the free trial, plan cadence, runtime/device ranges, and legal links fit together."
 ---
 
 <div className="bf-article">
 
 <p className="bf-lead">
-Bitfield billing is plan-first, then trigger-counted. The plan is the subscription. The included units are runtime/device triggers inside the billing window.
+Bitfield billing is plan-first, then request-counted by runtime identity. The plan is the subscription. The included units are device/server/runtime identities that sent request bytes to Bitfield inside the billing window.
 </p>
 
 You start with a 3-day Personal trial, try Bitfield with the included runtime/device range, and decide whether this is the foundation you want before the paid cadence begins.
 
-The important correction: this is not passive install billing. A dormant install does not count by itself. A triggered Bitfield runtime identity does.
+The important correction: this is not passive install billing. A dormant install does not count by itself. A runtime identity counts when it sends request bytes to Bitfield.
 
 <div className="bf-flow" aria-label="Trial and billing flow">
   <div className="bf-flow-step">
     <span>Trial</span>
-    <strong>Start with included triggers</strong>
+    <strong>Start with included runtime identities</strong>
     <p>Use the Personal runtime/device range during the trial window.</p>
   </div>
   <div className="bf-flow-arrow">→</div>
@@ -28,7 +28,7 @@ The important correction: this is not passive install billing. A dormant install
   <div className="bf-flow-arrow">→</div>
   <div className="bf-flow-step">
     <span>Scale</span>
-    <strong>Move by trigger range</strong>
+    <strong>Move by runtime range</strong>
     <p>Grow from Personal to Builder and then larger runtime/device ranges.</p>
   </div>
 </div>
@@ -42,7 +42,7 @@ The customer needs four answers fast: what costs $0 today, when the plan starts 
 | Try Personal free | 1-5 | Start Personal with 3 days free, then billing begins unless you cancel first. |
 | Personal | 1-5 | Pay now for the Personal range. |
 | Builder | 6-100 | Pay now for the Builder range. |
-| 101+ | 101 or more | Use the curve for larger triggered runtime/device counts. |
+| 101+ | 101 or more | Use the curve for larger runtime/device counts. |
 
 Monthly and yearly cadence are separate choices. The checkout total should change when the cadence changes.
 
@@ -58,9 +58,9 @@ $0 today, then the Personal price starts after the 3-day trial unless you cancel
 
 ## What consumes the included range
 
-The public phrase is active device. The precise meaning is a triggered Bitfield runtime identity in the billing window.
+The public phrase is active device. The precise meaning is a runtime identity that sent request bytes to Bitfield in the billing window.
 
-That runtime identity can be a laptop, phone, server, cloud runtime, local box, kiosk, test machine, or another environment that actually triggers Bitfield runtime access.
+That runtime identity can be a laptop, phone, server, cloud runtime, local box, kiosk, test machine, or another environment that actually sends request bytes to Bitfield.
 
 It is not:
 
@@ -75,7 +75,7 @@ It is not:
 
 The curve is cumulative. That means each range uses its own rate, then the ranges add up.
 
-For example, when a count goes above 100, the first 100 are still the base Builder range. Extra triggered runtime/device units are priced by the next range, and later ranges only apply to the units inside those later ranges.
+For example, when a count goes above 100, the first 100 are still the base Builder range. Extra runtime/device units are priced by the next range, and later ranges only apply to the units inside those later ranges.
 
 ## Legal pages
 
@@ -91,9 +91,9 @@ Those pages govern the actual legal terms. This docs page explains the product l
 
 | Symptom | Cause | Fix |
 |---|---|---|
-| Customer thinks pricing is per person | Active device was read as seat | Say triggered runtime/device unit |
-| Customer thinks an old install is charged forever | Triggering and installing were mixed up | Say dormant installs do not count by themselves |
-| Customer thinks every visitor is charged | Traffic got mixed up with runtime triggers | Explain that visitors and page views are not triggers |
+| Customer thinks pricing is per person | Active device was read as seat | Say runtime/device identity that sent Bitfield request bytes |
+| Customer thinks an old install is charged forever | Request bytes and installing were mixed up | Say dormant installs do not count by themselves |
+| Customer thinks every visitor is charged | Traffic got mixed up with Bitfield request bytes | Explain that static visitors only receive already-published files |
 | Customer accidentally uses Runtime Kit for a static page | Public content and live runtime were not separated | Use static output when the page does not need Bitfield runtime behavior |
 | Customer misses the post-trial billing date | Trial language is hidden | Show `$0 today` and the paid start clearly |
 | Larger-device pricing feels like a black box | Ranges are not explained as cumulative | Explain that each range applies only to units inside that range |

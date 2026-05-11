@@ -1,15 +1,26 @@
 ---
 title: "Use Runtime Kit where it should run"
-description: "How to use Runtime Kit without accidentally triggering Bitfield runtime usage on public pages."
+description: "How to use Runtime Kit without accidentally sending Bitfield request bytes from public pages."
 ---
 
 <div className="bf-article">
 
 <p className="bf-lead">
-Runtime Kit is for surfaces that need Bitfield runtime behavior. A static landing page does not need to trigger Runtime Kit just because it lives beside the product.
+Runtime Kit is for surfaces where Bitfield needs to run while the product is being used. A static landing page does not need to ask Bitfield to run just because it lives beside the product.
 </p>
 
-The billing rule is not "how much runtime." It is not "every visitor." It is not "installed somewhere." The useful question is: **does this page or environment need to trigger Bitfield runtime access?**
+The billing rule is not "how much runtime." It is not "every visitor." It is not "installed somewhere." The useful question is: **does this page or environment ask Bitfield to run?**
+
+That has a concrete technical meaning:
+
+```text
+request bytes enter Bitfield
+  -> Bitfield decodes an envelope
+  -> the envelope address resolves to a slot, native handler, or live state
+  -> Bitfield returns bytes
+```
+
+No envelope bytes, no slot, no native handler, no live-state read means Bitfield did not run for that page view.
 
 <div className="bf-flow" aria-label="Runtime Kit cost-aware flow">
   <div className="bf-flow-step">
@@ -20,14 +31,14 @@ The billing rule is not "how much runtime." It is not "every visitor." It is not
   <div className="bf-flow-arrow">→</div>
   <div className="bf-flow-step">
     <span>Runtime</span>
-    <strong>Trigger only where needed</strong>
-    <p>The runtime identity triggers Bitfield when the surface needs live data or work.</p>
+    <strong>Run only where needed</strong>
+    <p>The runtime identity asks Bitfield to run only where the product needs it.</p>
   </div>
   <div className="bf-flow-arrow">→</div>
   <div className="bf-flow-step">
     <span>Bill</span>
-    <strong>Count triggered identities</strong>
-    <p>Traffic reading static output does not become runtime usage.</p>
+    <strong>Count runtime identities</strong>
+    <p>Traffic reading already-published files does not become runtime usage.</p>
   </div>
 </div>
 
@@ -35,8 +46,8 @@ The billing rule is not "how much runtime." It is not "every visitor." It is not
 
 | Use Runtime Kit when the surface needs... | Why |
 |---|---|
-| Named Bitfield data | The surface reads data Runtime Kit prepares by name. |
-| Target requests | A button or action asks a Bitfield target to do work. |
+| Named Bitfield data | The surface needs Bitfield to provide current product data. |
+| Product actions | A button or action asks Bitfield to run something. |
 | Package boundaries | Product material belongs to packages instead of tangled app imports. |
 | Local state | The product needs Bitfield state on the device or runtime environment. |
 | Offline-capable behavior | The product should keep useful state close to where it runs. |
@@ -44,7 +55,7 @@ The billing rule is not "how much runtime." It is not "every visitor." It is not
 
 That is real Runtime Kit work.
 
-## Do not trigger Runtime Kit just for this
+## Do not ask Bitfield to run just for this
 
 | Public page need | Better shape |
 |---|---|
@@ -55,14 +66,14 @@ That is real Runtime Kit work.
 | A public blog post | Static or ordinary hosted output. |
 | A button that links somewhere | Ordinary link or form behavior. |
 
-This is not anti-Bitfield. It is cost-aware Bitfield. Use the runtime where the runtime is doing something valuable.
+This is not anti-Bitfield. It is cost-aware Bitfield. Use Runtime Kit where Bitfield needs to run. Keep plain public pages plain.
 
 ## Start with the symptom
 
 | Symptom | What probably happened | First fix |
 |---|---|---|
-| A public page feels like it will create usage | Runtime Kit was added to static content | Keep the page static unless it needs live Bitfield data or target requests |
-| Visitors are being discussed like devices | Traffic and runtime identities were mixed together | Ask which environment actually triggers Bitfield |
+| A public page feels like it will create usage | Runtime Kit was added to static content | Keep the page static unless the page needs to ask Bitfield to run |
+| Visitors are being discussed like devices | Traffic and runtime identities were mixed together | Ask which device, server, or environment actually asks Bitfield to run |
 | An AI agent adds Runtime Kit to every page | The instruction did not separate marketing and product surfaces | Use the prompt below before the agent writes code |
 | A test machine keeps showing up | Old runtime identity was not cleaned up | Revoke old devices and test machines in the account portal |
 
@@ -77,29 +88,57 @@ build or export step
   -> visitors read the page
 ```
 
-Result: visitors do not trigger Bitfield runtime usage.
+Result: visitors do not send Bitfield request bytes.
 
-The build machine can still be a Bitfield runtime identity if the build itself triggers Bitfield. The public visitor reading static output does not become one.
+The build machine can still be a Bitfield runtime identity if the build itself asks Bitfield to run. The public visitor reading already-published files does not become one.
+
+Technical check:
+
+```text
+visitor page load
+  -> no Bitfield envelope bytes
+  -> no resolved slot
+  -> no native handler
+  -> no live-state read
+```
 
 ### Hosted Runtime Kit product
 
 ```text
-server triggers Bitfield runtime access
+server asks Bitfield to run
   -> product surface uses Runtime Kit
   -> visitors use the hosted product
 ```
 
-Result: the server runtime identity is the counted runtime/device unit. Visitors are not counted separately unless their own environment also triggers Bitfield runtime access.
+Result: the server runtime identity is the counted runtime/device unit. Visitors are not counted separately unless their own device or browser also asks Bitfield to run.
+
+Technical check:
+
+```text
+server request
+  -> Bitfield envelope bytes
+  -> resolved slot, native handler, or live-state read
+  -> server runtime identity can count
+```
 
 ### Local or downloaded product
 
 ```text
-customer device triggers Bitfield runtime access
+customer device asks Bitfield to run
   -> Runtime Kit talks to local Bitfield state
   -> product runs on that machine
 ```
 
-Result: each triggered customer runtime identity can consume a runtime/device unit for the billing window.
+Result: each customer runtime identity that sends Bitfield request bytes can consume a runtime/device unit for the billing window.
+
+Technical check:
+
+```text
+customer device action
+  -> Bitfield envelope bytes
+  -> resolved slot, native handler, or live-state read
+  -> customer runtime identity can count
+```
 
 ## Mixed site example
 
@@ -107,43 +146,43 @@ Result: each triggered customer runtime identity can consume a runtime/device un
 
 | URL | Good shape | Billing meaning |
 |---|---|---|
-| `/` | Static landing page | Visitors do not trigger runtime usage. |
-| `/pricing` | Static pricing page | Visitors do not trigger runtime usage. |
-| `/docs` | Static docs output | Visitors do not trigger runtime usage. |
-| `/app` | Runtime Kit product surface | The device, server, or environment that triggers Bitfield runtime access can be counted. |
+| `/` | Static landing page | No Bitfield envelope bytes per visitor. Visitors do not create runtime usage. |
+| `/pricing` | Static pricing page | No Bitfield envelope bytes per visitor. Visitors do not create runtime usage. |
+| `/docs` | Static docs output | No Bitfield envelope bytes per visitor. Visitors do not create runtime usage. |
+| `/app` | Runtime Kit product surface | The device, server, or environment that sends Bitfield envelope bytes can be counted. |
 
-The path name does not decide billing. The trigger does.
+The path name does not decide billing. Bitfield request bytes do.
 
 ## What to tell an AI agent
 
 Use this when an AI agent is building a public site around Bitfield:
 
 ```text
-Build public marketing pages as static or ordinary hosted output unless the page needs live Bitfield data or target requests.
-Use Runtime Kit only for surfaces that need named data, target requests, local Bitfield state, package runtime behavior, or offline-capable product behavior.
+Build public marketing pages as static or ordinary hosted output unless the page needs to ask Bitfield to run.
+Use Runtime Kit only for surfaces that need current Bitfield data, product actions, local Bitfield state, package runtime behavior, or offline-capable product behavior.
 Never put a Bitfield key into public browser code.
-Do not trigger Runtime Kit just to render static copy, images, links, or a brochure page.
+Do not ask Bitfield to run just to render static copy, images, links, or a brochure page.
 ```
 
 ## Launch checklist
 
 Before launch, answer these plainly:
 
-1. Which devices, servers, or runtime environments will trigger Bitfield?
+1. Which devices, servers, or runtime environments will send request bytes to Bitfield?
 2. Which public pages are just static output?
 3. Which product surfaces really need Runtime Kit?
 4. Are any Bitfield keys or activation files exposed to public browser code?
 5. Are old test machines and dead runtime identities revoked in the account portal?
 
-The bill should follow the first answer, not the number of people who read public pages.
+The bill should follow the first answer, not the number of people who read already-published files.
 
 Do not copy one device's local activation folder to another device. Activate the runtime identity properly from the account path.
 
 ## Verify
 
-The page is wired correctly when you can point to each public URL and answer one question: does this URL need to trigger Bitfield runtime access?
+The page is wired correctly when you can point to each public URL and answer one question: does opening this URL ask Bitfield to run?
 
-Static pages should load without a Bitfield key in public browser code. Runtime Kit product surfaces should use the public Runtime Kit calls and account-owned activation path. The component renders real data only when the named data exists and the runtime path is actually needed.
+Static pages should load without a Bitfield key in public browser code. Runtime Kit product surfaces should use the public Runtime Kit calls and account-owned activation path. The component renders real data only when the named data exists and Bitfield request bytes are actually needed.
 
 ## Next
 

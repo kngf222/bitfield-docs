@@ -1,15 +1,15 @@
 ---
 title: "Device and deployment shape"
-description: "How to think about account keys, triggered runtime identities, local state, and product rollout."
+description: "How to think about account keys, runtime identities, local state, and product rollout."
 ---
 
 <div className="bf-article">
 
 <p className="bf-lead">
-Bitfield products are not only pages. They run through triggered runtime identities with local state, account-owned access, and product packages that should keep working as your idea changes.
+Bitfield products are not only pages. They run through runtime identities that send request bytes to Bitfield, with local state, account-owned access, and product packages that should keep working as your idea changes.
 </p>
 
-In this page, runtime identity includes cloud and local shapes. A laptop, server, worker, kiosk, or CI runner can all count when they actually trigger Bitfield during the billing window.
+In this page, runtime identity includes cloud and local shapes. A laptop, server, worker, kiosk, or CI runner can all count when they actually send request bytes to Bitfield during the billing window.
 
 You start with a laptop and phone. Then a friend tests it. Then ten customers use it. The product shape should not change just because the device count grows.
 
@@ -23,7 +23,7 @@ You start with a laptop and phone. Then a friend tests it. Then ten customers us
   <div className="bf-flow-step">
     <span>Device</span>
     <strong>Activates</strong>
-    <p>Each device or runtime identity triggers Bitfield when it needs runtime access.</p>
+    <p>Each device or runtime identity sends request bytes to Bitfield when it needs runtime access.</p>
   </div>
   <div className="bf-flow-arrow">→</div>
   <div className="bf-flow-step">
@@ -39,7 +39,7 @@ You start with a laptop and phone. Then a friend tests it. Then ten customers us
 |---|---|---|
 | How does the user get a key? | The product cannot run without account access | [Get your key](/start/get-your-key) |
 | How many devices can try it first? | Trial shape affects first customer experience | [Trials and billing](/activation/trials-and-billing) |
-| What will actually be charged? | Triggered runtime/device units are not visitors, page views, projects, or packages | [What you pay for](/activation/what-you-pay-for) |
+| What will actually be charged? | Runtime/device units are identities that send Bitfield request bytes, not visitors, page views, projects, or packages | [What you pay for](/activation/what-you-pay-for) |
 | Where does local state live? | Users need to understand ownership and no-hand-edit boundaries | [Local state](/runtime-kit/local-state) |
 | Which package runs the feature? | Product behavior should stay package-shaped | [Package authoring](/build-your-own-surface/package-authoring) |
 | Which surface appears first? | The first visible result sells the product path | [App surfaces](/build-your-own-surface/app-surfaces) |
@@ -57,9 +57,9 @@ Adding devices should change access and activation, not the feature boundaries y
 
 ## Hosted and static output
 
-A hosted product can trigger Bitfield on a server. That server runtime identity can count for the billing window.
+A hosted product can send Bitfield request bytes from a server. That server runtime identity can count for the billing window.
 
-A public static page is different. Visitors reading ordinary hosted output are not runtime triggers. Keep marketing pages, docs pages, pricing pages, and other public read-only pages static when they do not need live Bitfield data or target requests.
+A public static page is different. Visitors reading ordinary hosted output send no Bitfield request bytes. Keep marketing pages, docs pages, pricing pages, and other public read-only pages static when they do not need live Bitfield data or Bitfield requests.
 
 That is not a workaround. It is the clean deployment shape. Use Bitfield where the product needs Bitfield, and do not pay for runtime where static output is enough.
 
@@ -70,7 +70,7 @@ That is not a workaround. It is the clean deployment shape. Use Bitfield where t
 | Works on one machine only | Local state and account activation were not part of the build path | Add the key/device path to the launch checklist |
 | Users hand-edit local state | Docs or UI did not explain ownership | Link to local-state boundaries and expose product controls |
 | Every device needs a different feature build | Product package and shell placement are tangled | Separate package, surface, target, and shell concerns |
-| Public visitors look like runtime units | Static pages and live Runtime Kit surfaces were mixed together | Keep public read-only pages static and trigger Runtime Kit only where needed |
+| Public visitors look like runtime units | Static pages and live Runtime Kit surfaces were mixed together | Keep public read-only pages static and use Runtime Kit only where Bitfield request bytes are needed |
 
 ## Next
 
