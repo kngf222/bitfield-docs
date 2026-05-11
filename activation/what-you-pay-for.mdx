@@ -86,6 +86,24 @@ Plain names:
 | Live state | Current Bitfield state read by address. |
 | Static files | HTML, CSS, JS, and images already published to a web host. |
 
+## How the identity is determined
+
+For a local Bitfield runtime, identity does not come from IP address, cookies, browser tabs, or the person's name.
+
+It comes from activation:
+
+```text
+this runtime has local device key material
+  -> Bitfield derives a device public key hash
+  -> activation uses an activation ID
+  -> by default, that activation ID is the device public key hash
+  -> billing counts that activation/runtime identity for the billing window
+```
+
+That is why repeat use does not multiply the count. Once Jane's laptop identity has counted for the billing window, Jane can use it again and again in that same window without creating a second laptop identity.
+
+For custom or hosted setups, the same rule still applies: the runtime identity must be stable. A server, worker, browser runtime, kiosk, or customer device needs a stable activation/runtime identity so Bitfield can count the identity once instead of guessing from traffic.
+
 ## Do not mix up these two things
 
 | Thing | Plain meaning |
@@ -119,6 +137,30 @@ The plain test is: did this runtime identity actually ask Bitfield to run during
 | Click count | Pricing is not per click. |
 | Runtime duration | Pricing is not per second or per minute. |
 | Revenue | Pricing is not a revenue share. |
+
+## Identity edge cases
+
+| Scenario | What happens |
+|---|---|
+| Jane uses the same activated laptop 10,000,000 times in the same billing window. | 1 runtime/device unit. Same activation identity. |
+| Jane opens the same local product in Safari, Chrome, and an incognito window on the same machine. | Still 1 runtime/device unit when those browsers talk to the same local Bitfield runtime identity. |
+| Jane clears browser cookies, browser cache, or uses private browsing. | That does not change the local Bitfield identity by itself. Browser storage is not the billing identity. |
+| Jane turns on a VPN or changes IP address. | Still the same runtime/device unit. IP address is not the billing identity. |
+| Jane uses a laptop and a phone. | 2 runtime/device units if both devices send request bytes to Bitfield in the billing window. |
+| Jane reinstalls the app but the local Bitfield activation state remains. | Same runtime/device unit. |
+| Jane deletes the local activation state and activates again. | That can create a new runtime identity. Revoke old identities you no longer want active. |
+| A hosted product serves 100,000 visitors from one activated server. | 1 server runtime/device unit, unless the visitors' own browsers also send Bitfield request bytes. |
+| The same hosted product runs on 10 activated servers. | Up to 10 server runtime/device units for that billing window. |
+| A background worker and the web server share the same activation identity. | 1 runtime/device unit. |
+| A background worker has its own activation identity. | It can count separately from the web server. |
+| CI uses a persistent activated runner. | The runner can count once for the billing window. |
+| CI creates a fresh activated runner every run. | Each new activated runtime identity can count. Persist the activation state when you want the same identity. |
+| A Docker container or VM keeps the same Bitfield activation state across restarts. | Same runtime/device unit. |
+| A Docker container or VM throws away activation state and activates again. | That can create new runtime identities. |
+| Someone copies one device's activation folder to another machine. | Do not do this. It is not the supported way to move a spot; revoke or replace through the account portal. |
+| A static page was built with Bitfield, then published as files. | The build identity can count if Bitfield ran during the build. Later visitors only reading the files do not count. |
+| A public page directly sends Bitfield request bytes from the visitor's browser. | That browser/runtime identity can count. |
+| A package folder exists in a repo. | Nothing counts until some device, server, or runtime identity sends request bytes to Bitfield. |
 
 ## Common scenarios
 

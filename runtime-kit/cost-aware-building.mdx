@@ -22,6 +22,8 @@ request bytes enter Bitfield
 
 No envelope bytes, no slot, no native handler, no live-state read means Bitfield did not run for that page view.
 
+When Bitfield does run, the count follows the runtime identity that sent the request bytes. For local Bitfield, that identity comes from activation state, not cookies, IP address, browser tabs, or VPNs.
+
 <div className="bf-flow" aria-label="Runtime Kit cost-aware flow">
   <div className="bf-flow-step">
     <span>Page</span>
@@ -152,6 +154,19 @@ customer device action
 | `/app` | Runtime Kit product surface | The device, server, or environment that sends Bitfield envelope bytes can be counted. |
 
 The path name does not decide billing. Bitfield request bytes do.
+
+## Identity examples
+
+| Setup | Billing meaning |
+|---|---|
+| Same local Runtime Kit product opened in normal browser and incognito | Same local Bitfield runtime identity when both talk to the same local runtime. |
+| Same visitor changes IP address or uses a VPN | No new identity by itself. IP address is not used as the identity. |
+| Same visitor clears cookies | No new identity by itself when local Bitfield activation state remains. |
+| Product runs from one activated cloud server | The server identity can count once for the billing window. |
+| Product runs from multiple activated servers | Each activated server identity can count. |
+| Product runs in a throwaway container that activates from scratch every launch | Each new activation can create a new runtime identity. |
+| Product runs in a container with persisted Bitfield activation state | Same runtime identity across restarts. |
+| Public page is static but the build step used Bitfield | The build identity can count; visitors reading the exported files do not. |
 
 ## What to tell an AI agent
 

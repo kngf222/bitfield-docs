@@ -13,6 +13,10 @@ It does not mean "installed once forever." It does not mean "authorized in theor
 
 The technical line is simple: request bytes entered Bitfield, Bitfield decoded an envelope, and the address resolved to a slot, native handler, or live state. That identity can count. Static files being served do not cross that line.
 
+For local Bitfield, the identity starts from local device key material. Bitfield creates or reads `this-device.key`, derives a device public key hash, and uses an activation ID for that runtime. By default, the activation ID is the device public key hash.
+
+That means active device is not a cookie, browser tab, IP address, VPN address, or page view. It is the activated runtime identity.
+
 <div className="bf-flow" aria-label="Active device request flow">
   <div className="bf-flow-step">
     <span>Plan</span>
@@ -52,6 +56,21 @@ The technical line is simple: request bytes entered Bitfield, Bitfield decoded a
 | Static exported page | Visitors reading static files do not resolve a Bitfield slot, native handler, or live-state read. |
 | Same runtime doing lots of work | Usage amount is not the unit. |
 | Package folder | A package is product material, not request bytes entering Bitfield. |
+
+## Repeat use and split identities
+
+| Situation | Count model |
+|---|---|
+| Same activated laptop, many actions | One runtime/device unit for the billing window. |
+| Same laptop, different browsers or incognito | Still one unit when they talk to the same local Bitfield runtime identity. |
+| Same laptop, VPN on or off | Still one unit. IP address is not the identity. |
+| Same laptop, cookies cleared | Still one unit when local Bitfield activation state remains. |
+| Laptop plus phone | Two units when both send Bitfield request bytes. |
+| One activated server serving many visitors | One server unit unless visitor browsers also send Bitfield request bytes. |
+| Ten activated servers | Up to ten server units. |
+| Persistent CI runner | One runner identity can count once for the window. |
+| Fresh ephemeral CI runner every run | Each newly activated runner can count separately. |
+| Deleted activation state and activated again | Can become a new identity. Revoke old identities from the account portal. |
 
 ## Local activation state
 
